@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('item_id');
             $table->string('quantity');
             $table->string('department');
-            $table->boolean('in_progress')->default(0);
+            $table->string('in_progress')->default('in_progress(Logistic)');
             $table->timestamps();
         });
     }

@@ -8,15 +8,21 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("crew.order") }}">
+                <a class="nav-link" href="{{ Route("logistic.report") }}">
                     <span data-feather="file"></span>
-                    Make Order
+                    Make Report
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("crew.task") }}">
+                <a class="nav-link" href="{{ Route("logistic.history") }}">
                     <span data-feather="file"></span>
-                    My Task
+                    View History
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ Route("logistic.stocks") }}">
+                    <span data-feather="file"></span>
+                    Item Stocks
                 </a>
             </li>
         </ul>

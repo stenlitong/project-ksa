@@ -16,7 +16,9 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('itemName')->unique();
-            $table->integer('itemStock');
+            $table->string('itemStock');
+            $table->integer('itemAge');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

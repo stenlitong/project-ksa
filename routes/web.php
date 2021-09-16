@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
+use App\Http\Controllers\LogisticController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,12 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/order', [CrewController::class, 'storeOrder'])->name('order');
     });
 
+    Route::prefix('logistic')->name('logistic.')->group(function(){
+        Route::get('/report', [LogisticController::class, 'index'])->name('report');
+        Route::get('/history', [LogisticController::class, 'index'])->name('history');
+        Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
+        Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
+    });
 });
 
 require __DIR__.'/auth.php';

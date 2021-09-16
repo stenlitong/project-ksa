@@ -10,10 +10,10 @@ class DashboardController extends Controller
     public function index(){
         if(Auth::user()->hasRole('crew')){
             $orders = Order::all();
-
             return view('crew.crewDashboard', compact('orders'));
         }elseif(Auth::user()->hasRole('logistic')){
-            return view('logistic.logisticDashboard');
+            $orders = Order::all();
+            return view('logistic.logisticDashboard', compact('orders'));
         }elseif(Auth::user()->hasRole('purchasing')){
             return view('purchasing.purchasingDashboard');
         }

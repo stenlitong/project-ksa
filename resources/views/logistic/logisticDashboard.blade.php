@@ -1,10 +1,10 @@
 @extends('../layouts.base')
 
-@section('title', 'Crew Dashboard')
+@section('title', 'Logistic Dashboard')
 
 @section('container')
 <div class="row">
-    @include('crew.sidebar')
+    @include('logistic.sidebar')
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -19,6 +19,7 @@
                     <th scope="col">Item</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Department</th>
+                    <th scope="col">Item Age</th>
                     <th scope="col">Progress</th>
                 </tr>
             </thead>
@@ -29,6 +30,7 @@
                     <td>{{ $o -> item -> itemName}}</td>
                     <td>{{ $o -> quantity}}</td>
                     <td>{{ $o -> department}}</td>
+                    <td>{{ $o -> item ->itemAge }}</td>
                     <td>{{ ($o -> in_progress === 'in_progress(Logistic)') ? "In Progress" : "Completed"}}</td>
                 </tr>
                 @endforeach
