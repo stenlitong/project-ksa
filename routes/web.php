@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CrewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,10 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    // Route::prefix('crew')->name('crew.')->group(function(){
-    //     Route::get('order', )
-    // });
+    Route::prefix('crew')->name('crew.')->group(function(){
+        Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
+        Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
+    });
 
 });
 
