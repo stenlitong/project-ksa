@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class CrewController extends Controller
 {
@@ -13,7 +14,9 @@ class CrewController extends Controller
      */
     public function orderPage()
     {
-        return view('crew.crewOrder');
+        $items = Item::all();
+        // dd($items);
+        return view('crew.crewOrder', compact('items'));
     }
 
     public function taskPage()
