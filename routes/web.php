@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('crew')->name('crew.')->group(function(){
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
         Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
+        Route::post('/order', [CrewController::class, 'storeOrder'])->name('order');
     });
 
 });
