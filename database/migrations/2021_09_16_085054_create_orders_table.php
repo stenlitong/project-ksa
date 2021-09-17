@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('quantity');
             $table->string('department');
             $table->string('in_progress')->default('in_progress(Logistic)');
+            $table->string('reason')->default('');
             $table->timestamps();
         });
     }

@@ -32,7 +32,8 @@ class CrewController extends Controller
             'item_id' => 'required',
             'departmentName' => 'required',
             'quantity' => 'required',
-            'satuan' => 'required'
+            'satuan' => 'required',
+            'reason' => 'nullable'
         ]);
         
         $new_qty = $request->quantity . " " . $request->satuan;

@@ -3,7 +3,6 @@
 @section('title', 'Logistic Stocks')
 
 @section('container')
-<div class="row">
     @include('logistic.sidebar')
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
@@ -21,8 +20,23 @@
             Add Item +
         </button>
 
+        <div class="row">
+            <div class="col-md-6">
+                <form action="">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search Item..." name="search" id="search">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+            {{ $items->links() }}
+        </div>
+
         <!-- Modal -->
-        <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItemTitle"
+        <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem"
             aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -74,22 +88,20 @@
         </div>
 
         @foreach($items as $i)
-            <div class="card mt-3">
+            <div class="card mt-3 mb-5">
                 <h5 class="card-header">{{ $i -> itemName }}</h5>
                 <div class="card-body">
                     <h5 class="card-title">Stock : {{ $i -> itemStock }}</h5>
                     <p class="card-text d-inline">Description : {{ $i -> description }}</p>
-                    {{-- <a href="#" class="btn btn-primary" style="margin-left: 80%">Edit Item</a> --}}
-                    <!-- Button trigger modal 2 -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" style="margin-left: 80%"
-                        data-target="#editItem">
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 80%" data-target="#editItem">
                         Edit Item
-                    </button>
+                    </button> --}}
+                    <a href="/logistic/stocks/{{ $i->id }}/edit"class="btn btn-primary" style="margin-left: 90%">Edit Item</a>
                 </div>
             </div>
-
+            
             <!-- Modal 2 -->
-            <div class="modal fade" id="editItem" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
+            {{-- <div class="modal fade" id="editItem" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -100,18 +112,18 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="/logistic/stocks/{{ $i -> id }}">
+                            <form method="POST" action="/logistic/stocks/{{ $i->id }}">
                                 @csrf
                                 @method('put')
                                 <div class="form-group">
                                     <label for="itemName">Item Name</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Item's Name" value="{{ $i -> itemName }}">
+                                        placeholder="Input Item's Name" value="{{ $i->itemName }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="itemAge">Item Age</label>
                                     <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                        placeholder="Input Item's Age in Number" value="{{ $i -> itemAge }}">
+                                        placeholder="Input Item's Age in Number">
                                 </div>
                                 <div class="form-group">
                                     <label for="itemStock">Item Stock</label>
@@ -139,8 +151,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         @endforeach
     </main>
-
-    @endsection
+@endsection

@@ -13,7 +13,7 @@
         </div>
 
         <table class="table">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">Crew ID</th>
                     <th scope="col">Item</th>
@@ -29,12 +29,12 @@
                     <td>{{ $o -> item -> itemName}}</td>
                     <td>{{ $o -> quantity}}</td>
                     <td>{{ $o -> department}}</td>
-                    <td>{{ ($o -> in_progress === 'in_progress(Logistic)') ? "In Progress" : "Completed"}}</td>
+                    <td>{{ $o -> in_progress }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-
+        {{ $orders->links() }}
     </main>
 </div>
 
