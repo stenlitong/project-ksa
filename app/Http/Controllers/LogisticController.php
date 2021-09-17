@@ -24,6 +24,7 @@ class LogisticController extends Controller
             'satuan' => 'required',
         ]);
         $new_qty = $request->itemStock . " " . $request->satuan;
+
         Item::create([
             'itemName' => $request->itemName,
             'itemStock' => $new_qty,
@@ -31,5 +32,24 @@ class LogisticController extends Controller
             'description' => $request->description
         ]);
         return redirect('logistic/stocks')->with('status', 'Added Successfully');
+    }
+
+    public function editItem(Request $request, Item $item){
+        // dd($request);
+        $request->validate([
+            'itemName' => 'required',
+            'itemAge' => 'required|numeric',
+            'itemStock' => 'required|numeric',
+            'satuan' => 'required',
+        ]);
+        $new_qty = $request->itemStock . " " . $request->satuan;
+
+        Item::where('id', $item->id)->update([
+            'itemName' => $request->itemName,
+            'itemStock' => $new_qty,
+            'itemAge' => $request->itemAge,
+            'description' => $request->description
+        ]);
+        return redirect('logistic/stocks')->with('status', 'Edit Successfully');
     }
 }

@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/report', [LogisticController::class, 'index'])->name('report');
         Route::get('/history', [LogisticController::class, 'index'])->name('history');
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
+        Route::put('/stocks/{item}', [LogisticController::class, 'editItem']);
         Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
     });
 });
