@@ -21,6 +21,7 @@
                     <th scope="col">Department</th>
                     <th scope="col">Item Age</th>
                     <th scope="col">Progress</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,10 @@
                     <td>{{ $o -> department}}</td>
                     <td>{{ $o -> item ->itemAge }}</td>
                     <td>{{ ($o -> in_progress === 'in_progress(Logistic)') ? "In Progress" : "Completed"}}</td>
+                    <td>
+                        <Button class="btn btn-primary">Approve</Button>
+                        <Button class="btn btn-danger">Reject</Button>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
