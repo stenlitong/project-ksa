@@ -37,6 +37,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'no_induk_pegawai' => ['required', 'string', 'max:6', 'min:6', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'cabang' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,6 +45,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'no_induk_pegawai' => $request->no_induk_pegawai,
             'email' => $request->email,
+            'cabang' => $request->cabang,
             'password' => Hash::make($request->password),
         ]);
         $user->attachRole($request->role_id);

@@ -77,8 +77,9 @@ class LogisticController extends Controller
         return view('logistic.logisticApproveOrder', compact('order'));
     }
 
-
-
+    public function reportPage(){
+        return view('logistic.logisticReport');
+    }
 
     public function uploadItem(Request $request){
         $path = "storage/files";

@@ -1,3 +1,6 @@
+<head>
+    <title>Register</title>
+</head>
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
@@ -32,6 +35,18 @@
                 <x-label for="no_induk_pegawai" :value="__('No Induk Pegawai')" />
 
                 <x-input id="no_induk_pegawai" class="block mt-1 w-full" type="text" name="no_induk_pegawai" :value="old('no_induk_pegawai')" required autofocus />
+            </div>
+
+            <br>
+            <!-- Select Option Cabang -->
+            <div>
+                <x-label for="cabang" :value="__('Cabang:')" />
+
+                <select name="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                    <option value="jakarta">Jakarta</option>
+                    <option value="samarinda">Samarinda</option>
+                    <option value="banjarmasin">Banjarmasin</option>
+                </select>
             </div>
 
             <!-- Password -->
