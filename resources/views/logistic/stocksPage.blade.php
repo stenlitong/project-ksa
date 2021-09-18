@@ -50,19 +50,19 @@
                         <form method="POST" action="{{ Route("logistic.stocks") }}">
                             @csrf
                             <div class="form-group">
-                                <label for="itemName">Item Name</label>
+                                <label for="itemName">Nama Barang</label>
                                 <input type="text" class="form-control" id="itemName" name="itemName"
-                                    placeholder="Input Item's Name">
+                                    placeholder="Input Nama Barang">
                             </div>
                             <div class="form-group">
-                                <label for="itemAge">Item Age</label>
+                                <label for="itemAge">Umur Barang</label>
                                 <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                    placeholder="Input Item's Age in Number">
+                                    placeholder="Input Umur Barang Dalam Angka">
                             </div>
                             <div class="form-group">
-                                <label for="itemStock">Item Stock</label>
+                                <label for="itemStock">Stok Barang</label>
                                 <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                    placeholder="Input Item's Stock in Number">
+                                    placeholder="Input Stok Barang">
                             </div>
                             <div class="form-group">
                                 <label for="satuan">Satuan</label>
@@ -74,7 +74,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="description">Description</label>
+                                <label for="description">Deskripsi</label>
                                 <textarea class="form-control" name="description" id="description" rows="3"
                                     placeholder="Input Item's Description"></textarea>
                             </div>
@@ -91,8 +91,8 @@
             <div class="card mt-3 mb-5">
                 <h5 class="card-header">{{ $i -> itemName }}</h5>
                 <div class="card-body">
-                    <h5 class="card-title">Stock : {{ $i -> itemStock }}</h5>
-                    <p class="card-text d-inline">Description : {{ $i -> description }}</p>
+                    <h5 class="card-title">Stok : {{ $i -> itemStock }}</h5>
+                    <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>
                     <!-- Button trigger modal #2 -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
                         Edit Item
@@ -108,7 +108,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editItemTitle">Edit New Item</h5>
+                            <h5 class="modal-title" id="editItemTitle">Edit Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -118,19 +118,19 @@
                                 @csrf
                                 @method('put')
                                 <div class="form-group">
-                                    <label for="itemName">Item Name</label>
+                                    <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Item's Name" value="{{ $i->itemName }}">
+                                        placeholder="Input Nama Barang" value="{{ $i->itemName }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="itemAge">Item Age</label>
+                                    <label for="itemAge">Umur Barang</label>
                                     <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                        placeholder="Input Item's Age in Number" value="{{ $i->itemAge }}">
+                                        placeholder="Input Umur Barang Dalam Angka" value="{{ $i->itemAge }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="itemStock">Item Stock</label>
+                                    <label for="itemStock">Stok Barang</label>
                                     <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                        placeholder="Input Item's Stock in Number">
+                                        placeholder="Input Stok Barang">
                                 </div>
                                 <div class="form-group">
                                     <label for="satuan">Satuan</label>
@@ -142,7 +142,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Deskripsi</label>
                                     <textarea class="form-control" name="description" id="description" rows="3"
                                         placeholder="Input Item's Description"></textarea>
                                 </div>

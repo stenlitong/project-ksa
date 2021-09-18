@@ -15,6 +15,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->references('id')->on('orders');
+            $table->string('boatName');
+            $table->string('department');
+            $table->string('company');
+            $table->string('location');
+            $table->string('itemName');
+            $table->date('prDate');
+            $table->string('serialNo');
+            $table->string('quantity');
+            $table->string('codeMasterItem');
+            $table->string('note');
             $table->timestamps();
         });
     }

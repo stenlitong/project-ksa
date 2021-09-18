@@ -33,8 +33,15 @@
                     <td>{{ $o -> item -> itemName}}</td>
                     <td>{{ $o -> quantity}}</td>
                     <td>{{ $o -> department}}</td>
-                    <td>{{ $o -> in_progress }}</td>
-                    <td>{{ $o -> reason }}</td>
+                    @if($o -> in_progress === 'in_progress(Logistic)')
+                        <td>
+                            In Progress (Logistic)
+                        </td>
+                        <td></td>
+                    @elseif($o -> in_progress === 'rejected(Logistic)')
+                        <td>Rejected by Logistic</td>
+                        <td>{{ $o -> reason }}</td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>

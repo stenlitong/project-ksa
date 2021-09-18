@@ -49,7 +49,7 @@
                             </button>
                         </td>
                     @elseif($o -> in_progress === 'rejected(Logistic)')
-                        <td>Rejected</td>
+                        <td>Rejected by Logistic</td>
                         <td>Rejected</td>
                     @endif
                     </tr>
