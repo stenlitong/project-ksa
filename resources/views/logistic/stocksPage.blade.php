@@ -15,7 +15,7 @@
             </div>
         @endif
 
-        <!-- Button trigger modal -->
+        <!-- Button trigger modal #1 -->
         <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
             Add Item +
         </button>
@@ -35,7 +35,7 @@
             {{ $items->links() }}
         </div>
 
-        <!-- Modal -->
+        <!-- Modal #1 -->
         <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem"
             aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -93,15 +93,17 @@
                 <div class="card-body">
                     <h5 class="card-title">Stock : {{ $i -> itemStock }}</h5>
                     <p class="card-text d-inline">Description : {{ $i -> description }}</p>
-                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 80%" data-target="#editItem">
+                    <!-- Button trigger modal #2 -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
                         Edit Item
-                    </button> --}}
-                    <a href="/logistic/stocks/{{ $i->id }}/edit"class="btn btn-primary" style="margin-left: 90%">Edit Item</a>
+                    </button>
+                    {{-- <a href="/logistic/stocks/{{ $i->id }}/edit"class="btn btn-primary" style="margin-left: 90%">Edit Item</a> --}}
                 </div>
             </div>
-            
-            <!-- Modal 2 -->
-            {{-- <div class="modal fade" id="editItem" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
+        @endforeach
+        <!-- Modal #2 -->
+        @foreach($items as $i)
+            <div class="modal fade" id="editItem-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -112,7 +114,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="/logistic/stocks/{{ $i->id }}">
+                            <form method="POST" action="/logistic/stocks/{{ $i->id }}/edit">
                                 @csrf
                                 @method('put')
                                 <div class="form-group">
@@ -123,7 +125,7 @@
                                 <div class="form-group">
                                     <label for="itemAge">Item Age</label>
                                     <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                        placeholder="Input Item's Age in Number">
+                                        placeholder="Input Item's Age in Number" value="{{ $i->itemAge }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="itemStock">Item Stock</label>
@@ -151,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         @endforeach
     </main>
 @endsection

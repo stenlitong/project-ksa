@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Storage;
 
 class LogisticController extends Controller
 {
@@ -41,14 +42,8 @@ class LogisticController extends Controller
         return redirect('logistic/stocks')->with('status', 'Added Successfully');
     }
 
-    public function editItemPage(Item $item){
-        $items = Item::find($item->id);
-        // dd($items);
-        return view('logistic.logisticEditItem', compact('items'));
-    }
-
     public function editItem(Request $request, Item $item){
-        // dd($item->id);
+        // dd($request, $item->id);
         $request->validate([
             'itemName' => 'required',
             'itemAge' => 'required|numeric',
@@ -66,11 +61,6 @@ class LogisticController extends Controller
         return redirect('logistic/stocks')->with('status', 'Edit Successfully');
     }
 
-    public function rejectOrderPage(Order $order){
-        // dd($order->id);
-        return view('logistic.logisticRejectOrder', compact('order'));
-    }
-
     public function rejectOrder(Request $request, Order $order){
         // dd($request->reason);
         $request->validate([
@@ -85,5 +75,30 @@ class LogisticController extends Controller
 
     public function approveOrderPage(Order $order){
         return view('logistic.logisticApproveOrder', compact('order'));
+    }
+
+
+
+
+    public function uploadItem(Request $request){
+        $path = "storage/files";
+        $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
+        $file = $request->file('fileInput');
+
+        $url = Storage::disk('s3')->url($path."/".$filename);
+        dd($url);
+
+        Storage::disk('s3')->delete($path."/".$filename);
+
+        $file->storeAs(
+            $path,
+            $filename,
+            's3'
+        );
+        
+        // $url = Storage::disk('s3')->temporaryUrl(
+        //     $path
+        // )
+        // return redirect('/dashboard');
     }
 }

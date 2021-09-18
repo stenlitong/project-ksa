@@ -41,47 +41,47 @@
                             In Progress (Logistic)
                         </td>
                         <td>
-                            {{-- <Button type="button" class="btn btn-primary">Approve</Button> --}}
                             <a href="/logistic/order/{{ $o -> id }}/approve" class="btn btn-success">Approve</a>
-                            <a href="/logistic/order/{{ $o -> id }}/reject" class="btn btn-danger">Reject</a>
-                            <!-- Button trigger modal -->
-                            {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject">
+                            {{-- <a href="/logistic/order/{{ $o -> id }}/reject" class="btn btn-danger">Reject</a> --}}
+                            <!-- Button trigger modal #1 -->
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-{{ $o -> id }}">
                                 Reject
-                            </button> --}}
-
-                            <!-- Modal -->
-                            {{-- <div class="modal fade" id="reject" tabindex="-1" role="dialog" aria-labelledby="rejectTitle"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="rejectTitle">Reject Order</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="POST" action="/logistic/order/{{ $o -> id }}">
-                                                @csrf
-                                                @method('put')
-                                                <div class="form-group">
-                                                    <label for="reason">{{ $o -> id }}</label>
-                                                    <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Reject Order</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                            </button>
                         </td>
                     @elseif($o -> in_progress === 'rejected(Logistic)')
                         <td>Rejected</td>
                         <td>Rejected</td>
                     @endif
-                </tr>
+                    </tr>
+                @endforeach
+                @foreach($orders as $o)
+                    <!-- Modal #1-->
+                    <div class="modal fade" id="reject-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rejectTitle">Reject Order : {{ $o -> item -> itemName }} | {{ $o -> quantity }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="/logistic/order/{{ $o -> id }}/reject">
+                                        @csrf
+                                        @method('put')
+                                        <div class="form-group">
+                                            <label for="reason">Reason</label>
+                                            <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Reject Order</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
             </tbody>
         </table>
