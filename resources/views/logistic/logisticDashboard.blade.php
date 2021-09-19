@@ -16,6 +16,14 @@
         <div class="d-flex justify-content-center">
             {{ $orders->links() }}
         </div>
+
+        <br>
+        @error('reason')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Alasan Wajib Diisi
+        </div>
+        @enderror
+
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -42,7 +50,6 @@
                         </td>
                         <td>
                             <a href="/logistic/order/{{ $o -> id }}/approve" class="btn btn-success">Approve</a>
-                            {{-- <a href="/logistic/order/{{ $o -> id }}/reject" class="btn btn-danger">Reject</a> --}}
                             <!-- Button trigger modal #1 -->
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-{{ $o -> id }}">
                                 Reject
@@ -51,6 +58,9 @@
                     @elseif($o -> in_progress === 'rejected(Logistic)')
                         <td>Rejected by Logistic</td>
                         <td>Rejected</td>
+                    @elseif($o -> in_progress === 'in_progress(Purchasing)')
+                        <td>In Progress (Purchasing)</td>
+                        <td>Awaiting Approval on Purchasing</td>
                     @endif
                     </tr>
                 @endforeach

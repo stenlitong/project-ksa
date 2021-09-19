@@ -8,6 +8,8 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\TransactionExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LogisticController extends Controller
 {
@@ -81,7 +83,7 @@ class LogisticController extends Controller
     }
 
     public function createTransaction(Request $request, Order $order){
-        // dd($request);
+        // dd($order->id);
         $validated = $request->validate([
             'boatName' => 'required',
             'department' => 'required',
@@ -91,7 +93,8 @@ class LogisticController extends Controller
             'prDate' => 'required',
             'serialNo' => 'required',
             'quantity' => 'required',
-            'codeMasterItem' => 'required'
+            'codeMasterItem' => 'required',
+            'note' => 'nullable'
         ]);
 
         // Formatting the PR requirements
@@ -122,9 +125,16 @@ class LogisticController extends Controller
 
         Transaction::create($validated);
 
-        dd($validated);
+        // dd($validated);
         
+        // Changing the status in orders table
+        Order::where('id', $order->id)->update([
+            'in_progress' => 'in_progress(Purchasing)'
+        ]);
 
+        // Then Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
+        $t_id = Transaction::where('order_id', $order->id)->value('id');
+        return (new TransactionExport($t_id))->download('Transaction-'. $t_id . '-' . $formatted_company . '.xlsx');
     }
 
     public function reportPage(){

@@ -6,23 +6,12 @@
 <div class="row">
     @include('logistic.sidebar')
 
-        @error('itemName')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Nama Barang Wajib Diisi
+    <br>
+    @if(session('status'))
+        <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+            {{ session('status') }}
         </div>
-        @enderror
-        
-        @error('itemAge')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Umur Barang Invalid
-        </div>
-        @enderror
-
-        @error('itemStock')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Stok Barang Invalid
-        </div>
-        @enderror
+    @endif
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="mt-5 mb-5">

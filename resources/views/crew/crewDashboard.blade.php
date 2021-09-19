@@ -41,6 +41,9 @@
                     @elseif($o -> in_progress === 'rejected(Logistic)')
                         <td>Rejected by Logistic</td>
                         <td>{{ $o -> reason }}</td>
+                    @elseif($o -> in_progress === 'in_progress(Purchasing)')
+                        <td>In Progress (Purchasing)</td>
+                        <td>Awaiting Approval on Purchasing</td>
                     @endif
                 </tr>
                 @endforeach
