@@ -9,11 +9,12 @@ class DashboardController extends Controller
 {
     public function index(){
         if(Auth::user()->hasRole('crew')){
-            $orders = Order::orderBy('created_at', 'desc')->Paginate(10);
+            // $orders = Order::orderBy('created_at', 'desc')->Paginate(10);
+            $orders = Order::latest()->Paginate(10);
             return view('crew.crewDashboard', compact('orders'));
         }elseif(Auth::user()->hasRole('logistic')){
-            // $orders = Order::where('in_progress', 'in_progress(Logistic)')->orderBy('created_at', 'desc')->get();
-            $orders = Order::orderBy('created_at', 'desc')->Paginate(10);
+            // $orders = Order::orderBy('created_at', 'desc')->Paginate(10);
+            $orders = Order::latest()->Paginate(10);
             return view('logistic.logisticDashboard', compact('orders'));
         }elseif(Auth::user()->hasRole('purchasing')){
             return view('purchasing.purchasingDashboard');

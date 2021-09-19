@@ -15,6 +15,24 @@
             </div>
         @endif
 
+        @error('itemName')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Nama Barang Wajib Diisi
+        </div>
+        @enderror
+        
+        @error('itemAge')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Umur Barang Invalid
+        </div>
+        @enderror
+
+        @error('itemStock')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Stok Barang Invalid
+        </div>
+        @enderror
+
         <!-- Button trigger modal #1 -->
         <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
             Add Item +

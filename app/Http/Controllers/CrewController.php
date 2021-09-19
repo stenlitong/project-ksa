@@ -31,7 +31,7 @@ class CrewController extends Controller
         $request->validate([
             'item_id' => 'required',
             'departmentName' => 'required',
-            'quantity' => 'required',
+            'quantity' => 'required|numeric',
             'satuan' => 'required',
             'reason' => 'nullable'
         ]);

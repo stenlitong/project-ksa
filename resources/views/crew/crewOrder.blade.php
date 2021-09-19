@@ -14,6 +14,12 @@
                     {{session('status')}}
                 </div>
             @endif
+            
+            @error('quantity')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Quantity Invalid
+                </div>
+            @enderror
 
             <form method="POST" action="{{ Route("crew.order") }}">
                 @csrf
@@ -22,7 +28,6 @@
                         <label for="item_id" class="mt-3 mb-3">Item</label>
                         <br>
                         <select class="form-control" name="item_id" id="item_id" style="width: 400px; height:50px;">
-                            <option selected>Choose...</option>
                             @foreach($items as $i)
                                 <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
                             @endforeach
@@ -33,7 +38,6 @@
                         <label for="departmentName" class="mt-3 mb-3">Department</label>
                         <br>
                         <select class="form-control" name="departmentName" id="departmentName" style="width: 400px; height:50px;">
-                            <option selected>Choose...</option>
                             <option value="deck">Deck</option>
                             <option value="mesin">Mesin</option>
                         </select>
@@ -50,7 +54,6 @@
                         <label for="satuan" class="mt-3 mb-3">Satuan</label>
                         <br>
                         <select class="form-control" id="satuan" name="satuan" style="width: 400px; height:50px;">
-                            <option selected>Choose...</option>
                             <option value="MTR">MTR</option>
                             <option value="LTR">LTR</option>
                             <option value="PCS">PCS</option>

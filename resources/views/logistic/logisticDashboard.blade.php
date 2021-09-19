@@ -35,7 +35,7 @@
                     <td>{{ $o -> item -> itemName}}</td>
                     <td>{{ $o -> quantity}}</td>
                     <td>{{ $o -> department}}</td>
-                    <td>{{ $o -> item ->itemAge }}</td>
+                    <td>{{ $o -> item ->itemAge }} Bulan</td>
                     @if($o -> in_progress === 'in_progress(Logistic)')
                         <td>
                             In Progress (Logistic)

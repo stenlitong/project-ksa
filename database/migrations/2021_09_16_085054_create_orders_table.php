@@ -15,8 +15,8 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('crew_id')->references('id')->on('users');
-            $table->foreignId('item_id')->references('id')->on('items');
+            $table->foreignId('crew_id');
+            $table->foreignId('item_id');
             $table->string('quantity');
             $table->string('department');
             $table->string('in_progress')->default('in_progress(Logistic)');

@@ -19,4 +19,7 @@ class Order extends Model
     public function user(){
         return $this->belongsTo(Item::class);
     }
+    public function transaction(){
+        return $this->hasOne(Transaction::class);
+    }
 }
