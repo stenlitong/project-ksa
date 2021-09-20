@@ -64,6 +64,7 @@
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Terakhir Diberikan</th>
                                         <th scope="col">Umur Barang</th>
+                                        <th scope="col">Department</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,6 +75,7 @@
                                                 <td>{{ $od -> quantity }}</td>
                                                 <td></td>
                                                 <td>{{ $od -> itemAge }}</td>
+                                                <td>{{ $od -> department }}</td>
                                             </tr>
                                         @endif
                                     @endforeach

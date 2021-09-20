@@ -27,12 +27,8 @@
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Crew ID</th>
-                    <th scope="col">Item</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Item Age</th>
-                    <th scope="col">Progress</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>

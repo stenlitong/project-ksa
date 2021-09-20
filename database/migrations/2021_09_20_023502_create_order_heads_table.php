@@ -25,8 +25,6 @@ class CreateOrderHeadsTable extends Migration
             $table->string('price')->nullable();
             $table->string('supplier')->nullable();
             $table->date('prDate')->nullable();
-            $table->string('serialNo')->nullable();
-            $table->string('codeMasterItem')->nullable();
             $table->string('note')->nullable();
             $table->string('invoiceAddress')->nullable();
             $table->string('itemAddress')->nullable();

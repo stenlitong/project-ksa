@@ -38,14 +38,39 @@
             </div>
 
             <br>
+
+            <!-- Select Option role -->
+            <div>
+                <x-label for="role_id" :value="__('Register as:')" />
+
+                <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option value="picSite" id="picSite">PIC Site</option>
+                    <option value="picAdmin" id="picAdmin">PIC Admin</option>
+                    <option value="picIncident" id="picIncident">PIC Incident</option>
+                    <option value="insurance" id="insurance">Asuransi</option>
+                    <option value="adminOperational">Admin operational</option>
+                    <option value="adminPurchase">Admin Purchasing</option>
+                    <option value="purchasing">Purchasing</option>
+                    <option value="logistic">Logistic</option>
+                    <option value="crew">Crew</option>
+                </select>
+            </div>
+            <br>
+            
             <!-- Select Option Cabang -->
             <div>
                 <x-label for="cabang" :value="__('Cabang:')" />
 
-                <select name="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                    <option value="jakarta">Jakarta</option>
-                    <option value="samarinda">Samarinda</option>
-                    <option value="banjarmasin">Banjarmasin</option>
+                <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
+                    <option selected disabled="">Choose...</option>
+                    <option value="jakarta" id="jakarta">Jakarta</option>
+                    <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
+                    <option value="samarinda" id="samarinda">Samarinda</option>
+                    <option value="morosi" id="morosi">Morosi</option>
+                    <option value="bunati" id ="bunati">Bunati</option>
+                    <option value="babelan"id ="babelan">Babelan</option>
+                    <option value="berau"id ="berau">Berau</option>
                 </select>
             </div>
 
@@ -69,16 +94,6 @@
             </div>
 
             <br>
-            <!-- Select Option role -->
-            <div>
-                <x-label for="role_id" :value="__('Register as:')" />
-
-                <select name="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                    <option value="crew">Crew</option>
-                    <option value="logistic">Logistic</option>
-                    <option value="purchasing">Purchasing</option>
-                </select>
-            </div>
             
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
@@ -89,6 +104,42 @@
                     {{ __('Register') }}
                 </x-button>
             </div>
+            {{-- validation script --}}
+            <script>
+                function selectopt(id)
+                {
+                    var e = document.getElementById("cabang");
+                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
+                }
+                var dropdown = document.getElementById("role_id");
+                dropdown.onchange = function(event){
+                    
+                    if(dropdown.value=="picAdmin"){
+                        selectopt('jakarta');
+                        document.getElementById("samarinda").disabled = true;
+                        document.getElementById("Banjarmasin").disabled = true;
+                        document.getElementById("morosi").disabled = true;
+                        document.getElementById("bunati").disabled = true;
+                        document.getElementById("babelan").disabled = true;
+                        document.getElementById("berau").disabled = true;
+                    }else{
+                        document.getElementById("samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("morosi").disabled = false;
+                        document.getElementById("bunati").disabled = false;
+                        document.getElementById("babelan").disabled = false;
+                        document.getElementById("berau").disabled = false;
+                    }
+                    
+                    if (dropdown.value=="picSite") {
+                        document.getElementById("jakarta").disabled = true;
+                        selectopt('samarinda');
+
+                    } else {
+                            document.getElementById("jakarta").disabled = false;
+                        }
+                }
+            </script>
         </form>
     </x-auth-card>
 </x-guest-layout>

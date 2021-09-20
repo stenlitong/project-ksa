@@ -19,6 +19,12 @@
                     My Task
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <span data-feather="file"></span>
+                    Ongoing Task
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
