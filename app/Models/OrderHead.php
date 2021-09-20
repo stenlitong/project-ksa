@@ -5,17 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class OrderHead extends Model
 {
     use HasFactory;
+
     protected $guarded = [
         'id'
     ];
-
-    public function order(){
-        return $this->hasMany(Order::class);
-    }
-    public function cart(){
-        return $this->hasMany(Cart::class);
-    }
 }

@@ -133,8 +133,23 @@ class LogisticController extends Controller
         ]);
 
         // Then Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
-        $t_id = Transaction::where('order_id', $order->id)->value('id');
-        return (new TransactionExport($t_id))->download('Transaction-'. $t_id . '-' . $formatted_company . '.xlsx');
+        // $t_id = Transaction::where('order_id', $order->id)->value('id');
+        // return (new TransactionExport($t_id))->download('Transaction-'. $t_id . '-' . $formatted_company . '.xlsx');
+
+        return redirect('/logistic/ongoing-order');
+    }
+
+    public function ongoingOrderPage(){
+        $transactions = Transaction::latest()->Paginate(10);
+
+        return view('logistic.approvedOrderPage', compact('transactions'));
+    }
+
+    public function downloadOrder(Transaction $transaction){
+        // dd($transaction->id);
+
+        // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
+        return (new TransactionExport($transaction->id))->download('Transaction-'. $transaction->id . '.xlsx');
     }
 
     public function reportPage(){

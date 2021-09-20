@@ -30,12 +30,16 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('crew')->name('crew.')->group(function(){
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
         Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
-        Route::post('/order', [CrewController::class, 'storeOrder'])->name('order');
+        Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
+        Route::post('/{user}/add-cart', [CrewController::class, 'addItemToCart']);
+        Route::get('/{user}/submit-order', [CrewController::class, 'submitOrder']);
     });
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
         Route::get('/order/{order}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{order}/approve', [LogisticController::class, 'createTransaction']);
+        Route::get('/ongoing-order', [LogisticController::class, 'ongoingOrderPage'])->name('ongoing-order');
+        Route::get('/order/{transaction}/download', [LogisticController::class, 'downloadOrder']);
         Route::put('/order/{order}/reject', [LogisticController::class, 'rejectOrder']);
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/history', [LogisticController::class, 'index'])->name('history');

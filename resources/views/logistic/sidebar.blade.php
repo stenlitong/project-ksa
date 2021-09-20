@@ -8,6 +8,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ Route("logistic.ongoing-order") }}">
+                    <span data-feather="file"></span>
+                    Ongoing Order
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ Route("logistic.report") }}">
                     <span data-feather="file"></span>
                     Make Report
