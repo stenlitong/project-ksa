@@ -29,6 +29,30 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+        'admin purchasing' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'admin operational' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'pic site' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'pic admin' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'pic incident' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'asuransi' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
     ],
 
     'permissions_map' => [

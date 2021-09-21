@@ -38,8 +38,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('logistic')->name('logistic.')->group(function(){
         Route::get('/order/{order}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{order}/approve', [LogisticController::class, 'createTransaction']);
-        Route::get('/ongoing-order', [LogisticController::class, 'ongoingOrderPage'])->name('ongoing-order');
-        Route::get('/order/{transaction}/download', [LogisticController::class, 'downloadOrder']);
+        // Route::get('/order/{transaction}/download', [LogisticController::class, 'downloadOrder']); // Still in the making
         Route::put('/order/{order}/reject', [LogisticController::class, 'rejectOrder']);
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/history', [LogisticController::class, 'index'])->name('history');

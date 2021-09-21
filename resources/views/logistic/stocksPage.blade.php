@@ -33,6 +33,18 @@
         </div>
         @enderror
 
+        @error('serialNo')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Serial Number Invalid
+        </div>
+        @enderror
+        
+        @error('codeMasterItem')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Code Master Item Invalid
+        </div>
+        @enderror
+
         <!-- Button trigger modal #1 -->
         <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
             Add Item +
@@ -72,29 +84,58 @@
                                 <input type="text" class="form-control" id="itemName" name="itemName"
                                     placeholder="Input Nama Barang">
                             </div>
-                            <div class="form-group">
-                                <label for="itemAge">Umur Barang</label>
-                                <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                    placeholder="Input Umur Barang Dalam Angka">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="itemAge">Umur Barang</label>
+                                        <input type="text" class="form-control" id="itemAge" name="itemAge"
+                                            placeholder="Input Umur Barang Dalam Angka">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="umur">Bulan/Tahun</label>
+                                        <select class="form-control" id="umur" name="umur">
+                                            <option value="Bulan">Bulan</option>
+                                            <option value="Tahun">Tahun</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="itemStock">Stok Barang</label>
+                                        <input type="text" class="form-control" id="itemStock" name="itemStock"
+                                            placeholder="Input Stok Barang">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="satuan">Satuan</label>
+                                        <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
+                                            onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                            <option value="MTR">MTR</option>
+                                            <option value="LTR">LTR</option>
+                                            <option value="PCS">PCS</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="itemStock">Stok Barang</label>
-                                <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                    placeholder="Input Stok Barang">
+                                <label for="serialNo">Serial Number / Part Number</label>
+                                <input type="text" class="form-control" id="serialNo" name="serialNo"
+                                    placeholder="Input Serial Number">
                             </div>
                             <div class="form-group">
-                                <label for="satuan">Satuan</label>
-                                <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                    onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                    <option value="MTR">MTR</option>
-                                    <option value="LTR">LTR</option>
-                                    <option value="PCS">PCS</option>
-                                </select>
+                                <label for="codeMasterItem">Code Master Item</label>
+                                <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
+                                    placeholder="Input Code Master Item">
                             </div>
                             <div class="form-group">
-                                <label for="description">Deskripsi</label>
+                                <label for="description">Deskripsi (optional)</label>
                                 <textarea class="form-control" name="description" id="description" rows="3"
-                                    placeholder="Input Item's Description"></textarea>
+                                    placeholder="Input Deskripsi Barang"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Add Item</button>
@@ -111,11 +152,12 @@
                 <div class="card-body">
                     <h5 class="card-title">Stok : {{ $i -> itemStock }}</h5>
                     <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>
+
                     <!-- Button trigger modal #2 -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
                         Edit Item
                     </button>
-                    {{-- <a href="/logistic/stocks/{{ $i->id }}/edit"class="btn btn-primary" style="margin-left: 90%">Edit Item</a> --}}
+                    
                 </div>
             </div>
         @endforeach
@@ -138,34 +180,63 @@
                                 <div class="form-group">
                                     <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Nama Barang" value="{{ $i->itemName }}">
+                                        placeholder="Input Nama Barang" value="{{ $i -> itemName }}">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="itemAge">Umur Barang</label>
+                                            <input type="text" class="form-control" id="itemAge" name="itemAge"
+                                                placeholder="Input Umur Barang Dalam Angka">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="umur">Bulan/Tahun</label>
+                                            <select class="form-control" id="umur" name="umur">
+                                                <option value="Bulan">Bulan</option>
+                                                <option value="Tahun">Tahun</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="itemStock">Stok Barang</label>
+                                            <input type="text" class="form-control" id="itemStock" name="itemStock"
+                                                placeholder="Input Stok Barang">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="satuan">Satuan</label>
+                                            <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
+                                                onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                                <option value="MTR">MTR</option>
+                                                <option value="LTR">LTR</option>
+                                                <option value="PCS">PCS</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="itemAge">Umur Barang</label>
-                                    <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                        placeholder="Input Umur Barang Dalam Angka" value="{{ $i->itemAge }}">
+                                    <label for="serialNo">Serial Number / Part Number</label>
+                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
+                                        placeholder="Input Serial Number" value="{{ $i -> serialNo }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="itemStock">Stok Barang</label>
-                                    <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                        placeholder="Input Stok Barang">
+                                    <label for="codeMasterItem">Code Master Item</label>
+                                    <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
+                                        placeholder="Input Code Master Item" value="{{ $i -> codeMasterItem }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="satuan">Satuan</label>
-                                    <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                        onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                        <option value="MTR">MTR</option>
-                                        <option value="LTR">LTR</option>
-                                        <option value="PCS">PCS</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">Deskripsi</label>
+                                    <label for="description">Deskripsi (optional)</label>
                                     <textarea class="form-control" name="description" id="description" rows="3"
-                                        placeholder="Input Item's Description"></textarea>
+                                        placeholder="Input Deskripsi Barang"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Save Item</button>
+                                    <button type="submit" class="btn btn-primary">Add Item</button>
                                 </div>
                             </form>
                         </div>
