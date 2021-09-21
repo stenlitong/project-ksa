@@ -29,7 +29,11 @@
                 @foreach($orderHeads as $o)
                 <tr>
                     <th>#{{ $o -> order_id}}</th>
-                    <td>{{ $o -> status}}</td>
+                    @if(strpos($o -> status, 'Rejected') !== false)
+                        <td style="color: red">{{ $o -> status}}</td>
+                    @else
+                        <td>{{ $o -> status}}</td>
+                    @endif
                     <td>{{ $o -> reason }}</td>
                     <td><button type="button" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                         Detail

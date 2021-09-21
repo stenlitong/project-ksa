@@ -26,9 +26,8 @@ class DashboardController extends Controller
             // $orders = Order::where('in_progress', 'not like', '%in_progress(Purchasing)%')->latest()->Paginate(10);
 
             // Get the latest 30 days using Carbon package => still in testing
-            // Get all the order
-            // $orderHeads = OrderHead::where('status', 'like', '%In Progress%', 'or','created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10);
             $orderHeads = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10);
+            // $orderHeads = OrderHead::where('status', 'like', '%In Progress%', 'or','created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10);
 
             // Get all the order detail
             $order_id = OrderHead::select('order_id')->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');

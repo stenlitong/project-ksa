@@ -28,6 +28,7 @@
                 <tr>
                     <th scope="col">Order ID</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Keterangan</th>
                     <th scope="col">Detail</th>
                 </tr>
             </thead>
@@ -35,26 +36,19 @@
                 @foreach($orderHeads as $oh)
                 <tr>
                     <th>#{{ $oh -> order_id}}</th>
-                    <td>{{ $oh -> status}}</td>
+                    
+                    @if(strpos($oh -> status, 'Rejected') !== false)
+                        <td style="color: red">{{ $oh -> status}}</td>
+                    @else
+                        <td>{{ $oh -> status}}</td>
+                    @endif
+
+                    <td>{{ $oh -> reason}}</td>
+                    
                     {{-- Button to trigger the modal detail --}}
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
                         Detail
                     </button></td>
-                    {{-- @if($od -> status === 'In Progress (Logistic)')
-                        <td>
-                            <a href="/logistic/order/{{ $od -> id }}/approve" class="btn btn-success">Approve</a>
-                            <!-- Button trigger modal #1 -->
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-{{ $od -> id }}">
-                                Reject
-                            </button>
-                        </td>
-                    @elseif($o -> in_progress === 'rejected(Logistic)')
-                        <td>Rejected by Logistic</td>
-                        <td>Rejected</td>
-                    @elseif($o -> in_progress === 'in_progress(Purchasing)')
-                        <td>In Progress (Purchasing)</td>
-                        <td>Awaiting Approval on Purchasing</td>
-                    @endif --}}
                 </tr>
                 @endforeach
             </tbody>
@@ -123,13 +117,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body"> 
-                    <label for="reason">Alasan</label>
-                    <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Submit</button>
-                </div>
+                <form method="POST" action="/logistic/order/{{ $oh->id }}/reject">
+                    @csrf
+                    <div class="modal-body"> 
+                        <label for="reason">Alasan</label>
+                        <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                </form>
             </div>
             </div>
         </div>

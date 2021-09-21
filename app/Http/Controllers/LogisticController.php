@@ -63,12 +63,13 @@ class LogisticController extends Controller
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
-        // Reject the order made from crew role
+        // dd($request->reason);
+        // Reject the order made from crew
         $request->validate([
             'reason' => 'required'
         ]);
         OrderHead::where('id', $orderHeads->id)->update([
-            'in_progress' => 'Rejected (Logistic)',
+            'status' => 'Rejected (Logistic)',
             'reason' => $request->reason
         ]);
         return redirect('/dashboard');
@@ -79,6 +80,12 @@ class LogisticController extends Controller
 
         return view('logistic.logisticApproveOrder', compact('order'));
     }
+
+    public function reportPage(){
+        return view('logistic.logisticReport');
+    }
+
+    // ============================ Testing Playgrounds ===================================
 
     // public function createTransaction(Request $request){
         
@@ -143,10 +150,6 @@ class LogisticController extends Controller
         // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
     //     return (new TransactionExport($transaction->id))->download('Transaction-'. $transaction->id . '.xlsx');
     // }
-
-    public function reportPage(){
-        return view('logistic.logisticReport');
-    }
 
     public function uploadItem(Request $request){
         // Testing upload to S3 function
