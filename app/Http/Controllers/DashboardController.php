@@ -14,8 +14,8 @@ class DashboardController extends Controller
         if(Auth::user()->hasRole('crew')){
             // $orders = Order::latest()->Paginate(10);
 
-            // Get all the order within the logged in user
-            $orderHeads = OrderHead::where('user_id', Auth::user()->id, 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10);
+            // Get all the order within the logged in user within 30 days from date now
+            $orderHeads = OrderHead::where('user_id', 'like', Auth::user()->id, 'and', 'created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
             // Get the orderDetail from orders_id within the orderHead table 
             $order_id = OrderHead::select('order_id')->where('user_id', Auth::user()->id)->pluck('order_id');

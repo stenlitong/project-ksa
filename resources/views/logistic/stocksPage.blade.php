@@ -180,7 +180,7 @@
 
         @foreach($items as $i)
             <div class="card mt-3 mb-5">
-                <h5 class="card-header">{{ $i -> itemName }} | Code Item # {{ $i -> codeMasterItem }}</h5>
+                <h5 class="card-header">{{ $i -> itemName }} | Kode Barang # {{ $i -> codeMasterItem }}</h5>
                 <div class="card-body">
                     <h5 class="card-title">Stok : {{ $i -> itemStock }} {{ $i -> unit }}</h5>
                     <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>

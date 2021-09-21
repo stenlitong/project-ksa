@@ -117,7 +117,6 @@
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">Item ID</th>
                                 <th scope="col">Nama Barang</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Department</th>
@@ -127,7 +126,6 @@
                         <tbody>
                             @foreach($carts as $c)
                                 <tr>
-                                    <td>#{{ $c -> item_id }}</td>
                                     <td>{{ $c -> item -> itemName }}</td>
                                     <td>{{ $c -> quantity }}</td>
                                     <td>{{ $c -> department }}</td>

@@ -21,6 +21,7 @@
                 <tr>
                     <th scope="col">Order ID</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Keterangan</th>
                     <th scope="col">Detail</th>
                 </tr>
             </thead>
@@ -29,18 +30,12 @@
                 <tr>
                     <th>#{{ $o -> order_id}}</th>
                     <td>{{ $o -> status}}</td>
+                    <td>{{ $o -> reason }}</td>
                     <td><button type="button" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                         Detail
                     </button></td>
                 </tr>
                 @endforeach
-                {{-- @foreach($orderDetails as $o)
-                    @if($o -> id == 6)
-                    <tr>
-                        <td>{{ $o->itemName }}</td>
-                    </tr>
-                    @endif
-                @endforeach --}}
             </tbody>
 
         </table>
@@ -63,7 +58,6 @@
                                         <th scope="col">Item Barang</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Satuan</th>
-                                        <th scope="col">Reason</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,7 +67,6 @@
                                                 <td>{{ $od -> itemName }}</td>
                                                 <td>{{ $od -> quantity }}</td>
                                                 <td>{{ $od -> unit }}</td>
-                                                <td>Reason</td>
                                             </tr>
                                         @endif
                                     @endforeach
