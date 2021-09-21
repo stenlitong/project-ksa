@@ -12,7 +12,7 @@
         </div>
 
         <h2 class="mt-3 mb-3" style="text-align: center">Order List</h2>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-end">
             {{ $orderHeads->links() }}
         </div>
 
@@ -36,6 +36,7 @@
                 <tr>
                     <th>#{{ $oh -> order_id}}</th>
                     <td>{{ $oh -> status}}</td>
+                    {{-- Button to trigger the modal detail --}}
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
                         Detail
                     </button></td>
@@ -59,12 +60,14 @@
             </tbody>
         </table>
     </main>
+
+    {{-- Modal detail --}}
     @foreach($orderHeads as $o)
             <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                 aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header bg-danger">
                             <h5 class="modal-title" id="detailTitle">Order ID # {{ $o -> order_id }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -95,12 +98,42 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div> 
+                        <div class="modal-footer">
+                            {{-- Check if the order is rejected then do not show the approve & reject button --}}
+                            @if(strpos($o -> status, 'In Progress') !== false)
+                                {{-- Button to trigger modal 2 --}}
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
+                                <a href="" class="btn btn-primary">Approve</a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
     @endforeach
 
+    {{-- Modal 2 --}}
+    @foreach($orderHeads as $oh)
+        <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectTitle">Reject Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"> 
+                    <label for="reason">Alasan</label>
+                    <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Submit</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    @endforeach
 </div>
 
 @endsection
