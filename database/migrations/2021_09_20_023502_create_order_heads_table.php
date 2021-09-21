@@ -29,6 +29,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('invoiceAddress')->nullable();
             $table->string('itemAddress')->nullable();
             $table->string('status')->default('In Progress(Logistic)');
+            $table->string('reason')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

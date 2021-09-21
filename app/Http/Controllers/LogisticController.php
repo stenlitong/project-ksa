@@ -31,53 +31,34 @@ class LogisticController extends Controller
 
     public function storeItem(Request $request){
         // Storing the item to the stock
-        $request->validate([
+        $validated = $request->validate([
             'itemName' => 'required',
             'itemAge' => 'required|numeric',
             'umur' => 'required',
             'itemStock' => 'required|numeric',
-            'serialNo' => 'required',
-            'codeMasterItem' => 'required',
-            'satuan' => 'required',
+            'unit' => 'required',
+            'serialNo' => 'nullable',
+            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
         ]);
 
-        // Formatting the quantity and item age
-        $new_qty = $request->itemStock . ' ' . $request->satuan;
+        // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
+        $validated['itemAge'] = $new_itemAge;
 
-        Item::create([
-            'itemName' => $request->itemName,
-            'itemStock' => $new_qty,
-            'itemAge' => $new_itemAge,
-            'serialNo' => $request->serialNo,
-            'codeMasterItem' => $request->codeMasterItem,
-            'description' => $request->description
-        ]);
+        Item::create($validated);
+
         return redirect('logistic/stocks')->with('status', 'Added Successfully');
     }
 
     public function editItem(Request $request, Item $item){
         // Edit the requested item
-        $request->validate([
-            'itemName' => 'required',
-            'itemAge' => 'required|numeric',
-            'umur' => 'required',
+        $validated = $request->validate([
             'itemStock' => 'required|numeric',
-            'serialNo' => 'required',
-            'codeMasterItem' => 'required',
-            'satuan' => 'required',
+            'unit' => 'required',
+            'description' => 'nullable'
         ]);
 
-        // Formatting the quantity
-        $new_qty = $request->itemStock . " " . $request->satuan;
-        $new_itemAge = $request->itemAge . ' ' . $request->umur;
-
-        Item::where('id', $item->id)->update([
-            'itemName' => $request->itemName,
-            'itemStock' => $new_qty,
-            'itemAge' => $new_itemAge,
-            'description' => $request->description
-        ]);
+        Item::where('id', $item->id)->update($validated);
         return redirect('logistic/stocks')->with('status', 'Edit Successfully');
     }
 
@@ -87,7 +68,7 @@ class LogisticController extends Controller
             'reason' => 'required'
         ]);
         Order::where('id', $order->id)->update([
-            'in_progress' => 'rejected(Logistic)',
+            'in_progress' => 'Rejected (Logistic)',
             'reason' => $request->reason
         ]);
         return redirect('/dashboard');

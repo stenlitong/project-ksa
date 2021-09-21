@@ -112,13 +112,45 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="satuan">Satuan</label>
-                                        <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                            onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                            <option value="MTR">MTR</option>
-                                            <option value="LTR">LTR</option>
-                                            <option value="PCS">PCS</option>
-                                        </select>
+                                        <label>Unit<input list="unit" name="unit" class="mt-2" style="width: 400px; height:40px"/></label>
+                                        <datalist id="unit">
+                                        <option value="Bks">
+                                        <option value="Btg">
+                                        <option value="Btl">
+                                        <option value="Cm">
+                                        <option value="Crt">
+                                        <option value="Cyl">
+                                        <option value="Doz">
+                                        <option value="Drm">
+                                        <option value="Duz">
+                                        <option value="Gln">
+                                        <option value="Jrg">
+                                        <option value="Kbk">
+                                        <option value="Kg">
+                                        <option value="Klg">
+                                        <option value="Ktk">
+                                        <option value="Lbr">
+                                        <option value="Lgt">
+                                        <option value="Ls">
+                                        <option value="Ltr">
+                                        <option value="Mtr">
+                                        <option value="Pak">
+                                        <option value="Pal">
+                                        <option value="Pax">
+                                        <option value="Pc">
+                                        <option value="Pcs">
+                                        <option value="Plt">
+                                        <option value="Psg">
+                                        <option value="Ptg">
+                                        <option value="Ret">
+                                        <option value="Rol">
+                                        <option value="Sak">
+                                        <option value="SET">
+                                        <option value="Tbg">
+                                        <option value="Trk">
+                                        <option value="Unt">
+                                        <option value="Zak">
+                                        </datalist>
                                     </div>
                                 </div>
                             </div>
@@ -148,9 +180,9 @@
 
         @foreach($items as $i)
             <div class="card mt-3 mb-5">
-                <h5 class="card-header">{{ $i -> itemName }}</h5>
+                <h5 class="card-header">{{ $i -> itemName }} | Code Item # {{ $i -> codeMasterItem }}</h5>
                 <div class="card-body">
-                    <h5 class="card-title">Stok : {{ $i -> itemStock }}</h5>
+                    <h5 class="card-title">Stok : {{ $i -> itemStock }} {{ $i -> unit }}</h5>
                     <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>
 
                     <!-- Button trigger modal #2 -->
@@ -168,7 +200,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editItemTitle">Edit Item</h5>
+                            <h5 class="modal-title" id="editItemTitle">Edit Item Stocks</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -180,25 +212,7 @@
                                 <div class="form-group">
                                     <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Nama Barang" value="{{ $i -> itemName }}">
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="itemAge">Umur Barang</label>
-                                            <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                                placeholder="Input Umur Barang Dalam Angka">
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="umur">Bulan/Tahun</label>
-                                            <select class="form-control" id="umur" name="umur">
-                                                <option value="Bulan">Bulan</option>
-                                                <option value="Tahun">Tahun</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                        placeholder="Input Nama Barang" value="{{ $i -> itemName }}" readonly>
                                 </div>
                                 <div class="row">
                                     <div class="col">
@@ -210,25 +224,47 @@
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="satuan">Satuan</label>
-                                            <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                                onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                                <option value="MTR">MTR</option>
-                                                <option value="LTR">LTR</option>
-                                                <option value="PCS">PCS</option>
-                                            </select>
+                                            <label>Unit<input list="unit" name="unit" class="mt-2" style="width: 400px; height:40px"/></label>
+                                            <datalist id="unit">
+                                            <option value="Bks">
+                                            <option value="Btg">
+                                            <option value="Btl">
+                                            <option value="Cm">
+                                            <option value="Crt">
+                                            <option value="Cyl">
+                                            <option value="Doz">
+                                            <option value="Drm">
+                                            <option value="Duz">
+                                            <option value="Gln">
+                                            <option value="Jrg">
+                                            <option value="Kbk">
+                                            <option value="Kg">
+                                            <option value="Klg">
+                                            <option value="Ktk">
+                                            <option value="Lbr">
+                                            <option value="Lgt">
+                                            <option value="Ls">
+                                            <option value="Ltr">
+                                            <option value="Mtr">
+                                            <option value="Pak">
+                                            <option value="Pal">
+                                            <option value="Pax">
+                                            <option value="Pc">
+                                            <option value="Pcs">
+                                            <option value="Plt">
+                                            <option value="Psg">
+                                            <option value="Ptg">
+                                            <option value="Ret">
+                                            <option value="Rol">
+                                            <option value="Sak">
+                                            <option value="SET">
+                                            <option value="Tbg">
+                                            <option value="Trk">
+                                            <option value="Unt">
+                                            <option value="Zak">
+                                            </datalist>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="serialNo">Serial Number / Part Number</label>
-                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
-                                        placeholder="Input Serial Number" value="{{ $i -> serialNo }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="codeMasterItem">Code Master Item</label>
-                                    <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                        placeholder="Input Code Master Item" value="{{ $i -> codeMasterItem }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Deskripsi (optional)</label>

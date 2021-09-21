@@ -59,13 +59,46 @@
                             </div>
         
                             <div class="form-group p-2">
-                                <label for="satuan" class="mt-3 mb-3">Satuan</label>
                                 <br>
-                                <select class="form-control" id="satuan" name="satuan" style="width: 400px; height:50px;">
-                                    <option value="MTR">MTR</option>
-                                    <option value="LTR">LTR</option>
-                                    <option value="PCS">PCS</option>
-                                </select>
+                                <label>Satuan<input list="satuan" name="satuan" class="mt-3 mb-3" style="width: 400px; height:45px"/></label>
+                                <datalist id="satuan">
+                                  <option value="Bks">
+                                  <option value="Btg">
+                                  <option value="Btl">
+                                  <option value="Cm">
+                                  <option value="Crt">
+                                  <option value="Cyl">
+                                  <option value="Doz">
+                                  <option value="Drm">
+                                  <option value="Duz">
+                                  <option value="Gln">
+                                  <option value="Jrg">
+                                  <option value="Kbk">
+                                  <option value="Kg">
+                                  <option value="Klg">
+                                  <option value="Ktk">
+                                  <option value="Lbr">
+                                  <option value="Lgt">
+                                  <option value="Ls">
+                                  <option value="Ltr">
+                                  <option value="Mtr">
+                                  <option value="Pak">
+                                  <option value="Pal">
+                                  <option value="Pax">
+                                  <option value="Pc">
+                                  <option value="Pcs">
+                                  <option value="Plt">
+                                  <option value="Psg">
+                                  <option value="Ptg">
+                                  <option value="Ret">
+                                  <option value="Rol">
+                                  <option value="Sak">
+                                  <option value="SET">
+                                  <option value="Tbg">
+                                  <option value="Trk">
+                                  <option value="Unt">
+                                  <option value="Zak">
+                                </datalist>
                             </div>
                         </div>
         

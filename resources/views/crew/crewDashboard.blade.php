@@ -29,7 +29,7 @@
                 <tr>
                     <th>#{{ $o -> order_id}}</th>
                     <td>{{ $o -> status}}</td>
-                    <td><button type="button" class="btn btn-primary" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                         Detail
                     </button></td>
                 </tr>
@@ -62,9 +62,8 @@
                                     <tr>
                                         <th scope="col">Item Barang</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">Terakhir Diberikan</th>
-                                        <th scope="col">Umur Barang</th>
-                                        <th scope="col">Department</th>
+                                        <th scope="col">Satuan</th>
+                                        <th scope="col">Reason</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,9 +72,8 @@
                                             <tr>
                                                 <td>{{ $od -> itemName }}</td>
                                                 <td>{{ $od -> quantity }}</td>
-                                                <td></td>
-                                                <td>{{ $od -> itemAge }}</td>
-                                                <td>{{ $od -> department }}</td>
+                                                <td>{{ $od -> unit }}</td>
+                                                <td>Reason</td>
                                             </tr>
                                         @endif
                                     @endforeach
