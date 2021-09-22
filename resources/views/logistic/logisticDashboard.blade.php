@@ -11,7 +11,7 @@
             <h3>{{ "Today is, " . date('l M Y') }}</h3>
         </div>
 
-        <h2 class="mt-3 mb-3" style="text-align: center">Order List</h2>
+        <h2 class="mt-3 mb-2" style="text-align: center">Order List</h2>
         <div class="d-flex justify-content-end">
             {{ $orderHeads->links() }}
         </div>
@@ -23,7 +23,9 @@
         </div>
         @enderror
 
-        <table class="table">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by status..">
+
+        <table class="table" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Order ID</th>
@@ -43,7 +45,7 @@
                         <td>{{ $oh -> status}}</td>
                     @endif
 
-                    <td>{{ $oh -> reason}}</td>
+                    <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ $oh -> reason}}</td>
                     
                     {{-- Button to trigger the modal detail --}}
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
@@ -76,6 +78,7 @@
                                         <th scope="col">Terakhir Diberikan</th>
                                         <th scope="col">Umur Barang</th>
                                         <th scope="col">Department</th>
+                                        <th scope="col">Stok Barang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,6 +90,11 @@
                                                 <td></td>
                                                 <td>{{ $od -> itemAge }}</td>
                                                 <td>{{ $od -> department }}</td>
+                                                @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> itemStock)
+                                                    <td style="color: red">{{ $od -> itemStock}} {{ $od -> unit }} (Stok Tidak Mencukupi)</td>
+                                                @else
+                                                    <td style="color: green">{{ $od -> itemStock}} {{ $od -> unit }}</td>
+                                                @endif
                                             </tr>
                                         @endif
                                     @endforeach
@@ -98,7 +106,7 @@
                             @if(strpos($o -> status, 'In Progress') !== false)
                                 {{-- Button to trigger modal 2 --}}
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
-                                <a href="/logistic/order//approve" class="btn btn-primary">Approve</a>
+                                <a href="/logistic/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
                             @endif
                         </div>
                     </div>
@@ -132,5 +140,46 @@
         </div>
     @endforeach
 </div>
+
+<style>
+    #myInput {
+        background-image: url('/css/search.png'); /* Add a search icon to input */
+        background-position: 10px 12px; /* Position the search icon */
+        background-repeat: no-repeat; /* Do not repeat the icon image */
+        width: 400px; /* Full-width */
+        font-size: 16px; /* Increase font-size */
+        padding: 12px 20px 12px 40px; /* Add some padding */
+        border: 1px solid #ddd; /* Add a grey border */
+        margin-bottom: 12px; /* Add some space below the input */
+    }
+
+    #myTable {
+        border-collapse: collapse; /* Collapse borders */
+    }
+</style>
+
+<script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    </script>
 
 @endsection

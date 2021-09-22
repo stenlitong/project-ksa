@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\Barge;
+use App\Models\Tug;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
@@ -24,10 +26,12 @@ class CrewController extends Controller
     {
         // Select items to choose in the order page & carts according to the login user
         $items = Item::all();
+        $barges = Barge::all();
+        $tugs = Tug::all();
         $carts = Cart::where('user_id', Auth::user()->id)->get();
 
         // dd($carts);
-        return view('crew.crewOrder', compact('items', 'carts'));
+        return view('crew.crewOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
 
     public function taskPage()
@@ -74,21 +78,34 @@ class CrewController extends Controller
         return redirect('/crew/order')->with('status', 'Delete Item Success');
     }
 
-    public function submitOrder(User $user){
+    public function submitOrder(Request $request){
+        $request -> validate([
+            'tugName' => 'required',
+            'bargeName' => 'required'
+        ]);
+
         // Find the cart of the following user
         $carts = Cart::where('user_id', Auth::user()->id)->get();
 
-        // dd(Item::where('id', 2)->value('itemName'));
+        // Validate cart size
+        // dd(count($carts));
+        if(count($carts) == 0){
+            return redirect('/crew/order')->with('errorCart', 'Cart is Empty');
+        }
 
         // Generate unique id for the order_id || Create the order from the cart
         do{
             $unique_id = Str::random(9);
         }while(OrderHead::where('order_id', $unique_id)->exists());
 
+        // String formatting for boatName with tugName + bargeName
+        $boatName = $request->tugName . '/' . $request->bargeName;
+
         // Create Order Head
         OrderHead::create([
             'user_id' => Auth::user()->id,
             'order_id' => $unique_id,
+            'boatName' => $boatName,
             'status' => 'In Progress (Logistic)'
         ]);
         

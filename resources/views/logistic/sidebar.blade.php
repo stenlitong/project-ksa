@@ -7,12 +7,12 @@
                     Dashboard
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{ Route("logistic.report") }}">
                     <span data-feather="file"></span>
                     Make Report
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link" href="{{ Route("logistic.history") }}">
                     <span data-feather="file"></span>
@@ -23,6 +23,12 @@
                 <a class="nav-link" href="{{ Route("logistic.stocks") }}">
                     <span data-feather="file"></span>
                     Item Stocks
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ Route("logistic.makeOrder") }}">
+                    <span data-feather="file"></span>
+                    Make Order
                 </a>
             </li>
         </ul>

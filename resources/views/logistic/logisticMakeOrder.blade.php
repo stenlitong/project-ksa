@@ -1,13 +1,13 @@
 @extends('../layouts.base')
 
-@section('title', 'Crew Order')
+@section('title', 'Logistic Order Item')
 
 @section('container')
 <div class="row">
-    @include('crew.sidebar')
+    @include('logistic.sidebar')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-            <h1 style="margin-left: 40%">Create Order</h1>
+            <h1 style="margin-left: 35%">Create Order For Logistic</h1>
             <br>
             @if (session('status'))
                 <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -20,12 +20,6 @@
                     {{session('error')}}
                 </div>
             @endif
-
-            @if (session('errorCart'))
-                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                    {{session('errorCart')}}
-                </div>
-            @endif
             
             @error('quantity')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -33,21 +27,9 @@
                 </div>
             @enderror
 
-            @error('tugName')
-                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                    Nama Tug Invalid
-                </div>
-            @enderror
-
-            @error('bargeName')
-                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                    Nama Barge Invalid
-                </div>
-            @enderror
-
             <div class="row">
                 <div class="col">
-                    <form method="POST" action="/crew/{{ Auth::user()->id }}/add-cart">
+                    <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
                         @csrf
                         <div class="d-flex justify-content-around ml-3 mr-3">
                             <div class="form-group p-2">
@@ -124,14 +106,9 @@
                         <div class="d-flex ml-3 justify-content-center">
                             {{-- Add Item To Cart --}}
                             <button type="submit" class="btn btn-success mr-3" style="">Add To Cart</button>
-                            {{-- <a class="btn btn-primary ml-3" style="">Submit Order</a> --}}
                             
                             {{-- Submit Cart To Order --}}
-                            {{-- <a href="/crew/{{ Auth::user()->id }}/submit-order" class="btn btn-primary ml-3" style="">Submit Order</a> --}}
-                            
-                            {{-- Modal --}}
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submit-order">Submit Order</button>
-
+                            <a href="/crew/{{ Auth::user()->id }}/submit-order" class="btn btn-primary ml-3" style="">Submit Order</a>
                         </div>
                     </form>
                 </div>
@@ -165,45 +142,5 @@
             </div>
         </div>
     </main>
-
-    <div class="modal fade" id="submit-order" tabindex="-1" role="dialog" aria-labelledby="submit-orderTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="submitTitle">Input Nama Kapal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form method="POST" action="/crew/{{ Auth::user()->id }}/submit-order">
-                @csrf
-                <div class="modal-body"> 
-                    <div class="row">
-                        <div class="col">
-                            <label>Tug<input list="tugName" name="tugName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                            <datalist id="tugName">
-                                @foreach($tugs as $t)
-                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                @endforeach
-                            </datalist>
-                        </div>
-                        <div class="col">
-                            <label>Barge<input list="bargeName" name="bargeName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                            <datalist id="bargeName">
-                                @foreach($barges as $b)
-                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                @endforeach
-                            </datalist>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-        </div>
-    </div>
-
 </div>
 @endsection

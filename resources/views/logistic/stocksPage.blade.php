@@ -183,6 +183,7 @@
                 <h5 class="card-header">{{ $i -> itemName }} | Kode Barang # {{ $i -> codeMasterItem }}</h5>
                 <div class="card-body">
                     <h5 class="card-title">Stok : {{ $i -> itemStock }} {{ $i -> unit }}</h5>
+                    <p class="card-text">Umur Barang : {{ $i -> itemAge }}</p>
                     <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>
 
                     <!-- Button trigger modal #2 -->

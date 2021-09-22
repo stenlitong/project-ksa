@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Storage;
 use Illuminate\Support\Facades\Auth;
@@ -75,10 +76,27 @@ class LogisticController extends Controller
         return redirect('/dashboard');
     }
 
-    public function approveOrder(OrderHead $order){
+    public function approveOrder(OrderHead $orderHeads){
+        dd($orderHeads -> id);
         // Approve the order
+        $orderDetails = OrderDetail::where('orders_id', $order->order_id)->get();
+
+        dd($order->id);
 
         return view('logistic.logisticApproveOrder', compact('order'));
+    }
+
+    public function makeOrderPage(){
+        // Select items to choose in the order page & carts according to the login user
+        $items = Item::all();
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+        return view('logistic.logisticMakeOrder', compact('items', 'carts'));
+    }
+
+    public function addItemToCart(Request $request){
+        dd($request);
+
     }
 
     public function reportPage(){
