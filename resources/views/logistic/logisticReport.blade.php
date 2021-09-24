@@ -68,8 +68,7 @@
                                 style="width: 400px">
                         </div>
                     </div>
-                
-    
+
                     <br>
     
                     <button type="submit" class="btn btn-primary" style="margin-left: 44%">Submit report</button>

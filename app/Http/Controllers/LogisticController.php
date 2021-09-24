@@ -32,7 +32,38 @@ class LogisticController extends Controller
 
     public function storeItem(Request $request){
         // Storing the item to the stock
-        $validated = $request->validate([
+        $request->validate([
+            'itemName' => 'required|unique:items',
+            'itemAge' => 'required|numeric',
+            'umur' => 'required',
+            'itemStock' => 'required|numeric',
+            'unit' => 'required',
+            'serialNo' => 'nullable',
+            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/|unique:items',
+            'description' => 'nullable'
+        ]);
+
+        // Formatting the item age
+        $new_itemAge = $request->itemAge . ' ' . $request->umur;
+        
+
+        Item::create([
+            'itemName' => $request -> itemName,
+            'itemAge' => $new_itemAge,
+            'itemStock' => $request -> itemStock,
+            'unit' => $request -> unit,
+            'serialNo' => $request -> serialNo,
+            'codeMasterItem' => $request -> codeMasterItem,
+            'description' => $request -> description
+        ]);
+
+        return redirect('logistic/stocks')->with('status', 'Added Successfully');
+    }
+
+    public function editItem(Request $request, Item $item){
+
+        // Edit the requested item
+         $request->validate([
             'itemName' => 'required',
             'itemAge' => 'required|numeric',
             'umur' => 'required',
@@ -40,26 +71,21 @@ class LogisticController extends Controller
             'unit' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            'description' => 'nullable'
         ]);
 
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
-        $validated['itemAge'] = $new_itemAge;
 
-        Item::create($validated);
-
-        return redirect('logistic/stocks')->with('status', 'Added Successfully');
-    }
-
-    public function editItem(Request $request, Item $item){
-        // Edit the requested item
-        $validated = $request->validate([
-            'itemStock' => 'required|numeric',
-            'unit' => 'required',
-            'description' => 'nullable'
+        Item::where('id', $item->id)->update([
+            'itemName' => $request -> itemName,
+            'itemAge' => $new_itemAge,
+            'itemStock' => $request -> itemStock,
+            'unit' => $request -> unit,
+            'serialNo' => $request -> serialNo,
+            'codeMasterItem' => $request -> codeMasterItem,
+            'description' => $request -> description
         ]);
-
-        Item::where('id', $item->id)->update($validated);
         return redirect('logistic/stocks')->with('status', 'Edit Successfully');
     }
 
@@ -76,14 +102,53 @@ class LogisticController extends Controller
         return redirect('/dashboard');
     }
 
-    public function approveOrder(OrderHead $orderHeads){
-        dd($orderHeads -> id);
-        // Approve the order
-        $orderDetails = OrderDetail::where('orders_id', $order->order_id)->get();
+    public function approveOrderPage(OrderHead $orderHeads){
+        // Get the order details join with the item
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
 
-        dd($order->id);
+        return view('logistic.logisticApprovedOrder', compact('orderDetails', 'orderHeads'));
+    }
 
-        return view('logistic.logisticApproveOrder', compact('order'));
+    public function approveOrder(Request $request, OrderHead $orderHeads){
+        // Validate
+        $request -> validate([
+            'boatName' => 'required',
+            'sender' => 'required',
+            'receiver' => 'required',
+            'cabang' => 'required',
+            'expedition' => 'required',
+            'noResi' => 'nullable',
+            'description' => 'nullable',
+        ]);
+
+        // Get the order details of the following order
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+
+        //If the stock is not enough then redirect to dashboard with error
+        foreach($orderDetails as $od){
+            // Pluck return an array
+            if(Item::where('itemName', $od -> itemName)->pluck('itemStock')[0] < $od -> quantity){
+                return redirect('/dashboard')->with('error', 'Stok Tidak Mencukupi, Silahkan Periksa Stok Kembali');
+            }
+        }
+
+        // Else stock is enough, then update the stock
+        foreach($orderDetails as $od){
+            Item::where('itemName', $od -> itemName)->decrement('itemStock', $od -> quantity);
+        }
+
+        // Update the status of the following order
+        OrderHead::where('id', $orderHeads -> id)->update([
+            'status' => 'On Delivery',
+            'sender' => $request -> sender,
+            'receiver' => $request -> receiver,
+            'expedition' => $request -> expedition,
+            'noResi' => $request -> noResi,
+            'descriptions' => $request -> description,
+            'approved_at' => date("d/m/Y")
+        ]);
+
+        return redirect('/dashboard')->with('status', 'Order Approved');
     }
 
     public function makeOrderPage(){

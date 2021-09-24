@@ -17,7 +17,7 @@
 
         @error('itemName')
         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Nama Barang Wajib Diisi
+            Nama Barang Invalid
         </div>
         @enderror
         
@@ -155,14 +155,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="serialNo">Serial Number / Part Number</label>
+                                <label for="serialNo">Serial Number / Part Number (optional)</label>
                                 <input type="text" class="form-control" id="serialNo" name="serialNo"
                                     placeholder="Input Serial Number">
                             </div>
                             <div class="form-group">
                                 <label for="codeMasterItem">Code Master Item</label>
                                 <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                    placeholder="Input Code Master Item">
+                                    placeholder="Input Code Master Item (xx-xxxx-)">
                             </div>
                             <div class="form-group">
                                 <label for="description">Deskripsi (optional)</label>
@@ -180,7 +180,14 @@
 
         @foreach($items as $i)
             <div class="card mt-3 mb-5">
-                <h5 class="card-header">{{ $i -> itemName }} | Kode Barang # {{ $i -> codeMasterItem }}</h5>
+                <div class="card-header d-inline-flex justify-content-between">
+                    <h5>
+                        {{ $i -> itemName }}
+                    </h5>
+                    <h5>
+                        Kode Barang # {{ $i -> codeMasterItem }}
+                    </h5>
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">Stok : {{ $i -> itemStock }} {{ $i -> unit }}</h5>
                     <p class="card-text">Umur Barang : {{ $i -> itemAge }}</p>
@@ -201,7 +208,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editItemTitle">Edit Item Stocks</h5>
+                            <h5 class="modal-title" id="editItemTitle">Edit Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -213,14 +220,32 @@
                                 <div class="form-group">
                                     <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Nama Barang" value="{{ $i -> itemName }}" readonly>
+                                        placeholder="Input Nama Barang" value="{{ $i -> itemName }}">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="itemAge">Umur Barang</label>
+                                            <input type="text" class="form-control" id="itemAge" name="itemAge"
+                                                placeholder="Input Umur Barang Dalam Angka">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="umur">Bulan/Tahun</label>
+                                            <select class="form-control" id="umur" name="umur">
+                                                <option value="Bulan">Bulan</option>
+                                                <option value="Tahun">Tahun</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="itemStock">Stok Barang</label>
                                             <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                                placeholder="Input Stok Barang">
+                                                placeholder="Input Stok Barang" value="{{ $i -> itemStock }}">
                                         </div>
                                     </div>
                                     <div class="col">
@@ -268,12 +293,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="serialNo">Serial Number / Part Number (optional)</label>
+                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
+                                        placeholder="Input Serial Number" value="{{ $i -> serialNo }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="codeMasterItem">Code Master Item</label>
+                                    <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
+                                        placeholder="Input Code Master Item (xx-xxxx-)" value="{{ $i -> codeMasterItem }}">
+                                </div>
+                                <div class="form-group">
                                     <label for="description">Deskripsi (optional)</label>
                                     <textarea class="form-control" name="description" id="description" rows="3"
                                         placeholder="Input Deskripsi Barang"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Add Item</button>
+                                    <button type="submit" class="btn btn-primary">Edit Item</button>
                                 </div>
                             </form>
                         </div>

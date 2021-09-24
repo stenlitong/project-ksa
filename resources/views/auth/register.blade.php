@@ -64,13 +64,13 @@
 
                 <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                     <option selected disabled="">Choose...</option>
-                    <option value="jakarta" id="jakarta">Jakarta</option>
+                    <option value="Jakarta" id="jakarta">Jakarta</option>
                     <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                    <option value="samarinda" id="samarinda">Samarinda</option>
-                    <option value="morosi" id="morosi">Morosi</option>
-                    <option value="bunati" id ="bunati">Bunati</option>
-                    <option value="babelan"id ="babelan">Babelan</option>
-                    <option value="berau"id ="berau">Berau</option>
+                    <option value="Samarinda" id="samarinda">Samarinda</option>
+                    <option value="Morosi" id="morosi">Morosi</option>
+                    <option value="Bunati" id ="bunati">Bunati</option>
+                    <option value="Babelan"id ="babelan">Babelan</option>
+                    <option value="Berau"id ="berau">Berau</option>
                 </select>
             </div>
 

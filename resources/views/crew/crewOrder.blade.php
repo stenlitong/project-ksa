@@ -72,11 +72,11 @@
                         <div class="d-flex justify-content-around ml-3 mr-3">
                             <div class="form-group p-2">
                                 <label for="quantity" class="mt-3 mb-3">Quantity</label>
-                                <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Enter quantity"
+                                <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
                                     style="width: 400px; height: 50px">
                             </div>
         
-                            <div class="form-group p-2">
+                            {{-- <div class="form-group p-2">
                                 <br>
                                 <label>Satuan<input list="satuan" name="satuan" class="mt-3 mb-3" style="width: 400px; height:45px"/></label>
                                 <datalist id="satuan">
@@ -117,7 +117,7 @@
                                   <option value="Unt">
                                   <option value="Zak">
                                 </datalist>
-                            </div>
+                            </div> --}}
                         </div>
         
                         <br>
@@ -149,7 +149,7 @@
                             @foreach($carts as $c)
                                 <tr>
                                     <td>{{ $c -> item -> itemName }}</td>
-                                    <td>{{ $c -> quantity }}</td>
+                                    <td>{{ $c -> quantity }} {{ $c -> unit }}</td>
                                     <td>{{ $c -> department }}</td>
                                     {{-- Delete Item --}}
                                     <form method="POST" action="/crew/{{ $c -> id }}/delete">

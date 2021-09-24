@@ -19,9 +19,10 @@ class CreateItemsTable extends Migration
             $table->integer('itemStock');
             $table->string('unit');
             $table->string('serialNo')->nullable();
-            $table->string('codeMasterItem');
+            $table->string('codeMasterItem')->unique();
             $table->string('itemAge');
             $table->string('description')->nullable();
+            $table->date('lastGiven')->nullable();
             $table->timestamps();
         });
     }

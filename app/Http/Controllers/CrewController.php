@@ -28,7 +28,7 @@ class CrewController extends Controller
         $items = Item::all();
         $barges = Barge::all();
         $tugs = Tug::all();
-        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $carts = Cart::where('user_id', Auth::user()->id)->join('items', 'items.id', '=', 'carts.item_id')->get();
 
         // dd($carts);
         return view('crew.crewOrder', compact('items', 'carts', 'tugs', 'barges'));
@@ -47,7 +47,6 @@ class CrewController extends Controller
             'item_id' => 'required',
             'department' => 'required',
             'quantity' => 'required | numeric',
-            'satuan' => 'required'
         ]);
 
         // Check if the cart within the user is already > 12 items, then return with message
@@ -57,12 +56,12 @@ class CrewController extends Controller
         }
 
         // Else add item to the cart
-        $new_qty = $request->quantity . " " . $request->satuan;
+        // $new_qty = $request->quantity . " " . $request->satuan;
 
         Cart::create([
             'user_id' => Auth::user()->id,
             'item_id' => $request->item_id,
-            'quantity' => $new_qty,
+            'quantity' => $request->quantity,
             'department' => $request->department
         ]);
         
@@ -123,5 +122,15 @@ class CrewController extends Controller
         Cart::where('user_id', Auth::user()->id)->delete();
 
         return redirect('/dashboard')->with('status', 'Submit Order Success');
+    }
+
+    public function acceptOrder(OrderHead $orderHeads){
+        // dd($orderHeads->id);
+
+        OrderHead::where('id', $orderHeads->id)->update([
+            'status' => 'Completed'
+        ]);
+
+        return redirect('/dashboard')->with('status', 'Order Diterima');
     }
 }
