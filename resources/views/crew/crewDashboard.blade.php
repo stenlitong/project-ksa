@@ -86,7 +86,7 @@
                                     @foreach($orderDetails as $od)
                                         @if($od -> orders_id == $o -> order_id)
                                             <tr>
-                                                <td>{{ $od -> itemName }}</td>
+                                                <td>{{ $od -> item -> itemName }}</td>
                                                 <td>{{ $od -> quantity }}</td>
                                                 <td>{{ $od -> unit }}</td>
                                             </tr>

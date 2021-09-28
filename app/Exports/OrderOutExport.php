@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Exports;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\OrderHead;
+use App\Models\OrderDetail;
 use App\Models\User;
 Use \Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -15,9 +16,15 @@ class OrderOutExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEve
 {
     public function query()
     {
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
+        if(Auth::user()->hasRole('adminLogistic')){
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
 
-        return OrderHead::query()->join('order_details', 'order_details.orders_id', '=', 'order_heads.order_id')->whereIn('user_id', $users)->select(['order_id', 'approved_at', 'itemName', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions'])->where('status', 'completed')->where('order_details.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc');
+            return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc');
+        }
+        // Find order from user/goods out
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+
+        return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('order_heads.cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc');
     }
 
     public function headings(): array{

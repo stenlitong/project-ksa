@@ -17,6 +17,7 @@ class CreateOrderHeadsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('order_id');
+            $table->string('cabang');
             $table->string('boatName')->nullable();
             $table->string('noPr')->nullable();
             $table->string('noPo')->nullable();
@@ -35,7 +36,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('reason')->nullable();
             $table->string('descriptions')->nullable();
             $table->string('approved_at')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

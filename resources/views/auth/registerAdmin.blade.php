@@ -107,7 +107,7 @@
                 }
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function(event){
-                    
+
                     if(dropdown.value=="picAdmin"){
                         selectopt('jakarta');
                         document.getElementById("Samarinda").disabled = true;

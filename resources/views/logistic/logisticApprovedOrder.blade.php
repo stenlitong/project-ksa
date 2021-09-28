@@ -73,12 +73,12 @@
                         <tbody>
                             @foreach($orderDetails as $od)
                             <tr>
-                                <td>{{ $od -> itemName }}</td>
+                                <td>{{ $od -> item -> itemName }}</td>
                                 <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
-                                @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> itemStock)
-                                    <td style="color: red">{{ $od -> itemStock}} {{ $od -> unit }} (Stok Tidak Mencukupi)</td>
+                                @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
+                                    <td style="color: red">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
                                 @else
-                                    <td style="color: green">{{ $od -> itemStock}} {{ $od -> unit }}</td>
+                                    <td style="color: green">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
                                 @endif
                             </tr>
                             @endforeach

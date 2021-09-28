@@ -56,7 +56,7 @@
             <div class="col-md-6">
                 <form action="">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search Item..." name="search" id="search">
+                        <input type="text" class="form-control" placeholder="Search Item by Nama, Cabang, Kode Barang..." name="search" id="search">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>

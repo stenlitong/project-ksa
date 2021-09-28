@@ -103,6 +103,7 @@ class CrewController extends Controller
         OrderHead::create([
             'user_id' => Auth::user()->id,
             'order_id' => $unique_id,
+            'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
             'status' => 'In Progress (Logistic)'
         ]);
@@ -113,7 +114,7 @@ class CrewController extends Controller
             $unit = Item::where('id', $c->item_id)->pluck('unit');
             OrderDetail::create([
                 'orders_id' => $unique_id,
-                'itemName' => Item::where('id', $c->item_id)->value('itemName'),
+                'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
                 'unit' => $unit[0],
                 'serialNo' => $serialNo[0],

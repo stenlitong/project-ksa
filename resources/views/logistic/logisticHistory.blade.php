@@ -30,6 +30,7 @@
                           <tr>
                             <th scope="col">Order ID</th>
                             <th scope="col">Tanggal Keluar</th>
+                            <th scope="col">Cabang</th>
                             <th scope="col">Item Barang Keluar</th>
                             <th scope="col">Serial Number</th>
                             <th scope="col">Qty</th>
@@ -43,8 +44,9 @@
                                 <tr>
                                     <td>{{ $oh -> order_id }}</td>
                                     <td>{{ $oh -> approved_at }}</td>
-                                    <td>{{ $oh -> itemName }}</td>
-                                    <td>{{ $oh -> serialNo}}</td>
+                                    <td>{{ $oh -> cabang }}</td>
+                                    <td>{{ $oh -> item -> itemName }}</td>
+                                    <td>{{ $oh -> item -> serialNo}}</td>
                                     <td>{{ $oh -> quantity}}</td>
                                     <td>{{ $oh -> unit}}</td>
                                     <td>{{ $oh -> noResi}}</td>
@@ -69,6 +71,12 @@
         }
         .table-wrapper-scroll-y {
             display: block;
+        }
+
+        td{
+            word-wrap: break-word;
+            min-width: 160px;
+            max-width: 160px;
         }
     </style>
 @endsection

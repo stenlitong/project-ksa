@@ -16,13 +16,15 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->string('orders_id');
-            $table->string('itemName');
+            $table->unsignedBigInteger('item_id');
             $table->string('quantity');
             $table->string('unit');
             $table->string('serialNo')->nullable();
             $table->string('department');
             $table->string('note')->nullable();
             $table->timestamps();
+
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

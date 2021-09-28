@@ -7,6 +7,8 @@ use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Tug;
+use App\Models\Barge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\OrderOutExport;
@@ -50,7 +52,7 @@ class LogisticController extends Controller
             'itemStock' => 'required|numeric',
             'unit' => 'required',
             'serialNo' => 'nullable',
-            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/|unique:items',
+            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
             'cabang' => 'required',
             'description' => 'nullable'
         ]);
@@ -117,7 +119,7 @@ class LogisticController extends Controller
 
     public function approveOrderPage(OrderHead $orderHeads){
         // Get the order details join with the item
-        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
+        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->order_id)->get();
 
         return view('logistic.logisticApprovedOrder', compact('orderDetails', 'orderHeads'));
     }
@@ -140,14 +142,14 @@ class LogisticController extends Controller
         //If the stock is not enough then redirect to dashboard with error
         foreach($orderDetails as $od){
             // Pluck return an array
-            if(Item::where('itemName', $od -> itemName)->pluck('itemStock')[0] < $od -> quantity){
+            if(Item::where('itemName', $od -> item -> itemName)->pluck('itemStock')[0] < $od -> quantity){
                 return redirect('/dashboard')->with('error', 'Stok Tidak Mencukupi, Silahkan Periksa Stok Kembali');
             }
         }
 
         // Else stock is enough, then update the stock
         foreach($orderDetails as $od){
-            Item::where('itemName', $od -> itemName)->decrement('itemStock', $od -> quantity);
+            Item::where('itemName', $od -> item -> itemName)->decrement('itemStock', $od -> quantity);
         }
 
         // Update the status of the following order
@@ -165,13 +167,17 @@ class LogisticController extends Controller
     }
 
     public function historyOutPage(){
-        // Find order from user/goods out
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
-        
-        // Find all the items that has been approved from the user | last 30 days only
-        $orderHeads = OrderHead::join('order_details', 'order_details.orders_id', '=', 'order_heads.order_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions')->where('status', 'completed')->where('order_details.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        if(Auth::user()->hasRole('adminLogistic')){
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
 
-        // dd($orderHeads);
+            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions', 'cabang')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        }else{
+            // Find order from user/goods out
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            
+            // Find all the items that has been approved from the user | last 30 days only
+            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions', 'cabang')->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        }
 
         return view('logistic.logisticHistory', compact('orderHeads'));
     }
@@ -184,16 +190,17 @@ class LogisticController extends Controller
     public function downloadOut(Excel $excel){
 
         // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
-        // return (new OrderOutExport)->download('OrderGoodsOut'. date("d-m-Y") . '.xlsx');
         return $excel -> download(new OrderOutExport, 'OrderGoodsOut_'. date("d-m-Y") . '.xlsx');
     }
 
     public function makeOrderPage(){
         // Select items to choose in the order page & carts according to the login user
-        $items = Item::all();
-        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $items = Item::where('cabang', Auth::user()->cabang)->get();
+        $barges = Barge::all();
+        $tugs = Tug::all();
+        $carts = Cart::where('user_id', Auth::user()->id)->join('items', 'items.id', '=', 'carts.item_id')->get();
 
-        return view('logistic.logisticMakeOrder', compact('items', 'carts'));
+        return view('logistic.logisticMakeOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
 
     public function addItemToCart(Request $request){

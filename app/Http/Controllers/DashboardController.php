@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
             // Get the orderDetail from orders_id within the orderHead table 
             $order_id = OrderHead::select('order_id')->where('user_id', Auth::user()->id)->pluck('order_id');
-            $orderDetails = OrderDetail::whereIn('orders_id', $order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             return view('crew.crewDashboard', compact('orderHeads', 'orderDetails'));
         }elseif(Auth::user()->hasRole('logistic') or Auth::user()->hasRole('adminLogistic')){
@@ -26,22 +26,21 @@ class DashboardController extends Controller
             // Get the latest 30 days using Carbon package => still in testing
             if(Auth::user()->hasRole('adminLogistic')){
                 if(request('search')){
-                    $orderHeads = OrderHead::with('user')->join('users', 'users.id' , '=', 'order_heads.user_id')->where('status', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                    $orderHeads = OrderHead::with('user')->where('status', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'cabang', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
                 }else{
-                    $orderHeads = OrderHead::with('user')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->join('users', 'users.id' , '=', 'order_heads.user_id')->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                    $orderHeads = OrderHead::with('user')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
                 }
             }else{
                 if(request('search')){
-                    $orderHeads = OrderHead::with('user')->join('users', 'users.id' , '=', 'order_heads.user_id')->where('status', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                    $orderHeads = OrderHead::with('user')->where('status', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
                 }else{
-                    $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->join('users', 'users.id' , '=', 'order_heads.user_id')->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                    $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
                 }
             }
 
             // Get all the order detail
             $order_id = OrderHead::select('order_id')->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
-            $orderDetails = OrderDetail::whereIn('orders_id', $order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
-            // $orderDetails = OrderDetail::where('orders_id', 'OART8WUgb', 'and')->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Get user's role
             // $user_id = OrderHead::select('user_id')->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('user_id');
