@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
+use App\Models\Role;
 Use \Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index(){
         if(Auth::user()->hasRole('crew')){
-            // $orders = Order::latest()->Paginate(10);
-
             // Get all the order within the logged in user within 30 days from date now
             $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id, 'and', 'created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
@@ -22,23 +21,35 @@ class DashboardController extends Controller
             $orderDetails = OrderDetail::whereIn('orders_id', $order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
 
             return view('crew.crewDashboard', compact('orderHeads', 'orderDetails'));
-        }elseif(Auth::user()->hasRole('logistic')){
+        }elseif(Auth::user()->hasRole('logistic') or Auth::user()->hasRole('adminLogistic')){
 
             // Get the latest 30 days using Carbon package => still in testing
-            if(request('search')){
-                $orderHeads = OrderHead::with('user')->where('status', 'like', '%'. request('search') .'%', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orWhere('order_id', 'like', '%'. request('search') .'%', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
-
+            if(Auth::user()->hasRole('adminLogistic')){
+                if(request('search')){
+                    $orderHeads = OrderHead::with('user')->join('users', 'users.id' , '=', 'order_heads.user_id')->where('status', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                }else{
+                    $orderHeads = OrderHead::with('user')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->join('users', 'users.id' , '=', 'order_heads.user_id')->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                }
             }else{
-                $orderHeads = OrderHead::with('user')->where('created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+                if(request('search')){
+                    $orderHeads = OrderHead::with('user')->join('users', 'users.id' , '=', 'order_heads.user_id')->where('status', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere( 'order_id', 'like', '%'. request('search') .'%', 'and', 'cabang', 'like', Auth::user()->cabang, 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                }else{
+                    $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->join('users', 'users.id' , '=', 'order_heads.user_id')->orderBy('order_heads.created_at', 'desc')->paginate(10)->withQueryString();
+                }
             }
-            // $orderHeads = OrderHead::where('status', 'like', '%In Progress%', 'or','created_at', '>=', Carbon::now()->subDays(30))->orderBy('created_at', 'desc')->paginate(10);
 
             // Get all the order detail
             $order_id = OrderHead::select('order_id')->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
             $orderDetails = OrderDetail::whereIn('orders_id', $order_id)->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
+            // $orderDetails = OrderDetail::where('orders_id', 'OART8WUgb', 'and')->join('items', 'items.itemName', '=', 'order_details.itemName')->get();
+
+            // Get user's role
+            // $user_id = OrderHead::select('user_id')->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('user_id');
+            // $roles = Role::join('role_user', 'role_user.role_id' , '=', 'roles.id')->whereIn('role_user.user_id', $user_id)->get();
 
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails'));
         }elseif(Auth::user()->hasRole('purchasing')){
+
             return view('purchasing.purchasingDashboard');
         }
     }

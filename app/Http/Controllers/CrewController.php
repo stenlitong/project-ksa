@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Item;
-use App\Models\Order;
 use App\Models\Barge;
 use App\Models\Tug;
 use App\Models\User;
@@ -25,7 +24,7 @@ class CrewController extends Controller
     public function orderPage()
     {
         // Select items to choose in the order page & carts according to the login user
-        $items = Item::all();
+        $items = Item::where('cabang', Auth::user()->cabang)->get();
         $barges = Barge::all();
         $tugs = Tug::all();
         $carts = Cart::where('user_id', Auth::user()->id)->join('items', 'items.id', '=', 'carts.item_id')->get();
@@ -110,11 +109,15 @@ class CrewController extends Controller
         
         // Then fill the Order Detail with the cart items
         foreach($carts as $c){
+            $serialNo = Item::where('id', $c->item_id)->pluck('serialNo');
+            $unit = Item::where('id', $c->item_id)->pluck('unit');
             OrderDetail::create([
                 'orders_id' => $unique_id,
                 'itemName' => Item::where('id', $c->item_id)->value('itemName'),
                 'quantity' => $c->quantity,
-                'department' => $c->department
+                'unit' => $unit[0],
+                'serialNo' => $serialNo[0],
+                'department' => $c->department,
             ]);
         }
 

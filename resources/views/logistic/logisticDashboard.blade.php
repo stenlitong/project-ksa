@@ -7,12 +7,13 @@
     @include('logistic.sidebar')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         
-        <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2>Welcome back, {{ Auth::user()->name }} !</h2>
-            <h3>{{ "Today is, " . date('l M Y') }}</h3>
-        </div>
+        @include('../layouts/time')
 
-        <h2 class="mt-3 mb-2" style="text-align: center">Order List</h2>
+        @if(Auth::user()->hasRole('logistic'))
+            <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
+        @else
+            <h2 class="mt-3 mb-2" style="text-align: center">Order List</h2>
+        @endif
         <div class="d-flex justify-content-end">
             {{ $orderHeads->links() }}
         </div>
@@ -54,9 +55,8 @@
                 <tr>
                     <th scope="col">Order ID</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Cabang</th>
                     <th scope="col">Keterangan</th>
-                    <th scope="col">Detail</th>
+                    <th scope="col">Detail/Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,8 +71,6 @@
                     @else
                         <td>{{ $oh -> status}}</td>
                     @endif
-
-                    <td>{{ $oh -> user -> cabang }}</td>
 
                     <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ $oh -> reason}}</td>
                     
@@ -116,7 +114,7 @@
                                             <tr>
                                                 <td>{{ $od -> itemName }}</td>
                                                 <td>{{ $od -> quantity }}</td>
-                                                <td></td>
+                                                <td>{{ $o ->  approved_at}}</td>
                                                 <td>{{ $od -> itemAge }}</td>
                                                 <td>{{ $od -> department }}</td>
                                                 @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> itemStock)
@@ -169,6 +167,5 @@
         </div>
     @endforeach
 </div>
-
 
 @endsection

@@ -18,6 +18,8 @@ class CreateOrderDetailsTable extends Migration
             $table->string('orders_id');
             $table->string('itemName');
             $table->string('quantity');
+            $table->string('unit');
+            $table->string('serialNo')->nullable();
             $table->string('department');
             $table->string('note')->nullable();
             $table->timestamps();

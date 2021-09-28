@@ -45,10 +45,12 @@
         </div>
         @enderror
 
-        <!-- Button trigger modal #1 -->
-        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
-            Add Item +
-        </button>
+        @if(Auth::user()->hasRole('adminLogistic'))
+            <!-- Button trigger modal #1 -->
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
+                Add Item +
+            </button>
+        @endif
 
         <div class="row">
             <div class="col-md-6">
@@ -165,6 +167,18 @@
                                     placeholder="Input Code Master Item (xx-xxxx-)">
                             </div>
                             <div class="form-group">
+                                <label for="cabang">Cabang</label>
+                                <select class="form-control" id="cabang" name="cabang">
+                                    <option selected disabled="">Choose...</option>
+                                    <option value="Jakarta" id="Jakarta">Jakarta</option>
+                                    <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
+                                    <option value="Samarinda" id="Samarinda">Samarinda</option>
+                                    <option value="Bunati" id ="Bunati">Bunati</option>
+                                    <option value="Babelan"id ="Babelan">Babelan</option>
+                                    <option value="Berau" id ="Berau">Berau</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="description">Deskripsi (optional)</label>
                                 <textarea class="form-control" name="description" id="description" rows="3"
                                     placeholder="Input Deskripsi Barang"></textarea>
@@ -191,16 +205,22 @@
                 <div class="card-body">
                     <h5 class="card-title">Stok : {{ $i -> itemStock }} {{ $i -> unit }}</h5>
                     <p class="card-text">Umur Barang : {{ $i -> itemAge }}</p>
+                    @if(Auth::user()->hasRole('adminLogistic'))
+                        <p class="card-text">Cabang : {{ $i -> cabang }}</p>
+                    @endif
                     <p class="card-text d-inline">Deskripsi : {{ $i -> description }}</p>
 
-                    <!-- Button trigger modal #2 -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
-                        Edit Item
-                    </button>
+                    @if(Auth::user()->hasRole('adminLogistic'))
+                        <!-- Button trigger modal #2 -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
+                            Edit Item
+                        </button>
+                    @endif
                     
                 </div>
             </div>
         @endforeach
+
         <!-- Modal #2 -->
         @foreach($items as $i)
             <div class="modal fade" id="editItem-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"

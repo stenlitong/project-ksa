@@ -6,11 +6,14 @@ use App\Models\Item;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Storage;
 use Illuminate\Support\Facades\Auth;
-use App\Exports\TransactionExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrderOutExport;
+// use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel;
+Use \Carbon\Carbon;
+use Storage;
 
 class LogisticController extends Controller
 {
@@ -18,28 +21,37 @@ class LogisticController extends Controller
         return view('logistic.logisticDashboard');
     }
     public function stocksPage(){
-        // Search function || if there is 2 page or more, it will also include the query string
-        if(request('search')){
-            $items = Item::where('itemName', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
-            return view('logistic.stocksPage', [
-                'items' => $items
-            ]);
+        if(Auth::user()->hasRole('adminLogistic')){
+            if(request('search')){
+                $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
+                return view('logistic.stocksPage', compact('items'));
+            }else{
+                $items = Item::latest()->Paginate(5)->withQueryString();
+                return view('logistic.stocksPage', compact('items'));
+            }
         }else{
-            $items = Item::latest()->Paginate(5)->withQueryString();
-            return view('logistic.stocksPage', compact('items'));
+            // Search function || if there is 2 page or more, it will also include the query string
+            if(request('search')){
+                $items = Item::where('itemName', 'like', '%' . request('search') . '%', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('codeMasterItem', 'like', '%' . request('search') . '%', 'and', 'cabang', 'like', Auth::user()->cabang)->Paginate(5)->withQueryString();
+                return view('logistic.stocksPage', compact('items'));
+            }else{
+                $items = Item::latest()->where('cabang', 'like', Auth::user()->cabang)->Paginate(5)->withQueryString();
+                return view('logistic.stocksPage', compact('items'));
+            }
         }
     }
 
     public function storeItem(Request $request){
         // Storing the item to the stock
         $request->validate([
-            'itemName' => 'required|unique:items',
+            'itemName' => 'required',
             'itemAge' => 'required|numeric',
             'umur' => 'required',
             'itemStock' => 'required|numeric',
             'unit' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/|unique:items',
+            'cabang' => 'required',
             'description' => 'nullable'
         ]);
 
@@ -54,6 +66,7 @@ class LogisticController extends Controller
             'unit' => $request -> unit,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
+            'cabang' => $request->cabang,
             'description' => $request -> description
         ]);
 
@@ -96,7 +109,7 @@ class LogisticController extends Controller
             'reason' => 'required'
         ]);
         OrderHead::where('id', $orderHeads->id)->update([
-            'status' => 'Rejected (Logistic)',
+            'status' => 'Rejected By Logistic',
             'reason' => $request->reason
         ]);
         return redirect('/dashboard');
@@ -151,6 +164,30 @@ class LogisticController extends Controller
         return redirect('/dashboard')->with('status', 'Order Approved');
     }
 
+    public function historyOutPage(){
+        // Find order from user/goods out
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
+        
+        // Find all the items that has been approved from the user | last 30 days only
+        $orderHeads = OrderHead::join('order_details', 'order_details.orders_id', '=', 'order_heads.order_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions')->where('status', 'completed')->where('order_details.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+
+        // dd($orderHeads);
+
+        return view('logistic.logisticHistory', compact('orderHeads'));
+    }
+
+    public function historyInPage(){
+
+        return view('logistic.logisticHistoryIn');
+    }
+
+    public function downloadOut(Excel $excel){
+
+        // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
+        // return (new OrderOutExport)->download('OrderGoodsOut'. date("d-m-Y") . '.xlsx');
+        return $excel -> download(new OrderOutExport, 'OrderGoodsOut_'. date("d-m-Y") . '.xlsx');
+    }
+
     public function makeOrderPage(){
         // Select items to choose in the order page & carts according to the login user
         $items = Item::all();
@@ -162,10 +199,6 @@ class LogisticController extends Controller
     public function addItemToCart(Request $request){
         dd($request);
 
-    }
-
-    public function reportPage(){
-        return view('logistic.logisticReport');
     }
 
     // ============================ Testing Playgrounds ===================================
@@ -225,13 +258,6 @@ class LogisticController extends Controller
         // return (new TransactionExport($t_id))->download('Transaction-'. $t_id . '-' . $formatted_company . '.xlsx');
 
     //     return redirect('/logistic/ongoing-order');
-    // }
-
-    // public function downloadOrder(Transaction $transaction){
-        // Testing export into excel function
-
-        // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
-    //     return (new TransactionExport($transaction->id))->download('Transaction-'. $transaction->id . '.xlsx');
     // }
 
     public function uploadItem(Request $request){

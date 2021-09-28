@@ -14,7 +14,7 @@
                 </a>
             </li> --}}
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.history") }}">
+                <a class="nav-link" href="{{ Route("logistic.historyOut") }}">
                     <span data-feather="file"></span>
                     View History
                 </a>

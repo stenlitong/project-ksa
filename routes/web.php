@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Models\Barge;
 use App\Models\Tug;
 
@@ -42,9 +43,10 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [LogisticController::class, 'rejectOrder']);
-        // Route::get('/order/{transaction}/download', [LogisticController::class, 'downloadOrder']); // Still in the making
         // Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
-        Route::get('/history', [DashboardController::class, 'index'])->name('history');
+        Route::get('/history-out', [LogisticController::class, 'historyOutPage'])->name('historyOut');
+        Route::get('/download-out', [LogisticController::class, 'downloadOut'])->name('downloadOut');
+        Route::get('/history-in', [LogisticController::class, 'historyInPage'])->name('historyIn');
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
         Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
         Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
@@ -53,6 +55,10 @@ Route::group(['middleware' => ['auth']], function(){
 
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
     });
+});
+
+Route::get('/ksa-admin/register', function(){
+    return view('auth.registerAdmin');
 });
 
 Route::get('/add-boat', function(){

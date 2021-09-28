@@ -25,27 +25,31 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+        'adminLogistic' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
         'purchasing' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'admin purchasing' => [
+        'adminPurchasing' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'admin operational' => [
+        'adminOperational' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'pic site' => [
+        'picSite' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'pic admin' => [
+        'picAdmin' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'pic incident' => [
+        'picIncident' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],

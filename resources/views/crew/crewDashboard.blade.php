@@ -8,14 +8,19 @@
 
     
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2>Welcome back, {{ Auth::user()->name }} !</h2>
-            <h3>{{ "Today is, " . date('l M Y') }}</h3>
-        </div>
+        @include('../layouts/time')
+        
         <h2 class="mt-3 mb-3" style="text-align: center">Order List</h2>
         <div class="d-flex justify-content-end">
             {{ $orderHeads->links() }}
         </div>
+
+        @if(session('status'))
+            <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -36,17 +41,17 @@
                     @else
                         <td>{{ $o -> status}}</td>
                     @endif
-                    <td>{{ $o -> reason }}</td>
+                    <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ $o -> reason }}</td>
                     @if($o -> status == 'On Delivery')
-                        <td class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                        <td >
+                            <button type="button" style="margin-left: 40%" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                                 Detail
                             </button>
                             <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
                         </td>
                     @else
-                    <td class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                    <td class="">
+                        <button type="button" style="margin-left: 40%" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                             Detail
                         </button>
                     </td>
