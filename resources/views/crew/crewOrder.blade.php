@@ -135,7 +135,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col mt-5">
+                <div class="col mt-5 table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
@@ -149,7 +149,7 @@
                             @foreach($carts as $c)
                                 <tr>
                                     <td>{{ $c -> item -> itemName }}</td>
-                                    <td>{{ $c -> quantity }} {{ $c -> unit }}</td>
+                                    <td>{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
                                     <td>{{ $c -> department }}</td>
                                     {{-- Delete Item --}}
                                     <form method="POST" action="/crew/{{ $c -> id }}/delete">
@@ -211,6 +211,17 @@
         word-wrap: break-word;
         min-width: 100px;
         max-width: 160px;
+    }
+    .tableFixHead          { overflow: auto; height: 250px; }
+    .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+    .my-custom-scrollbar {
+        position: relative;
+        height: 550px;
+        overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+        display: block;
     }
 </style>
 

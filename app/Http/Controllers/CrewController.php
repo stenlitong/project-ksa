@@ -27,20 +27,19 @@ class CrewController extends Controller
         $items = Item::where('cabang', Auth::user()->cabang)->get();
         $barges = Barge::all();
         $tugs = Tug::all();
-        $carts = Cart::where('user_id', Auth::user()->id)->join('items', 'items.id', '=', 'carts.item_id')->get();
+        $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
 
-        // dd($carts);
         return view('crew.crewOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
 
     public function taskPage()
     {
+        // ==== In Progress ====
+
         return view('crew.crewTask');
     }
 
     public function addItemToCart(Request $request){
-        // dd($request);
-
         // Validate Cart Request
         $request->validate([
             'item_id' => 'required',
@@ -55,8 +54,6 @@ class CrewController extends Controller
         }
 
         // Else add item to the cart
-        // $new_qty = $request->quantity . " " . $request->satuan;
-
         Cart::create([
             'user_id' => Auth::user()->id,
             'item_id' => $request->item_id,
@@ -83,13 +80,12 @@ class CrewController extends Controller
         // Find the cart of the following user
         $carts = Cart::where('user_id', Auth::user()->id)->get();
 
-        // Validate cart size
-        // dd(count($carts));
+        // Validate cart size, if the cart size is zero then return error message
         if(count($carts) == 0){
             return redirect('/crew/order')->with('errorCart', 'Cart is Empty');
         }
 
-        // Generate unique id for the order_id || Create the order from the cart
+        // Else, generate unique id for the order_id and checks the order_id is already exist || Create the order from the cart
         do{
             $unique_id = Str::random(9);
         }while(OrderHead::where('order_id', $unique_id)->exists());
@@ -97,7 +93,7 @@ class CrewController extends Controller
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
 
-        // Create Order Head
+        // Create Order Head firstly
         OrderHead::create([
             'user_id' => Auth::user()->id,
             'order_id' => $unique_id,
@@ -106,7 +102,7 @@ class CrewController extends Controller
             'status' => 'In Progress (Logistic)'
         ]);
         
-        // Then fill the Order Detail with the cart items
+        // Then fill the Order Detail with the cart items of the following Order Head
         foreach($carts as $c){
             $serialNo = Item::where('id', $c->item_id)->pluck('serialNo');
             $unit = Item::where('id', $c->item_id)->pluck('unit');
@@ -120,15 +116,14 @@ class CrewController extends Controller
             ]);
         }
 
-        // Emptying the cart items
+        // After all of that, emptying the cart items to reset the cart
         Cart::where('user_id', Auth::user()->id)->delete();
 
         return redirect('/dashboard')->with('status', 'Submit Order Success');
     }
 
     public function acceptOrder(OrderHead $orderHeads){
-        // dd($orderHeads->id);
-
+        // Crew accept the order, then the status will be completed
         OrderHead::where('id', $orderHeads->id)->update([
             'status' => 'Completed'
         ]);

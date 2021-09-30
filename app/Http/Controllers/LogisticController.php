@@ -20,10 +20,13 @@ use Storage;
 class LogisticController extends Controller
 {
     public function index(){
+        // Dummy routes for testing purpose
         return view('logistic.logisticDashboard');
     }
     public function stocksPage(){
+        // Check if the role is admin logistic, then he can see the stocks of all branches, else only can see the stocks of each branches
         if(Auth::user()->hasRole('adminLogistic')){
+            // Search function || if there is 2 page or more, it will also include the query string
             if(request('search')){
                 $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
                 return view('logistic.stocksPage', compact('items'));
@@ -60,7 +63,7 @@ class LogisticController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
         
-
+        // Create the item
         Item::create([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
@@ -76,7 +79,6 @@ class LogisticController extends Controller
     }
 
     public function editItem(Request $request, Item $item){
-
         // Edit the requested item
          $request->validate([
             'itemName' => 'required',
@@ -92,6 +94,7 @@ class LogisticController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
+        // Update the item
         Item::where('id', $item->id)->update([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
@@ -105,7 +108,6 @@ class LogisticController extends Controller
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
-        // dd($request->reason);
         // Reject the order made from crew
         $request->validate([
             'reason' => 'required'
@@ -167,6 +169,7 @@ class LogisticController extends Controller
     }
 
     public function historyOutPage(){
+        // Chech if the role is admin logistic, then he can see all of the order, else logistic role can see their respectable order
         if(Auth::user()->hasRole('adminLogistic')){
             $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
 
@@ -183,25 +186,28 @@ class LogisticController extends Controller
     }
 
     public function historyInPage(){
+        // ==== In progress ====
 
         return view('logistic.logisticHistoryIn');
     }
 
     public function downloadOut(Excel $excel){
-
         // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
+        // Export the data of history goods out
         return $excel -> download(new OrderOutExport, 'OrderGoodsOut_'. date("d-m-Y") . '.xlsx');
     }
 
     public function makeOrderPage(){
+        // Check if the role is admin logistic, then he can see all of the items and order it for the stock
         if(Auth::user()->hasRole('adminLogistic')){
             $itemsUnique = Item::latest()->get();
             $items = $itemsUnique->unique('itemName');
         }else{
-            // Select items to choose in the order page & carts according to the login user
+            // Else, logistic role can only select the items that are only available to their branches & carts according to the login user
             $items = Item::where('cabang', Auth::user()->cabang)->get();
         }
-        // dd($items);
+
+        // Get all the tugs, barges, and cart of the following user
         $barges = Barge::all();
         $tugs = Tug::all();
         $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
@@ -219,7 +225,7 @@ class LogisticController extends Controller
             'note' => 'nullable'
         ]);
 
-        // Check if the cart within the user is already > 12 items, then return with message
+        // Check if the cart within the user is already > 12 items, then cart is full & return with message
         $counts = Cart::where('user_id', Auth::user()->id)->count();
         if($counts ==  12){
             return redirect('/logistic/make-order')->with('error', 'Cart is Full');

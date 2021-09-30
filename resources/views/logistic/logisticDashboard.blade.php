@@ -72,7 +72,7 @@
                     @elseif(strpos($oh -> status, 'On Delivery') !== false)
                         <td style="color: blue">{{ $oh -> status}}</td>
                     @else
-                        <td>{{ $oh -> status}}</td>
+                        <td style="color: #8B8000">{{ $oh -> status}}</td>
                     @endif
 
                     <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ $oh -> reason}}</td>
@@ -86,8 +86,8 @@
             </tbody>
         </table>
 
-        {{-- Modal detail --}}
-        @foreach($orderHeads as $o)
+            {{-- Modal detail --}}
+            @foreach($orderHeads as $o)
                 <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
@@ -104,10 +104,19 @@
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
-                                            <th scope="col">Terakhir Diberikan</th>
+                                            
+                                            @if(strpos($o -> status, 'Purchasing') !== false)
+                                            @else
+                                                <th scope="col">Terakhir Diberikan</th>
+                                            @endif
+
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
-                                            <th scope="col">Stok Barang</th>
+                                            
+                                            @if(strpos($o -> status, 'Purchasing') !== false)
+                                            @else
+                                                <th scope="col">Stok Barang</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,13 +125,22 @@
                                                 <tr>
                                                     <td>{{ $od -> item -> itemName }}</td>
                                                     <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
-                                                    <td>{{ $o ->  approved_at}}</td>
+
+                                                    @if(strpos($o -> status, 'Purchasing') !== false)
+                                                    @else
+                                                        <td>{{ $o ->  approved_at}}</td>
+                                                    @endif
+                                                    
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
-                                                    @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
-                                                        <td style="color: red">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
+
+                                                    @if(strpos($o -> status, 'Purchasing') !== false)
                                                     @else
-                                                        <td style="color: green">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
+                                                        @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
+                                                            <td style="color: red">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
+                                                        @else
+                                                            <td style="color: green">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
+                                                        @endif
                                                     @endif
                                                 </tr>
                                             @endif
