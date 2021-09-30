@@ -132,7 +132,7 @@
                             </div> 
                             <div class="modal-footer">
                                 {{-- Check if the order is rejected, then do not show the approve & reject button --}}
-                                @if(strpos($o -> status, 'In Progress') !== false)
+                                @if(strpos($o -> status, 'In Progress (Logistic)') !== false)
                                     {{-- Button to trigger modal 2 --}}
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
                                     <a href="/logistic/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>

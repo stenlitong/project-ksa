@@ -34,9 +34,9 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
         Route::get('/order/{orderHeads}/accept', [CrewController::class, 'acceptOrder']);
-        Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
         Route::post('/{user}/add-cart', [CrewController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
+        Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
     });
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
         Route::get('/make-order', [LogisticController::class, 'makeOrderPage'])->name('makeOrder');
         Route::post('/{user}/add-cart', [LogisticController::class, 'addItemToCart']);
+        Route::delete('/{cart}/delete', [LogisticController::class, 'deleteItemFromCart']);
+        Route::post('/{user}/submit-order', [LogisticController::class, 'submitOrder']);
 
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
     });

@@ -68,8 +68,6 @@ class CrewController extends Controller
     }
 
     public function deleteItemFromCart(Cart $cart){
-        // dd($cart->id);
-
         // Delete item from cart of the following user
         Cart::destroy($cart->id);
 

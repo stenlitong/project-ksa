@@ -204,6 +204,14 @@
         </div>
         </div>
     </div>
-
 </div>
+
+<style>
+    td{
+        word-wrap: break-word;
+        min-width: 100px;
+        max-width: 160px;
+    }
+</style>
+
 @endsection

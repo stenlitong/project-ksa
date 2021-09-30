@@ -47,87 +47,61 @@
 
             <div class="row">
                 <div class="col">
-                    <form method="POST" action="">
+                    <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
                         @csrf
-                        <div class="d-flex justify-content-around ml-3 mr-3">
+                        <div class="d-flex justify-content-around mr-3">
                             <div class="form-group p-2">
                                 <label for="item_id" class="mt-3 mb-3">Item</label>
                                 <br>
-                                <select class="form-control" name="item_id" id="item_id" style="width: 400px; height:50px;">
+                                <select class="form-control" name="item_id" id="item_id" style="width: 500px; height:50px;">
                                     @foreach($items as $i)
                                         <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
                                     @endforeach
                                 </select>
                             </div>
-        
+                        </div>
+                        <div class="d-flex justify-content-around mr-3">
                             <div class="form-group p-2">
-                                <label for="department" class="mt-3 mb-3">Department</label>
+                                <label for="quantity" class="mb-3">Quantity</label>
+                                <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
+                                    style="width: 500px; height: 50px">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around mr-3">
+                            <div class="form-group p-2">
+                                <label for="department" class="mb-3">Department (optional)</label>
                                 <br>
-                                <select class="form-control" name="department" id="department" style="width: 400px; height:50px;">
+                                <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
+                                    <option value="">None</option>
                                     <option value="deck">Deck</option>
                                     <option value="mesin">Mesin</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-around ml-3 mr-3">
+                        <div class="d-flex justify-content-around mr-3">
                             <div class="form-group p-2">
-                                <label for="quantity" class="mt-3 mb-3">Quantity</label>
-                                <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
-                                    style="width: 400px; height: 50px">
-                            </div>
-        
-                            {{-- <div class="form-group p-2">
+                                <label for="golongan" class="mb-3">Golongan</label>
                                 <br>
-                                <label>Satuan<input list="satuan" name="satuan" class="mt-3 mb-3" style="width: 400px; height:45px"/></label>
-                                <datalist id="satuan">
-                                  <option value="Bks">
-                                  <option value="Btg">
-                                  <option value="Btl">
-                                  <option value="Cm">
-                                  <option value="Crt">
-                                  <option value="Cyl">
-                                  <option value="Doz">
-                                  <option value="Drm">
-                                  <option value="Duz">
-                                  <option value="Gln">
-                                  <option value="Jrg">
-                                  <option value="Kbk">
-                                  <option value="Kg">
-                                  <option value="Klg">
-                                  <option value="Ktk">
-                                  <option value="Lbr">
-                                  <option value="Lgt">
-                                  <option value="Ls">
-                                  <option value="Ltr">
-                                  <option value="Mtr">
-                                  <option value="Pak">
-                                  <option value="Pal">
-                                  <option value="Pax">
-                                  <option value="Pc">
-                                  <option value="Pcs">
-                                  <option value="Plt">
-                                  <option value="Psg">
-                                  <option value="Ptg">
-                                  <option value="Ret">
-                                  <option value="Rol">
-                                  <option value="Sak">
-                                  <option value="SET">
-                                  <option value="Tbg">
-                                  <option value="Trk">
-                                  <option value="Unt">
-                                  <option value="Zak">
-                                </datalist>
-                            </div> --}}
+                                <select class="form-control" name="golongan" id="golongan" style="width: 500px; height:50px;">
+                                    <option value="none">None</option>
+                                    <option value="Floating">Floating</option>
+                                    <option value="Dock">Dock</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around mr-3">
+                            <div class="form-group p-2">
+                                <label for="note">Note (optional)</label>
+                                <br>
+                                <textarea class="form-control" name="note" Note="note" Note="3"
+                                    placeholder="Input Deskripsi Barang" style="width: 500px; height: 100px"></textarea>
+                            </div>
                         </div>
         
                         <br>
                         <div class="d-flex ml-3 justify-content-center">
                             {{-- Add Item To Cart --}}
                             <button type="submit" class="btn btn-success mr-3" style="">Add To Cart</button>
-                            {{-- <a class="btn btn-primary ml-3" style="">Submit Order</a> --}}
-                            
-                            {{-- Submit Cart To Order --}}
-                            {{-- <a href="/crew/{{ Auth::user()->id }}/submit-order" class="btn btn-primary ml-3" style="">Submit Order</a> --}}
                             
                             {{-- Modal --}}
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submit-order">Submit Order</button>
@@ -135,13 +109,15 @@
                         </div>
                     </form>
                 </div>
-                <div class="col mt-5">
+                <div class="col mt-5 mr-3">
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Nama Barang</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Department</th>
+                                <th scope="col">Golongan</th>
+                                <th scope="col">Note</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -149,10 +125,12 @@
                             @foreach($carts as $c)
                                 <tr>
                                     <td>{{ $c -> item -> itemName }}</td>
-                                    <td>{{ $c -> quantity }} {{ $c -> unit }}</td>
+                                    <td>{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
                                     <td>{{ $c -> department }}</td>
+                                    <td>{{ $c -> golongan }}</td>
+                                    <td>{{ $c -> note }}</td>
                                     {{-- Delete Item --}}
-                                    <form method="POST" action="">
+                                    <form method="POST" action="/logistic/{{ $c -> id }}/delete">
                                         @csrf
                                         @method('delete')
                                         <td><button class="btn btn-danger">Delete Item</button></td>
@@ -167,43 +145,78 @@
     </main>
 
     <div class="modal fade" id="submit-order" tabindex="-1" role="dialog" aria-labelledby="submit-orderTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="max-width: 600px;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="submitTitle">Input Nama Kapal</h5>
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title ml-3" id="submitTitle">Input PR Requirements</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="">
+            <form method="POST" action="/logistic/{{ Auth::user()->id }}/submit-order">
                 @csrf
                 <div class="modal-body"> 
-                    <div class="row">
-                        <div class="col">
-                            <label>Tug<input list="tugName" name="tugName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                            <datalist id="tugName">
-                                @foreach($tugs as $t)
-                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                @endforeach
-                            </datalist>
+                    <div class="d-flex justify-content-start mr-3">
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="tugs">Pilih Tug:</label>
+                            </div>
+                            <div class="col">
+                                <input list="tugName" name="tugName" class="mt-2 mb-2" style="width: 400px; height:45px"/>
+                                <datalist id="tugName">
+                                    @foreach($tugs as $t)
+                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                    @endforeach
+                                </datalist>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label>Barge<input list="bargeName" name="bargeName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                            <datalist id="bargeName">
-                                @foreach($barges as $b)
-                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                @endforeach
-                            </datalist>
+                    </div>
+                    <div class="d-flex justify-content-start mr-3">
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="tugs">Pilih Barge:</label>
+                            </div>
+                            <div class="col">
+                                <input list="bargeName" name="bargeName" class="mb-2" style="width: 400px; height:45px"/>
+                                <datalist id="bargeName">
+                                    @foreach($barges as $b)
+                                        <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                    @endforeach
+                                </datalist>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mr-3">
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="company" class="mb-3">Perusahaan</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="company" id="company" style="width: 400px; height:50px;">
+                                    <option value="KSA">KSA</option>
+                                    <option value="ISA">ISA</option>
+                                    <option value="KSAO">KSA OFFSHORE</option>
+                                    <option value="KSAM">KSA MARITIME</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary mr-3">Submit</button>
                 </div>
             </form>
         </div>
         </div>
     </div>
-
 </div>
+
+<style>
+    td{
+        word-wrap: break-word;
+        min-width: 100px;
+        max-width: 160px;
+    }
+</style>
+
 @endsection

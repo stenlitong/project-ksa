@@ -11,8 +11,8 @@ use App\Models\Tug;
 use App\Models\Barge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
-// use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Excel;
 Use \Carbon\Carbon;
 use Storage;
@@ -194,18 +194,128 @@ class LogisticController extends Controller
     }
 
     public function makeOrderPage(){
-        // Select items to choose in the order page & carts according to the login user
-        $items = Item::where('cabang', Auth::user()->cabang)->get();
+        if(Auth::user()->hasRole('adminLogistic')){
+            $itemsUnique = Item::latest()->get();
+            $items = $itemsUnique->unique('itemName');
+        }else{
+            // Select items to choose in the order page & carts according to the login user
+            $items = Item::where('cabang', Auth::user()->cabang)->get();
+        }
+        // dd($items);
         $barges = Barge::all();
         $tugs = Tug::all();
-        $carts = Cart::where('user_id', Auth::user()->id)->join('items', 'items.id', '=', 'carts.item_id')->get();
+        $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
 
         return view('logistic.logisticMakeOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
 
     public function addItemToCart(Request $request){
-        dd($request);
+        // Validate Cart Request
+        $validated = $request->validate([
+            'item_id' => 'required',
+            'quantity' => 'required | numeric',
+            'department' => 'nullable',
+            'golongan' => 'required',
+            'note' => 'nullable'
+        ]);
 
+        // Check if the cart within the user is already > 12 items, then return with message
+        $counts = Cart::where('user_id', Auth::user()->id)->count();
+        if($counts ==  12){
+            return redirect('/logistic/make-order')->with('error', 'Cart is Full');
+        }
+        
+        // Else add item to the cart
+        $validated['user_id'] = Auth::user()->id;
+        Cart::create($validated);
+        
+        return redirect('/logistic/make-order')->with('status', 'Add Item Success');
+    }
+
+    public function deleteItemFromCart(Cart $cart){
+        // Delete item from cart of the following user
+        Cart::destroy($cart->id);
+
+        return redirect('/logistic/make-order')->with('status', 'Delete Item Success');
+    }
+
+    public function submitOrder(Request $request){
+        $request -> validate([
+            'tugName' => 'required',
+            'bargeName' => 'required',
+            'company' => 'required'
+        ]);
+
+        // Find the cart of the following user
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+        // Validate cart size
+        if(count($carts) == 0){
+            return redirect('/logistic/make-order')->with('errorCart', 'Cart is Empty');
+        }
+
+        // Generate unique id for the order_id || Create the order from the cart
+        do{
+            $unique_id = Str::random(9);
+        }while(OrderHead::where('order_id', $unique_id)->exists());
+
+        // String formatting for boatName with tugName + bargeName
+        $boatName = $request->tugName . '/' . $request->bargeName;
+        
+        // Create Order Head
+        $orderHead = OrderHead::create([
+            'user_id' => Auth::user()->id,
+            'order_id' => $unique_id,
+            'cabang' => Auth::user()->cabang,
+            'boatName' => $boatName,
+            'status' => 'In Progress (Purchasing)'
+        ]);
+        
+        // Formatting the PR format requirements
+        $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+        $cabang_arr = [
+            'Jakarta' => 'JKT',
+            'Banjarmasin' => 'BNJ',
+            'Samarinda' => 'SMD',
+            'Bunati' => 'BNT',
+            'Babelan' => 'BBL',
+            'Berau' => 'BER'
+        ];
+
+        $pr_id = $orderHead -> id;
+        $first_char_name = strtoupper(Auth::user()->name[0]);
+        $location = $cabang_arr[Auth::user()->cabang];
+        $month = date('n');
+        $month_to_roman = $month_arr_in_roman[$month - 1];
+        $year = date('Y');
+
+        // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
+        $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
+
+        OrderHead::where('id', $pr_id)->update([
+            'noPr' => $pr_number,
+            'company' => $request->company,
+            'prDate' => now()
+        ]);
+
+        // Then fill the Order Detail with the cart items
+        foreach($carts as $c){
+            OrderDetail::create([
+                'orders_id' => $unique_id,
+                'item_id' => $c->item_id,
+                'quantity' => $c->quantity,
+                'unit' => $c->item->unit,
+                'golongan' => $c->golongan,
+                'serialNo' => $c->item->serialNo,
+                'department' => $c->department,
+            ]);
+        }
+
+        // Emptying the cart items
+        Cart::where('user_id', Auth::user()->id)->delete();
+
+        return redirect('/dashboard')->with('status', 'Submit Order Success');
     }
 
     // ============================ Testing Playgrounds ===================================
@@ -227,14 +337,6 @@ class LogisticController extends Controller
 
         // Formatting the PR requirements
         // $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-
-        // if(Auth::user()->id < 10){
-        //     $formatted_id = '00' . Auth::user()->id;
-        // }else if(Auth::user()->id < 100){
-        //     $formatted_id = '0' . Auth::user()->id;
-        // }else{
-        //     $formatted_id = Auth::user()->id;
-        // }
         
         // $first_char_name = strtoupper(Auth::user()->name[0]);
         // $formatted_company = strtoupper(str_replace(' ', '-' , $request->company));

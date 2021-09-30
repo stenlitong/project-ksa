@@ -22,7 +22,6 @@ class CreateOrderHeadsTable extends Migration
             $table->string('noPr')->nullable();
             $table->string('noPo')->nullable();
             $table->string('company')->nullable();
-            $table->string('location')->nullable();
             $table->string('price')->nullable();
             $table->string('supplier')->nullable();
             $table->string('sender')->nullable();
