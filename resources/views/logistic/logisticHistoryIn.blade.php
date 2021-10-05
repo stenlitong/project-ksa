@@ -20,7 +20,9 @@
                         <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
                         <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
 
-                        <a href="" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
+                        @if(count($orderHeads) > 0)
+                            <a href="" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
+                        @endif
                     </form>
                 </nav>
                 
@@ -39,18 +41,18 @@
                           </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach($orderHeads as $oh)
+                            @foreach($orderHeads as $oh)
                                 <tr>
                                     <td>{{ $oh -> order_id }}</td>
                                     <td>{{ $oh -> approved_at }}</td>
-                                    <td>{{ $oh -> itemName }}</td>
+                                    <td>{{ $oh -> item -> itemName }}</td>
                                     <td>{{ $oh -> serialNo}}</td>
                                     <td>{{ $oh -> quantity}}</td>
                                     <td>{{ $oh -> unit}}</td>
-                                    <td>{{ $oh -> noResi}}</td>
+                                    <td>{{ $oh -> supplierName}}</td>
                                     <td>{{ $oh -> descriptions}}</td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                       </table>
                 </div>
@@ -69,6 +71,12 @@
         }
         .table-wrapper-scroll-y {
             display: block;
+        }
+
+        td{
+            word-wrap: break-word;
+            min-width: 160px;
+            max-width: 160px;
         }
     </style>
 @endsection

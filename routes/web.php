@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminPurchasingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\PurchasingController;
 use App\Models\Barge;
 use App\Models\Tug;
 
@@ -54,8 +56,22 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/{user}/add-cart', [LogisticController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [LogisticController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [LogisticController::class, 'submitOrder']);
+        Route::get('/{orderHeads}/download-pr', [LogisticController::class, 'downloadPr']);
+        Route::get('/stock-order/{orderHeads}/accept-order', [LogisticController::class, 'acceptStockOrder']);
 
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
+    });
+
+    Route::prefix('purchasing')->name('purchasing.')->group(function(){
+        Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
+        Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
+        // Route::post('/rate-supplier', [PurchasingController::class, 'rateSupplier']);
+        Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
+    });
+
+    Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
+        Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
+        Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
     });
 });
 

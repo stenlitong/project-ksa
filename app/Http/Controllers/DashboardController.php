@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
-use App\Models\Role;
+use App\Models\Supplier;
 Use \Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -50,16 +50,23 @@ class DashboardController extends Controller
 
             // Search Functionality to find all of the order from logistic
             if(request('search')){
-                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('status', 'like', '%'. request('search') .'%', 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere('order_id', 'like', '%'. request('search') .'%', 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('status', 'like', '%'. request('search') .'%', 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->orWhere('order_id', 'like', '%'. request('search') .'%', 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(6);
             }else{
-                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(6);
             }
             
             // Then find all the order details from the orderHeads
             $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails'));
+            // Get all the suppliers
+            $suppliers = Supplier::latest()->get();
+
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers'));
+        }elseif(Auth::user()->hasRole('adminPurchasing')){
+            $suppliers = Supplier::latest()->get();
+
+            return view('adminPurchasing.adminPurchasingDashboard', compact('suppliers'));
         }
     }
 }

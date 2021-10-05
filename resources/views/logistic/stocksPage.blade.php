@@ -32,16 +32,16 @@
             Stok Barang Invalid
         </div>
         @enderror
-
-        @error('serialNo')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Serial Number Invalid
-        </div>
-        @enderror
         
         @error('codeMasterItem')
         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
             Code Master Item Invalid
+        </div>
+        @enderror
+
+        @error('cabang')
+        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+            Cabang Invalid
         </div>
         @enderror
 

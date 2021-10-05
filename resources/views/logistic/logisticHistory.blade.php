@@ -19,8 +19,10 @@
                     <form class="form-inline">
                         <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
                         <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
-
-                        <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
+                        
+                        @if(count($orderHeads) > 0)
+                            <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
+                        @endif
                     </form>
                 </nav>
                 
@@ -30,7 +32,9 @@
                           <tr>
                             <th scope="col">Order ID</th>
                             <th scope="col">Tanggal Keluar</th>
-                            <th scope="col">Cabang</th>
+                            @if(Auth::user()->hasRole('adminLogistic'))
+                                <th scope="col">Cabang</th>
+                            @endif
                             <th scope="col">Item Barang Keluar</th>
                             <th scope="col">Serial Number</th>
                             <th scope="col">Qty</th>
@@ -44,7 +48,9 @@
                                 <tr>
                                     <td>{{ $oh -> order_id }}</td>
                                     <td>{{ $oh -> approved_at }}</td>
-                                    <td>{{ $oh -> cabang }}</td>
+                                    @if(Auth::user()->hasRole('adminLogistic'))
+                                        <td>{{ $oh -> cabang }}</td>
+                                    @endif
                                     <td>{{ $oh -> item -> itemName }}</td>
                                     <td>{{ $oh -> item -> serialNo}}</td>
                                     <td>{{ $oh -> quantity}}</td>

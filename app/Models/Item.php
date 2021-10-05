@@ -12,9 +12,6 @@ class Item extends Model
         'id'
     ];
 
-    public function order(){
-        return $this->hasMany(Order::class);
-    }
     public function cart(){
         return $this->hasMany(Cart::class);
     }

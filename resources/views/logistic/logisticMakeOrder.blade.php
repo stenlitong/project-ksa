@@ -27,6 +27,12 @@
                 </div>
             @endif
             
+            @error('item_id')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Barang
+                </div>
+            @enderror
+
             @error('quantity')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Quantity Invalid
@@ -45,6 +51,18 @@
                 </div>
             @enderror
 
+            @error('department')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Department Invalid
+                </div>
+            @enderror
+            
+            @error('golongan')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Golongan Invalid
+                </div>
+            @enderror
+
             <div class="row">
                 <div class="col">
                     <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
@@ -55,7 +73,7 @@
                                 <br>
                                 <select class="form-control" name="item_id" id="item_id" style="width: 500px; height:50px;">
                                     @foreach($items as $i)
-                                        <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
+                                        <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }})</option>
                                     @endforeach
                                 </select>
                             </div>

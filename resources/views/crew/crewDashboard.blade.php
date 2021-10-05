@@ -50,7 +50,7 @@
                             <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
                         </td>
                     @else
-                    <td class="">
+                    <td>
                         <button type="button" style="margin-left: 40%" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                             Detail
                         </button>

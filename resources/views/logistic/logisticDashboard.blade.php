@@ -38,12 +38,18 @@
         </div>
         @enderror
 
-        {{-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by status.."> --}}
+        @php
+            $search_placeholder = "Search by Order ID or Status...";
+            if(Auth::user()->hasRole('adminLogistic')){
+                $search_placeholder = "Search by Order ID, Cabang or Status...";
+            };
+        @endphp
+
         <div class="row">
             <div class="col-md-6">
                 <form action="">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
+                        <input type="text" class="form-control" placeholder="{{ $search_placeholder }}" name="search" id="search">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>
@@ -54,33 +60,54 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Order ID</th>
-                    <th scope="col">Cabang</th>
+                    @if(Auth::user()->hasRole('adminLogistic'))
+                        <th scope="col">Cabang</th>
+                    @endif
                     <th scope="col">Status</th>
                     <th scope="col">Keterangan</th>
-                    <th scope="col">Detail/Action</th>
+                    <th scope="col">Detail</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($orderHeads as $oh)
                 <tr>
                     <th>{{ $oh -> order_id}}</th>
-                    <td>{{ $oh -> cabang}}</th>
+                    @if(Auth::user()->hasRole('adminLogistic'))
+                        <td>{{ $oh -> cabang}}</th>
+                    @endif
                     @if(strpos($oh -> status, 'Rejected') !== false)
                         <td style="color: red">{{ $oh -> status}}</td>
                     @elseif(strpos($oh -> status, 'Completed') !== false)
                         <td style="color: green">{{ $oh -> status}}</td>
                     @elseif(strpos($oh -> status, 'On Delivery') !== false)
                         <td style="color: blue">{{ $oh -> status}}</td>
+                    @elseif(strpos($oh -> status, 'Approved') !== false)
+                        <td style="color: #16c9e9">{{ $oh -> status }}</td>
                     @else
-                        <td style="color: #8B8000">{{ $oh -> status}}</td>
+                        <td>{{ $oh -> status}}</td>
                     @endif
 
-                    <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ $oh -> reason}}</td>
-                    
-                    {{-- Button to trigger the modal detail --}}
-                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
-                        Detail
-                    </button></td>
+                    <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
+
+                    @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false)
+                        <td>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                            <a href="/logistic/{{ $oh -> id }}/download-pr" class="btn btn-warning">Download PR</a>
+                        </td>
+                    @else
+                        {{-- Button to trigger the modal detail --}}
+                        <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
+                            Detail
+                        </button></td>
+                    @endif
+
+                    @if(strpos($oh -> status, 'Approved') !== false)
+                        <td><a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a></td>
+                    @else
+                        <td></td>
+                    @endif
+
                 </tr>
                 @endforeach
             </tbody>
@@ -93,19 +120,29 @@
                     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
-                                <h5 class="modal-title" id="detailTitle">Order ID # {{ $o->order_id }}</h5>
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex-column">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->order_id }}</h5>
+                                    </div>
+                                    <div class="d-flex-column ml-5">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
+                                    </div>
+                                </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <h5>Nomor PR : {{ $o -> noPr }}</h5>
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
                                             
-                                            @if(strpos($o -> status, 'Purchasing') !== false)
+                                            @if(strpos($o -> status, 'Order') !== false)
                                             @else
                                                 <th scope="col">Terakhir Diberikan</th>
                                             @endif
@@ -113,7 +150,7 @@
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
                                             
-                                            @if(strpos($o -> status, 'Purchasing') !== false)
+                                            @if(strpos($o -> status, 'Order') !== false)
                                             @else
                                                 <th scope="col">Stok Barang</th>
                                             @endif
@@ -126,7 +163,7 @@
                                                     <td>{{ $od -> item -> itemName }}</td>
                                                     <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
 
-                                                    @if(strpos($o -> status, 'Purchasing') !== false)
+                                                    @if(strpos($o -> status, 'Order') !== false)
                                                     @else
                                                         <td>{{ $o ->  approved_at}}</td>
                                                     @endif
@@ -134,7 +171,7 @@
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
 
-                                                    @if(strpos($o -> status, 'Purchasing') !== false)
+                                                    @if(strpos($o -> status, 'Order') !== false)
                                                     @else
                                                         @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
                                                             <td style="color: red">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
