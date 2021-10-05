@@ -11,7 +11,7 @@ class AdminPurchasingController extends Controller
         // Add supplier
         $validated = $request -> validate([
             'supplierName' => 'required',
-            'noTelp' => 'required|max:15|min:8',
+            'noTelp' => 'required|numeric|digits_between:8,11',
             'supplierEmail' => 'required|email',
             'supplierAddress' => 'required',
             'supplierNPWP' => 'required'
@@ -26,7 +26,7 @@ class AdminPurchasingController extends Controller
         // Edit supplier
         $validated = $request -> validate([
             'supplierName' => 'required',
-            'noTelp' => 'required|max:15|min:8',
+            'noTelp' => 'required|numeric|digits_between:8,11',
             'supplierEmail' => 'required|email',
             'supplierAddress' => 'required',
             'supplierNPWP' => 'required'

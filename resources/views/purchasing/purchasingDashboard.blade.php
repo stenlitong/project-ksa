@@ -12,6 +12,13 @@
         <div class="row">
             <div class="col" style="max-width: 850px">
                 <h2 class="mt-3 mb-4" style="text-align: center">Supplier</h2>
+
+                @if(session('status'))
+                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <div class="row flex-row flex-nowrap scrolling-wrapper">
                     @foreach($suppliers as $s)
                         <div class="card border-dark w-75 mr-3">
@@ -20,11 +27,8 @@
                                 <div class="col ml-2">
                                     <img src="/images/profile.png" style="height: 150px; width: 150px;">
                                     <p style="font-size: 200%; max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
-                                    <p style="font-size: 125%; max-width: 270px">{{ $s -> noTelp }}</p>
+                                    <p style="font-size: 125%; max-width: 270px">(+62) {{ $s -> noTelp }}</p>
                                     <p style="font-size: 125%; max-width: 270px">{{ $s -> supplierEmail }}</p>
-                                    {{-- <h2>{{ $s -> supplierName }}</h2>
-                                    <h2>{{ $s -> supplierEmail }}</h2>
-                                    <h2>{{ $s -> noTelp }}</h2> --}}
                                 </div>
                                 <div class="col" style="margin-left: -100px ">
                                     <div class="d-flex justify-content-between ratings">
@@ -92,12 +96,12 @@
             </div>
             <div class="col">
                 <h2 class="mt-3 mb-4" style="text-align: center;">Order List</h2>
-                @if(session('status'))
-                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                        {{ session('status') }}
-                    </div>
-                @endif
-                
+                @error('reason')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alasan Wajib Diisi
+                </div>
+                @enderror
+
                     <div class="d-flex flex-row justify-content-between">
                         <form class="" action="">
                             <div class="input-group mb-3 ">
@@ -121,7 +125,9 @@
                         @foreach($orderHeads as $oh)
                         <tr>
                             <td><strong>{{ $oh -> order_id }}</strong></td>
-                            @if(strpos($oh -> status, 'Completed') !== false)
+                            @if(strpos($oh -> status, 'Rejected') !== false)
+                                <td style="color: red">{{ $oh -> status}}</td>
+                            @elseif(strpos($oh -> status, 'Completed') !== false)
                                 <td style="color: green">{{ $oh -> status}}</td>
                             @elseif(strpos($oh -> status, 'Approved') !== false)
                                 <td style="color: #8B8000">{{ $oh -> status}}</td>
@@ -288,7 +294,34 @@
                 </div>
             </div>
         @endforeach
+
     </main>
+
+    {{-- Modal 2 --}}
+    @foreach($orderHeads as $oh)
+        <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="/purchasing/order/{{ $oh->id }}/reject">
+                    @csrf
+                    <div class="modal-body"> 
+                        <label for="reason">Alasan</label>
+                        <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
 </div>
 
 <style>

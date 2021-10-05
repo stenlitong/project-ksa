@@ -61,18 +61,18 @@
                                     <img src="/images/profile.png" style="height: 100px; width: 100px;">
                                     <h2 class="mt-3" style="max-width: 270px">{{ $s -> supplierName }}</h2>
                                 </div>
-                                <div class="col" style="margin-left: -100px ">
+                                <div class="col" style="margin-left: -150px ">
                                     <div class="d-flex mb-2">
-                                        <h4>{{ $s -> noTelp }}</h4>
+                                        <h4 style="max-width: 250px;">(+62) {{ $s -> noTelp }}</h4>
                                     </div>
                                     <div class="d-flex mb-2">
-                                        <h4>{{ $s -> supplierEmail }}</h4>
+                                        <h4 style="max-width: 400px;">{{ $s -> supplierEmail }}</h4>
                                     </div>
                                     <div class="d-flex mb-2">
-                                        <h4>{{ $s -> supplierAddress }}</h4>
+                                        <h4 style="max-width: 250px;">{{ $s -> supplierAddress }}</h4>
                                     </div>
                                     <div class="d-flex mb-2">
-                                        <h4>{{ $s -> supplierNPWP }}</h4>
+                                        <h4 style="max-width: 250px;">{{ $s -> supplierNPWP }}</h4>
                                     </div>
                                     <div class="d-flex justify-content-end">
                                         <button class="btn btn-success mt-2 mr-3" style="width: 70px" data-toggle="modal" id="detail" data-target="#editItem-{{ $s->id }}">Edit</button>
@@ -90,16 +90,23 @@
                     @csrf
                     <div class="d-flex justify-content-around mr-2">
                         <div class="form-group p-2">
-                            <label for="supplierName" class="mb-2">Nama Supplier</label>
+                            <label for="supplierName">Nama Supplier</label>
                             <input name="supplierName" type="text" class="form-control" id="supplierName" placeholder="Input nama supplier..."
                                 style="width: 500px; height: 50px">
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mr-2">
                         <div class="form-group p-2">
-                            <label for="noTelp" class="mb-2">No. Telp Supplier</label>
-                            <input name="noTelp" type="text" class="form-control" id="noTelp" placeholder="Input nomor telepon dalam angka..."
-                                style="width: 500px; height: 50px">
+                            <label for="noTelp">No. Telp Supplier</label>
+                            
+                            {{-- <input name="noTelp" type="text" class="form-control" id="noTelp" placeholder="Input nomor telepon dalam angka..."
+                                style="width: 500px; height: 50px"> --}}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">(+62)</div>
+                                </div>
+                                <input type="text" class="form-control" id="noTelp" name="noTelp" style="width: 450px; height: 50px" placeholder="Input nomor telepon dalam angka...">
+                            </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mr-2">
@@ -158,8 +165,12 @@
                         <div class="d-flex justify-content-around mr-2">
                             <div class="form-group p-2">
                                 <label for="noTelp" class="mb-2">No. Telp Supplier</label>
-                                <input name="noTelp" type="text" class="form-control" id="noTelp" placeholder="Input nomor telepon dalam angka..."
-                                    style="width: 500px; height: 50px" value="{{ $s -> noTelp }}">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">(+62)</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="noTelp" name="noTelp" style="width: 450px; height: 50px" placeholder="Input nomor telepon dalam angka...">
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-around mr-2">

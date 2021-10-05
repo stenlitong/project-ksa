@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'Logistic Report')
+@section('title', 'Logistic Order')
 
 @section('container')
     <div class="row">
@@ -15,22 +15,21 @@
                     </div>
                 @endif
                 
-                <nav class="navbar navbar-light">
-                    <form class="form-inline">
-                        <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
-                        <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
+                <div class="d-flex justify-content-start mb-3">
+                    <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
+                    <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
+    
+                    @if(count($orderHeads) > 0)
+                        <a href="{{ Route('logistic.downloadIn') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
+                    @endif
 
-                        @if(count($orderHeads) > 0)
-                            <a href="" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
-                        @endif
-                    </form>
-                </nav>
+                </div>
                 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                     <table class="table table-bordered">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">Order ID</th>
+                            <th scope="col">Nomor</th>
                             <th scope="col">Tanggal Masuk</th>
                             <th scope="col">Item Barang Masuk</th>
                             <th scope="col">Serial Number</th>
@@ -41,9 +40,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                            @foreach($orderHeads as $oh)
+                            @foreach($orderHeads as $key => $oh)
                                 <tr>
-                                    <td>{{ $oh -> order_id }}</td>
+                                    <td>{{ $key + 1 }}</td>
                                     <td>{{ $oh -> approved_at }}</td>
                                     <td>{{ $oh -> item -> itemName }}</td>
                                     <td>{{ $oh -> serialNo}}</td>

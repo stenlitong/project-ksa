@@ -19,16 +19,16 @@ class OrderOutExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEve
         if(Auth::user()->hasRole('adminLogistic')){
             $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
 
-            return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc');
+            return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc');
         }
         // Find order from user/goods out
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
-        return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('order_heads.cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc');
+        return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'noResi', 'descriptions')->where('order_heads.cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc');
     }
 
     public function headings(): array{
-        return ['Order ID', 'Tanggal Keluar', 'Item Barang Keluar', 'Serial Number', 'Qty', 'Satuan', 'No. Resi', 'Note'];
+        return ['Tanggal Keluar', 'Item Barang Keluar', 'Serial Number', 'Qty', 'Satuan', 'No. Resi', 'Note'];
     }
     
     public function registerEvents(): array

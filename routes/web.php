@@ -45,10 +45,10 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [LogisticController::class, 'rejectOrder']);
-        // Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/history-out', [LogisticController::class, 'historyOutPage'])->name('historyOut');
         Route::get('/download-out', [LogisticController::class, 'downloadOut'])->name('downloadOut');
         Route::get('/history-in', [LogisticController::class, 'historyInPage'])->name('historyIn');
+        Route::get('/download-in', [LogisticController::class, 'downloadIn'])->name('downloadIn');
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
         Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
         Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/{user}/submit-order', [LogisticController::class, 'submitOrder']);
         Route::get('/{orderHeads}/download-pr', [LogisticController::class, 'downloadPr']);
         Route::get('/stock-order/{orderHeads}/accept-order', [LogisticController::class, 'acceptStockOrder']);
+        Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
+        Route::get('/download-report', [LogisticController::class, 'downloadReport'])->name('downloadReport');
 
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
     });
@@ -65,8 +67,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('purchasing')->name('purchasing.')->group(function(){
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
-        // Route::post('/rate-supplier', [PurchasingController::class, 'rateSupplier']);
+        Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
+        Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
+        Route::get('/download-report', [PurchasingController::class, 'downloadReport'])->name('downloadReport');
     });
 
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){

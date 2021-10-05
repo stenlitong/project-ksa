@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
+use App\Exports\OrderInExport;
 use App\Exports\PRExport;
+use App\Exports\ReportExport;
 use Maatwebsite\Excel\Excel;
 Use \Carbon\Carbon;
 use Storage;
@@ -177,7 +179,7 @@ class LogisticController extends Controller
             $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions', 'cabang')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
         }else{
             // Find order from user/goods out
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
             
             // Find all the items that has been approved from the user | last 30 days only
             $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions')->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
@@ -194,7 +196,7 @@ class LogisticController extends Controller
             $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'supplierName', 'descriptions')->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
         }else{
             // Find order from user/goods out
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->orWhere('role_user.role_id' , '=', '4')->pluck('users.id');
             
             // Find all the items that has been approved from the user | last 30 days only
             $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'supplierName', 'descriptions')->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
@@ -207,6 +209,11 @@ class LogisticController extends Controller
         // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
         // Export the data of history goods out
         return $excel -> download(new OrderOutExport, 'OrderGoodsOut_'. date("d-m-Y") . '.xlsx');
+    }
+    public function downloadIn(Excel $excel){
+        // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
+        // Export the data of history goods out
+        return $excel -> download(new OrderInExport, 'OrderGoodsIn_'. date("d-m-Y") . '.xlsx');
     }
 
     public function makeOrderPage(){
@@ -360,56 +367,30 @@ class LogisticController extends Controller
         return (new PRExport($orderHeads -> order_id))->download('test.xlsx');
     }
 
+    public function reportPage(){
+
+        // Chech if the role is admin logistic, then he can see all of the order, else logistic role can see their respectable order
+        if(Auth::user()->hasRole('adminLogistic')){
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '4')->orWhere('role_user.role_id' , '=', '3')->pluck('user_id');
+
+            $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        }else{
+            // Find order from user/goods out
+            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('role_user.role_id' , '=', '4', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            
+            // Find all the items that has been approved from the user | last 30 days only
+            $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        }
+
+        return view('logistic.logisticReport', compact('orderHeads'));
+    }
+
+    public function downloadReport(Excel $excel){
+
+        return $excel -> download(new ReportExport, 'LogisticReport-'. date("d-m-Y") . '.xlsx');
+    }
+
     // ============================ Testing Playgrounds ===================================
-
-    // public function createTransaction(Request $request){
-        
-        // $validated = $request->validate([
-        //     'boatName' => 'required',
-        //     'department' => 'required',
-        //     'company' => 'required',
-        //     'location' => 'required',
-        //     'itemName' => 'required',
-        //     'prDate' => 'required',
-        //     'serialNo' => 'required',
-        //     'quantity' => 'required',
-        //     'codeMasterItem' => 'required',
-        //     'note' => 'nullable'
-        // ]);
-
-        // Formatting the PR requirements
-        // $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        
-        // $first_char_name = strtoupper(Auth::user()->name[0]);
-        // $formatted_company = strtoupper(str_replace(' ', '-' , $request->company));
-        // $month = date('n', strtotime($request->prDate));
-        // $month_to_roman = $month_arr_in_roman[$month - 1];
-        // $year = date('Y', strtotime($request->prDate));
-
-        // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
-        // $pr_number = $formatted_id . '.' . $first_char_name . '/' . 'PR-' . $formatted_company . '-' . $request->location . '/' . $month_to_roman . '/' . $year;
-        
-        // Adding columns to the validated arr before inserting the data into transaction table
-        // $validated['noPr'] = $pr_number;
-        // $validated['order_id'] = $order->id;
-        // $validated['crew_id'] = Auth::user()->id;
-        // $validated['status'] = 'Awaiting Approval';
-
-        // Transaction::create($validated);
-
-        // dd($validated);
-        
-        // Changing the status in orders table
-        // Order::where('id', $order->id)->update([
-        //     'in_progress' => 'in_progress(Purchasing)'
-        // ]);
-
-        // Then Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
-        // $t_id = Transaction::where('order_id', $order->id)->value('id');
-        // return (new TransactionExport($t_id))->download('Transaction-'. $t_id . '-' . $formatted_company . '.xlsx');
-
-    //     return redirect('/logistic/ongoing-order');
-    // }
 
     public function uploadItem(Request $request){
         // Testing upload to S3 function

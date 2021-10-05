@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PurchasingReportExport;
 use Illuminate\Http\Request;
 Use \Carbon\Carbon;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+use Maatwebsite\Excel\Excel;
 
 class PurchasingController extends Controller
 {
@@ -15,6 +19,7 @@ class PurchasingController extends Controller
         // Formatting the PO code
         $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
+        // Prepare all of the required resources
         $cabang_arr = [
             'Jakarta' => 'JKT',
             'Banjarmasin' => 'BNJ',
@@ -68,6 +73,20 @@ class PurchasingController extends Controller
         return redirect('/dashboard')->with('status', 'Order Approved');
     }
 
+    public function rejectOrder(Request $request, OrderHead $orderHeads){
+        // Reject the order made from logistic
+        $request->validate([
+            'reason' => 'required'
+        ]);
+
+        // Then update the status + reason
+        OrderHead::where('id', $orderHeads->id)->update([
+            'status' => 'Rejected By Purchasing',
+            'reason' => $request->reason
+        ]);
+        return redirect('/dashboard');
+    }
+
     public function editSupplier(Request $request, Supplier $suppliers){
         // Find the supplier id, then edit the ratings
         Supplier::find($suppliers->id)->update([
@@ -79,5 +98,19 @@ class PurchasingController extends Controller
         ]);
 
         return redirect('/dashboard')->with('status', 'Edited Successfully');
+    }
+
+    public function reportPage(){
+
+        // Purchasing role can see all of the order of their respective branches
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '4')->orWhere('role_user.role_id' , '=', '3')->pluck('user_id');
+
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+
+        return view('purchasing.purchasingReport', compact('orderHeads'));
+    }
+
+    public function downloadReport(Excel $excel){
+        return $excel -> download(new PurchasingReportExport, 'PurchasingReport-'. date("d-m-Y") . '.xlsx');
     }
 }

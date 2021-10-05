@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'Logistic Report')
+@section('title', 'Logistic Order History')
 
 @section('container')
     <div class="row">
@@ -15,22 +15,20 @@
                     </div>
                 @endif
                 
-                <nav class="navbar navbar-light">
-                    <form class="form-inline">
-                        <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
-                        <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
-                        
-                        @if(count($orderHeads) > 0)
-                            <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger" style="margin-left: 1220px">Export</a>
-                        @endif
-                    </form>
-                </nav>
+                <div class="d-flex justify-content-start mb-3">
+                    <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
+                    <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
+                    
+                    @if(count($orderHeads) > 0)
+                        <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
+                    @endif
+                </div>
                 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                     <table class="table table-bordered">
                         <thead class="thead-dark">
                           <tr>
-                            <th scope="col">Order ID</th>
+                            <th scope="col">Nomor</th>
                             <th scope="col">Tanggal Keluar</th>
                             @if(Auth::user()->hasRole('adminLogistic'))
                                 <th scope="col">Cabang</th>
@@ -44,9 +42,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                            @foreach($orderHeads as $oh)
+                            @foreach($orderHeads as $key => $oh)
                                 <tr>
-                                    <td>{{ $oh -> order_id }}</td>
+                                    <td>{{ $key + 1 }}</td>
                                     <td>{{ $oh -> approved_at }}</td>
                                     @if(Auth::user()->hasRole('adminLogistic'))
                                         <td>{{ $oh -> cabang }}</td>
@@ -79,7 +77,7 @@
             display: block;
         }
 
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 160px;
             max-width: 160px;

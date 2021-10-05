@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'Logistic Dashboard')
+@section('title', 'Logistic Approve Order')
 
 @section('container')
 <div class="row">

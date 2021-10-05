@@ -7,28 +7,28 @@
                     Dashboard
                 </a>
             </li>
-            {{-- <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.report") }}">
-                    <span data-feather="file"></span>
-                    Make Report
-                </a>
-            </li> --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.historyOut") }}">
-                    <span data-feather="file"></span>
-                    View History
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ Route("logistic.stocks") }}">
-                    <span data-feather="file"></span>
+                    <span data-feather="layers"></span>
                     Item Stocks
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ Route("logistic.makeOrder") }}">
-                    <span data-feather="file"></span>
+                    <span data-feather="plus-circle"></span>
                     Make Order
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ Route("logistic.historyOut") }}">
+                    <span data-feather="file"></span>
+                    Report Goods In/Out
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ Route("logistic.report") }}">
+                    <span data-feather="archive"></span>
+                    Report PR/PO
                 </a>
             </li>
         </ul>
