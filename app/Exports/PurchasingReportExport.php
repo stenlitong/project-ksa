@@ -16,15 +16,15 @@ class PurchasingReportExport implements FromQuery, WithHeadings, ShouldAutoSize,
 {
     public function query()
     {
-        // Find order from user/goods out
+        // Find order from logistic role but with different setup with the goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->orWhere('role_user.role_id' , '=', '4')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 30 days only
-        return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.id')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'boatName', 'descriptions');
+        return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.id')->join('order_details', 'order_details.orders_id', '=', 'order_heads.order_id')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'golongan', 'boatName', 'descriptions');
     }
 
     public function headings(): array{
-        return ['Tanggal PR', 'Nomor PR', 'Supplier', 'Nomor Po', 'Nama Kapal', 'Keterangan', 'Golongan'];
+        return ['Tanggal PR', 'Nomor PR', 'Supplier', 'Nomor Po', 'Golongan', 'Nama Kapal', 'Keterangan'];
     }
     
     public function registerEvents(): array

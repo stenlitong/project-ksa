@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+// use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\SupervisorController;
 use App\Models\Barge;
 use App\Models\Tug;
 
@@ -24,10 +25,6 @@ use App\Models\Tug;
 Route::get('/', function () {
     return view('welcome');
 });
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -51,6 +48,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/download-in', [LogisticController::class, 'downloadIn'])->name('downloadIn');
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
         Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
+        Route::delete('/stocks/{item}/delete', [LogisticController::class, 'deleteItem']);
         Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
         Route::get('/make-order', [LogisticController::class, 'makeOrderPage'])->name('makeOrder');
         Route::post('/{user}/add-cart', [LogisticController::class, 'addItemToCart']);
@@ -64,18 +62,40 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
     });
 
+    Route::prefix('supervisor')->name('supervisor.')->group(function(){
+        Route::get('/{orderHeads}/approve-order', [SupervisorController::class, 'approveOrder']);
+        Route::put('/{orderHeads}/reject-order', [SupervisorController::class, 'rejectOrder']);
+        Route::get('/{orderHeads}/download-pr', [SupervisorController::class, 'downloadPr']);
+    });
+
     Route::prefix('purchasing')->name('purchasing.')->group(function(){
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
-        Route::get('/download-report', [PurchasingController::class, 'downloadReport'])->name('downloadReport');
+        Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
     });
+
+    // Route::prefix('admin-logistic')->name('adminLogistic.')->group(function(){
+    //     Route::post('/add-item', [AdminLogisticController::class, 'addItem'])->name('addItem');
+    //     Route::put('/{item}/edit', [AdminLogisticController::class, 'editItem']);
+    //     Route::get('/create-order', [AdminLogisticController::class, 'preMakeOrderPage'])->name('preMakeOrderPage');
+    //     Route::post('/create-order', [AdminLogisticController::class, 'submittedCabangPage'])->name('submittedCabangPage');
+    //     Route::get('/create-order/{cabang}', [AdminLogisticController::class, 'createOrderFormPage']);
+    //     Route::post('/create-order/{cabang}/add-cart', [AdminLogisticController::class, 'addItemToCart']);
+    //     Route::delete('/create-order/{cabang}/{cart}/delete-cart', [AdminLogisticController::class, 'deleteItemFromCart']);
+    //     Route::post('/create-order/{cabang}/{user}/submit-order', [AdminLogisticController::class, 'submitOrder']);
+    //     Route::get('/history-out', [AdminLogisticController::class, 'historyOutPage'])->name('historyOut');
+    //     Route::get('/history-in', [AdminLogisticController::class, 'historyInPage'])->name('historyIn');
+    //     Route::get('/download-out', [AdminLogisticController::class, 'downloadOut'])->name('downloadOut');
+    //     Route::get('/download-in', [AdminLogisticController::class, 'downloadIn'])->name('downloadIn');
+    // });
 
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
         Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
         Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
+        Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
     });
 });
 

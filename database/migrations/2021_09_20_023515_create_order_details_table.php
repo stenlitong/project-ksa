@@ -18,8 +18,6 @@ class CreateOrderDetailsTable extends Migration
             $table->string('orders_id');
             $table->unsignedBigInteger('item_id');
             $table->string('quantity');
-            $table->string('unit');
-            $table->string('serialNo')->nullable();
             $table->string('department')->nullable();
             $table->string('golongan')->nullable();
             $table->string('note')->nullable();

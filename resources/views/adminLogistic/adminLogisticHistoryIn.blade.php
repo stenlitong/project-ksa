@@ -1,29 +1,29 @@
-@if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('adminLogistic'))
+@if(Auth::user()->hasRole('adminLogistic'))
     @extends('../layouts.base')
 
-    @section('title', 'Logistic Order')
+    @section('title', 'Logistic Order History')
 
     @section('container')
         <div class="row">
-            @include('logistic.sidebar')
+            @include('adminLogistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
                     <h1 class="d-flex justify-content-center">Goods In Report</h1>
                     <br>
                     
                     <div class="d-flex justify-content-start mb-3">
-                        <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
-                        <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
-        
+                        <a href="{{ Route('adminLogistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
+                        <a href="{{ Route('adminLogistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
+                        
                         @if(count($orderHeads) > 0)
-                            <a href="{{ Route('logistic.downloadIn') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
+                            <a href="{{ Route('adminLogistic.downloadIn') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
                         @endif
                     </div>
                     
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table table-bordered">
                             <thead class="thead-dark">
-                            <tr>
+                              <tr>
                                 <th scope="col">Nomor</th>
                                 <th scope="col">Tanggal Masuk</th>
                                 <th scope="col">Item Barang Masuk</th>
@@ -32,7 +32,7 @@
                                 <th scope="col">Satuan</th>
                                 <th scope="col">Nama Supplier</th>
                                 <th scope="col">Note</th>
-                            </tr>
+                              </tr>
                             </thead>
                             <tbody>
                                 @foreach($orderHeads as $key => $oh)
@@ -48,7 +48,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
+                          </table>
                     </div>
                 </div>
             </main>
@@ -67,7 +67,7 @@
                 display: block;
             }
 
-            td{
+            td, th{
                 word-wrap: break-word;
                 min-width: 160px;
                 max-width: 160px;

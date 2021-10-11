@@ -23,7 +23,7 @@ class CreateItemsTable extends Migration
             $table->string('itemAge');
             $table->string('cabang');
             $table->string('description')->nullable();
-            $table->date('lastGiven')->nullable();
+            $table->string('lastGiven')->nullable();
             $table->timestamps();
         });
     }

@@ -1,5 +1,7 @@
 <head>
     <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </head>
 <x-guest-layout>
     <x-auth-card>
@@ -28,6 +30,17 @@
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
+            
+            <!-- No Telp -->
+            <div class="mt-4">
+                <x-label for="user_noTelp" :value="__('Nomor Telepon')" />
+                <div class="input-group mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text" style="height: 45px">(+62)</div>
+                    </div>
+                    <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka...">
+                </div>
+            </div>
 
             <br>
             <!-- No Induk Pegawai -->
@@ -50,6 +63,7 @@
                     <option value="insurance" id="insurance">Asuransi</option>
                     <option value="purchasing">Purchasing</option>
                     <option value="logistic">Logistic</option>
+                    <option value="supervisor">Supervisor</option>
                     <option value="crew">Crew</option>
                 </select>
             </div>

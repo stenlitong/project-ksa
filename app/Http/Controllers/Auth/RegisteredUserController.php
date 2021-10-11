@@ -36,6 +36,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'no_induk_pegawai' => ['required', 'string', 'max:6', 'min:6', 'unique:users'],
+            'user_noTelp' => ['required', 'numeric', 'digits_between:8,11', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'cabang' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -44,10 +45,12 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'no_induk_pegawai' => $request->no_induk_pegawai,
+            'user_noTelp' => $request->user_noTelp,
             'email' => $request->email,
             'cabang' => $request->cabang,
             'password' => Hash::make($request->password),
         ]);
+
         $user->attachRole($request->role_id);
         event(new Registered($user));
 

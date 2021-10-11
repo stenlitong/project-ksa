@@ -12,7 +12,7 @@ class AdminPurchasingController extends Controller
         $validated = $request -> validate([
             'supplierName' => 'required',
             'noTelp' => 'required|numeric|digits_between:8,11',
-            'supplierEmail' => 'required|email',
+            'supplierEmail' => 'required|email|unique:suppliers',
             'supplierAddress' => 'required',
             'supplierNPWP' => 'required'
         ]);
@@ -36,5 +36,10 @@ class AdminPurchasingController extends Controller
         Supplier::find($suppliers->id)->update($validated);
 
         return redirect('/dashboard')->with('status', 'Edited Successfully');
+    }
+
+    public function formApPage(){
+
+        return view('adminPurchasing.adminPurchasingFormAp');
     }
 }

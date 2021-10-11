@@ -74,7 +74,7 @@ class CrewController extends Controller
     public function submitOrder(Request $request){
         $request -> validate([
             'tugName' => 'required',
-            'bargeName' => 'required'
+            'bargeName' => 'nullable'
         ]);
 
         // Find the cart of the following user
@@ -87,7 +87,7 @@ class CrewController extends Controller
 
         // Else, generate unique id for the order_id and checks the order_id is already exist || Create the order from the cart
         do{
-            $unique_id = Str::random(9);
+            $unique_id = Str::random(8);
         }while(OrderHead::where('order_id', $unique_id)->exists());
 
         // String formatting for boatName with tugName + bargeName
@@ -99,7 +99,7 @@ class CrewController extends Controller
             'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
-            'status' => 'In Progress (Logistic)'
+            'status' => 'In Progress By Logistic'
         ]);
         
         // Then fill the Order Detail with the cart items of the following Order Head
@@ -124,9 +124,18 @@ class CrewController extends Controller
 
     public function acceptOrder(OrderHead $orderHeads){
         // Crew accept the order, then the status will be completed
-        OrderHead::where('id', $orderHeads->id)->update([
-            'status' => 'Completed'
+        $order_heads = OrderHead::where('id', $orderHeads->id)->update([
+            'status' => 'Completed',
         ]);
+
+        // Get the order details of the following order
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+
+        foreach($orderDetails as $od){
+            Item::where('id', $od -> item -> id)->update([
+                'lastGiven' => date("d/m/Y")
+            ]);
+        }
 
         return redirect('/dashboard')->with('status', 'Order Diterima');
     }

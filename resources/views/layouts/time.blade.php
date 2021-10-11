@@ -1,4 +1,4 @@
-<div class="flex-wrap flex-md-nowrap align-items-center mb-3 mt-3 ml-3 rcorners1">
+<div class="flex-wrap align-items-center mb-3 mt-3 ml-3 rcorners1">
     @if((int)date("H") >= 18)
         <h2>Malam, {{ Auth::user()->name }} !</h2>
     @elseif((int)date("H") >= 15)

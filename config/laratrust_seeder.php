@@ -29,6 +29,10 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+        'supervisor' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
         'purchasing' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'

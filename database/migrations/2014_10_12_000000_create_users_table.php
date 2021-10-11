@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->char('no_induk_pegawai', 6)->unique;
             $table->string('cabang');
+            $table->string('user_noTelp');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

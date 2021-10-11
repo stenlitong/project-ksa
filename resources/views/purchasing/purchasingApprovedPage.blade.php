@@ -7,7 +7,7 @@
     @include('purchasing.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-        <h2 class="mt-3 mb-2" style="text-align: center">Order # {{ $orderHeads -> order_id }}</h2>
+        <h2 class="mt-3" style="text-align: center">Order # {{ $orderHeads -> order_id }}</h2>
 
         @error('boatName')
         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -51,7 +51,7 @@
         </div>
         @enderror
 
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <div class="col">
                     <form method="POST" action="">
                         @csrf
@@ -105,8 +105,13 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="price">Total Harga</label>
-                            <input type="text" class="form-control" id="price" name="price" placeholder="Input Total Harga Dalam Angka">
+                            <label for="price" class="mb-2">Harga</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Rp.</div>
+                                </div>
+                                <input type="text" class="form-control" id="price" name="price" placeholder="Input total harga">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="descriptions">Deskripsi (optional)</label>
@@ -129,7 +134,7 @@
                             @foreach($orderDetails as $od)
                             <tr>
                                 <td>{{ $od -> item -> itemName }}</td>
-                                <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
+                                <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
                             </tr>
                             @endforeach
                         </tbody>

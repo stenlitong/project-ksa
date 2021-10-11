@@ -9,6 +9,7 @@ use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Exports\PRExport;
 use Illuminate\Support\Facades\Auth;
 
 use Maatwebsite\Excel\Excel;
@@ -62,7 +63,7 @@ class PurchasingController extends Controller
 
         // Then update the following order
         OrderHead::find($orderHeads -> id)->update([
-            'status' => 'Order Approved (Purchasing)',
+            'status' => 'Order Approved By Purchasing',
             'noPo' => $request->noPo,
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
@@ -70,7 +71,7 @@ class PurchasingController extends Controller
             'price' => $request->price,
             'descriptions' => $request->descriptions
         ]);
-        return redirect('/dashboard')->with('status', 'Order Approved');
+        return redirect('/dashboard')->with('orderStatus', 'Order Approved By Purchasing');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -81,7 +82,7 @@ class PurchasingController extends Controller
 
         // Then update the status + reason
         OrderHead::where('id', $orderHeads->id)->update([
-            'status' => 'Rejected By Purchasing',
+            'status' => 'Order Rejected By Purchasing',
             'reason' => $request->reason
         ]);
         return redirect('/dashboard');
@@ -108,6 +109,12 @@ class PurchasingController extends Controller
         $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orderHeads'));
+    }
+
+    public function downloadPo(OrderHead $orderHeads){
+        dd($orderHeads->id);
+
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '-' .  date("d-m-Y") . '.xlsx');
     }
 
     public function downloadReport(Excel $excel){

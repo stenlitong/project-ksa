@@ -15,7 +15,8 @@ use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
 use App\Exports\PRExport;
-use App\Exports\ReportExport;
+// use App\Exports\ReportExport;
+use App\Exports\PurchasingReportExport;
 use Maatwebsite\Excel\Excel;
 Use \Carbon\Carbon;
 use Storage;
@@ -27,26 +28,14 @@ class LogisticController extends Controller
         return view('logistic.logisticDashboard');
     }
     public function stocksPage(){
-        // Check if the role is admin logistic, then he can see the stocks of all branches, else only can see the stocks of each branches
-        // if(Auth::user()->hasRole('adminLogistic')){
-            // Search function || if there is 2 page or more, it will also include the query string
-            if(request('search')){
-                $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
-                return view('logistic.stocksPage', compact('items'));
-            }else{
-                $items = Item::latest()->Paginate(5)->withQueryString();
-                return view('logistic.stocksPage', compact('items'));
-            }
-        // }else{
-            // Search function || if there is 2 page or more, it will also include the query string
-            // if(request('search')){
-            //     $items = Item::where('itemName', 'like', '%' . request('search') . '%', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('codeMasterItem', 'like', '%' . request('search') . '%', 'and', 'cabang', 'like', Auth::user()->cabang)->Paginate(5)->withQueryString();
-            //     return view('logistic.stocksPage', compact('items'));
-            // }else{
-            //     $items = Item::latest()->where('cabang', 'like', Auth::user()->cabang)->Paginate(5)->withQueryString();
-            //     return view('logistic.stocksPage', compact('items'));
-            // }
-        // }
+        // Logistic can see the stocks of all branches
+        if(request('search')){
+            $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
+            return view('logistic.stocksPage', compact('items'));
+        }else{
+            $items = Item::latest()->Paginate(5)->withQueryString();
+            return view('logistic.stocksPage', compact('items'));
+        }
     }
 
     public function storeItem(Request $request){
@@ -110,11 +99,19 @@ class LogisticController extends Controller
         return redirect('logistic/stocks')->with('status', 'Edit Successfully');
     }
 
+    public function deleteItem(Item $item){
+        // Find the selected item by id
+        Item::find($item->id)->delete();
+        
+        return redirect('logistic/stocks')->with('status', 'Delete Successfully');
+    }
+
     public function rejectOrder(Request $request, OrderHead $orderHeads){
         // Reject the order made from crew
         $request->validate([
-            'reason' => 'required'
+            'reason' => 'reason'
         ]);
+
         OrderHead::where('id', $orderHeads->id)->update([
             'status' => 'Rejected By Logistic',
             'reason' => $request->reason
@@ -135,7 +132,6 @@ class LogisticController extends Controller
             'boatName' => 'required',
             'sender' => 'required',
             'receiver' => 'required',
-            'cabang' => 'required',
             'expedition' => 'required',
             'noResi' => 'nullable',
             'description' => 'nullable',
@@ -157,9 +153,15 @@ class LogisticController extends Controller
             Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
         }
 
+        if($request->expedition == 'onsite'){
+            $status = 'Items Ready';
+        }else{
+            $status = 'On Delivery';
+        }
+
         // Update the status of the following order
         OrderHead::where('id', $orderHeads -> id)->update([
-            'status' => 'On Delivery',
+            'status' => $status,
             'sender' => $request -> sender,
             'receiver' => $request -> receiver,
             'expedition' => $request -> expedition,
@@ -172,35 +174,21 @@ class LogisticController extends Controller
     }
 
     public function historyOutPage(){
-        // Chech if the role is admin logistic, then he can see all of the order, else logistic role can see their respectable order
-        if(Auth::user()->hasRole('adminLogistic')){
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
-
-            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions', 'cabang')->where('status', 'like', 'Completed', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
-        }else{
-            // Find order from user/goods out
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
-            
-            // Find all the items that has been approved from the user | last 30 days only
-            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'noResi', 'descriptions')->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
-        }
+        // Find order from crew role/goods out
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
+        
+        // Find all the items that has been approved/completed from the user feedback | last 30 days only
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('logistic.logisticHistory', compact('orderHeads'));
     }
 
     public function historyInPage(){
-        // Chech if the role is admin logistic, then he can see all of the order, else logistic role can see their respectable order
-        if(Auth::user()->hasRole('adminLogistic')){
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '4')->orWhere('role_user.role_id' , '=', '3')->pluck('user_id');
-
-            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'supplierName', 'descriptions')->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
-        }else{
-            // Find order from user/goods out
+            // Find order from logistic role/goods in
             $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->orWhere('role_user.role_id' , '=', '4')->pluck('users.id');
             
             // Find all the items that has been approved from the user | last 30 days only
-            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->select('order_id', 'approved_at', 'item_id', 'serialNo', 'quantity', 'unit', 'supplierName', 'descriptions')->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
-        }
+            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticHistoryIn', compact('orderHeads'));
     }
@@ -210,6 +198,7 @@ class LogisticController extends Controller
         // Export the data of history goods out
         return $excel -> download(new OrderOutExport, 'OrderGoodsOut_'. date("d-m-Y") . '.xlsx');
     }
+
     public function downloadIn(Excel $excel){
         // Exporting the data into excel => command : composer require maatwebsite/excel || php artisan make:export TransactionExport --model=Transaction 
         // Export the data of history goods out
@@ -217,14 +206,8 @@ class LogisticController extends Controller
     }
 
     public function makeOrderPage(){
-        // Check if the role is admin logistic, then he can see all of the items and order it for the stock
-        if(Auth::user()->hasRole('adminLogistic')){
-            $items = Item::latest()->get();
-            // $items = $itemsUnique->unique('itemName');
-        }else{
-            // Else, logistic role can only select the items that are only available to their branches & carts according to the login user
-            $items = Item::where('cabang', Auth::user()->cabang)->get();
-        }
+        // logistic role can only select the items that are only available to their branches & carts according to the login user
+        $items = Item::where('cabang', Auth::user()->cabang)->get();
 
         // Get all the tugs, barges, and cart of the following user
         $barges = Barge::all();
@@ -235,6 +218,7 @@ class LogisticController extends Controller
     }
 
     public function addItemToCart(Request $request){
+        
         // Validate Cart Request
         $validated = $request->validate([
             'item_id' => 'required',
@@ -267,7 +251,7 @@ class LogisticController extends Controller
     public function submitOrder(Request $request){
         $request -> validate([
             'tugName' => 'required',
-            'bargeName' => 'required',
+            'bargeName' => 'nullable',
             'company' => 'required'
         ]);
 
@@ -281,7 +265,7 @@ class LogisticController extends Controller
 
         // Generate unique id for the order_id || Create the order from the cart
         do{
-            $unique_id = Str::random(9);
+            $unique_id = Str::random(8);
         }while(OrderHead::where('order_id', $unique_id)->exists());
 
         // String formatting for boatName with tugName + bargeName
@@ -293,7 +277,7 @@ class LogisticController extends Controller
             'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
-            'status' => 'Order In Progress (Purchasing)'
+            'status' => 'Order In Progress By Supervisor'
         ]);
         
         // Formatting the PR format requirements
@@ -364,7 +348,7 @@ class LogisticController extends Controller
     public function downloadPr(OrderHead $orderHeads){
         // dd($orderHeads->id);
 
-        return (new PRExport($orderHeads -> order_id))->download('test.xlsx');
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '-' .  date("d-m-Y") . '.xlsx');
     }
 
     public function reportPage(){
@@ -387,7 +371,7 @@ class LogisticController extends Controller
 
     public function downloadReport(Excel $excel){
 
-        return $excel -> download(new ReportExport, 'LogisticReport-'. date("d-m-Y") . '.xlsx');
+        return $excel -> download(new PurchasingReportExport, 'LogisticReport-'. date("d-m-Y") . '.xlsx');
     }
 
     // ============================ Testing Playgrounds ===================================
