@@ -18,20 +18,20 @@ class OrderInExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEven
     public function query()
     {
         // Find order from logistic role/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->orWhere('role_user.role_id' , '=', '4')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
-        return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'supplierName', 'descriptions')->where('status', 'like', '%' . 'Order Completed' . '%', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc');
+        return OrderDetail::query()->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%', 'and', 'created_at', '>=', Carbon::now()->subDays(30))->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'golongan', 'supplierName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
     }
 
     public function headings(): array{
-        return ['Tanggal Keluar', 'Item Barang Masuk', 'Serial Number', 'Qty', 'Satuan', 'No. Resi', 'Note'];
+        return ['Tanggal Masuk', 'Item Barang Masuk', 'Serial Number', 'Qty', 'Satuan', 'Golongan', 'Supplier', 'Note'];
     }
     
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('supervisor'))
+@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster'))
     @extends('../layouts.base')
 
     @section('title', 'Supervisor Dashboard')
@@ -7,12 +7,12 @@
         <div class="row">
         @include('supervisor.sidebar')
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 200px">
             @include('../layouts/time')
             
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
 
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mr-3">
                 {{ $orderHeads->links() }}
             </div>
 
@@ -30,19 +30,28 @@
             </div>
             @enderror
 
-            <div class="row">
-                <div class="col-md-6">
-                    <form action="">
-                        <div class="input-group mb-3">
+            <div class="d-flex mb-3">
+                @if($show_search)
+                    <form class="mr-auto w-50" action="">
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
                             <button class="btn btn-primary" type="submit">Search</button>
                         </div>
                     </form>
-                </div>
+                    <div>
+                        <a href="{{ Route('supervisor.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                        <a href="{{ Route('supervisor.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                    </div>
+                @else
+                    <div class="ml-auto">
+                        <a href="{{ Route('supervisor.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                        <a href="{{ Route('supervisor.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                    </div>
+                @endif
             </div>
 
             <table class="table" id="myTable">
-                <thead class="thead-dark">
+                <thead class="thead bg-danger">
                     <tr>
                         <th scope="col">Order ID</th>
                         <th scope="col">Status</th>
@@ -53,15 +62,15 @@
                 <tbody>
                     @foreach($orderHeads as $oh)
                     <tr>
-                        <th>{{ $oh -> order_id}}</th>
+                        <td><strong>{{ $oh -> order_id}}</strong></td>
                         @if(strpos($oh -> status, 'Rejected') !== false)
-                            <td style="color: red">{{ $oh -> status}}</td>
+                            <td><span style="color: red">{{ $oh -> status}}</span></td>
                         @elseif(strpos($oh -> status, 'Completed') !== false)
-                            <td style="color: green">{{ $oh -> status}}</td>
-                        @elseif(strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Items Ready') !== false)
-                            <td style="color: blue">{{ $oh -> status}}</td>
+                            <td><span style="color: green">{{ $oh -> status}}</span></td>
+                        @elseif(strpos($oh -> status, 'On Delivery') !== false) !== false)
+                            <td><span style="color: blue">{{ $oh -> status}}</span></td>
                         @elseif(strpos($oh -> status, 'Approved') !== false)
-                            <td style="color: #16c9e9">{{ $oh -> status }}</td>
+                            <td><span style="color: #16c9e9">{{ $oh -> status }}</span></td>
                         @else
                             <td>{{ $oh -> status}}</td>
                         @endif
@@ -72,9 +81,8 @@
                             <td>{{ $oh -> descriptions}}</td>
                         @endif
 
-                        {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
                         <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
                             <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
                         </td>
 
@@ -177,6 +185,9 @@
         @endforeach
 
         <style>
+            th{
+                color: white;
+            }
             td, th{
                 word-wrap: break-word;
                 min-width: 150px;

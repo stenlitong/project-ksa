@@ -9,102 +9,174 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Tug;
 use App\Models\Barge;
+use App\Models\OrderDo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
 use App\Exports\PRExport;
-// use App\Exports\ReportExport;
 use App\Exports\PurchasingReportExport;
 use Maatwebsite\Excel\Excel;
 Use \Carbon\Carbon;
 use Storage;
 
+use function PHPSTORM_META\map;
+
 class LogisticController extends Controller
 {
-    public function index(){
-        // Dummy routes for testing purpose
-        return view('logistic.logisticDashboard');
+    public function inProgressOrder(){
+        // Find all of the order that is "in progress" state
+        $orderHeads = OrderHead::with('user')->where('status', 'like', '%' . 'In Progress' . '%')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+
+        // Then get all the order detail
+        $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
+        // Get the count number of the completed and in progress order to show it on the view
+        $completed = OrderHead::where('status', 'like', '%' . 'Completed' . '%')->orWhere('status', 'like', '%' . 'Rejected' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress' . '%')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
+        // If they access it from the button, then remove search functionality
+        $show_search = false;
+
+        return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
     }
+
+    public function completedOrder(){
+        $orderHeads = OrderHead::with('user')->where('status', 'like', '%' . 'Completed' . '%')->orWhere('status', 'like', '%' . 'Rejected' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+
+        // Get all the order detail
+        $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
+        $completed = OrderHead::where('status', 'like', '%' . 'Completed' . '%')->orWhere('status', 'like', '%' . 'Rejected' . '%')->count();
+        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress' . '%')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->count();
+        $show_search = false;
+
+        return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
+    }
+
     public function stocksPage(){
         // Logistic can see the stocks of all branches
         if(request('search')){
-            $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(5)->withQueryString();
+            $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(10)->withQueryString();
             return view('logistic.stocksPage', compact('items'));
         }else{
-            $items = Item::latest()->Paginate(5)->withQueryString();
+            $items = Item::latest()->Paginate(10)->withQueryString();
             return view('logistic.stocksPage', compact('items'));
         }
     }
 
-    public function storeItem(Request $request){
-        // Storing the item to the stock
+    public function requestStock(Request $request, Item $items){
+        // Request stock validation
         $request->validate([
-            'itemName' => 'required',
-            'itemAge' => 'required|numeric',
-            'umur' => 'required',
-            'itemStock' => 'required|numeric',
-            'unit' => 'required',
-            'serialNo' => 'nullable',
-            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
-            'cabang' => 'required',
-            'description' => 'nullable'
+           'itemName' => 'required',
+           'cabang' => 'required',
+           'quantity' => 'required|numeric',
+           'description' => 'nullable'
         ]);
 
-        // Formatting the item age
-        $new_itemAge = $request->itemAge . ' ' . $request->umur;
+        // Find the item on the respective branches
+        $itemToFound = Item::where('itemName', $items->itemName)->where('cabang', Auth::user()->cabang)->first();
+
+        // Check if the same item is exist OR if the requested quantity is more than the available stock, then return error
+        // case #1 => item request from Jakarta -> Bahan Bakar, then the item from requested branch Banjarmasin -> Bahan Bakarr, return error cause it is not exist/not the same
+        // case #2 => CASE SENSITIVE MATTER, Bahan Bakar !== BAHAN Bakar, they need to make sure their naming correct
+        if($itemToFound === null || ($request -> quantity > $items -> itemStock)){
+            return redirect('/logistic/stocks')->with('itemInvalid', 'Barang Tidak Tersedia Dalam Cabang/Stok Invalid');
+        }else{
+            // Else, create a DO request
+            OrderDo::create([
+                'user_id' => Auth::user()->id,
+                'item_id' => $itemToFound -> id,
+                'quantity' => $request -> quantity,
+                'status' => 'In Progress By Supervisor Cabang ' . Auth::user()->cabang,
+                'fromCabang' => Auth::user()->cabang,
+                'toCabang' => $request -> cabang,
+                'description' => $request -> description
+            ]); 
+
+            return redirect('/logistic/stocks')->with('success', 'Request Successfully');
+        }
+    }
+
+    public function requestDoPage(){
+        $ongoingOrders = OrderDo::with(['item', 'user'])->where('fromCabang', Auth::user()->cabang)->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
+
+        return view('logistic.logisticOngoingDO', compact('ongoingOrders'));
+    }
+
+    // ============================================= soon to be deleted, just for references ==============================================================
+    // public function storeItem(Request $request){
+    //     // Storing the item to the stock
+    //     $request->validate([
+    //         'itemName' => 'required',
+    //         'itemAge' => 'required|numeric',
+    //         'umur' => 'required',
+    //         'itemStock' => 'required|numeric',
+    //         'unit' => 'required',
+    //         'serialNo' => 'nullable',
+    //         'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+    //         'cabang' => 'required',
+    //         'description' => 'nullable'
+    //     ]);
+
+    //     // Formatting the item age
+    //     $new_itemAge = $request->itemAge . ' ' . $request->umur;
         
-        // Create the item
-        Item::create([
-            'itemName' => $request -> itemName,
-            'itemAge' => $new_itemAge,
-            'itemStock' => $request -> itemStock,
-            'unit' => $request -> unit,
-            'serialNo' => $request -> serialNo,
-            'codeMasterItem' => $request -> codeMasterItem,
-            'cabang' => $request->cabang,
-            'description' => $request -> description
-        ]);
+    //     // Create the item
+    //     Item::create([
+    //         'itemName' => $request -> itemName,
+    //         'itemAge' => $new_itemAge,
+    //         'itemStock' => $request -> itemStock,
+    //         'unit' => $request -> unit,
+    //         'serialNo' => $request -> serialNo,
+    //         'codeMasterItem' => $request -> codeMasterItem,
+    //         'cabang' => $request->cabang,
+    //         'description' => $request -> description
+    //     ]);
 
-        return redirect('logistic/stocks')->with('status', 'Added Successfully');
-    }
+    //     return redirect('logistic/stocks')->with('status', 'Added Successfully');
+    // }
 
-    public function editItem(Request $request, Item $item){
-        // Edit the requested item
-         $request->validate([
-            'itemName' => 'required',
-            'itemAge' => 'required|numeric',
-            'umur' => 'required',
-            'itemStock' => 'required|numeric',
-            'unit' => 'required',
-            'serialNo' => 'nullable',
-            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
-            'description' => 'nullable'
-        ]);
+    // public function editItem(Request $request, Item $item){
+    //     // Edit the requested item
+    //      $request->validate([
+    //         'itemName' => 'required',
+    //         'itemAge' => 'required|numeric',
+    //         'umur' => 'required',
+    //         'itemStock' => 'required|numeric',
+    //         'unit' => 'required',
+    //         'serialNo' => 'nullable',
+    //         'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+    //         'description' => 'nullable'
+    //     ]);
 
-        // Formatting the item age
-        $new_itemAge = $request->itemAge . ' ' . $request->umur;
+    //     // Formatting the item age
+    //     $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
-        // Update the item
-        Item::where('id', $item->id)->update([
-            'itemName' => $request -> itemName,
-            'itemAge' => $new_itemAge,
-            'itemStock' => $request -> itemStock,
-            'unit' => $request -> unit,
-            'serialNo' => $request -> serialNo,
-            'codeMasterItem' => $request -> codeMasterItem,
-            'description' => $request -> description
-        ]);
-        return redirect('logistic/stocks')->with('status', 'Edit Successfully');
-    }
+    //     // Update the item
+    //     Item::where('id', $item->id)->update([
+    //         'itemName' => $request -> itemName,
+    //         'itemAge' => $new_itemAge,
+    //         'itemStock' => $request -> itemStock,
+    //         'unit' => $request -> unit,
+    //         'serialNo' => $request -> serialNo,
+    //         'codeMasterItem' => $request -> codeMasterItem,
+    //         'description' => $request -> description
+    //     ]);
+    //     return redirect('logistic/stocks')->with('status', 'Edit Successfully');
+    // }
 
-    public function deleteItem(Item $item){
-        // Find the selected item by id
-        Item::find($item->id)->delete();
+    // public function deleteItem(Item $item){
+    //     // Find the selected item by id
+    //     Item::find($item->id)->delete();
         
-        return redirect('logistic/stocks')->with('status', 'Delete Successfully');
-    }
+    //     return redirect('logistic/stocks')->with('status', 'Delete Successfully');
+    // }
+    // ============================================= soon to be deleted, just for references ==============================================================
+    
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
         // Reject the order made from crew
@@ -178,17 +250,17 @@ class LogisticController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', 'Completed')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('logistic.logisticHistory', compact('orderHeads'));
     }
 
     public function historyInPage(){
-            // Find order from logistic role/goods in
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->orWhere('role_user.role_id' , '=', '4')->pluck('users.id');
-            
-            // Find all the items that has been approved from the user | last 30 days only
-            $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find order from logistic role/goods in
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+        
+        // Find all the items that has been approved from the user | last 30 days only
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticHistoryIn', compact('orderHeads'));
     }
@@ -305,6 +377,7 @@ class LogisticController extends Controller
         OrderHead::where('id', $pr_id)->update([
             'noPr' => $pr_number,
             'company' => $request->company,
+            // 'prDate' => date("d-m-Y")
             'prDate' => now()
         ]);
 
@@ -348,30 +421,22 @@ class LogisticController extends Controller
     public function downloadPr(OrderHead $orderHeads){
         // dd($orderHeads->id);
 
-        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '-' .  date("d-m-Y") . '.xlsx');
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.xlsx');
     }
 
     public function reportPage(){
-
-        // Chech if the role is admin logistic, then he can see all of the order, else logistic role can see their respectable order
-        if(Auth::user()->hasRole('adminLogistic')){
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '4')->orWhere('role_user.role_id' , '=', '3')->pluck('user_id');
-
-            $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
-        }else{
-            // Find order from user/goods out
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('role_user.role_id' , '=', '4', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
-            
-            // Find all the items that has been approved from the user | last 30 days only
-            $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
-        }
+        // Find order from user/goods in
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        
+        // Find all the items that has been approved from the logistic | last 30 days only
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticReport', compact('orderHeads'));
     }
 
     public function downloadReport(Excel $excel){
 
-        return $excel -> download(new PurchasingReportExport, 'LogisticReport-'. date("d-m-Y") . '.xlsx');
+        return $excel -> download(new PurchasingReportExport, 'Reports_'. date("d-m-Y") . '.xlsx');
     }
 
     // ============================ Testing Playgrounds ===================================

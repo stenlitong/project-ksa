@@ -22,6 +22,11 @@
                 </div>
             @endif
 
+            <div class="d-flex justify-content-end mb-3">
+                <a href="{{ Route('crew.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                <a href="{{ Route('crew.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+            </div>
+
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
@@ -45,22 +50,22 @@
                             <td>{{ $o -> status}}</td>
                         @endif
                         
-                        @if(strpos($oh -> status, 'Rejected') !== false)
+                        @if(strpos($o -> status, 'Rejected') !== false)
                             <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
                         @else
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
+                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> descriptions}}</td>
                         @endif
 
                         @if($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
                             <td >
-                                <button type="button" style="margin-left: 40%" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                                <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                                     Detail
                                 </button>
                                 <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
                             </td>
                         @else
                         <td>
-                            <button type="button" style="margin-left: 40%" class="btn btn-success" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                            <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                                 Detail
                             </button>
                         </td>
@@ -112,6 +117,15 @@
                 </div>
         @endforeach
     </div>
+
+    <style>
+        td, th{
+            word-wrap: break-word;
+            min-width: 200px;
+            max-width: 200px;
+            text-align: center;
+        }
+    </style>
 
     @endsection
 @else

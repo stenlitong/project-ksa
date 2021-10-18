@@ -1,22 +1,22 @@
-@if(Auth::user()->hasRole('logistic'))
+@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster'))
     @extends('../layouts.base')
 
-    @section('title', 'Logistic Order History')
+    @section('title', 'Supervisor Order History')
 
     @section('container')
         <div class="row">
-            @include('logistic.sidebar')
+            @include('supervisor.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
                     <h1 class="d-flex justify-content-center">Goods Out Report</h1>
                     <br>
                     
                     <div class="d-flex justify-content-start mb-3">
-                        <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
-                        <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
+                        <a href="{{ Route('supervisor.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
+                        <a href="{{ Route('supervisor.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
                         
                         @if(count($orderHeads) > 0)
-                            <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
+                            <a href="{{ Route('supervisor.downloadOut') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
                         @endif
                     </div>
                     

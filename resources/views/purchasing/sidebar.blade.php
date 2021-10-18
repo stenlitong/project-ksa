@@ -8,13 +8,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ Route('purchasing.form-ap') }}">
                     <span data-feather="file"></span>
                     Checklist AP
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("purchasing.report") }}">
+                <a class="nav-link" href="{{ Route('purchasing.report') }}">
                     <span data-feather="archive"></span>
                     Report PR/PO
                 </a>

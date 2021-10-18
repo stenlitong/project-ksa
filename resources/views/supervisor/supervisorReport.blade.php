@@ -1,11 +1,11 @@
-@if(Auth::user()->hasRole('purchasing'))
+@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster'))
     @extends('../layouts.base')
 
-    @section('title', 'Purchasing Reports')
+    @section('title', 'Supervisor Reports')
 
     @section('container')
     <div class="row">
-        @include('purchasing.sidebar')
+        @include('supervisor.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
@@ -13,7 +13,7 @@
 
                 @if(count($orderHeads) > 0)
                     <div class="d-flex justify-content-end mr-3">
-                        <a href="{{ Route('purchasing.downloadReport') }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                        <a href="{{ Route('supervisor.downloadReport') }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
                     </div>
                 @endif
 

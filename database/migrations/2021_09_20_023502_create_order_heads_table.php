@@ -28,7 +28,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('receiver')->nullable();
             $table->string('expedition')->nullable();
             $table->string('noResi')->nullable();
-            $table->date('prDate')->nullable();
+            $table->string('prDate')->nullable();
             $table->string('invoiceAddress')->nullable();
             $table->string('itemAddress')->nullable();
             $table->string('status')->default('In Progress(Logistic)');

@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('adminLogistic'))
+@if(Auth::user()->hasRole('logistic'))
     @extends('../layouts.base')
 
     @section('title', 'Logistic Approve Order')

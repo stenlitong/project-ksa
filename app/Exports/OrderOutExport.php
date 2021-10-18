@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 use Illuminate\Support\Facades\Auth;
-use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\User;
 Use \Carbon\Carbon;

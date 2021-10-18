@@ -25,7 +25,7 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'adminLogistic' => [
+        'supervisorMaster' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],

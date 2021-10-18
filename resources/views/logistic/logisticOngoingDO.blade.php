@@ -1,50 +1,42 @@
 @if(Auth::user()->hasRole('logistic'))
     @extends('../layouts.base')
 
-    @section('title', 'Logistic Order History')
+    @section('title', 'Logistic Request DO')
 
     @section('container')
         <div class="row">
             @include('logistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                    <h1 class="d-flex justify-content-center">Goods Out Report</h1>
+                    <h1 class="d-flex justify-content-center mb-3">My Request DO</h1>
                     <br>
-                    
-                    <div class="d-flex justify-content-start mb-3">
-                        <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
-                        <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
-                        
-                        @if(count($orderHeads) > 0)
-                            <a href="{{ Route('logistic.downloadOut') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
-                        @endif
-                    </div>
                     
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table table-bordered sortable">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                             <tr>
-                                <th scope="col">Nomor</th>
-                                <th scope="col">Tanggal Keluar</th>
-                                <th scope="col">Item Barang Keluar</th>
-                                <th scope="col">Serial Number</th>
+                                <th scope="col" style="width: 100px">Nomor</th>
+                                <th scope="col">Item Barang</th>
+                                <th scope="col">Cabang Tujuan</th>
                                 <th scope="col">Qty</th>
-                                <th scope="col">Satuan</th>
-                                <th scope="col">No. Resi</th>
-                                <th scope="col">Note</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($orderHeads as $key => $oh)
+                                @foreach($ongoingOrders as $key => $o)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $oh -> approved_at }}</td>
-                                        <td>{{ $oh -> item -> itemName }}</td>
-                                        <td>{{ $oh -> item -> serialNo}}</td>
-                                        <td>{{ $oh -> quantity}}</td>
-                                        <td>{{ $oh -> item -> unit}}</td>
-                                        <td>{{ $oh -> noResi}}</td>
-                                        <td>{{ $oh -> note}}</td>
+                                        <td>{{ $o -> item -> itemName }}</td>
+                                        <td>{{ $o -> toCabang}}</td>
+                                        <td>{{ $o -> quantity}} {{ $o -> item -> unit}}</td>
+                                        <td>{{ $o -> status }}</td>
+                                        <td>
+                                            <a href=""><span data-feather="download" class="icon"></span></a>
+                                            @if(strpos($o -> status, 'On Delivery') !== false)
+                                                <a href="" class="btn btn-info">Accept Delivery</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -66,12 +58,20 @@
             .table-wrapper-scroll-y {
                 display: block;
             }
-
+            th{
+                color: white;
+            }
             td, th{
                 word-wrap: break-word;
                 min-width: 160px;
                 max-width: 160px;
                 text-align: center;
+            }
+            .icon{
+                margin-bottom: -10px;
+                color: black;
+                height: 34px;
+                width: 34px;
             }
         </style>
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>

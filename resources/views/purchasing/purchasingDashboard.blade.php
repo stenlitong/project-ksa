@@ -7,7 +7,7 @@
     <div class="row">
         @include('purchasing.sidebar')
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 150px">
             @include('../layouts/time')
 
             <div class="row">
@@ -111,19 +111,28 @@
                     </div>
                     @enderror
 
-                        <div class="d-flex flex-row justify-content-between">
-                            <form class="" action="">
-                                <div class="input-group mb-3 ">
-                                    <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search" style="width: 250px">
+                    <div class="d-flex mb-3">
+                        @if($show_search)
+                            <form class="mr-auto w-50" action="">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
                                     <button class="btn btn-primary" type="submit">Search</button>
                                 </div>
                             </form>
-                            <div class="">
-                                {{ $orderHeads->links() }}
+                            <div>
+                                <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                                <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
                             </div>
-                        </div>
+                        @else
+                            <div class="ml-auto">
+                                <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                                <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                            </div>
+                        @endif
+                    </div>
+
                     <table class="table">
-                        <thead class="thead-dark">
+                        <thead class="thead bg-danger">
                         <tr>
                             <th scope="col">Order ID</th>
                             <th scope="col">Status</th>
@@ -145,8 +154,8 @@
                                 @endif
                                 <td>
                                     {{-- Modal button for order details --}}
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                    @if(strpos($oh -> status, 'Approved') !== false)
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                                    @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Completed') !== false)
                                         <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                     @endif
                                 </td>
@@ -155,7 +164,12 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="d-flex justify-content-end">
+                    {{ $orderHeads->links() }}
+                </div>
             </div>
+
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
@@ -164,7 +178,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title" id="detailTitle">Order ID # {{ $o->order_id }}</h5>
+                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order ID # {{ $o->order_id }}</span></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -172,7 +186,7 @@
                                 <div class="modal-body">
                                     <h5>Nomor PR : {{ $o -> noPr }}</h5>
                                     <table class="table">
-                                        <thead>
+                                        <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
@@ -337,6 +351,9 @@
     </div>
 
     <style>
+        th{
+            color: white;
+        }
         th, td{
             word-wrap: break-word;
             min-width: 100px;
@@ -356,36 +373,36 @@
         font-weight: 800;
         text-align: center;
         text-transform: uppercase;
-    }
-    /* .rating-css input {
-        display: none;
-    } */
-    .rating-css input + label {
-        font-size: 20px;
-        text-shadow: 1px 1px 0 #8f8420;
-        cursor: pointer;
-    }
-    .rating-css input:checked + label ~ label {
-        color: #b4afaf;
-    }
-    .rating-css label:active {
-        transform: scale(0.8);
-        transition: 0.3s ease;
-    }
-    .scrolling-wrapper{
-            overflow-x: auto;
         }
-        .card-block{
-        background-color: #fff;
-        background-position: center;
-        background-size: cover;
-        transition: all 0.2s ease-in-out !important;
-        &:hover{
-            transform: translateY(-5px);
-            box-shadow: none;
-            opacity: 0.9;
+        /* .rating-css input {
+            display: none;
+        } */
+        .rating-css input + label {
+            font-size: 20px;
+            text-shadow: 1px 1px 0 #8f8420;
+            cursor: pointer;
         }
-    }
+        .rating-css input:checked + label ~ label {
+            color: #b4afaf;
+        }
+        .rating-css label:active {
+            transform: scale(0.8);
+            transition: 0.3s ease;
+        }
+        .scrolling-wrapper{
+                overflow-x: auto;
+            }
+            .card-block{
+            background-color: #fff;
+            background-position: center;
+            background-size: cover;
+            transition: all 0.2s ease-in-out !important;
+            &:hover{
+                transform: translateY(-5px);
+                box-shadow: none;
+                opacity: 0.9;
+            }
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />

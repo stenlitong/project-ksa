@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\ApList;
+use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class AdminPurchasingController extends Controller
 {
@@ -39,7 +42,35 @@ class AdminPurchasingController extends Controller
     }
 
     public function formApPage(){
+        // Show the form AP page
+        $documents = ApList::where('cabang', Auth::user()->cabang)->latest()->get();
 
-        return view('adminPurchasing.adminPurchasingFormAp');
+        return view('adminPurchasing.adminPurchasingFormAp', compact('documents'));
+    }
+
+    public function uploadFile(Request $request){
+        // Validate the file extension must be pdf or zip
+        $request->validate([
+            'filename' => 'required|mimes:pdf,zip'
+        ]);
+        
+        // Then create the AP List on the database
+        ApList::create([
+            'user_id' => Auth::user()->id,
+            'cabang' => Auth::user()->cabang,
+            'filename' => $request->filename->getClientOriginalName(),
+            'status' => 'On Review',
+            'submissionTime' => date("d/m/Y")
+        ]);
+        
+        // Store it in storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
+        $request->file('filename')->storeAs('APList', $request->filename->getClientOriginalName());
+
+        return redirect('/admin-purchasing/form-ap')->with('status', 'Uploaded Successfully');
+    }
+
+    public function downloadFile(ApList $apList){
+        // Find the file then download
+        return Storage::download('/APList' . '/' . $apList->filename);
     }
 }

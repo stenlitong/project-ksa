@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
+        Route::get('/completed-order', [CrewController::class, 'completedOrder'])->name('completed-order');
+        Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
         Route::get('/order/{orderHeads}/accept', [CrewController::class, 'acceptOrder']);
@@ -39,6 +41,8 @@ Route::group(['middleware' => ['auth']], function(){
     });
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
+        Route::get('/in-progress-order', [LogisticController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-order', [LogisticController::class, 'completedOrder'])->name('completed-order');
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [LogisticController::class, 'rejectOrder']);
@@ -47,9 +51,13 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/history-in', [LogisticController::class, 'historyInPage'])->name('historyIn');
         Route::get('/download-in', [LogisticController::class, 'downloadIn'])->name('downloadIn');
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
-        Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
-        Route::delete('/stocks/{item}/delete', [LogisticController::class, 'deleteItem']);
-        Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
+        Route::post('/stocks/{items}/request', [LogisticController::class, 'requestStock']);
+        Route::get('/request-do', [LogisticController::class, 'requestDoPage'])->name('requestDo');
+        // ============================================= soon to be deleted, just for references ==============================================================
+        // Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
+        // Route::delete('/stocks/{item}/delete', [LogisticController::class, 'deleteItem']);
+        // Route::post('/stocks', [LogisticController::class, 'storeItem'])->name('stocks');
+        // ============================================= soon to be deleted, just for references ==============================================================
         Route::get('/make-order', [LogisticController::class, 'makeOrderPage'])->name('makeOrder');
         Route::post('/{user}/add-cart', [LogisticController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [LogisticController::class, 'deleteItemFromCart']);
@@ -63,18 +71,44 @@ Route::group(['middleware' => ['auth']], function(){
     });
 
     Route::prefix('supervisor')->name('supervisor.')->group(function(){
+        Route::get('/completed-order', [SupervisorController::class, 'completedOrder'])->name('completed-order');
+        Route::get('/in-progress-order', [SupervisorController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/{orderHeads}/approve-order', [SupervisorController::class, 'approveOrder']);
         Route::put('/{orderHeads}/reject-order', [SupervisorController::class, 'rejectOrder']);
         Route::get('/{orderHeads}/download-pr', [SupervisorController::class, 'downloadPr']);
+        Route::get('/report', [SupervisorController::class, 'reportsPage'])->name('report');
+        Route::get('/report/download', [SupervisorController::class, 'downloadReport'])->name('downloadReport');
+        Route::get('/goods-out', [SupervisorController::class, 'historyOut'])->name('historyOut');
+        Route::get('/goods-in', [SupervisorController::class, 'historyIn'])->name('historyIn');
+        Route::get('/goods-out/download', [SupervisorController::class, 'downloadOut'])->name('downloadOut');
+        Route::get('/goods-in/download', [SupervisorController::class, 'downloadIn'])->name('downloadIn');
+        Route::get('/item-stocks', [SupervisorController::class, 'itemStock'])->name('itemStock');
+        Route::post('/item-stocks', [SupervisorController::class, 'addItemStock']);
+        Route::post('/item-stocks/{item}/edit-item', [SupervisorController::class, 'editItemStock']);
+        Route::get('/approval-do', [SupervisorController::class, 'approvalDoPage'])->name('approvalDoPage');
     });
 
     Route::prefix('purchasing')->name('purchasing.')->group(function(){
+        Route::get('/completed-order', [PurchasingController::class, 'completedOrder'])->name('completed-order');
+        Route::get('/in-progress-order', [PurchasingController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
-        Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
+        Route::get('/report/download', [PurchasingController::class, 'downloadReport'])->name('downloadReport');
+        Route::get('/form-ap', [PurchasingController::class, 'formApPage'])->name('form-ap');
+        Route::get('/form-ap/{apList}/download', [PurchasingController::class, 'downloadFile']);
+        Route::get('/form-ap/{apList}/approve', [PurchasingController::class, 'approveAp']);
+        Route::post('/form-ap/{apList}/reject', [PurchasingController::class, 'rejectAp']);
+    });
+
+    Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
+        Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
+        Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
+        Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
+        Route::post('/form-ap/upload', [AdminPurchasingController::class, 'uploadFile']);
+        Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
     });
 
     // Route::prefix('admin-logistic')->name('adminLogistic.')->group(function(){
@@ -91,12 +125,6 @@ Route::group(['middleware' => ['auth']], function(){
     //     Route::get('/download-out', [AdminLogisticController::class, 'downloadOut'])->name('downloadOut');
     //     Route::get('/download-in', [AdminLogisticController::class, 'downloadIn'])->name('downloadIn');
     // });
-
-    Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
-        Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
-        Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
-        Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
-    });
 });
 
 Route::get('/ksa-admin/register', function(){

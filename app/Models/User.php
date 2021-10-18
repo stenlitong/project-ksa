@@ -50,4 +50,12 @@ class User extends Authenticatable
         return $this->hasMany(OrderHead::class);
     }
 
+    public function apList(){
+        return $this->hasMany(ApList::class);
+    }
+
+    public function orderDo(){
+        return $this->hasMany(OrderDo::class);
+    }
+
 }

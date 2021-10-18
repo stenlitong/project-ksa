@@ -61,7 +61,7 @@
                     <option value="picAdmin" id="picAdmin">PIC Admin</option>
                     <option value="adminOperational">Admin Operational</option>
                     <option value="adminPurchasing">Admin Purchasing</option>
-                    <option value="adminLogistic">Admin Logistic</option>
+                    <option value="supervisorMaster">Supervisor Master</option>
                 </select>
             </div>
             <br>

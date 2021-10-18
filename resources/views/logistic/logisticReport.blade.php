@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('adminLogistic'))
+@if(Auth::user()->hasRole('logistic'))
     @extends('../layouts.base')
 
     @section('title', 'Logistic Reports')
@@ -9,7 +9,7 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 class="d-flex justify-content-center mb-4">Logistic Reports</h1>
+                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO</h1>
 
                 @if(count($orderHeads) > 0)
                     <div class="d-flex justify-content-end mr-3">
@@ -18,7 +18,7 @@
                 @endif
 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered sortable">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Nomor</th>
@@ -61,13 +61,14 @@
             display: block;
         }
 
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 160px;
             max-width: 160px;
+            text-align: center;
         }
     </style>
-
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection
 @else
     @include('../layouts/notAuthorized')

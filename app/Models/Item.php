@@ -19,4 +19,8 @@ class Item extends Model
     public function orderDetail(){
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function orderDo(){
+        return $this->hasMany(OrderDo::class);
+    }
 }

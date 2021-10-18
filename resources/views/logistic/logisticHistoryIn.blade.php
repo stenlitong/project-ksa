@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('adminLogistic'))
+@if(Auth::user()->hasRole('logistic'))
     @extends('../layouts.base')
 
     @section('title', 'Logistic Order')
@@ -21,7 +21,7 @@
                     </div>
                     
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered sortable">
                             <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Nomor</th>
@@ -30,6 +30,7 @@
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Satuan</th>
+                                <th scope="col">Golongan</th>
                                 <th scope="col">Nama Supplier</th>
                                 <th scope="col">Note</th>
                             </tr>
@@ -43,8 +44,9 @@
                                         <td>{{ $oh -> item -> serialNo}}</td>
                                         <td>{{ $oh -> quantity}}</td>
                                         <td>{{ $oh -> item -> unit}}</td>
+                                        <td>{{ $oh -> golongan}}</td>
                                         <td>{{ $oh -> supplierName}}</td>
-                                        <td>{{ $oh -> descriptions}}</td>
+                                        <td>{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -67,12 +69,14 @@
                 display: block;
             }
 
-            td{
+            td, th{
                 word-wrap: break-word;
                 min-width: 160px;
                 max-width: 160px;
+                text-align: center;
             }
         </style>
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection
 @else
     @include('../layouts/notAuthorized')

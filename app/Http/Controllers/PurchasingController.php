@@ -9,13 +9,55 @@ use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\User;
-use App\Exports\PRExport;
-use Illuminate\Support\Facades\Auth;
-
+use App\Models\ApList;
 use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class PurchasingController extends Controller
 {
+    public function completedOrder(){
+        // Find order from logistic role, then they can approve and send it to the purchasing role
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+
+        // Then find all the order details from the orderHeads
+        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
+        $orderHeads = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+
+        // Count the completed & in progress order
+        $completed = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Approved' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $show_search = false;
+
+        // Get all the suppliers
+        $suppliers = Supplier::latest()->get();
+
+        return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search', 'suppliers'));
+    }
+
+    public function inProgressOrder(){
+        // Find order from logistic role, then they can approve and send it to the purchasing role
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+
+        // Then find all the order details from the orderHeads
+        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
+        $orderHeads =  OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Approved' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+
+        // Count the completed & in progress order
+        $completed = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Approved' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $show_search = false;
+
+        // Get all the suppliers
+        $suppliers = Supplier::latest()->get();
+
+        return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search', 'suppliers'));
+    }
+
     public function approveOrderPage(OrderHead $orderHeads){
         // Formatting the PO code
         $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -63,12 +105,12 @@ class PurchasingController extends Controller
 
         // Then update the following order
         OrderHead::find($orderHeads -> id)->update([
-            'status' => 'Order Approved By Purchasing',
+            'status' => 'Item Delivered By Supplier',
             'noPo' => $request->noPo,
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
             'supplier_id' => $request->supplier_id,
-            'price' => $request->price,
+            'price' => 'Rp.' . $request->price,
             'descriptions' => $request->descriptions
         ]);
         return redirect('/dashboard')->with('orderStatus', 'Order Approved By Purchasing');
@@ -102,22 +144,52 @@ class PurchasingController extends Controller
     }
 
     public function reportPage(){
-
-        // Purchasing role can see all of the order of their respective branches
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '4')->orWhere('role_user.role_id' , '=', '3')->pluck('user_id');
-
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find order from user/goods in
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('role_user.role_id' , '=', '4', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+                
+        // Find all the items that has been approved from the logistic | last 30 days only
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orderHeads'));
     }
 
-    public function downloadPo(OrderHead $orderHeads){
-        dd($orderHeads->id);
-
-        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '-' .  date("d-m-Y") . '.xlsx');
+    public function downloadReport(Excel $excel){
+        return $excel -> download(new PurchasingReportExport, 'Reports_'. date("d-m-Y") . '.xlsx');
     }
 
-    public function downloadReport(Excel $excel){
-        return $excel -> download(new PurchasingReportExport, 'PurchasingReport-'. date("d-m-Y") . '.xlsx');
+    public function formApPage(){
+        // Find all of the documents for their respective branches
+        $documents = ApList::where('cabang', Auth::user()->cabang)->latest()->get();
+
+        return view('purchasing.purchasingFormAP', compact('documents'));
+    }
+
+    public function downloadFile(ApList $apList){
+        // Find the document, then return download
+        return Storage::download('/APList' . '/' . $apList->filename);
+    }
+
+    public function approveAp(ApList $apList){
+        // Find the form, then update the status to approved
+        ApList::find($apList -> id)->update([
+            'status' => 'Approved'
+        ]);
+
+        return redirect('/purchasing/form-ap')->with('status', 'Form Approved');
+    }
+
+    public function rejectAp(Request $request, ApList $apList){
+        // User must input the reason, then validate the reason
+        $request->validate([
+            'description' => 'required'
+        ]);
+        
+        // Find the form, then update the status to denied
+        ApList::find($apList -> id)->update([
+            'status' => 'Denied',
+            'description' => $request -> description
+        ]);
+
+        return redirect('/purchasing/form-ap')->with('status', 'Form Denied');
     }
 }
