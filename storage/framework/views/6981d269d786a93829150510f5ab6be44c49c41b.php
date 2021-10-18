@@ -1,0 +1,1 @@
+<h1>You Are Not Authorized!</h1><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views////layouts/notAuthorized.blade.php ENDPATH**/ ?>
