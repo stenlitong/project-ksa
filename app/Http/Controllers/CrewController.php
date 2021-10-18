@@ -19,28 +19,51 @@ class CrewController extends Controller
     
     public function completedOrder(){
         // Get all the order within the logged in user within 30 days from date now
-        $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id, 'and', 'created_at', '>=', Carbon::now()->subDays(30))->where('status', 'like', 'Order Completed (Crew)')->paginate(10);
+        $orderHeads = OrderHead::with('user')->where(function($query){
+            $query->where('status', 'like', 'Order Completed (Crew)')
+            ->orWhere('status', 'like', 'Rejected By Logistic');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $completed = OrderHead::where('status', 'like', 'Order Completed (Crew)')->orWhere('status', 'like', 'Rejected By Logistic')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-        $in_progress = OrderHead::where('status', 'like', 'In Progress By Logistic')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $completed = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Crew)')
+            ->orWhere('status', 'like', 'Rejected By Logistic');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        
+        $in_progress = OrderHead::where(function($query){
+            $query->where('status', 'like', 'In Progress By Logistic')
+            ->orWhere('status', 'like', 'Items Ready')
+            ->orWhere('status', 'like', 'On Delivery');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
         return view('crew.crewDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
     }
 
     public function inProgressOrder(){
         // Get all the order within the logged in user within 30 days from date now
-        $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id, 'and', 'created_at', '>=', Carbon::now()->subDays(30))->where('status', 'like', 'In Progress By Logistic')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->paginate(10);
+        $orderHeads = OrderHead::with('user')->where(function($query){
+            $query->where('status', 'like', 'In Progress By Logistic')
+            ->orWhere('status', 'like', 'Items Ready')
+            ->orWhere('status', 'like', 'On Delivery');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $completed = OrderHead::where('status', 'like', 'Order Completed (Crew)')->orWhere('status', 'like', 'Rejected By Logistic')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-        $in_progress = OrderHead::where('status', 'like', 'In Progress By Logistic')->orWhere('status', 'like', 'Items Ready')->orWhere('status', 'like', 'On Delivery')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $completed = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Crew)')
+            ->orWhere('status', 'like', 'Rejected By Logistic');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        
+        $in_progress = OrderHead::where(function($query){
+            $query->where('status', 'like', 'In Progress By Logistic')
+            ->orWhere('status', 'like', 'Items Ready')
+            ->orWhere('status', 'like', 'On Delivery');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
         return view('crew.crewDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
     }

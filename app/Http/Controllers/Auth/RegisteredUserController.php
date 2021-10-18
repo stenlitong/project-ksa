@@ -23,6 +23,11 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
+    public function createAdmin()
+    {
+        return view('auth.registerAdmin');
+    }
+
     /**
      * Handle an incoming registration request.
      *
@@ -34,9 +39,9 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'no_induk_pegawai' => ['required', 'string', 'max:6', 'min:6', 'unique:users'],
-            'user_noTelp' => ['required', 'numeric', 'digits_between:8,11', 'unique:users'],
+            'name' => ['required', 'alpha', 'max:255'],
+            'no_induk_pegawai' => ['required', 'digits:6', 'unique:users'],
+            'user_noTelp' => ['required', 'digits_between:8,11', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'cabang' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],

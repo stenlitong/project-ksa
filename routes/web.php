@@ -134,10 +134,6 @@ Route::group(['middleware' => ['auth']], function(){
     // });
 });
 
-Route::get('/ksa-admin/register', function(){
-    return view('auth.registerAdmin');
-});
-
 Route::get('/add-boat', function(){
     Tug::create([
         'tugName' => 'Tug A',

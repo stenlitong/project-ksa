@@ -27,11 +27,25 @@ class SupervisorController extends Controller
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $orderHeads = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        $orderHeads = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Logistic)')
+            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Count the completed & in progress order
-        $completed = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $completed = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Logistic)')
+            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
+        $in_progress = OrderHead::where(function($query){
+            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
         $show_search = false;
 
         return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
@@ -45,11 +59,24 @@ class SupervisorController extends Controller
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $orderHeads =  OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        $orderHeads =  OrderHead::where(function($query){
+            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Count the completed & in progress order
-        $completed = OrderHead::where('status', 'like', 'Order Completed (Logistic)')->orWhere('status', 'like', 'Order Rejected By Supervisor')->orWhere('status', 'like', 'Order Rejected By Purchasing')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-        $in_progress = OrderHead::where('status', 'like', '%' . 'In Progress By Supervisor' . '%')->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $completed = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Logistic)')
+            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
+        $in_progress = OrderHead::where(function($query){
+            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
         $show_search = false;
 
         return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
@@ -131,7 +158,12 @@ class SupervisorController extends Controller
     public function itemStock(){
         // Check the stocks of all branches
         if(request('search')){
-            $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(10)->withQueryString();
+            // $items = Item::where('itemName', 'like', '%' . request('search') . '%')->orWhere('cabang', 'like', '%' . request('search') . '%')->orWhere('codeMasterItem', 'like', '%' . request('search') . '%')->Paginate(10)->withQueryString();
+            $items = Item::where(function($query){
+                $query->where('itemName', 'like', '%' . request('search') . '%')
+                ->orWhere('cabang', 'like', '%' . request('search') . '%')
+                ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
+            })->groupBy('cabang')->Paginate(10)->withQueryString();
             return view('supervisor.supervisorItemStock', compact('items'));
         }else{
             $items = Item::latest()->Paginate(10)->withQueryString();

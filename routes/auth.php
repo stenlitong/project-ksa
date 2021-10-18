@@ -14,7 +14,14 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
                 ->name('register');
 
+Route::get('/ksa-admin/register', [RegisteredUserController::class, 'createAdmin'])
+                ->middleware('guest')
+                ->name('admin-register');
+
 Route::post('/register', [RegisteredUserController::class, 'store'])
+                ->middleware('guest');
+
+Route::post('/ksa-admin/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])

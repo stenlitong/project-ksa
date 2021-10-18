@@ -36,9 +36,9 @@
             <div class="d-flex justify-content-end">
                 @if(Route::has('login'))
                     @auth
-                    <a href="{{ url('/dashboard') }}">Dashboard</a>
+                    <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
                     @if (Route::has('register'))
                         <a class="btn btn-danger" href="{{ route('register') }}">Register</a>
                     @endif

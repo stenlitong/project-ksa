@@ -51,7 +51,7 @@
                         @endif
                         
                         @if(strpos($o -> status, 'Rejected') !== false)
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
+                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> reason}}</td>
                         @else
                             <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> descriptions}}</td>
                         @endif
