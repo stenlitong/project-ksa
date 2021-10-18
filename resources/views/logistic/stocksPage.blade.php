@@ -171,6 +171,9 @@
                 max-width: 140px;
                 text-align: center;
             }
+            .alert{
+                text-align: center;
+            }
         </style>
 
     @endsection

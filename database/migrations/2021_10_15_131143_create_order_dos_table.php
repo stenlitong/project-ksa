@@ -16,14 +16,16 @@ class CreateOrderDosTable extends Migration
         Schema::create('order_dos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('item_requested_id');
+            $table->unsignedBigInteger('item_requested_from_id');
             $table->integer('quantity');
             $table->string('status');
             $table->string('fromCabang');
             $table->string('toCabang');
             $table->string('description')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('item_requested_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('item_requested_from_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

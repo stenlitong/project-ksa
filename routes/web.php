@@ -53,6 +53,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
         Route::post('/stocks/{items}/request', [LogisticController::class, 'requestStock']);
         Route::get('/request-do', [LogisticController::class, 'requestDoPage'])->name('requestDo');
+        Route::get('/request-do/{orderDos}/accept-do', [LogisticController::class, 'acceptDo']);
+        Route::get('/request-do/{orderDos}/download', [LogisticController::class, 'downloadDo']);
         // ============================================= soon to be deleted, just for references ==============================================================
         // Route::put('/stocks/{item}/edit', [LogisticController::class, 'editItem']);
         // Route::delete('/stocks/{item}/delete', [LogisticController::class, 'deleteItem']);
@@ -86,6 +88,11 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/item-stocks', [SupervisorController::class, 'addItemStock']);
         Route::post('/item-stocks/{item}/edit-item', [SupervisorController::class, 'editItemStock']);
         Route::get('/approval-do', [SupervisorController::class, 'approvalDoPage'])->name('approvalDoPage');
+        Route::get('/approval-do/{orderDos}/forward', [SupervisorController::class, 'forwardDo']);
+        Route::get('/approval-do/{orderDos}/deny', [SupervisorController::class, 'denyDo']);
+        Route::get('/approval-do/{orderDos}/approve', [SupervisorController::class, 'approveDo']);
+        Route::get('/approval-do/{orderDos}/reject', [SupervisorController::class, 'rejectDo']);
+        Route::get('/approval-do/{orderDos}/download', [SupervisorController::class, 'downloadDo']);
     });
 
     Route::prefix('purchasing')->name('purchasing.')->group(function(){

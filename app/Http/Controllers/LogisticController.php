@@ -16,12 +16,11 @@ use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
 use App\Exports\PRExport;
+use App\Exports\DOExport;
 use App\Exports\PurchasingReportExport;
 use Maatwebsite\Excel\Excel;
 Use \Carbon\Carbon;
 use Storage;
-
-use function PHPSTORM_META\map;
 
 class LogisticController extends Controller
 {
@@ -89,7 +88,8 @@ class LogisticController extends Controller
             // Else, create a DO request
             OrderDo::create([
                 'user_id' => Auth::user()->id,
-                'item_id' => $itemToFound -> id,
+                'item_requested_id' => $itemToFound -> id,
+                'item_requested_from_id' => $items -> id,
                 'quantity' => $request -> quantity,
                 'status' => 'In Progress By Supervisor Cabang ' . Auth::user()->cabang,
                 'fromCabang' => Auth::user()->cabang,
@@ -102,9 +102,31 @@ class LogisticController extends Controller
     }
 
     public function requestDoPage(){
-        $ongoingOrders = OrderDo::with(['item', 'user'])->where('fromCabang', Auth::user()->cabang)->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
+        // Get all the DO from the last 30 days
+        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
 
         return view('logistic.logisticOngoingDO', compact('ongoingOrders'));
+    }
+
+    public function acceptDo(OrderDo $orderDos){
+        // Increment the stock for the requester branch
+        Item::where('id', $orderDos -> item_requested_id)->increment('itemStock', $orderDos -> quantity);
+
+        // Decrement the stock for the requested branch
+        Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
+
+        // Update the status of the DO
+        OrderDo::where('id', $orderDos -> id)->update([
+            'status' => 'Accepted'
+        ]);
+
+        // Then redirect/refresh page
+        return redirect('/logistic/request-do')->with('success', 'Order Accepted Successfully');
+    }
+
+    public function downloadDo(OrderDo $orderDos){
+        // Find the specific DO, then download it
+        return (new DOExport($orderDos -> id))->download('DO-' . $orderDos -> id . '_' .  date("d-m-Y") . '.xlsx');
     }
 
     // ============================================= soon to be deleted, just for references ==============================================================
@@ -181,7 +203,7 @@ class LogisticController extends Controller
     public function rejectOrder(Request $request, OrderHead $orderHeads){
         // Reject the order made from crew
         $request->validate([
-            'reason' => 'reason'
+            'reason' => 'required'
         ]);
 
         OrderHead::where('id', $orderHeads->id)->update([
@@ -218,11 +240,6 @@ class LogisticController extends Controller
             if(Item::where('id', $od -> item -> id)->pluck('itemStock')[0] < $od -> quantity){
                 return redirect('/dashboard')->with('error', 'Stok Tidak Mencukupi, Silahkan Periksa Stok Kembali');
             }
-        }
-
-        // Else stock is enough, then update the stock
-        foreach($orderDetails as $od){
-            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
         }
 
         if($request->expedition == 'onsite'){

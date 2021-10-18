@@ -123,7 +123,7 @@ class CrewController extends Controller
             'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
-            'status' => 'In Progress By Logistic'
+            'status' => 'Request In Progress By Logistic'
         ]);
         
         // Then fill the Order Detail with the cart items of the following Order Head
@@ -159,6 +159,7 @@ class CrewController extends Controller
             Item::where('id', $od -> item -> id)->update([
                 'lastGiven' => date("d/m/Y")
             ]);
+            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
         }
 
         return redirect('/dashboard')->with('status', 'Order Accepted');

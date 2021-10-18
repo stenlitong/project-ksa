@@ -11,6 +11,12 @@
                     <h1 class="d-flex justify-content-center mb-3">Approval DO Site</h1>
                     <br>
                     
+                    @if(session('status'))
+                        <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table table-bordered sortable">
                             <thead class="thead bg-danger">
@@ -30,23 +36,42 @@
                                 @foreach($ongoingOrders as $key => $o)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $o -> item -> itemName }}</td>
+                                        <td>{{ $o -> item_requested -> itemName }}</td>
                                         <td>{{ $o -> fromCabang}}</td>
                                         <td>{{ $o -> toCabang}}</td>
-                                        <td>{{ $o -> quantity}} {{ $o -> item -> unit}}</td>
+                                        <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
                                         <td>{{ $o -> user -> name }}</td>
-                                        <td>{{ $o -> status }}</td>
+                                        @if(strpos($o -> status, 'Rejected') !== false)
+                                            <td><strong style="color: red">{{ $o -> status }}</strong></td>
+                                        @elseif(strpos($o -> status, 'On Delivery') !== false)
+                                            <td><strong style="color: blue">{{ $o -> status }}</strong></td>
+                                        @elseif(strpos($o -> status, 'Accepted') !== false)
+                                            <td><strong style="color: green">{{ $o -> status }}</strong></td>
+                                        @else
+                                            <td>{{ $o -> status }}</td>
+                                        @endif
                                         <td>
-                                            <a href=""><span data-feather="download" class="icon"></span></a>
+                                            <a href="/supervisor/approval-do/{{ $o -> id }}/download"><span data-feather="download" class="icon"></span></a>
                                         </td>
-                                        {{-- @if()
-                                        @endif --}}
-                                        <td>
-                                            <div class="d-flex justify-content-around">
-                                                <a href="" class="btn btn-success">Approve</a>
-                                                <a href="" class="btn btn-danger">Reject</a>
-                                            </div>
-                                        </td>
+                                        {{-- scenario #1 : If the order needs to be approved by the requested branches --}}
+                                        @if($o -> fromCabang == Auth::user()->cabang and strpos($o -> status, 'In Progress By Supervisor Cabang ' . Auth::user()->cabang) !== false)
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <a href="/supervisor/approval-do/{{ $o -> id }}/forward" class="btn btn-success">Approve</a>
+                                                    <a href="/supervisor/approval-do/{{ $o -> id }}/deny" class="btn btn-danger">Reject</a>
+                                                </div>
+                                            </td>
+                                        {{-- scenario #2 : If the order is already approved by their respective branches, then the destination branches also need to approve --}}
+                                        @elseif($o -> toCabang == Auth::user()->cabang and strpos($o -> status, 'Waiting Approval By Supervisor Cabang '. Auth::user()->cabang) !== false)
+                                            <td>
+                                                <div class="d-flex justify-content-around">
+                                                    <a href="/supervisor/approval-do/{{ $o -> id }}/approve" class="btn btn-success">Approve</a>
+                                                    <a href="/supervisor/approval-do/{{ $o -> id }}/reject" class="btn btn-danger">Reject</a>
+                                                </div>
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -82,6 +107,9 @@
                 color: black;
                 height: 34px;
                 width: 34px;
+            }
+            .alert{
+                text-align: center;
             }
         </style>
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>

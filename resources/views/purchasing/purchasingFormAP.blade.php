@@ -116,6 +116,9 @@
             height: 24px;
             width: 24px
         }
+        .alert{
+                text-align: center;
+            }
     </style>
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 

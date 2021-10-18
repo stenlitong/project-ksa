@@ -11,6 +11,12 @@
                     <h1 class="d-flex justify-content-center mb-3">My Request DO</h1>
                     <br>
                     
+                    @if(session('success'))
+                        <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table table-bordered sortable">
                             <thead class="thead bg-danger">
@@ -27,14 +33,22 @@
                                 @foreach($ongoingOrders as $key => $o)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $o -> item -> itemName }}</td>
+                                        <td>{{ $o -> item_requested -> itemName }}</td>
                                         <td>{{ $o -> toCabang}}</td>
-                                        <td>{{ $o -> quantity}} {{ $o -> item -> unit}}</td>
-                                        <td>{{ $o -> status }}</td>
+                                        <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
+                                        @if(strpos($o -> status, 'Rejected') !== false)
+                                            <td><strong style="color: red">{{ $o -> status }}</strong></td>
+                                        @elseif(strpos($o -> status, 'On Delivery') !== false)
+                                            <td><strong style="color: blue">{{ $o -> status }}</strong></td>
+                                        @elseif(strpos($o -> status, 'Accepted') !== false)
+                                            <td><strong style="color: green">{{ $o -> status }}</strong></td>
+                                        @else
+                                            <td>{{ $o -> status }}</td>
+                                        @endif
                                         <td>
-                                            <a href=""><span data-feather="download" class="icon"></span></a>
+                                            <a href="/logistic/request-do/{{ $o -> id }}/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
                                             @if(strpos($o -> status, 'On Delivery') !== false)
-                                                <a href="" class="btn btn-info">Accept Delivery</a>
+                                                <a href="/logistic/request-do/{{ $o -> id }}/accept-do" class="btn btn-info">Accept Delivery</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -70,8 +84,11 @@
             .icon{
                 margin-bottom: -10px;
                 color: black;
-                height: 34px;
-                width: 34px;
+                height: 30px;
+                width: 30px;
+            }
+            .alert{
+                text-align: center;
             }
         </style>
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>

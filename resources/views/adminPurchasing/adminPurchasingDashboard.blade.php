@@ -218,6 +218,9 @@
 		box-shadow: none;
 		opacity: 0.9;
 	}
+    .alert{
+        text-align: center;
+    }
 }
 </style>
 

@@ -182,6 +182,9 @@
         .table-wrapper-scroll-y {
             display: block;
         }
+        .alert{
+                text-align: center;
+            }
     </style>
 
     @endsection

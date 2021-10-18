@@ -134,7 +134,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                    @if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false)
+                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                    @endif
                                     <table class="table">
                                         <thead class="thead-dark">
                                             <tr>
@@ -144,7 +146,7 @@
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
                                                 
-                                                @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Order In Progress') !== false)
                                                 @else
                                                     <th scope="col">Stok Barang</th>
                                                 @endif
@@ -160,7 +162,7 @@
                                                         <td>{{ $od -> item -> itemAge }}</td>
                                                         <td>{{ $od -> department }}</td>
 
-                                                        @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                        @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Order In Progress') !== false)
                                                         @else
                                                             @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
                                                                 <td style="color: red; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
@@ -225,8 +227,10 @@
             min-width: 120px;
             max-width: 160px;
             text-align: center;
-            
         }
+        .alert{
+                text-align: center;
+            }
     </style>
 
     @endsection

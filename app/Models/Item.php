@@ -20,7 +20,7 @@ class Item extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function orderDo(){
-        return $this->hasMany(OrderDo::class);
-    }
+    // public function orderDo(){
+    //     return $this->hasMany(OrderDo::class);
+    // }
 }

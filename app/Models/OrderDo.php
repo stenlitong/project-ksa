@@ -16,7 +16,11 @@ class OrderDo extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function item(){
-        return $this->belongsTo(Item::class);
+    public function item_requested(){
+        return $this->belongsTo(Item::class, 'item_requested_id', 'id');
+    }
+
+    public function item_requested_from(){
+        return $this->belongsTo(Item::class, 'item_requested_from_id', 'id');
     }
 }

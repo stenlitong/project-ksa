@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
 use App\Exports\PRExport;
+use App\Exports\DOExport;
 use App\Exports\PurchasingReportExport;
 use App\Models\OrderDo;
 use Maatwebsite\Excel\Excel;
@@ -202,8 +203,45 @@ class SupervisorController extends Controller
 
     public function approvalDoPage(){
         // Find all of the ongoing DO from the requested branch OR the destination branch
-        $ongoingOrders = OrderDo::with(['user', 'item'])->where('fromCabang', Auth::user()->cabang)->orWhere('toCabang', Auth::user()->cabang)->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
+        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->orWhere('toCabang', Auth::user()->cabang)->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
 
         return view('supervisor.supervisorApprovalDO', compact('ongoingOrders'));
+    }
+
+    public function forwardDo(OrderDo $orderDos){
+        OrderDo::where('id', $orderDos -> id)->update([
+            'status' => 'Waiting Approval By Supervisor Cabang ' . $orderDos->toCabang
+        ]);
+
+        return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+    }
+    
+    public function denyDo(OrderDo $orderDos){
+        OrderDo::where('id', $orderDos -> id)->update([
+            'status' => 'Rejected By Supervisor Cabang ' . $orderDos->fromCabang
+        ]);
+
+        return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+    }
+
+    public function approveDo(OrderDo $orderDos){
+        OrderDo::where('id', $orderDos -> id)->update([
+            'status' => 'On Delivery'
+        ]);
+
+        return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+    }
+
+    public function rejectDo(OrderDo $orderDos){
+        OrderDo::where('id', $orderDos -> id)->update([
+            'status' => 'Rejected By Supervisor Cabang ' . $orderDos->toCabang
+        ]);
+
+        return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+    }
+
+    public function downloadDo(OrderDo $orderDos){
+        // Find the specific DO, then download it
+        return (new DOExport($orderDos -> id))->download('DO-' . $orderDos -> id . '_' .  date("d-m-Y") . '.xlsx');
     }
 }

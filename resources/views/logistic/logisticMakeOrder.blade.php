@@ -77,17 +77,6 @@
                                             <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }})</option>
                                         @endforeach
                                     </select>
-                                    {{-- <div class="col">
-                                        <label for="tugs">Barang</label>
-                                    </div>
-                                    <div class="col">
-                                        <input list="item_id" name="item_id" class="mt-2" style="width: 500px; height:45px"/>
-                                        <datalist id="item_id">
-                                            @foreach($items as $i)
-                                                <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
-                                            @endforeach
-                                        </datalist>
-                                    </div> --}}
                                 </div>
                             </div>
                             <div class="d-flex justify-content-around mr-3">
@@ -141,7 +130,7 @@
                     </div>
                     <div class="col mt-5 mr-3 table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                                 <tr>
                                     <th scope="col">Nama Barang</th>
                                     <th scope="col">Quantity</th>
@@ -242,6 +231,9 @@
     </div>
 
     <style>
+        th{
+            color: white;
+        }
         td{
             word-wrap: break-word;
             min-width: 100px;
@@ -258,6 +250,9 @@
         .table-wrapper-scroll-y {
             display: block;
         }
+        .alert{
+                text-align: center;
+            }
     </style>
 
     @endsection

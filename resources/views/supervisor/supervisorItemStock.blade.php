@@ -371,6 +371,9 @@
                 max-width: 160px;
                 text-align: center;
             }
+            .alert{
+                text-align: center;
+            }
         </style>
 
     @endsection

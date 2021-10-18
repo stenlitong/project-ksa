@@ -112,6 +112,9 @@
                 margin-left: 25%;
                 width: 50%;
             }
+            .alert{
+                text-align: center;
+            }
         </style>
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection

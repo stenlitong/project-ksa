@@ -164,6 +164,12 @@
         }
     </script>
 
+    <style>
+        .alert{
+                text-align: center;
+            }
+    </style>
+
     @endsection
 @else
     @include('../layouts/notAuthorized')
