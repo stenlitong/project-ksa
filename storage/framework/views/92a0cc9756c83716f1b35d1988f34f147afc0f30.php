@@ -1,7 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <title>Register</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous">
+    </script>
 </head>
 <?php if (isset($component)) { $__componentOriginalc3251b308c33b100480ddc8862d4f9c79f6df015 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\GuestLayout::class, []); ?>
@@ -106,7 +112,7 @@
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
             </div>
-            
+
             <!-- No Telp -->
             <div class="mt-4">
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
@@ -125,7 +131,12 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text" style="height: 45px">(+62)</div>
                     </div>
-                    <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka...">
+                    <input type="text" class="form-control" id="user_noTelp" name="user_noTelp"
+                        style="border-radius: 8px; border-color: rgb(196, 194, 194);"
+                        placeholder="Input nomor telepon dalam angka..."
+                        value=<?php echo e(old('user_noTelp')); ?>
+
+                        required>
                 </div>
             </div>
 
@@ -176,19 +187,21 @@
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 
-                <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
+                <select name="role_id" id="role_id"
+                    class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    required>
                     <option selected disabled value="">Choose...</option>
-                    <option value="picSite" id="picSite">PIC Site</option>
-                    <option value="picIncident" id="picIncident">PIC Incident</option>
-                    <option value="insurance" id="insurance">Asuransi</option>
-                    <option value="purchasing">Purchasing</option>
-                    <option value="logistic">Logistic</option>
-                    <option value="supervisor">Supervisor</option>
-                    <option value="crew">Crew</option>
+                    <option value="picSite" id="picSite" <?php if(old('role_id') == 'picSite'): ?> selected="selected" <?php endif; ?>>PIC Site</option>
+                    <option value="picIncident" id="picIncident"  <?php if(old('role_id') == 'picIncident'): ?> selected="selected" <?php endif; ?>>PIC Incident</option>
+                    <option value="insurance" id="insurance"  <?php if(old('role_id') == 'insurance'): ?> selected="selected" <?php endif; ?>>Asuransi</option>
+                    <option value="purchasing"  <?php if(old('role_id') == 'purchasing'): ?> selected="selected" <?php endif; ?>>Purchasing</option>
+                    <option value="logistic"  <?php if(old('role_id') == 'logistic'): ?> selected="selected" <?php endif; ?>>Logistic</option>
+                    <option value="supervisor"  <?php if(old('role_id') == 'supervisor'): ?> selected="selected" <?php endif; ?>>Supervisor</option>
+                    <option value="crew"  <?php if(old('role_id') == 'crew'): ?> selected="selected" <?php endif; ?>>Crew</option>
                 </select>
             </div>
             <br>
-            
+
             <!-- Select Option Cabang -->
             <div>
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
@@ -204,14 +217,16 @@
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 
-                <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
+                <select name="cabang" id="cabang"
+                    class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    required>
                     <option selected disabled="">Choose...</option>
-                    <option value="Jakarta" id="Jakarta">Jakarta</option>
-                    <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                    <option value="Samarinda" id="Samarinda">Samarinda</option>
-                    <option value="Bunati" id ="Bunati">Bunati</option>
-                    <option value="Babelan"id ="Babelan">Babelan</option>
-                    <option value="Berau" id ="Berau">Berau</option>
+                    <option value="Jakarta" id="Jakarta" <?php if(old('cabang') == 'Jakarta'): ?> selected="selected" <?php endif; ?>>Jakarta</option>
+                    <option value="Banjarmasin" id="Banjarmasin" <?php if(old('cabang') == 'Banjarmasin'): ?> selected="selected" <?php endif; ?>>Banjarmasin</option>
+                    <option value="Samarinda" id="Samarinda" <?php if(old('cabang') == 'Samarinda'): ?> selected="selected" <?php endif; ?>>Samarinda</option>
+                    <option value="Bunati" id="Bunati" <?php if(old('cabang') == 'Bunati'): ?> selected="selected" <?php endif; ?>>Bunati</option>
+                    <option value="Babelan" id="Babelan" <?php if(old('cabang') == 'Babelan'): ?> selected="selected" <?php endif; ?>>Babelan</option>
+                    <option value="Berau" id="Berau" <?php if(old('cabang') == 'Berau'): ?> selected="selected" <?php endif; ?>>Berau</option>
                 </select>
             </div>
 
@@ -274,9 +289,10 @@
             </div>
 
             <br>
-            
+
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="<?php echo e(route('login')); ?>">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900"
+                    href="<?php echo e(route('login')); ?>">
                     <?php echo e(__('Already registered?')); ?>
 
                 </a>
@@ -298,23 +314,23 @@
             </div>
             
             <script>
-                function selectopt(id)
-                {
+                function selectopt(id) {
                     var e = document.getElementById("cabang");
-                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
+                    e.selectedIndex = e.querySelector('option[value="' + id + '"]').index;
                 }
                 var dropdown = document.getElementById("role_id");
-                dropdown.onchange = function(event){
-                    
-                    if (dropdown.value=="picSite") {
+                dropdown.onchange = function (event) {
+
+                    if (dropdown.value == "picSite") {
                         document.getElementById("Jakarta").disabled = true;
                         document.getElementById("Berau").disabled = true;
                         selectopt('samarinda');
 
                     } else {
-                            document.getElementById("Jakarta").disabled = false;
-                        }
+                        document.getElementById("Jakarta").disabled = false;
+                    }
                 }
+
             </script>
         </form>
      <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
@@ -328,4 +344,7 @@
 <?php unset($__componentOriginalc3251b308c33b100480ddc8862d4f9c79f6df015); ?>
 <?php endif; ?>
 <?php echo $__env->renderComponent(); ?>
-<?php endif; ?><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/auth/register.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+
+</html>
+<?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/auth/register.blade.php ENDPATH**/ ?>
