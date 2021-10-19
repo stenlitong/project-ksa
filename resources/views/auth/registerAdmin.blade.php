@@ -40,7 +40,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text" style="height: 45px">(+62)</div>
                         </div>
-                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka..." value={{ old('user_noTelp') }} required>
+                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka..." value={{ old('user_noTelp') }}>
                     </div>
                 </div>
                 
