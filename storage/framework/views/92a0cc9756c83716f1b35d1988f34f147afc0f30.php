@@ -134,9 +134,7 @@
                     <input type="text" class="form-control" id="user_noTelp" name="user_noTelp"
                         style="border-radius: 8px; border-color: rgb(196, 194, 194);"
                         placeholder="Input nomor telepon dalam angka..."
-                        value=<?php echo e(old('user_noTelp')); ?>
-
-                        required>
+                        value=<?php echo e(old('user_noTelp')); ?>>
                 </div>
             </div>
 
@@ -290,6 +288,11 @@
 
             <br>
 
+            <div class="ml-1">
+                <input type="checkbox" onclick="myFunction()" style="border-radius: 30%">
+                <label for="">Show Password</label>
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900"
                     href="<?php echo e(route('login')); ?>">
@@ -314,6 +317,20 @@
             </div>
             
             <script>
+                function myFunction() {
+                    var x = document.getElementById("password");
+                    var y = document.getElementById("password_confirmation");
+                    if (x.type === "password") {
+                        x.type = "text";
+                    } else {
+                        x.type = "password";
+                    }
+                    if (y.type === "password") {
+                        y.type = "text";
+                    } else {
+                        y.type = "password";
+                    }
+                }
                 function selectopt(id) {
                     var e = document.getElementById("cabang");
                     e.selectedIndex = e.querySelector('option[value="' + id + '"]').index;

@@ -40,7 +40,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text" style="height: 45px">(+62)</div>
                         </div>
-                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka...">
+                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp" style="border-radius: 8px; border-color: rgb(196, 194, 194);" placeholder="Input nomor telepon dalam angka..." value={{ old('user_noTelp') }} required>
                     </div>
                 </div>
                 
@@ -60,10 +60,10 @@
                     
                     <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                         <option selected disabled value="">Choose...</option>
-                        <option value="picAdmin" id="picAdmin">PIC Admin</option>
-                        <option value="adminOperational">Admin Operational</option>
-                        <option value="adminPurchasing">Admin Purchasing</option>
-                        <option value="supervisorMaster">Supervisor Master</option>
+                        <option value="picAdmin" id="picAdmin" @if (old('role_id') == 'picAdmin') selected="selected" @endif>PIC Admin</option>
+                        <option value="adminOperational" @if (old('role_id') == 'adminOperational') selected="selected" @endif>Admin Operational</option>
+                        <option value="adminPurchasing" @if (old('role_id') == 'adminPurchasing') selected="selected" @endif>Admin Purchasing</option>
+                        <option value="supervisorMaster" @if (old('role_id') == 'supervisorMaster') selected="selected" @endif>Supervisor Master</option>
                     </select>
                 </div>
                 <br>
@@ -74,12 +74,13 @@
                     
                     <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                         <option selected disabled="">Choose...</option>
-                        <option value="Jakarta" id="Jakarta">Jakarta</option>
-                        <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                        <option value="Samarinda" id="Samarinda">Samarinda</option>
-                        <option value="Bunati" id ="Bunati">Bunati</option>
-                        <option value="Babelan"id ="Babelan">Babelan</option>
-                        <option value="Berau"id ="Berau">Berau</option>
+                        <option selected disabled="">Choose...</option>
+                        <option value="Jakarta" id="Jakarta" @if (old('cabang') == 'Jakarta') selected="selected" @endif>Jakarta</option>
+                        <option value="Banjarmasin" id="Banjarmasin" @if (old('cabang') == 'Banjarmasin') selected="selected" @endif>Banjarmasin</option>
+                        <option value="Samarinda" id="Samarinda" @if (old('cabang') == 'Samarinda') selected="selected" @endif>Samarinda</option>
+                        <option value="Bunati" id="Bunati" @if (old('cabang') == 'Bunati') selected="selected" @endif>Bunati</option>
+                        <option value="Babelan" id="Babelan" @if (old('cabang') == 'Babelan') selected="selected" @endif>Babelan</option>
+                        <option value="Berau" id="Berau" @if (old('cabang') == 'Berau') selected="selected" @endif>Berau</option>
                     </select>
                 </div>
                 
@@ -102,6 +103,11 @@
                     name="password_confirmation" required />
                 </div>
                 
+                <div class="ml-1">
+                    <input type="checkbox" onclick="myFunction()" style="border-radius: 30%">
+                    <label for="">Show Password</label>
+                </div>
+
                 <br>
                 
                 <div class="flex items-center justify-end mt-4">
@@ -115,6 +121,20 @@
                 </div>
                 {{-- validation script --}}
                 <script>
+                    function myFunction() {
+                        var x = document.getElementById("password");
+                        var y = document.getElementById("password_confirmation");
+                        if (x.type === "password") {
+                            x.type = "text";
+                        } else {
+                            x.type = "password";
+                        }
+                        if (y.type === "password") {
+                            y.type = "text";
+                        } else {
+                            y.type = "password";
+                        }
+                    }
                     function selectopt(id)
                     {
                         var e = document.getElementById("cabang");

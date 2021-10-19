@@ -92,10 +92,10 @@ class LogisticController extends Controller
                 ->orWhere('cabang', 'like', '%' . request('search') . '%')
                 ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
             })->groupBy('cabang')->Paginate(10)->withQueryString();
-            return view('supervisor.supervisorItemStock', compact('items'));
+            return view('logistic.stocksPage', compact('items'));
         }else{
             $items = Item::latest()->Paginate(10)->withQueryString();
-            return view('supervisor.supervisorItemStock', compact('items'));
+            return view('logistic.stocksPage', compact('items'));
         }
     }
 

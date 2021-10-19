@@ -1,4 +1,4 @@
-<?php if(Auth::user()->hasRole('supervisor')): ?>
+<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster')): ?>
     
 
     <?php $__env->startSection('title', 'Supervisor Approval DO'); ?>

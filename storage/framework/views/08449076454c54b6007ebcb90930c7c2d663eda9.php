@@ -19,7 +19,7 @@
 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                     <table class="table table-bordered sortable">
-                        <thead class="thead-dark">
+                        <thead class="thead bg-danger">
                         <tr>
                             <th scope="col">Nomor</th>
                             <th scope="col">Tanggal PR</th>
@@ -60,7 +60,9 @@
         .table-wrapper-scroll-y {
             display: block;
         }
-
+        th{
+            color: white;
+        }
         td, th{
             word-wrap: break-word;
             min-width: 160px;
