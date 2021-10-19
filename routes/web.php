@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/item-stocks', [SupervisorController::class, 'itemStock'])->name('itemStock');
         Route::post('/item-stocks', [SupervisorController::class, 'addItemStock']);
         Route::post('/item-stocks/{item}/edit-item', [SupervisorController::class, 'editItemStock']);
+        Route::delete('/item-stocks/{item}/delete-item', [SupervisorController::class, 'deleteItemStock']);
         Route::get('/approval-do', [SupervisorController::class, 'approvalDoPage'])->name('approvalDoPage');
         Route::get('/approval-do/{orderDos}/forward', [SupervisorController::class, 'forwardDo']);
         Route::get('/approval-do/{orderDos}/deny', [SupervisorController::class, 'denyDo']);

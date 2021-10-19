@@ -203,6 +203,12 @@ class SupervisorController extends Controller
         return redirect('/supervisor/item-stocks')->with('status', 'Added Successfully');
     }
 
+    public function deleteItemStock(Item $item){
+        Item::find($item -> id)->destroy();
+
+        return redirect('/supervisor/item-stocks')->with('status', 'Deleted Successfully');
+    }
+
     public function editItemStock(Request $request, Item $item){
         // Edit the requested item
         $request->validate([

@@ -233,7 +233,7 @@
                                         Edit
                                     </button>
                                     
-                                    <form method="POST" action="" >
+                                    <form method="POST" action="/supervisor/{{ $i -> id }}/delete-item" >
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger">
