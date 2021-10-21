@@ -24,6 +24,12 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @error('descriptions')
             <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                 Alasan Wajib Diisi
@@ -50,46 +56,46 @@
                 @endif
             </div>
 
-            <table class="table" id="myTable">
-                <thead class="thead bg-danger">
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col">Detail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($orderHeads as $oh)
-                    <tr>
-                        <td><strong>{{ $oh -> order_id}}</strong></td>
-                        @if(strpos($oh -> status, 'Rejected') !== false)
-                            <td><span style="color: red">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'Completed') !== false)
-                            <td><span style="color: green">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'On Delivery') !== false) !== false)
-                            <td><span style="color: blue">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'Approved') !== false)
-                            <td><span style="color: #16c9e9">{{ $oh -> status }}</span></td>
-                        @else
-                            <td>{{ $oh -> status}}</td>
-                        @endif
+            <div id="content">
+                <table class="table" id="myTable">
+                    <thead class="thead bg-danger">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($orderHeads as $oh)
+                        <tr>
+                            <td><strong>{{ $oh -> order_id}}</strong></td>
+                            @if(strpos($oh -> status, 'Rejected') !== false)
+                                <td><span style="color: red; font-weight: bold">{{ $oh -> status}}</span></td>
+                            @elseif(strpos($oh -> status, 'Completed') !== false)
+                                <td><span style="color: green; font-weight: bold">{{ $oh -> status}}</span></td>
+                            @elseif(strpos($oh -> status, 'Delivered') !== false) !== false)
+                                <td><span style="color: blue; font-weight: bold">{{ $oh -> status}}</span></td>
+                            @else
+                                <td>{{ $oh -> status}}</td>
+                            @endif
 
-                        @if(strpos($oh -> status, 'Rejected') !== false)
-                            <td>{{ $oh -> reason}}</td>
-                        @else
-                            <td>{{ $oh -> descriptions}}</td>
-                        @endif
+                            @if(strpos($oh -> status, 'Rejected') !== false)
+                                <td>{{ $oh -> reason}}</td>
+                            @else
+                                <td>{{ $oh -> descriptions}}</td>
+                            @endif
 
-                        <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                            <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
-                        </td>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                                <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                            </td>
 
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             </main>
 
@@ -97,7 +103,7 @@
             @foreach($orderHeads as $o)
                 <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-between">
@@ -117,13 +123,16 @@
                             <div class="modal-body">
                                 <h5>Nomor PR : {{ $o -> noPr }}</h5>
                                 <table class="table">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Terakhir Diberikan</th>
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
+                                            @if(strpos($oh -> status, 'Order In Progress') !== false)
+                                                <th scope="col">Stok Barang</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -135,6 +144,9 @@
                                                     <td>{{ $od -> item -> lastGiven }}</td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
+                                                    @if(strpos($oh -> status, 'Order In Progress') !== false)
+                                                        <td>{{ $od -> item -> itemStock }}</td>
+                                                    @endif
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -191,13 +203,19 @@
             td, th{
                 word-wrap: break-word;
                 min-width: 150px;
-                max-width: 250px;
+                max-width: 150px;
                 text-align: center;
             }
             .alert{
                 text-align: center;
             }
         </style>
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
     @endsection
 @else
     @include('../layouts/notAuthorized')

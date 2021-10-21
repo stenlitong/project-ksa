@@ -17,45 +17,54 @@
                         </div>
                     @endif
 
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                        <table class="table table-bordered sortable">
-                            <thead class="thead bg-danger">
-                            <tr>
-                                <th scope="col" style="width: 100px">Nomor</th>
-                                <th scope="col">Item Barang</th>
-                                <th scope="col">Cabang Tujuan</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($ongoingOrders as $key => $o)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $o -> item_requested -> itemName }}</td>
-                                        <td>{{ $o -> toCabang}}</td>
-                                        <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
-                                        @if(strpos($o -> status, 'Rejected') !== false)
-                                            <td><strong style="color: red">{{ $o -> status }}</strong></td>
-                                        @elseif(strpos($o -> status, 'On Delivery') !== false)
-                                            <td><strong style="color: blue">{{ $o -> status }}</strong></td>
-                                        @elseif(strpos($o -> status, 'Accepted') !== false)
-                                            <td><strong style="color: green">{{ $o -> status }}</strong></td>
-                                        @else
-                                            <td>{{ $o -> status }}</td>
-                                        @endif
-                                        <td>
-                                            <a href="/logistic/request-do/{{ $o -> id }}/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
-                                            @if(strpos($o -> status, 'On Delivery') !== false)
-                                                <a href="/logistic/request-do/{{ $o -> id }}/accept-do" class="btn btn-info">Accept Delivery</a>
+                    @if(session('error'))
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
+                    <div id="content">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                            <table class="table table-bordered sortable">
+                                <thead class="thead bg-danger">
+                                <tr>
+                                    <th scope="col" style="width: 100px">Nomor</th>
+                                    <th scope="col">Item Barang</th>
+                                    <th scope="col">Cabang Tujuan</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($ongoingOrders as $key => $o)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $o -> item_requested -> itemName }}</td>
+                                            <td>{{ $o -> toCabang}}</td>
+                                            <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
+                                            @if(strpos($o -> status, 'Rejected') !== false)
+                                                <td><strong style="color: red">{{ $o -> status }}</strong></td>
+                                            @elseif(strpos($o -> status, 'On Delivery') !== false)
+                                                <td><strong style="color: blue">{{ $o -> status }}</strong></td>
+                                            @elseif(strpos($o -> status, 'Accepted') !== false)
+                                                <td><strong style="color: green">{{ $o -> status }}</strong></td>
+                                            @else
+                                                <td>{{ $o -> status }}</td>
                                             @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                            <td>
+                                                <a href="/logistic/request-do/{{ $o -> id }}/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
+                                                @if(strpos($o -> status, 'On Delivery') !== false)
+                                                    <a href="/logistic/request-do/{{ $o -> id }}/accept-do" class="btn btn-info">Accept Delivery</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </main>
         </div>
@@ -91,6 +100,14 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
+
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection
 @else

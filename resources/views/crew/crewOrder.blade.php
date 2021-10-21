@@ -50,32 +50,29 @@
                     <div class="col">
                         <form method="POST" action="/crew/{{ Auth::user()->id }}/add-cart">
                             @csrf
-                            <div class="d-flex justify-content-around ml-3 mr-3">
-                                <div class="form-group p-2">
-                                    <label for="item_id" class="mt-3 mb-3">Item</label>
-                                    <br>
-                                    <select class="form-control" name="item_id" id="item_id" style="width: 400px; height:50px;">
-                                        @foreach($items as $i)
-                                            <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-            
-                                <div class="form-group p-2">
-                                    <label for="department" class="mt-3 mb-3">Department</label>
-                                    <br>
-                                    <select class="form-control" name="department" id="department" style="width: 400px; height:50px;">
-                                        <option value="deck">Deck</option>
-                                        <option value="mesin">Mesin</option>
-                                    </select>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="item_id" class="mt-3 ">Item</label>
+                                <br>
+                                <select class="form-control" name="item_id" id="item_id" style=" height:50px;">
+                                    @foreach($items as $i)
+                                        <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-around ml-3 mr-3">
-                                <div class="form-group p-2">
-                                    <label for="quantity" class="mt-3 mb-3">Quantity</label>
-                                    <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
-                                        style="width: 400px; height: 50px">
-                                </div>
+        
+                            <div class="form-group p-2">
+                                <label for="department" class="mt-3 ">Department</label>
+                                <br>
+                                <select class="form-control" name="department" id="department" style=" height:50px;">
+                                    <option value="deck">Deck</option>
+                                    <option value="mesin">Mesin</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group p-2">
+                                <label for="quantity" class="mt-3 ">Quantity</label>
+                                <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
+                                    style=" height: 50px" required>
                             </div>
             
                             <br>

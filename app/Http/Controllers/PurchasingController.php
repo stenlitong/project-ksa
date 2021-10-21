@@ -18,7 +18,7 @@ class PurchasingController extends Controller
 {
     public function completedOrder(){
         // Find order from logistic role, then they can approve and send it to the purchasing role
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
@@ -28,20 +28,16 @@ class PurchasingController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Count the completed & in progress order
-        $completed = OrderHead::where(function($query){
-            $query->where('status', 'like', 'Order Completed (Logistic)')
-            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
-            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
+        $completed = $orderHeads->count();
 
         $show_search = false;
 
@@ -72,11 +68,7 @@ class PurchasingController extends Controller
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
         })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $in_progress = $orderHeads->count();
 
         $show_search = false;
 
@@ -131,6 +123,11 @@ class PurchasingController extends Controller
             'descriptions' => 'nullable'
         ]);
 
+        // Check if already been processed or not
+        if($orderHeads -> order_tracker == 4){
+            return redirect('/dashboard')->with('errorB', 'Order Already Been Processed');
+        }
+
         // Then update the following order
         OrderHead::find($orderHeads -> id)->update([
             'status' => 'Item Delivered By Supplier',
@@ -139,9 +136,10 @@ class PurchasingController extends Controller
             'itemAddress' => $request->itemAddress,
             'supplier_id' => $request->supplier_id,
             'price' => 'Rp.' . $request->price,
+            'order_tracker' => 4,
             'descriptions' => $request->descriptions
         ]);
-        return redirect('/dashboard')->with('orderStatus', 'Order Approved By Purchasing');
+        return redirect('/dashboard')->with('statusB', 'Order Approved By Purchasing');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -150,12 +148,18 @@ class PurchasingController extends Controller
             'reason' => 'required'
         ]);
 
+        // Check if already been processed or not
+        if($orderHeads -> order_tracker == 4){
+            return redirect('/dashboard')->with('errorB', 'Order Already Been Processed');
+        }
+        
         // Then update the status + reason
         OrderHead::where('id', $orderHeads->id)->update([
+            'order_tracker' => 4,
             'status' => 'Order Rejected By Purchasing',
             'reason' => $request->reason
         ]);
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('statusB', 'Order Rejected');
     }
 
     public function editSupplier(Request $request, Supplier $suppliers){
@@ -168,7 +172,7 @@ class PurchasingController extends Controller
             'availability' => $request -> availability,
         ]);
 
-        return redirect('/dashboard')->with('status', 'Edited Successfully');
+        return redirect('/dashboard')->with('statusA', 'Edited Successfully');
     }
 
     public function reportPage(){
@@ -202,8 +206,14 @@ class PurchasingController extends Controller
     }
 
     public function approveAp(ApList $apList){
+        // Validate if it's already been processed
+        if($apList->tracker == 4){
+            return redirect('/purchasing/form-ap')->with('error', 'Form Already Been Processed');
+        }
+
         // Find the form, then update the status to approved
         ApList::find($apList -> id)->update([
+            'tracker' => 4,
             'status' => 'Approved'
         ]);
 
@@ -216,8 +226,14 @@ class PurchasingController extends Controller
             'description' => 'required'
         ]);
         
+        // Validate if it's already been processed
+        if($apList->tracker == 4){
+            return redirect('/purchasing/form-ap')->with('error', 'Form Already Been Processed');
+        }
+
         // Find the form, then update the status to denied
         ApList::find($apList -> id)->update([
+            'tracker' => 4,
             'status' => 'Denied',
             'description' => $request -> description
         ]);

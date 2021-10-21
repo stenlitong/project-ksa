@@ -26,6 +26,13 @@
                 </div>
             <?php endif; ?>
 
+            <?php if(session('error')): ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('error')); ?>
+
+                </div>
+            <?php endif; ?>
+
             <?php $__errorArgs = ['descriptions'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -59,46 +66,46 @@ unset($__errorArgs, $__bag); ?>
                 <?php endif; ?>
             </div>
 
-            <table class="table" id="myTable">
-                <thead class="thead bg-danger">
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col">Detail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <td><strong><?php echo e($oh -> order_id); ?></strong></td>
-                        <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                            <td><span style="color: red"><?php echo e($oh -> status); ?></span></td>
-                        <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
-                            <td><span style="color: green"><?php echo e($oh -> status); ?></span></td>
-                        <?php elseif(strpos($oh -> status, 'On Delivery') !== false): ?> !== false)
-                            <td><span style="color: blue"><?php echo e($oh -> status); ?></span></td>
-                        <?php elseif(strpos($oh -> status, 'Approved') !== false): ?>
-                            <td><span style="color: #16c9e9"><?php echo e($oh -> status); ?></span></td>
-                        <?php else: ?>
-                            <td><?php echo e($oh -> status); ?></td>
-                        <?php endif; ?>
+            <div id="content">
+                <table class="table" id="myTable">
+                    <thead class="thead bg-danger">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td><strong><?php echo e($oh -> order_id); ?></strong></td>
+                            <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
+                                <td><span style="color: red; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
+                            <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
+                                <td><span style="color: green; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
+                            <?php elseif(strpos($oh -> status, 'Delivered') !== false): ?> !== false)
+                                <td><span style="color: blue; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
+                            <?php else: ?>
+                                <td><?php echo e($oh -> status); ?></td>
+                            <?php endif; ?>
 
-                        <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                            <td><?php echo e($oh -> reason); ?></td>
-                        <?php else: ?>
-                            <td><?php echo e($oh -> descriptions); ?></td>
-                        <?php endif; ?>
+                            <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
+                                <td><?php echo e($oh -> reason); ?></td>
+                            <?php else: ?>
+                                <td><?php echo e($oh -> descriptions); ?></td>
+                            <?php endif; ?>
 
-                        <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                            <a href="/supervisor/<?php echo e($oh -> id); ?>/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
-                        </td>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
+                                <a href="/supervisor/<?php echo e($oh -> id); ?>/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                            </td>
 
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
-            </table>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
 
             </main>
 
@@ -106,7 +113,7 @@ unset($__errorArgs, $__bag); ?>
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-between">
@@ -126,13 +133,16 @@ unset($__errorArgs, $__bag); ?>
                             <div class="modal-body">
                                 <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
                                 <table class="table">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Terakhir Diberikan</th>
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
+                                            <?php if(strpos($oh -> status, 'Order In Progress') !== false): ?>
+                                                <th scope="col">Stok Barang</th>
+                                            <?php endif; ?>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -144,6 +154,9 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><?php echo e($od -> item -> lastGiven); ?></td>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
+                                                    <?php if(strpos($oh -> status, 'Order In Progress') !== false): ?>
+                                                        <td><?php echo e($od -> item -> itemStock); ?></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -200,13 +213,19 @@ unset($__errorArgs, $__bag); ?>
             td, th{
                 word-wrap: break-word;
                 min-width: 150px;
-                max-width: 250px;
+                max-width: 150px;
                 text-align: center;
             }
             .alert{
                 text-align: center;
             }
         </style>
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
     <?php $__env->stopSection(); ?>
 <?php else: ?>
     <?php echo $__env->make('../layouts/notAuthorized', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

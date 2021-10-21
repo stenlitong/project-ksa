@@ -22,6 +22,7 @@ class CreateOrderDosTable extends Migration
             $table->string('status');
             $table->string('fromCabang');
             $table->string('toCabang');
+            $table->integer('order_tracker');
             $table->string('description')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('item_requested_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
@@ -29,7 +30,7 @@ class CreateOrderDosTable extends Migration
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *

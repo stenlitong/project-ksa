@@ -64,6 +64,7 @@
                                 <tr>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Stok</th>
                                 </tr>
                             </thead>
@@ -72,10 +73,11 @@
                                 <tr>
                                     <td><?php echo e($od -> item -> itemName); ?></td>
                                     <td><?php echo e($od -> quantity); ?> <?php echo e($od -> unit); ?></td>
+                                    <td><?php echo e($od -> department); ?></td>
                                     <?php if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock): ?>
-                                        <td style="color: red"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>
+                                        <td style="color: red; font-weight: bold"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>
                                     <?php else: ?>
-                                        <td style="color: green"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></td>
+                                        <td style="color: green; font-weight: bold"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></td>
                                     <?php endif; ?>
                                 </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

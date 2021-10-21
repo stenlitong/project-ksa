@@ -14,22 +14,29 @@
                 <div class="col" style="max-width: 850px">
                     <h2 class="mt-3 mb-4" style="text-align: center">Supplier</h2>
 
-                    <?php if(session('status')): ?>
+                    <?php if(session('statusA')): ?>
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                            <?php echo e(session('status')); ?>
+                            <?php echo e(session('statusA')); ?>
 
                         </div>
                     <?php endif; ?>
 
-                    <div class="row flex-row flex-nowrap scrolling-wrapper">
+                    <?php if(session('errorA')): ?>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <?php echo e(session('errorA')); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="row ml-3 flex-row flex-nowrap scrolling-wrapper">
                         <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="card border-dark w-75 mr-3">
+                            <div class="card border-dark w-100 mr-3">
                                 <div class="card-body mr-3">
                                 <div class="row">
                                     <div class="col ml-2">
                                         <img src="/images/profile.png" style="height: 150px; width: 150px;">
                                         <p style="font-size: 200%; max-width: 270px"><strong><?php echo e($s -> supplierName); ?></strong></p>
-                                        <p style="font-size: 125%; max-width: 270px">(+62) <?php echo e($s -> noTelp); ?></p>
+                                        <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> <?php echo e($s -> noTelp); ?></p>
                                         <p style="font-size: 125%; max-width: 270px"><?php echo e($s -> supplierEmail); ?></p>
                                     </div>
                                     <div class="col" style="margin-left: -100px ">
@@ -100,9 +107,16 @@
                 <div class="col">
                     <h2 class="mt-3 mb-4" style="text-align: center;">Order List</h2>
                     
-                    <?php if(session('orderStatus')): ?>
+                    <?php if(session('statusB')): ?>
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                            <?php echo e(session('status')); ?>
+                            <?php echo e(session('statusB')); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if(session('errorB')): ?>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <?php echo e(session('errorB')); ?>
 
                         </div>
                     <?php endif; ?>
@@ -112,9 +126,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Alasan Wajib Diisi
-                    </div>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            Alasan Wajib Diisi
+                        </div>
                     <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -140,38 +154,40 @@ unset($__errorArgs, $__bag); ?>
                         <?php endif; ?>
                     </div>
 
-                    <table class="table">
-                        <thead class="thead bg-danger">
-                        <tr>
-                            <th scope="col">Order ID</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Detail</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div id="content">
+                        <table class="table">
+                            <thead class="thead bg-danger">
                             <tr>
-                                <td><strong><?php echo e($oh -> order_id); ?></strong></td>
-                                <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                                    <td style="color: red"><?php echo e($oh -> status); ?></td>
-                                <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
-                                    <td style="color: green"><?php echo e($oh -> status); ?></td>
-                                <?php elseif(strpos($oh -> status, 'Approved') !== false): ?>
-                                    <td style="color: #8B8000"><?php echo e($oh -> status); ?></td>
-                                <?php else: ?>
-                                    <td><?php echo e($oh -> status); ?></td>
-                                <?php endif; ?>
-                                <td>
-                                    
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                    <?php if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Completed') !== false): ?>
-                                        <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
-                                    <?php endif; ?>
-                                </td>
+                                <th scope="col">Order ID</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Detail</th>
                             </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><strong><?php echo e($oh -> order_id); ?></strong></td>
+                                    <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
+                                        <td style="color: red"><?php echo e($oh -> status); ?></td>
+                                    <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
+                                        <td style="color: green"><?php echo e($oh -> status); ?></td>
+                                    <?php elseif(strpos($oh -> status, 'Item Delivered') !== false): ?>
+                                        <td style="color: blue"><?php echo e($oh -> status); ?></td>
+                                    <?php else: ?>
+                                        <td><?php echo e($oh -> status); ?></td>
+                                    <?php endif; ?>
+                                    <td>
+                                        
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
+                                        <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
+                                            <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -218,7 +234,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div> 
                                 <div class="modal-footer">
                                     
-                                    <?php if(strpos($o -> status, 'In Progress') !== false): ?>
+                                    <?php if(strpos($o -> status, 'In Progress By Purchasing') !== false): ?>
                                         
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
                                         <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
@@ -371,18 +387,18 @@ unset($__errorArgs, $__bag); ?>
             text-align: center;
         }
         .fa-star{
-        font-size: 20px;
+            font-size: 20px;
         }
         .fa-star.checked{
             color: #ffe400;
         }
         .rating-css {
-        color: #ffe400;
-        font-size: 20px;
-        font-family: sans-serif;
-        font-weight: 800;
-        text-align: center;
-        text-transform: uppercase;
+            color: #ffe400;
+            font-size: 20px;
+            font-family: sans-serif;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
         }
         /* .rating-css input {
             display: none;
@@ -417,6 +433,13 @@ unset($__errorArgs, $__bag); ?>
                 text-align: center;
             }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+    </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />

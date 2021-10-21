@@ -24,60 +24,71 @@
                 </div>
             <?php endif; ?>
 
+            <?php if(session('error')): ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('error')); ?>
+
+                </div>
+            <?php endif; ?>
+
             <div class="d-flex justify-content-end mb-3">
                 <a href="<?php echo e(Route('crew.completed-order')); ?>" class="btn btn-success mr-3">Completed (<?php echo e($completed); ?>)</a>
                 <a href="<?php echo e(Route('crew.in-progress-order')); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
             </div>
 
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col" class="text-center">Action/Detail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <th><?php echo e($o -> order_id); ?></th>
-                        <?php if(strpos($o -> status, 'Rejected') !== false): ?>
-                            <td style="color: red"><?php echo e($o -> status); ?></td>
-                        <?php elseif(strpos($o -> status, 'Completed') !== false): ?>
-                            <td style="color: green"><?php echo e($o -> status); ?></td>
-                        <?php elseif($o -> status == 'On Delivery' || $o -> status == 'Items Ready'): ?>
-                            <td style="color: blue"><?php echo e($o -> status); ?></td>
-                        <?php else: ?>
-                            <td><?php echo e($o -> status); ?></td>
-                        <?php endif; ?>
-                        
-                        <?php if(strpos($o -> status, 'Rejected') !== false): ?>
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($o -> reason); ?></td>
-                        <?php else: ?>
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($o -> descriptions); ?></td>
-                        <?php endif; ?>
+            <div id="content">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col" class="text-center">Action/Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <th><?php echo e($o -> order_id); ?></th>
+                            <?php if(strpos($o -> status, 'Rejected') !== false): ?>
+                                <td style="color: red; font-weight: bold"><?php echo e($o -> status); ?></td>
+                            <?php elseif(strpos($o -> status, 'Completed') !== false): ?>
+                                <td style="color: green; font-weight: bold"><?php echo e($o -> status); ?></td>
+                            <?php elseif($o -> status == 'On Delivery' || $o -> status == 'Items Ready'): ?>
+                                <td style="color: blue; font-weight: bold"><?php echo e($o -> status); ?></td>
+                            <?php else: ?>
+                                <td><?php echo e($o -> status); ?></td>
+                            <?php endif; ?>
+                            
+                            <?php if(strpos($o -> status, 'Rejected') !== false): ?>
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($o -> reason); ?></td>
+                            <?php else: ?>
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($o -> descriptions); ?></td>
+                            <?php endif; ?>
 
-                        <?php if($o -> status == 'On Delivery' || $o -> status == 'Items Ready'): ?>
-                            <td >
-                                <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($o -> id); ?>">
+                            <?php if($o -> status == 'On Delivery' || $o -> status == 'Items Ready'): ?>
+                                <td >
+                                    <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($o -> id); ?>">
+                                        Detail
+                                    </button>
+                                    <a href="/crew/order/<?php echo e($o->id); ?>/accept" class="btn btn-primary ml-3">Accept</a>
+                                </td>
+                            <?php else: ?>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($o -> id); ?>">
                                     Detail
                                 </button>
-                                <a href="/crew/order/<?php echo e($o->id); ?>/accept" class="btn btn-primary ml-3">Accept</a>
                             </td>
-                        <?php else: ?>
-                        <td>
-                            <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($o -> id); ?>">
-                                Detail
-                            </button>
-                        </td>
-                        <?php endif; ?>
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
 
-            </table>
+                </table>
+            </div>
+            
         </main>
+        
         <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="editItem-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                     aria-hidden="true">
@@ -131,6 +142,13 @@
                 text-align: center;
             }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+    </script>
 
     <?php $__env->stopSection(); ?>
 <?php else: ?>

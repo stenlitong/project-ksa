@@ -17,6 +17,13 @@
                 </div>
             <?php endif; ?>
 
+            <?php if(session('error')): ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('error')); ?>
+
+                </div>
+            <?php endif; ?>
+
             <?php $__errorArgs = ['description'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

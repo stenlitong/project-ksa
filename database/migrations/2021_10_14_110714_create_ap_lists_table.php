@@ -20,12 +20,12 @@ class CreateApListsTable extends Migration
             $table->string('filename');
             $table->string('submissionTime');
             $table->string('status');
+            $table->integer('tracker');
             $table->string('description')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -60,6 +60,7 @@ class AdminPurchasingController extends Controller
             'cabang' => Auth::user()->cabang,
             'filename' => $request->filename->getClientOriginalName(),
             'status' => 'On Review',
+            'tracker' => 5,
             'submissionTime' => date("d/m/Y")
         ]);
         

@@ -18,9 +18,9 @@
                 </div>
             <?php endif; ?>
 
-            <?php if(session('success')): ?>
-                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                    <?php echo e(session('success')); ?>
+            <?php if(session('error')): ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('error')); ?>
 
                 </div>
             <?php endif; ?>
@@ -106,40 +106,42 @@ unset($__errorArgs, $__bag); ?>
 
             </div>
 
-            <table class="table mb-5">
-                <thead class="thead bg-danger">
-                  <tr>
-                    <th scope="col" style="color: white">No</th>
-                    <th scope="col" style="color: white">Item Barang</th>
-                    <th scope="col" style="color: white">Umur Barang</th>
-                    <th scope="col" style="color: white">Quantity</th>
-                    <th scope="col" style="color: white">Serial Number</th>
-                    <th scope="col" style="color: white">Code Master Item</th>
-                    <th scope="col" style="color: white">Cabang</th>
-                    <th scope="col" style="color: white">Deskripsi</th>
-                    <th scope="col" style="color: white">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <th><?php echo e($key + 1); ?></th>
-                            <td><?php echo e($i -> itemName); ?></td>
-                            <td><?php echo e($i -> itemAge); ?></td>
-                            <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
-                            <td><?php echo e($i -> serialNo); ?></td>
-                            <td><?php echo e($i -> codeMasterItem); ?></td>
-                            <td><?php echo e($i -> cabang); ?></td>
-                            <td><?php echo e($i -> description); ?></td>
-                            <?php if($i -> cabang != Auth::user()->cabang): ?>
-                                <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-<?php echo e($i -> id); ?>" style="color: white">Request Delivery</button></td>
-                            <?php else: ?>
-                                <td></td>
-                            <?php endif; ?>
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
-              </table>
+            <div id="content">
+                <table class="table mb-5">
+                    <thead class="thead bg-danger">
+                    <tr>
+                        <th scope="col" style="color: white">No</th>
+                        <th scope="col" style="color: white">Item Barang</th>
+                        <th scope="col" style="color: white">Umur Barang</th>
+                        <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Serial Number</th>
+                        <th scope="col" style="color: white">Code Master Item</th>
+                        <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Deskripsi</th>
+                        <th scope="col" style="color: white">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <th><?php echo e($key + 1); ?></th>
+                                <td><?php echo e($i -> itemName); ?></td>
+                                <td><?php echo e($i -> itemAge); ?></td>
+                                <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
+                                <td><?php echo e($i -> serialNo); ?></td>
+                                <td><?php echo e($i -> codeMasterItem); ?></td>
+                                <td><?php echo e($i -> cabang); ?></td>
+                                <td><?php echo e($i -> description); ?></td>
+                                <?php if($i -> cabang != Auth::user()->cabang): ?>
+                                    <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-<?php echo e($i -> id); ?>" style="color: white">Request Delivery</button></td>
+                                <?php else: ?>
+                                    <td></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Modal #1 -->
             <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -175,7 +177,7 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="quantity">Quantity <strong>(Periksa Kembali Stok Barang)</strong></label>
-                                                <input type="text" class="form-control" id="quantity" name="quantity"
+                                                <input type="number" min="1" class="form-control" id="quantity" name="quantity"
                                                     placeholder="Input Quantity Dalam Angka">
                                             </div>
                                         </div>
@@ -213,6 +215,13 @@ unset($__errorArgs, $__bag); ?>
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
 
     <?php $__env->stopSection(); ?>
 <?php else: ?>

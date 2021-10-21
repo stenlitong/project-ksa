@@ -17,9 +17,9 @@
                 </div>
             @endif
 
-            @if(session('success'))
-                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                    {{ session('success') }}
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -68,40 +68,42 @@
                 {{ $items->links() }}
             </div>
 
-            <table class="table mb-5">
-                <thead class="thead bg-danger">
-                  <tr>
-                    <th scope="col" style="color: white">No</th>
-                    <th scope="col" style="color: white">Item Barang</th>
-                    <th scope="col" style="color: white">Umur Barang</th>
-                    <th scope="col" style="color: white">Quantity</th>
-                    <th scope="col" style="color: white">Serial Number</th>
-                    <th scope="col" style="color: white">Code Master Item</th>
-                    <th scope="col" style="color: white">Cabang</th>
-                    <th scope="col" style="color: white">Deskripsi</th>
-                    <th scope="col" style="color: white">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach($items as $key => $i)
-                        <tr>
-                            <th>{{ $key + 1 }}</th>
-                            <td>{{ $i -> itemName }}</td>
-                            <td>{{ $i -> itemAge }}</td>
-                            <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
-                            <td>{{ $i -> serialNo }}</td>
-                            <td>{{ $i -> codeMasterItem }}</td>
-                            <td>{{ $i -> cabang }}</td>
-                            <td>{{ $i -> description }}</td>
-                            @if($i -> cabang != Auth::user()->cabang)
-                                <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-{{ $i -> id }}" style="color: white">Request Delivery</button></td>
-                            @else
-                                <td></td>
-                            @endif
-                        </tr>
-                    @endforeach
-                </tbody>
-              </table>
+            <div id="content">
+                <table class="table mb-5">
+                    <thead class="thead bg-danger">
+                    <tr>
+                        <th scope="col" style="color: white">No</th>
+                        <th scope="col" style="color: white">Item Barang</th>
+                        <th scope="col" style="color: white">Umur Barang</th>
+                        <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Serial Number</th>
+                        <th scope="col" style="color: white">Code Master Item</th>
+                        <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Deskripsi</th>
+                        <th scope="col" style="color: white">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($items as $key => $i)
+                            <tr>
+                                <th>{{ $key + 1 }}</th>
+                                <td>{{ $i -> itemName }}</td>
+                                <td>{{ $i -> itemAge }}</td>
+                                <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                                <td>{{ $i -> serialNo }}</td>
+                                <td>{{ $i -> codeMasterItem }}</td>
+                                <td>{{ $i -> cabang }}</td>
+                                <td>{{ $i -> description }}</td>
+                                @if($i -> cabang != Auth::user()->cabang)
+                                    <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-{{ $i -> id }}" style="color: white">Request Delivery</button></td>
+                                @else
+                                    <td></td>
+                                @endif
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Modal #1 -->
             @foreach($items as $i)
@@ -137,7 +139,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="quantity">Quantity <strong>(Periksa Kembali Stok Barang)</strong></label>
-                                                <input type="text" class="form-control" id="quantity" name="quantity"
+                                                <input type="number" min="1" class="form-control" id="quantity" name="quantity"
                                                     placeholder="Input Quantity Dalam Angka">
                                             </div>
                                         </div>
@@ -175,6 +177,13 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
 
     @endsection
 @else

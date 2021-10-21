@@ -20,24 +20,21 @@ class CrewController extends Controller
     public function completedOrder(){
         // Get all the order within the logged in user within 30 days from date now
         $orderHeads = OrderHead::with('user')->where(function($query){
-            $query->where('status', 'like', 'Order Completed (Crew)')
-            ->orWhere('status', 'like', 'Rejected By Logistic');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+            $query->where('status', 'like', 'Request Completed (Crew)')
+            ->orWhere('status', 'like', 'Request Rejected By Logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
-
-        $completed = OrderHead::where(function($query){
-            $query->where('status', 'like', 'Order Completed (Crew)')
-            ->orWhere('status', 'like', 'Rejected By Logistic');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
         
         $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', 'In Progress By Logistic')
+            $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        
+        $completed = $orderHeads->count();
 
         return view('crew.crewDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
     }
@@ -45,28 +42,31 @@ class CrewController extends Controller
     public function inProgressOrder(){
         // Get all the order within the logged in user within 30 days from date now
         $orderHeads = OrderHead::with('user')->where(function($query){
-            $query->where('status', 'like', 'In Progress By Logistic')
+            $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $completed = OrderHead::where(function($query){
-            $query->where('status', 'like', 'Order Completed (Crew)')
-            ->orWhere('status', 'like', 'Rejected By Logistic');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            $query->where('status', 'like', 'Request Completed (Crew)')
+            ->orWhere('status', 'like', 'Request Rejected By Logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
         
-        $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', 'In Progress By Logistic')
-            ->orWhere('status', 'like', 'Items Ready')
-            ->orWhere('status', 'like', 'On Delivery');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        $in_progress = $orderHeads->count();
 
         return view('crew.crewDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
     }
+
+    // order_tracker is a validation mechanism (somewhat) to validate if the order is already being processed or not,
+    // scenario : 2 people open the page at the same time (A & B), then A processed the order, while B has not refreshed the same page (even tho we already create auto
+    // refresh the pages every 60 seconds), then there will be a case where the order in guy B where it has not been processed still shown it can be processed, 
+    // while it has already been processed by guy A, 
+    // this mechanism will check if the order is already processed or not by checking the number => crew(1), logistic(2), supervisor A(3), supervisor B(4),
+    // purchasing (5), if the tracker number is different then it will return the "error" message.
 
     public function orderPage()
     {
@@ -79,19 +79,12 @@ class CrewController extends Controller
         return view('crew.crewOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
 
-    public function taskPage()
-    {
-        // ==== In Progress ====
-
-        return view('crew.crewTask');
-    }
-
     public function addItemToCart(Request $request){
         // Validate Cart Request
         $request->validate([
             'item_id' => 'required',
             'department' => 'required',
-            'quantity' => 'required | numeric',
+            'quantity' => 'required|numeric|min:1',
         ]);
 
         // Check if the cart within the user is already > 12 items, then return with message
@@ -100,13 +93,23 @@ class CrewController extends Controller
             return redirect('/crew/order')->with('error', 'Cart is Full');
         }
 
-        // Else add item to the cart
-        Cart::create([
-            'user_id' => Auth::user()->id,
-            'item_id' => $request->item_id,
-            'quantity' => $request->quantity,
-            'department' => $request->department
-        ]);
+         // Find if the same configuration of item is already exist in cart or no
+         $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->where('golongan', $request->golongan)->first();
+
+         if($itemExistInCart){
+            Cart::find($itemExistInCart->id)->increment('quantity', $request->quantity);
+            Cart::find($itemExistInCart->id)->update([
+                'note' => $request->note
+            ]);
+         }else{
+            // Else add item to the cart
+            Cart::create([
+                'user_id' => Auth::user()->id,
+                'item_id' => $request->item_id,
+                'quantity' => $request->quantity,
+                'department' => $request->department
+            ]);  
+         }
         
         return redirect('/crew/order')->with('status', 'Add Item Success');
     }
@@ -146,6 +149,7 @@ class CrewController extends Controller
             'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
+            'order_tracker' => 1,
             'status' => 'Request In Progress By Logistic'
         ]);
         
@@ -166,17 +170,25 @@ class CrewController extends Controller
         // After all of that, emptying the cart items to reset the cart
         Cart::where('user_id', Auth::user()->id)->delete();
 
-        return redirect('/dashboard')->with('status', 'Submit Order Success');
+        return redirect('/dashboard')->with('status', 'Submit Request Order Success');
     }
 
     public function acceptOrder(OrderHead $orderHeads){
-        // Crew accept the order, then the status will be completed
-        $order_heads = OrderHead::where('id', $orderHeads->id)->update([
-            'status' => 'Order Completed (Crew)',
-        ]);
-
         // Get the order details of the following order
         $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+
+        if($orderHeads -> order_tracker == 1){
+            return redirect('/dashboard')->with('error', 'Request Order Already Accepted');
+        }
+
+        OrderHead::find($orderHeads -> id)->update([
+            'order_tracker' => 1
+        ]);
+
+        // Crew accept the order, then the status will be completed
+        OrderHead::where('id', $orderHeads->id)->update([
+            'status' => 'Request Completed (Crew)',
+        ]);
 
         foreach($orderDetails as $od){
             Item::where('id', $od -> item -> id)->update([
@@ -185,6 +197,13 @@ class CrewController extends Controller
             Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
         }
 
-        return redirect('/dashboard')->with('status', 'Order Accepted');
+        return redirect('/dashboard')->with('status', 'Request Order Accepted');
+    }
+
+    public function taskPage()
+    {
+        // ==== In Progress ====
+
+        return view('crew.crewTask');
     }
 }

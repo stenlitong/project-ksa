@@ -18,45 +18,55 @@
                         </div>
                     <?php endif; ?>
 
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                        <table class="table table-bordered sortable">
-                            <thead class="thead bg-danger">
-                            <tr>
-                                <th scope="col" style="width: 100px">Nomor</th>
-                                <th scope="col">Item Barang</th>
-                                <th scope="col">Cabang Tujuan</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr>
-                                        <td><?php echo e($key + 1); ?></td>
-                                        <td><?php echo e($o -> item_requested -> itemName); ?></td>
-                                        <td><?php echo e($o -> toCabang); ?></td>
-                                        <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></td>
-                                        <?php if(strpos($o -> status, 'Rejected') !== false): ?>
-                                            <td><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
-                                        <?php elseif(strpos($o -> status, 'On Delivery') !== false): ?>
-                                            <td><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
-                                        <?php elseif(strpos($o -> status, 'Accepted') !== false): ?>
-                                            <td><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
-                                        <?php else: ?>
-                                            <td><?php echo e($o -> status); ?></td>
-                                        <?php endif; ?>
-                                        <td>
-                                            <a href="/logistic/request-do/<?php echo e($o -> id); ?>/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
-                                            <?php if(strpos($o -> status, 'On Delivery') !== false): ?>
-                                                <a href="/logistic/request-do/<?php echo e($o -> id); ?>/accept-do" class="btn btn-info">Accept Delivery</a>
+                    <?php if(session('error')): ?>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <?php echo e(session('error')); ?>
+
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div id="content">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                            <table class="table table-bordered sortable">
+                                <thead class="thead bg-danger">
+                                <tr>
+                                    <th scope="col" style="width: 100px">Nomor</th>
+                                    <th scope="col">Item Barang</th>
+                                    <th scope="col">Cabang Tujuan</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td><?php echo e($key + 1); ?></td>
+                                            <td><?php echo e($o -> item_requested -> itemName); ?></td>
+                                            <td><?php echo e($o -> toCabang); ?></td>
+                                            <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></td>
+                                            <?php if(strpos($o -> status, 'Rejected') !== false): ?>
+                                                <td><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
+                                            <?php elseif(strpos($o -> status, 'On Delivery') !== false): ?>
+                                                <td><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
+                                            <?php elseif(strpos($o -> status, 'Accepted') !== false): ?>
+                                                <td><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
+                                            <?php else: ?>
+                                                <td><?php echo e($o -> status); ?></td>
                                             <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
-                        </table>
+                                            <td>
+                                                <a href="/logistic/request-do/<?php echo e($o -> id); ?>/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
+                                                <?php if(strpos($o -> status, 'On Delivery') !== false): ?>
+                                                    <a href="/logistic/request-do/<?php echo e($o -> id); ?>/accept-do" class="btn btn-info">Accept Delivery</a>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </main>
         </div>
@@ -92,6 +102,14 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
+
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     <?php $__env->stopSection(); ?>
 <?php else: ?>

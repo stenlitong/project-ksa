@@ -125,7 +125,7 @@
                     </div>
                     <div class="col mt-3">
                         <table class="table" id="myTable">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                                 <tr>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
@@ -165,6 +165,9 @@
     </script>
 
     <style>
+        th{
+            color: white;
+        }
         .alert{
                 text-align: center;
             }

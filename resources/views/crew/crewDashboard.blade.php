@@ -22,60 +22,70 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="d-flex justify-content-end mb-3">
                 <a href="{{ Route('crew.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
                 <a href="{{ Route('crew.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
             </div>
 
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col" class="text-center">Action/Detail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($orderHeads as $o)
-                    <tr>
-                        <th>{{ $o -> order_id}}</th>
-                        @if(strpos($o -> status, 'Rejected') !== false)
-                            <td style="color: red">{{ $o -> status}}</td>
-                        @elseif(strpos($o -> status, 'Completed') !== false)
-                            <td style="color: green">{{ $o -> status}}</td>
-                        @elseif($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
-                            <td style="color: blue">{{ $o -> status}}</td>
-                        @else
-                            <td>{{ $o -> status}}</td>
-                        @endif
-                        
-                        @if(strpos($o -> status, 'Rejected') !== false)
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> reason}}</td>
-                        @else
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> descriptions}}</td>
-                        @endif
+            <div id="content">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col" class="text-center">Action/Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($orderHeads as $o)
+                        <tr>
+                            <th>{{ $o -> order_id}}</th>
+                            @if(strpos($o -> status, 'Rejected') !== false)
+                                <td style="color: red; font-weight: bold">{{ $o -> status}}</td>
+                            @elseif(strpos($o -> status, 'Completed') !== false)
+                                <td style="color: green; font-weight: bold">{{ $o -> status}}</td>
+                            @elseif($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
+                                <td style="color: blue; font-weight: bold">{{ $o -> status}}</td>
+                            @else
+                                <td>{{ $o -> status}}</td>
+                            @endif
+                            
+                            @if(strpos($o -> status, 'Rejected') !== false)
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> reason}}</td>
+                            @else
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> descriptions}}</td>
+                            @endif
 
-                        @if($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
-                            <td >
-                                <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                            @if($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
+                                <td >
+                                    <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
+                                        Detail
+                                    </button>
+                                    <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
+                                </td>
+                            @else
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
                                     Detail
                                 </button>
-                                <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
                             </td>
-                        @else
-                        <td>
-                            <button type="button" style="margin-left: 40%" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
-                                Detail
-                            </button>
-                        </td>
-                        @endif
-                    </tr>
-                    @endforeach
-                </tbody>
+                            @endif
+                        </tr>
+                        @endforeach
+                    </tbody>
 
-            </table>
+                </table>
+            </div>
+            
         </main>
+        
         @foreach($orderHeads as $o)
                 <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                     aria-hidden="true">
@@ -129,6 +139,13 @@
                 text-align: center;
             }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+    </script>
 
     @endsection
 @else

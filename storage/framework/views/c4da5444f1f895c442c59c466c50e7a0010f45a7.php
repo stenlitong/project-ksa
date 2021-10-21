@@ -135,14 +135,14 @@ unset($__errorArgs, $__bag); ?>
                                 <div class="form-group">
                                     <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Nama Barang">
+                                        placeholder="Input Nama Barang" required>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="itemAge">Umur Barang</label>
-                                            <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                                placeholder="Input Umur Barang Dalam Angka">
+                                            <input type="number" min="1" class="form-control" id="itemAge" name="itemAge"
+                                                placeholder="Input Umur Barang Dalam Angka" required>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -159,8 +159,8 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="itemStock">Stok Barang</label>
-                                            <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                                placeholder="Input Stok Barang">
+                                            <input type="number" min="1" class="form-control" id="itemStock" name="itemStock"
+                                                placeholder="Input Stok Barang" required>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -215,7 +215,7 @@ unset($__errorArgs, $__bag); ?>
                                 <div class="form-group">
                                     <label for="codeMasterItem">Code Master Item</label>
                                     <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                        placeholder="Input Code Master Item (xx-xxxx-)">
+                                        placeholder="Input Code Master Item (xx-xxxx-)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="cabang">Cabang</label>
@@ -243,54 +243,57 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
+            <div id="content">
             <table class="table mb-5">
                 <thead class="thead bg-danger">
-                  <tr>
-                    <th scope="col" style="color: white">No</th>
-                    <th scope="col" style="color: white">Item Barang</th>
-                    <th scope="col" style="color: white">Umur Barang</th>
-                    <th scope="col" style="color: white">Quantity</th>
-                    <th scope="col" style="color: white">Serial Number</th>
-                    <th scope="col" style="color: white">Code Master Item</th>
-                    <th scope="col" style="color: white">Cabang</th>
-                    <th scope="col" style="color: white">Deskripsi</th>
-                    <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
+                    <tr>
+                        <th scope="col" style="color: white">No</th>
+                        <th scope="col" style="color: white">Item Barang</th>
+                        <th scope="col" style="color: white">Umur Barang</th>
+                        <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Serial Number</th>
+                        <th scope="col" style="color: white">Code Master Item</th>
+                        <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Deskripsi</th>
+                        <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
                         <th scope="col" style="color: white">Action</th>
-                    <?php endif; ?>
-                  </tr>
+                        <?php endif; ?>
+                    </tr>
                 </thead>
                 <tbody>
                     <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <th><?php echo e($key + 1); ?></th>
-                            <td><?php echo e($i -> itemName); ?></td>
-                            <td><?php echo e($i -> itemAge); ?></td>
-                            <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
-                            <td><?php echo e($i -> serialNo); ?></td>
-                            <td><?php echo e($i -> codeMasterItem); ?></td>
-                            <td><?php echo e($i -> cabang); ?></td>
-                            <td><?php echo e($i -> description); ?></td>
-                            <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
-                            <td>
-                                <div class="d-flex justify-content-start">
-                                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($i->id); ?>">
-                                        Edit
+                    <tr>
+                        <th><?php echo e($key + 1); ?></th>
+                        <td><?php echo e($i -> itemName); ?></td>
+                        <td><?php echo e($i -> itemAge); ?></td>
+                        <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
+                        <td><?php echo e($i -> serialNo); ?></td>
+                        <td><?php echo e($i -> codeMasterItem); ?></td>
+                        <td><?php echo e($i -> cabang); ?></td>
+                        <td><?php echo e($i -> description); ?></td>
+                        <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
+                        <td>
+                            <div class="d-flex justify-content-start">
+                                <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($i->id); ?>">
+                                    Edit
+                                </button>
+                                
+                                <form method="POST" action="/supervisor/item-stocks/<?php echo e($i -> id); ?>/delete-item" >
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('delete'); ?>
+                                    <button class="btn btn-danger">
+                                        Delete
                                     </button>
-                                    
-                                    <form method="POST" action="" >
-                                        <?php echo csrf_field(); ?>
-                                        <?php echo method_field('delete'); ?>
-                                        <button class="btn btn-danger">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                            <?php endif; ?>
-                        </tr>
+                                </form>
+                            </div>
+                        </td>
+                        <?php endif; ?>
+                    </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
-              </table>
+            </table>
+            
+            </div>
 
             <!-- Modal #2 -->
             <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -310,14 +313,14 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group">
                                         <label for="itemName">Nama Barang</label>
                                         <input type="text" class="form-control" id="itemName" name="itemName"
-                                            placeholder="Input Nama Barang" value="<?php echo e($i -> itemName); ?>">
+                                            placeholder="Input Nama Barang" value="<?php echo e($i -> itemName); ?>" required>
                                     </div>
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="itemAge">Umur Barang</label>
-                                                <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                                    placeholder="Input Umur Barang Dalam Angka">
+                                                <input type="number" min="1" class="form-control" id="itemAge" name="itemAge"
+                                                    placeholder="Input Umur Barang Dalam Angka" required>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -334,8 +337,8 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="itemStock">Stok Barang</label>
-                                                <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                                    placeholder="Input Stok Barang" value="<?php echo e($i -> itemStock); ?>">
+                                                <input type="number" min="1" class="form-control" id="itemStock" name="itemStock"
+                                                    placeholder="Input Stok Barang" value="<?php echo e($i -> itemStock); ?>" required>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -390,7 +393,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group">
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                            placeholder="Input Code Master Item (xx-xxxx-)" value="<?php echo e($i -> codeMasterItem); ?>">
+                                            placeholder="Input Code Master Item (xx-xxxx-)" value="<?php echo e($i -> codeMasterItem); ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Deskripsi (optional)</label>
@@ -419,6 +422,13 @@ unset($__errorArgs, $__bag); ?>
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
 
     <?php $__env->stopSection(); ?>
 <?php else: ?>

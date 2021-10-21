@@ -18,66 +18,82 @@
                         </div>
                     <?php endif; ?>
 
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                        <table class="table table-bordered sortable">
-                            <thead class="thead bg-danger">
-                            <tr>
-                                <th scope="col" style="width: 100px">Nomor</th>
-                                <th scope="col">Item Barang</th>
-                                <th scope="col">Dari Cabang</th>
-                                <th scope="col">Cabang Tujuan</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Nama Requester</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                                <th scope="col">Approval</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr>
-                                        <td><?php echo e($key + 1); ?></td>
-                                        <td><?php echo e($o -> item_requested -> itemName); ?></td>
-                                        <td><?php echo e($o -> fromCabang); ?></td>
-                                        <td><?php echo e($o -> toCabang); ?></td>
-                                        <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></td>
-                                        <td><?php echo e($o -> user -> name); ?></td>
-                                        <?php if(strpos($o -> status, 'Rejected') !== false): ?>
-                                            <td><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
-                                        <?php elseif(strpos($o -> status, 'On Delivery') !== false): ?>
-                                            <td><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
-                                        <?php elseif(strpos($o -> status, 'Accepted') !== false): ?>
-                                            <td><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
-                                        <?php else: ?>
-                                            <td><?php echo e($o -> status); ?></td>
-                                        <?php endif; ?>
-                                        <td>
-                                            <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/download"><span data-feather="download" class="icon"></span></a>
-                                        </td>
-                                        
-                                        <?php if($o -> fromCabang == Auth::user()->cabang and strpos($o -> status, 'In Progress By Supervisor Cabang ' . Auth::user()->cabang) !== false): ?>
+                    <?php if(session('error')): ?>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <?php echo e(session('error')); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <div id="content">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                            <table class="table table-bordered sortable">
+                                <thead class="thead bg-danger">
+                                <tr>
+                                    <th scope="col" style="width: 100px">Nomor</th>
+                                    <th scope="col">Item Barang</th>
+                                    <th scope="col">Dari Cabang</th>
+                                    <th scope="col">Cabang Tujuan</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Stok Cabang Tujuan</th>
+                                    <th scope="col">Nama Requester</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Approval</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td><?php echo e($key + 1); ?></td>
+                                            <td><?php echo e($o -> item_requested -> itemName); ?></td>
+                                            <td><?php echo e($o -> fromCabang); ?></td>
+                                            <td><?php echo e($o -> toCabang); ?></td>
+                                            <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></td>
+                                            <?php if($o -> quantity > $o -> item_requested_from -> itemStock ): ?>
+                                                <td><span style="color: red; font-weight: bold"><?php echo e($o -> item_requested_from -> itemStock); ?> <?php echo e($o -> item_requested -> unit); ?></span></td>
+                                            <?php else: ?>
+                                                <td><span style="color: green; font-weight: bold"><?php echo e($o -> item_requested_from -> itemStock); ?> <?php echo e($o -> item_requested -> unit); ?></span></td>
+                                            <?php endif; ?>
+                                            <td><?php echo e($o -> user -> name); ?></td>
+                                            <?php if(strpos($o -> status, 'Rejected') !== false): ?>
+                                                <td><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
+                                            <?php elseif(strpos($o -> status, 'On Delivery') !== false): ?>
+                                                <td><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
+                                            <?php elseif(strpos($o -> status, 'Accepted') !== false): ?>
+                                                <td><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
+                                            <?php else: ?>
+                                                <td><?php echo e($o -> status); ?></td>
+                                            <?php endif; ?>
                                             <td>
-                                                <div class="d-flex justify-content-between">
-                                                    <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/forward" class="btn btn-success">Approve</a>
-                                                    <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/deny" class="btn btn-danger">Reject</a>
-                                                </div>
+                                                <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/download"><span data-feather="download" class="icon"></span></a>
                                             </td>
-                                        
-                                        <?php elseif($o -> toCabang == Auth::user()->cabang and strpos($o -> status, 'Waiting Approval By Supervisor Cabang '. Auth::user()->cabang) !== false): ?>
-                                            <td>
-                                                <div class="d-flex justify-content-around">
-                                                    <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/approve" class="btn btn-success">Approve</a>
-                                                    <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/reject" class="btn btn-danger">Reject</a>
-                                                </div>
-                                            </td>
-                                        <?php else: ?>
-                                            <td></td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
-                        </table>
+                                            
+                                            <?php if($o -> fromCabang == Auth::user()->cabang and strpos($o -> status, 'In Progress By Supervisor Cabang ' . Auth::user()->cabang) !== false): ?>
+                                                <td>
+                                                    <div class="d-flex justify-content-around">
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/forward" class="btn btn-success btn-sm">Approve</a>
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/deny" class="btn btn-danger btn-sm">Reject</a>
+                                                    </div>
+                                                </td>
+                                            
+                                            <?php elseif($o -> toCabang == Auth::user()->cabang and strpos($o -> status, 'Waiting Approval By Supervisor Cabang '. Auth::user()->cabang) !== false): ?>
+                                                <td>
+                                                    <div class="d-flex justify-content-around">
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/approve" class="btn btn-success btn-sm">Approve</a>
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/reject" class="btn btn-danger btn-sm">Reject</a>
+                                                    </div>
+                                                </td>
+                                            <?php else: ?>
+                                                <td></td>
+                                            <?php endif; ?>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </main>
         </div>
@@ -99,8 +115,8 @@
             }
             td, th{
                 word-wrap: break-word;
-                min-width: 100px;
-                max-width: 100px;
+                min-width: 80px;
+                max-width: 80px;
                 text-align: center;
             }
             .icon{
@@ -113,6 +129,14 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
+        
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     <?php $__env->stopSection(); ?>
 <?php else: ?>

@@ -6,7 +6,7 @@
     @section('container')
     <div class="row">
         @include('logistic.sidebar')
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 200px">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 30px">
             
             @include('../layouts/time')
 
@@ -56,61 +56,63 @@
                 @endif
             </div>
 
-            <table class="table" id="myTable">
-                <thead class="thead bg-danger">
-                    <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col">Detail</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($orderHeads as $oh)
-                    <tr>
-                        <td><strong>{{ $oh -> order_id}}</strong></td>
-                        @if(strpos($oh -> status, 'Rejected') !== false)
-                            <td><span style="color: red;font-weight: bold;">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'Completed') !== false)
-                            <td><span style="color: green;font-weight: bold;">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Items Ready') !== false)
-                            <td><span style="color: blue;font-weight: bold;">{{ $oh -> status}}</span></td>
-                        @elseif(strpos($oh -> status, 'Approved') !== false)
-                            <td><span style="color: #16c9e9;font-weight: bold;">{{ $oh -> status }}</span></td>
-                        @else
-                            <td>{{ $oh -> status}}</td>
-                        @endif
+            <div id="content">
+                <table class="table" id="myTable">
+                    <thead class="thead bg-danger">
+                        <tr>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Detail</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($orderHeads as $oh)
+                        <tr>
+                            <td><strong>{{ $oh -> order_id}}</strong></td>
+                            @if(strpos($oh -> status, 'Rejected') !== false)
+                                <td><span style="color: red;font-weight: bold;">{{ $oh -> status}}</span></td>
+                            @elseif(strpos($oh -> status, 'Completed') !== false)
+                                <td><span style="color: green;font-weight: bold;">{{ $oh -> status}}</span></td>
+                            @elseif(strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Items Ready') !== false)
+                                <td><span style="color: blue;font-weight: bold;">{{ $oh -> status}}</span></td>
+                            @elseif(strpos($oh -> status, 'Delivered') !== false)
+                                <td><span style="color: #16c9e9;font-weight: bold;">{{ $oh -> status }}</span></td>
+                            @else
+                                <td>{{ $oh -> status}}</td>
+                            @endif
 
-                        @if(strpos($oh -> status, 'Rejected') !== false)
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
-                        @else
-                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
-                        @endif
+                            @if(strpos($oh -> status, 'Rejected') !== false)
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
+                            @else
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
+                            @endif
 
-                        {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
-                        @if(strpos($oh -> status, 'Order') !== false)
-                            <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
-                            </td>
-                        @else
-                            {{-- Button to trigger the modal detail --}}
-                            <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
-                                Detail
-                            </button></td>
-                        @endif
+                            {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
+                            @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
+                                <td>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                                    <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
+                                </td>
+                            @else
+                                {{-- Button to trigger the modal detail --}}
+                                <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
+                                    Detail
+                                </button></td>
+                            @endif
 
-                        @if(strpos($oh -> status, 'Approved By Purchasing') !== false)
-                            <td><a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a></td>
-                        @else
-                            <td></td>
-                        @endif
+                            @if(strpos($oh -> status, 'Delivered') !== false)
+                                <td><a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a></td>
+                            @else
+                                <td></td>
+                            @endif
 
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
@@ -146,10 +148,10 @@
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
                                                 
-                                                @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Order In Progress') !== false)
-                                                @else
+                                                @if(strpos($o -> status, 'Request In Progress') !== false)
                                                     <th scope="col">Stok Barang</th>
                                                 @endif
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -162,9 +164,8 @@
                                                         <td>{{ $od -> item -> itemAge }}</td>
                                                         <td>{{ $od -> department }}</td>
 
-                                                        @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Order In Progress') !== false)
-                                                        @else
-                                                            @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
+                                                        @if(strpos($o -> status, 'Request In Progress') !== false)
+                                                            @if($od -> quantity > $od -> item -> itemStock)
                                                                 <td style="color: red; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
                                                             @else
                                                                 <td style="color: green; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
@@ -232,6 +233,13 @@
                 text-align: center;
             }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+    </script>
 
     @endsection
 @else

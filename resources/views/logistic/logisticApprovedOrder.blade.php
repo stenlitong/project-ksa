@@ -64,6 +64,7 @@
                                 <tr>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Stok</th>
                                 </tr>
                             </thead>
@@ -72,10 +73,11 @@
                                 <tr>
                                     <td>{{ $od -> item -> itemName }}</td>
                                     <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
+                                    <td>{{ $od -> department }}</td>
                                     @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
-                                        <td style="color: red">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
+                                        <td style="color: red; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
                                     @else
-                                        <td style="color: green">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
+                                        <td style="color: green; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
                                     @endif
                                 </tr>
                                 @endforeach

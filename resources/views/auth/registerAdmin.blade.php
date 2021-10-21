@@ -74,7 +74,6 @@
                     
                     <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                         <option selected disabled="">Choose...</option>
-                        <option selected disabled="">Choose...</option>
                         <option value="Jakarta" id="Jakarta" @if (old('cabang') == 'Jakarta') selected="selected" @endif>Jakarta</option>
                         <option value="Banjarmasin" id="Banjarmasin" @if (old('cabang') == 'Banjarmasin') selected="selected" @endif>Banjarmasin</option>
                         <option value="Samarinda" id="Samarinda" @if (old('cabang') == 'Samarinda') selected="selected" @endif>Samarinda</option>
@@ -103,12 +102,12 @@
                     name="password_confirmation" required />
                 </div>
                 
+                <br>
+
                 <div class="ml-1">
                     <input type="checkbox" onclick="myFunction()" style="border-radius: 30%">
                     <label for="">Show Password</label>
                 </div>
-
-                <br>
                 
                 <div class="flex items-center justify-end mt-4">
                     <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">

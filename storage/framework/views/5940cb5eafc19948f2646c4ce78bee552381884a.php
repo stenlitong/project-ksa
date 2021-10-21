@@ -127,7 +127,7 @@ unset($__errorArgs, $__bag); ?>
                             <div class="d-flex justify-content-around mr-3">
                                 <div class="form-group p-2">
                                     <label for="quantity" class="mb-3">Quantity</label>
-                                    <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
+                                    <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
                                         style="width: 500px; height: 50px">
                                 </div>
                             </div>
@@ -212,7 +212,7 @@ unset($__errorArgs, $__bag); ?>
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="max-width: 600px;">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
-                    <h5 class="modal-title ml-3" id="submitTitle">Input PR Requirements</h5>
+                    <h5 class="modal-title ml-3" id="submitTitle" style="color: white">Input PR Requirements</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

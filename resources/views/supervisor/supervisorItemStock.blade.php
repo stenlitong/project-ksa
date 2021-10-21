@@ -91,14 +91,14 @@
                                 <div class="form-group">
                                     <label for="itemName">Nama Barang</label>
                                     <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Nama Barang">
+                                        placeholder="Input Nama Barang" required>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="itemAge">Umur Barang</label>
-                                            <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                                placeholder="Input Umur Barang Dalam Angka">
+                                            <input type="number" min="1" class="form-control" id="itemAge" name="itemAge"
+                                                placeholder="Input Umur Barang Dalam Angka" required>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -115,8 +115,8 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="itemStock">Stok Barang</label>
-                                            <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                                placeholder="Input Stok Barang">
+                                            <input type="number" min="1" class="form-control" id="itemStock" name="itemStock"
+                                                placeholder="Input Stok Barang" required>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -171,7 +171,7 @@
                                 <div class="form-group">
                                     <label for="codeMasterItem">Code Master Item</label>
                                     <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                        placeholder="Input Code Master Item (xx-xxxx-)">
+                                        placeholder="Input Code Master Item (xx-xxxx-)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="cabang">Cabang</label>
@@ -199,54 +199,57 @@
                 </div>
             </div>
 
+            <div id="content">
             <table class="table mb-5">
                 <thead class="thead bg-danger">
-                  <tr>
-                    <th scope="col" style="color: white">No</th>
-                    <th scope="col" style="color: white">Item Barang</th>
-                    <th scope="col" style="color: white">Umur Barang</th>
-                    <th scope="col" style="color: white">Quantity</th>
-                    <th scope="col" style="color: white">Serial Number</th>
-                    <th scope="col" style="color: white">Code Master Item</th>
-                    <th scope="col" style="color: white">Cabang</th>
-                    <th scope="col" style="color: white">Deskripsi</th>
-                    @if(Auth::user()->hasRole('supervisorMaster'))
+                    <tr>
+                        <th scope="col" style="color: white">No</th>
+                        <th scope="col" style="color: white">Item Barang</th>
+                        <th scope="col" style="color: white">Umur Barang</th>
+                        <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Serial Number</th>
+                        <th scope="col" style="color: white">Code Master Item</th>
+                        <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Deskripsi</th>
+                        @if(Auth::user()->hasRole('supervisorMaster'))
                         <th scope="col" style="color: white">Action</th>
-                    @endif
-                  </tr>
+                        @endif
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach($items as $key => $i)
-                        <tr>
-                            <th>{{ $key + 1 }}</th>
-                            <td>{{ $i -> itemName }}</td>
-                            <td>{{ $i -> itemAge }}</td>
-                            <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
-                            <td>{{ $i -> serialNo }}</td>
-                            <td>{{ $i -> codeMasterItem }}</td>
-                            <td>{{ $i -> cabang }}</td>
-                            <td>{{ $i -> description }}</td>
-                            @if(Auth::user()->hasRole('supervisorMaster'))
-                            <td>
-                                <div class="d-flex justify-content-start">
-                                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-{{ $i->id }}">
-                                        Edit
+                    <tr>
+                        <th>{{ $key + 1 }}</th>
+                        <td>{{ $i -> itemName }}</td>
+                        <td>{{ $i -> itemAge }}</td>
+                        <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                        <td>{{ $i -> serialNo }}</td>
+                        <td>{{ $i -> codeMasterItem }}</td>
+                        <td>{{ $i -> cabang }}</td>
+                        <td>{{ $i -> description }}</td>
+                        @if(Auth::user()->hasRole('supervisorMaster'))
+                        <td>
+                            <div class="d-flex justify-content-start">
+                                <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-{{ $i->id }}">
+                                    Edit
+                                </button>
+                                
+                                <form method="POST" action="/supervisor/item-stocks/{{ $i -> id }}/delete-item" >
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger">
+                                        Delete
                                     </button>
-                                    
-                                    <form method="POST" action="/supervisor/{{ $i -> id }}/delete-item" >
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-danger">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-                        </tr>
+                                </form>
+                            </div>
+                        </td>
+                        @endif
+                    </tr>
                     @endforeach
                 </tbody>
-              </table>
+            </table>
+            
+            </div>
 
             <!-- Modal #2 -->
             @foreach($items as $i)
@@ -266,14 +269,14 @@
                                     <div class="form-group">
                                         <label for="itemName">Nama Barang</label>
                                         <input type="text" class="form-control" id="itemName" name="itemName"
-                                            placeholder="Input Nama Barang" value="{{ $i -> itemName }}">
+                                            placeholder="Input Nama Barang" value="{{ $i -> itemName }}" required>
                                     </div>
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="itemAge">Umur Barang</label>
-                                                <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                                    placeholder="Input Umur Barang Dalam Angka">
+                                                <input type="number" min="1" class="form-control" id="itemAge" name="itemAge"
+                                                    placeholder="Input Umur Barang Dalam Angka" required>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -290,8 +293,8 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="itemStock">Stok Barang</label>
-                                                <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                                    placeholder="Input Stok Barang" value="{{ $i -> itemStock }}">
+                                                <input type="number" min="1" class="form-control" id="itemStock" name="itemStock"
+                                                    placeholder="Input Stok Barang" value="{{ $i -> itemStock }}" required>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -346,7 +349,7 @@
                                     <div class="form-group">
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                            placeholder="Input Code Master Item (xx-xxxx-)" value="{{ $i -> codeMasterItem }}">
+                                            placeholder="Input Code Master Item (xx-xxxx-)" value="{{ $i -> codeMasterItem }}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Deskripsi (optional)</label>
@@ -375,6 +378,13 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
 
     @endsection
 @else

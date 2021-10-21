@@ -16,6 +16,12 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @error('description')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Dekripsi Wajib Diisi

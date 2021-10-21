@@ -14,21 +14,27 @@
                 <div class="col" style="max-width: 850px">
                     <h2 class="mt-3 mb-4" style="text-align: center">Supplier</h2>
 
-                    @if(session('status'))
+                    @if(session('statusA'))
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                            {{ session('status') }}
+                            {{ session('statusA') }}
                         </div>
                     @endif
 
-                    <div class="row flex-row flex-nowrap scrolling-wrapper">
+                    @if(session('errorA'))
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            {{ session('errorA') }}
+                        </div>
+                    @endif
+
+                    <div class="row ml-3 flex-row flex-nowrap scrolling-wrapper">
                         @foreach($suppliers as $s)
-                            <div class="card border-dark w-75 mr-3">
+                            <div class="card border-dark w-100 mr-3">
                                 <div class="card-body mr-3">
                                 <div class="row">
                                     <div class="col ml-2">
                                         <img src="/images/profile.png" style="height: 150px; width: 150px;">
                                         <p style="font-size: 200%; max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
-                                        <p style="font-size: 125%; max-width: 270px">(+62) {{ $s -> noTelp }}</p>
+                                        <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> {{ $s -> noTelp }}</p>
                                         <p style="font-size: 125%; max-width: 270px">{{ $s -> supplierEmail }}</p>
                                     </div>
                                     <div class="col" style="margin-left: -100px ">
@@ -99,16 +105,22 @@
                 <div class="col">
                     <h2 class="mt-3 mb-4" style="text-align: center;">Order List</h2>
                     
-                    @if(session('orderStatus'))
+                    @if(session('statusB'))
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                            {{ session('status') }}
+                            {{ session('statusB') }}
+                        </div>
+                    @endif
+
+                    @if(session('errorB'))
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            {{ session('errorB') }}
                         </div>
                     @endif
 
                     @error('reason')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Alasan Wajib Diisi
-                    </div>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            Alasan Wajib Diisi
+                        </div>
                     @enderror
 
                     <div class="d-flex mb-3">
@@ -131,38 +143,40 @@
                         @endif
                     </div>
 
-                    <table class="table">
-                        <thead class="thead bg-danger">
-                        <tr>
-                            <th scope="col">Order ID</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Detail</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($orderHeads as $oh)
+                    <div id="content">
+                        <table class="table">
+                            <thead class="thead bg-danger">
                             <tr>
-                                <td><strong>{{ $oh -> order_id }}</strong></td>
-                                @if(strpos($oh -> status, 'Rejected') !== false)
-                                    <td style="color: red">{{ $oh -> status}}</td>
-                                @elseif(strpos($oh -> status, 'Completed') !== false)
-                                    <td style="color: green">{{ $oh -> status}}</td>
-                                @elseif(strpos($oh -> status, 'Approved') !== false)
-                                    <td style="color: #8B8000">{{ $oh -> status}}</td>
-                                @else
-                                    <td>{{ $oh -> status }}</td>
-                                @endif
-                                <td>
-                                    {{-- Modal button for order details --}}
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                    @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Completed') !== false)
-                                        <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
-                                    @endif
-                                </td>
+                                <th scope="col">Order ID</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Detail</th>
                             </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($orderHeads as $oh)
+                                <tr>
+                                    <td><strong>{{ $oh -> order_id }}</strong></td>
+                                    @if(strpos($oh -> status, 'Rejected') !== false)
+                                        <td style="color: red">{{ $oh -> status}}</td>
+                                    @elseif(strpos($oh -> status, 'Completed') !== false)
+                                        <td style="color: green">{{ $oh -> status}}</td>
+                                    @elseif(strpos($oh -> status, 'Item Delivered') !== false)
+                                        <td style="color: blue">{{ $oh -> status}}</td>
+                                    @else
+                                        <td>{{ $oh -> status }}</td>
+                                    @endif
+                                    <td>
+                                        {{-- Modal button for order details --}}
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
+                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
+                                            <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -208,7 +222,7 @@
                                 </div> 
                                 <div class="modal-footer">
                                     {{-- Check if the order is rejected, then do not show the approve & reject button --}}
-                                    @if(strpos($o -> status, 'In Progress') !== false)
+                                    @if(strpos($o -> status, 'In Progress By Purchasing') !== false)
                                         {{-- Button to trigger modal 2 --}}
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
                                         <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
@@ -361,18 +375,18 @@
             text-align: center;
         }
         .fa-star{
-        font-size: 20px;
+            font-size: 20px;
         }
         .fa-star.checked{
             color: #ffe400;
         }
         .rating-css {
-        color: #ffe400;
-        font-size: 20px;
-        font-family: sans-serif;
-        font-weight: 800;
-        text-align: center;
-        text-transform: uppercase;
+            color: #ffe400;
+            font-size: 20px;
+            font-family: sans-serif;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
         }
         /* .rating-css input {
             display: none;
@@ -407,6 +421,13 @@
                 text-align: center;
             }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+    </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />

@@ -74,32 +74,29 @@ unset($__errorArgs, $__bag); ?>
                     <div class="col">
                         <form method="POST" action="/crew/<?php echo e(Auth::user()->id); ?>/add-cart">
                             <?php echo csrf_field(); ?>
-                            <div class="d-flex justify-content-around ml-3 mr-3">
-                                <div class="form-group p-2">
-                                    <label for="item_id" class="mt-3 mb-3">Item</label>
-                                    <br>
-                                    <select class="form-control" name="item_id" id="item_id" style="width: 400px; height:50px;">
-                                        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($i -> id); ?>"><?php echo e($i -> itemName); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </select>
-                                </div>
-            
-                                <div class="form-group p-2">
-                                    <label for="department" class="mt-3 mb-3">Department</label>
-                                    <br>
-                                    <select class="form-control" name="department" id="department" style="width: 400px; height:50px;">
-                                        <option value="deck">Deck</option>
-                                        <option value="mesin">Mesin</option>
-                                    </select>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="item_id" class="mt-3 ">Item</label>
+                                <br>
+                                <select class="form-control" name="item_id" id="item_id" style=" height:50px;">
+                                    <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($i -> id); ?>"><?php echo e($i -> itemName); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-around ml-3 mr-3">
-                                <div class="form-group p-2">
-                                    <label for="quantity" class="mt-3 mb-3">Quantity</label>
-                                    <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
-                                        style="width: 400px; height: 50px">
-                                </div>
+        
+                            <div class="form-group p-2">
+                                <label for="department" class="mt-3 ">Department</label>
+                                <br>
+                                <select class="form-control" name="department" id="department" style=" height:50px;">
+                                    <option value="deck">Deck</option>
+                                    <option value="mesin">Mesin</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group p-2">
+                                <label for="quantity" class="mt-3 ">Quantity</label>
+                                <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
+                                    style=" height: 50px" required>
                             </div>
             
                             <br>

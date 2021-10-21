@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
-// use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\SupervisorController;
 use App\Models\Barge;
