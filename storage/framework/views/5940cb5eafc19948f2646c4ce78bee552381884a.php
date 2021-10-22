@@ -108,7 +108,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-
+                
                 <div class="row">
                     <div class="col">
                         <form method="POST" action="/logistic/<?php echo e(Auth::user()->id); ?>/add-cart">
@@ -137,8 +137,8 @@ unset($__errorArgs, $__bag); ?>
                                     <br>
                                     <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
                                         <option value="">None</option>
-                                        <option value="deck">Deck</option>
-                                        <option value="mesin">Mesin</option>
+                                        <option value="Deck">Deck</option>
+                                        <option value="Mesin">Mesin</option>
                                     </select>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@ unset($__errorArgs, $__bag); ?>
         }
         .alert{
                 text-align: center;
-            }
+        }
     </style>
 
     <?php $__env->stopSection(); ?>

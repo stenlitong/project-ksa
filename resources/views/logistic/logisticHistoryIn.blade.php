@@ -39,6 +39,7 @@
                                 @foreach($orderHeads as $key => $oh)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
+                                        {{-- Need to fix this --}}
                                         <td>{{ $oh -> approved_at }}</td>
                                         <td>{{ $oh -> item -> itemName }}</td>
                                         <td>{{ $oh -> item -> serialNo}}</td>

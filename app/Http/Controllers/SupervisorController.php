@@ -27,24 +27,37 @@ class SupervisorController extends Controller
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $orderHeads = OrderHead::where(function($query){
-            $query->where('status', 'like', 'Order Completed (Logistic)')
-            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
-            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
-
-        // Count the completed & in progress order
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        $completed = $orderHeads->count();
+        if(request('search')){
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere('order_id', 'like', '%'. request('search') .'%');
+            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
 
-        $show_search = false;
+            // Count the completed & in progress order
+            $completed = OrderHead::where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }else{
+            $orderHeads = OrderHead::where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+    
+            $completed = $orderHeads->count();
+    
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }
     }
 
     public function inProgressOrder(){
@@ -55,12 +68,6 @@ class SupervisorController extends Controller
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $orderHeads =  OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
-
         // Count the completed & in progress order
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
@@ -68,11 +75,30 @@ class SupervisorController extends Controller
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
         })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        $in_progress = $orderHeads->count();
+        if(request('search')){
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere('order_id', 'like', '%'. request('search') .'%');
+            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
 
-        $show_search = false;
+            $in_progress = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }else{
+            $orderHeads =  OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+    
+            $in_progress = $orderHeads->count();
+    
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }
     }
 
     public function approveOrder(OrderHead $orderHeads){

@@ -63,7 +63,7 @@
                         Golongan Invalid
                     </div>
                 @enderror
-
+                
                 <div class="row">
                     <div class="col">
                         <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
@@ -92,8 +92,8 @@
                                     <br>
                                     <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
                                         <option value="">None</option>
-                                        <option value="deck">Deck</option>
-                                        <option value="mesin">Mesin</option>
+                                        <option value="Deck">Deck</option>
+                                        <option value="Mesin">Mesin</option>
                                     </select>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
         }
         .alert{
                 text-align: center;
-            }
+        }
     </style>
 
     @endsection

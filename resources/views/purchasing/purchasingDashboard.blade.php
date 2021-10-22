@@ -124,23 +124,16 @@
                     @enderror
 
                     <div class="d-flex mb-3">
-                        @if($show_search)
-                            <form class="mr-auto w-50" action="">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
-                                    <button class="btn btn-primary" type="submit">Search</button>
-                                </div>
-                            </form>
-                            <div>
-                                <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                                <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                        <form class="mr-auto w-50" action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search by Order ID or Status..." value="{{ request('search') }}" name="search" id="search">
+                                <button class="btn btn-primary" type="submit">Search</button>
                             </div>
-                        @else
-                            <div class="ml-auto">
-                                <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                                <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
-                            </div>
-                        @endif
+                        </form>
+                        <div>
+                            <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                            <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                        </div>
                     </div>
 
                     <div id="content">

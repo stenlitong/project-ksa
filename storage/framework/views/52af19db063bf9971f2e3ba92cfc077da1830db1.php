@@ -39,7 +39,8 @@
                                 <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <td><?php echo e($key + 1); ?></td>
-                                        <td><?php echo e($oh -> approved_at); ?></td>
+                                        
+                                        <td><?php echo e($oh -> item -> lastGivenLogistic); ?></td>
                                         <td><?php echo e($oh -> item -> itemName); ?></td>
                                         <td><?php echo e($oh -> item -> serialNo); ?></td>
                                         <td><?php echo e($oh -> quantity); ?></td>

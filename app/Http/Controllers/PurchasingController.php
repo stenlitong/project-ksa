@@ -17,65 +17,97 @@ use Storage;
 class PurchasingController extends Controller
 {
     public function completedOrder(){
-        // Find order from logistic role, then they can approve and send it to the purchasing role
+        // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        $orderHeads = OrderHead::where(function($query){
-            $query->where('status', 'like', 'Order Completed (Logistic)')
-            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
-            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
-
-        // Count the completed & in progress order
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
         })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        $completed = $orderHeads->count();
+        if(request('search')){
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere('order_id', 'like', '%'. request('search') .'%');
+            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6);
+            
+            // Count the completed & in progress order
+            $completed = OrderHead::where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            
+            // Get all the suppliers
+            $suppliers = Supplier::latest()->get();
 
-        $show_search = false;
-
-        // Get all the suppliers
-        $suppliers = Supplier::latest()->get();
-
-        return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search', 'suppliers'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress'));
+        }else{
+            $orderHeads = OrderHead::where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+    
+            $completed = $orderHeads->count();
+    
+            // Get all the suppliers
+            $suppliers = Supplier::latest()->get();
+    
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers'));
+        }
     }
 
     public function inProgressOrder(){
-        // Find order from logistic role, then they can approve and send it to the purchasing role
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
-
-        $orderHeads =  OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Count the completed & in progress order
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        $in_progress = $orderHeads->count();
+        if(request('search')){
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere('order_id', 'like', '%'. request('search') .'%');
+            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6);
 
-        $show_search = false;
+            $in_progress = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        // Get all the suppliers
-        $suppliers = Supplier::latest()->get();
+            // Get all the suppliers
+            $suppliers = Supplier::latest()->get();
 
-        return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search', 'suppliers'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress'));
+        }else{
+            $orderHeads =  OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+    
+            $in_progress = $orderHeads->count();
+    
+            // Get all the suppliers
+            $suppliers = Supplier::latest()->get();
+    
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers'));
+        }
     }
 
     public function approveOrderPage(OrderHead $orderHeads){

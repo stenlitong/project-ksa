@@ -37,23 +37,16 @@
             @enderror
 
             <div class="d-flex mb-3">
-                @if($show_search)
-                    <form class="mr-auto w-50" action="">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-                    <div>
-                        <a href="{{ Route('supervisor.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                        <a href="{{ Route('supervisor.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                <form class="mr-auto w-50" action="">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search by Order ID or Status..." name="search" id="search">
+                        <button class="btn btn-primary" type="submit" value="{{ request('search') }}">Search</button>
                     </div>
-                @else
-                    <div class="ml-auto">
-                        <a href="{{ Route('supervisor.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                        <a href="{{ Route('supervisor.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
-                    </div>
-                @endif
+                </form>
+                <div>
+                    <a href="{{ Route('supervisor.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                    <a href="{{ Route('supervisor.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                </div>
             </div>
 
             <div id="content">
@@ -127,7 +120,6 @@
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
-                                            <th scope="col">Terakhir Diberikan</th>
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
                                             @if(strpos($oh -> status, 'Order In Progress') !== false)
@@ -141,7 +133,6 @@
                                                 <tr>
                                                     <td>{{ $od -> item -> itemName }}</td>
                                                     <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                    <td>{{ $od -> item -> lastGiven }}</td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
                                                     @if(strpos($oh -> status, 'Order In Progress') !== false)

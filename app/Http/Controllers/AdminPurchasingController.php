@@ -49,16 +49,27 @@ class AdminPurchasingController extends Controller
     }
 
     public function uploadFile(Request $request){
+        // if(!empty( $request->except('_token'))){
+            // if(count($request->file()) == 0){
+                // dd('kosong');
+            // }
+        // }
+        
+        // dd(count($request->file()));
+        // dd($request);
+
         // Validate the file extension must be pdf or zip
         $request->validate([
             'filename' => 'required|mimes:pdf,zip'
         ]);
         
+        $path = $request->filename->getClientOriginalName();
+
         // Then create the AP List on the database
         ApList::create([
             'user_id' => Auth::user()->id,
             'cabang' => Auth::user()->cabang,
-            'filename' => $request->filename->getClientOriginalName(),
+            'filename' => $path,
             'status' => 'On Review',
             'tracker' => 5,
             'submissionTime' => date("d/m/Y")
@@ -72,6 +83,6 @@ class AdminPurchasingController extends Controller
 
     public function downloadFile(ApList $apList){
         // Find the file then download
-        return Storage::download('/APList' . '/' . $apList->filename);
+        return Storage::download('/APList' . '/'. 'folderBaru' .'/' . $apList->filename);
     }
 }

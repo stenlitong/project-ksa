@@ -168,6 +168,12 @@
         th{
             color: white;
         }
+        td, th{
+            word-wrap: break-word;
+            min-width: 140px;
+            max-width: 160px;
+            text-align: center;
+        }
         .alert{
                 text-align: center;
             }

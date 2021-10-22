@@ -25,56 +25,105 @@ use Storage;
 class LogisticController extends Controller
 {
     public function inProgressOrder(){
-        // Find all of the order that is "in progress" state
-        $orderHeads = OrderHead::with('user')->where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress' . '%')
-            ->orWhere('status', 'like', 'Items Ready')
-            ->orWhere('status', 'like', 'On Delivery')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        if(request('search')){
+             // Search functonality
+             $orderHeads = OrderHead::with('user')->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
+            
+            // Get all the order detail
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        // Then get all the order detail
-        $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+            // Count the completed & in progress order
+            $completed = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'Completed' . '%')
+                ->orWhere('status', 'like', '%' . 'Rejected' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            
+            $in_progress = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress' . '%')
+                ->orWhere('status', 'like', 'Items Ready')
+                ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-        // Get the count number of the completed and in progress order to show it on the view
-         // Count the completed & in progress order
-         $completed = OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'Completed' . '%')
-            ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-        
-        $in_progress = $orderHeads->count();
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }else{
+            // Find all of the order that is "in progress" state
+            $orderHeads = OrderHead::with('user')->where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress' . '%')
+                ->orWhere('status', 'like', 'Items Ready')
+                ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7);
 
-        // If they access it from the button, then remove search functionality
-        $show_search = true;
+            // Then get all the order detail
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
+            // Get the count number of the completed and in progress order to show it on the view
+            // Count the completed & in progress order
+            $completed = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'Completed' . '%')
+                ->orWhere('status', 'like', '%' . 'Rejected' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+
+            $in_progress = $orderHeads->count();
+
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }
     }
 
     public function completedOrder(){
-        $orderHeads = OrderHead::with('user')->where(function($query){
-            $query->where('status', 'like', '%' . 'Completed' . '%')
-            ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        if(request('search')){
+            // Search functonality
+            $orderHeads = OrderHead::with('user')->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
+            
+            // Get all the order detail
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
-        // Get all the order detail
-        $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+            // Count the completed & in progress order
+            $completed = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'Completed' . '%')
+                ->orWhere('status', 'like', '%' . 'Rejected' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            
+            $in_progress = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress' . '%')
+                ->orWhere('status', 'like', 'Items Ready')
+                ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
-         // Count the completed & in progress order
-        $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress' . '%')
-            ->orWhere('status', 'like', 'Items Ready')
-            ->orWhere('status', 'like', 'On Delivery')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
-
-        $completed = $orderHeads->count();
-
-        $show_search = true;
-
-        return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'show_search'));
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }else{
+            $orderHeads = OrderHead::with('user')->where(function($query){
+                $query->where('status', 'like', '%' . 'Completed' . '%')
+                ->orWhere('status', 'like', '%' . 'Rejected' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7);
+    
+            // Get all the order detail
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+    
+             // Count the completed & in progress order
+            $in_progress = OrderHead::where(function($query){
+                $query->where('status', 'like', '%' . 'In Progress' . '%')
+                ->orWhere('status', 'like', 'Items Ready')
+                ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+    
+            $completed = $orderHeads->count();
+    
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+        }
     }
 
     public function stocksPage(){
