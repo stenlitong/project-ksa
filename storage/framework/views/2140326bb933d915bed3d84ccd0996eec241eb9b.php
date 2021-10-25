@@ -10,6 +10,7 @@
             
             <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+            <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang <?php echo e(Auth::user()->cabang); ?></h2>
 
             <div class="d-flex justify-content-end">
@@ -38,9 +39,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alasan Wajib Diisi
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alasan Wajib Diisi
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -93,28 +94,29 @@ unset($__errorArgs, $__bag); ?>
                             <?php endif; ?>
 
                             
-                            <?php if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false): ?>
-                                <td>
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                    <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
-                                </td>
-                            <?php else: ?>
+
+                            
                                 
                                 <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">
                                     Detail
                                 </button></td>
-                            <?php endif; ?>
+                            
 
-                            <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
-                                <td><a href="/logistic/stock-order/<?php echo e($oh -> id); ?>/accept-order" class="btn btn-primary">Accept</a></td>
-                            <?php else: ?>
-                                <td></td>
-                            <?php endif; ?>
+                            <td>
+                                <?php if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false): ?>
+                                    <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning btn-sm" target="_blank">Download PR</a>
+                                <?php endif; ?>
+                                <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
+                                    <a href="/logistic/stock-order/<?php echo e($oh -> id); ?>/accept-order" class="btn btn-primary btn-sm">Accept</a>
+                                <?php endif; ?>
+                            </td>
 
                         </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
+            </div>
+
             </div>
 
             
@@ -223,6 +225,16 @@ unset($__errorArgs, $__bag); ?>
     </div>
 
     <style>
+        body{
+            background-image: url('/images/logistic-background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .wrapper{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: antiquewhite;
+        }
         th{
             color: white;
         }

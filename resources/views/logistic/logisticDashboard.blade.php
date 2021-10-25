@@ -10,6 +10,7 @@
             
             @include('../layouts/time')
 
+            <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
 
             <div class="d-flex justify-content-end">
@@ -31,9 +32,9 @@
             @endif
 
             @error('descriptions')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alasan Wajib Diisi
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alasan Wajib Diisi
+                </div>
             @enderror
 
             <div class="d-flex mb-3">
@@ -83,28 +84,34 @@
                             @endif
 
                             {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
-                            @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
+
+                            {{-- @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
                                 <td>
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
                                     <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 </td>
-                            @else
+                            @else --}}
                                 {{-- Button to trigger the modal detail --}}
                                 <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
                                     Detail
                                 </button></td>
-                            @endif
+                            {{-- @endif --}}
 
-                            @if(strpos($oh -> status, 'Delivered') !== false)
-                                <td><a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a></td>
-                            @else
-                                <td></td>
-                            @endif
+                            <td>
+                                @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
+                                    <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning btn-sm" target="_blank">Download PR</a>
+                                @endif
+                                @if(strpos($oh -> status, 'Delivered') !== false)
+                                    <a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary btn-sm">Accept</a>
+                                @endif
+                            </td>
 
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+
             </div>
 
             {{-- Modal detail --}}
@@ -213,6 +220,16 @@
     </div>
 
     <style>
+        body{
+            background-image: url('/images/logistic-background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .wrapper{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: antiquewhite;
+        }
         th{
             color: white;
         }

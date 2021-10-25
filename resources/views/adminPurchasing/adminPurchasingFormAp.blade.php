@@ -37,7 +37,7 @@
                                         <input type="file" name="filename" class="form-control" data-browse-on-zone-click="true">
                                     </div>
 
-                                    <p class="mt-3" style="text-align: center">Format: zip/pdf</p>
+                                    <p class="mt-3" style="text-align: center">Format: zip/pdf (Max. 5MB)</p>
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                                     </div>

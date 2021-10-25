@@ -60,7 +60,7 @@ class AdminPurchasingController extends Controller
 
         // Validate the file extension must be pdf or zip
         $request->validate([
-            'filename' => 'required|mimes:pdf,zip'
+            'filename' => 'required|mimes:pdf,zip|max:5120'
         ]);
         
         $path = $request->filename->getClientOriginalName();
@@ -83,6 +83,6 @@ class AdminPurchasingController extends Controller
 
     public function downloadFile(ApList $apList){
         // Find the file then download
-        return Storage::download('/APList' . '/'. 'folderBaru' .'/' . $apList->filename);
+        return Storage::download('/APList' . '/' . $apList->filename);
     }
 }
