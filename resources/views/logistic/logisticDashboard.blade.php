@@ -160,7 +160,9 @@
                                                     <tr>
                                                         <td>{{ $od -> item -> itemName }}</td>
                                                         <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                        <td>{{ $od -> item -> lastGiven }}</td>
+                                                        @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                            <td>{{ $od -> item -> lastGiven }}</td>
+                                                        @endif
                                                         <td>{{ $od -> item -> itemAge }}</td>
                                                         <td>{{ $od -> department }}</td>
 

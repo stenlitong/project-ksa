@@ -228,7 +228,7 @@ class LogisticController extends Controller
         }
 
         OrderHead::where('id', $orderHeads->id)->update([
-            'status' => 'Rejected By Logistic',
+            'status' => 'Request Rejected By Logistic',
             'order_tracker' => 2,
             'reason' => $request->reason
         ]);
