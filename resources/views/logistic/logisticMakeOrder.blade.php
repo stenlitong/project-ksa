@@ -91,7 +91,7 @@
                                     <label for="department" class="mb-3">Department (optional)</label>
                                     <br>
                                     <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
-                                        <option value="">None</option>
+                                        <option value="None">None</option>
                                         <option value="Deck">Deck</option>
                                         <option value="Mesin">Mesin</option>
                                     </select>
@@ -102,7 +102,7 @@
                                     <label for="golongan" class="mb-3">Golongan</label>
                                     <br>
                                     <select class="form-control" name="golongan" id="golongan" style="width: 500px; height:50px;">
-                                        <option value="none">None</option>
+                                        <option value="None">None</option>
                                         <option value="Floating">Floating</option>
                                         <option value="Dock">Dock</option>
                                     </select>
@@ -152,7 +152,7 @@
                                         <form method="POST" action="/logistic/{{ $c -> id }}/delete">
                                             @csrf
                                             @method('delete')
-                                            <td><button class="btn btn-danger">Delete Item</button></td>
+                                            <td><button class="btn btn-danger btn-sm">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 @endforeach
@@ -181,12 +181,16 @@
                                     <label for="tugs">Pilih Tug:</label>
                                 </div>
                                 <div class="col">
-                                    <input list="tugName" name="tugName" class="mt-2 mb-2" style="width: 400px; height:45px"/>
-                                    <datalist id="tugName">
+                                    <select class="form-control" name="tugName" id="tugName" style=" height:50px; width: 400px;">
                                         @foreach($tugs as $t)
                                             <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                         @endforeach
-                                    </datalist>
+                                    </select>
+                                    {{-- <datalist id="tugName">
+                                        @foreach($tugs as $t)
+                                            <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                        @endforeach
+                                    </datalist> --}}
                                 </div>
                             </div>
                         </div>
@@ -196,12 +200,12 @@
                                     <label for="bargeName">Pilih Barge (Optional):</label>
                                 </div>
                                 <div class="col">
-                                    <input list="bargeName" name="bargeName" class="mb-2" style="width: 400px; height:45px"/>
-                                    <datalist id="bargeName">
+                                    <select class="form-control" name="bargeName" id="bargeName" style=" height: 50px; width: 400px;">
+                                        <option value="">None</option>
                                         @foreach($barges as $b)
                                             <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                         @endforeach
-                                    </datalist>
+                                </select>
                                 </div>
                             </div>
                         </div>
@@ -234,10 +238,11 @@
         th{
             color: white;
         }
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 100px;
             max-width: 160px;
+            text-align: center;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

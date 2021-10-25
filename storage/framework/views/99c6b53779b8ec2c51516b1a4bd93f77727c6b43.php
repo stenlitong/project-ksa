@@ -161,11 +161,11 @@ unset($__errorArgs, $__bag); ?>
                                 <tr>
                                     <td><strong><?php echo e($oh -> order_id); ?></strong></td>
                                     <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                                        <td style="color: red"><?php echo e($oh -> status); ?></td>
+                                        <td style="color: red; font-weight: bold"><?php echo e($oh -> status); ?></td>
                                     <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
-                                        <td style="color: green"><?php echo e($oh -> status); ?></td>
+                                        <td style="color: green; font-weight: bold"><?php echo e($oh -> status); ?></td>
                                     <?php elseif(strpos($oh -> status, 'Item Delivered') !== false): ?>
-                                        <td style="color: blue"><?php echo e($oh -> status); ?></td>
+                                        <td style="color: blue; font-weight: bold"><?php echo e($oh -> status); ?></td>
                                     <?php else: ?>
                                         <td><?php echo e($oh -> status); ?></td>
                                     <?php endif; ?>

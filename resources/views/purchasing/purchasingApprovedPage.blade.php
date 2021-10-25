@@ -111,7 +111,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="price" name="price" placeholder="Input total harga">
+                                    <input type="number" min="1" class="form-control" id="price" name="price" placeholder="Input total harga dalam angka..." required>
                                 </div>
                             </div>
                             <div class="form-group">

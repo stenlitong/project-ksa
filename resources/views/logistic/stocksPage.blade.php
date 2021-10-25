@@ -72,7 +72,6 @@
                 <table class="table mb-5">
                     <thead class="thead bg-danger">
                     <tr>
-                        <th scope="col" style="color: white">No</th>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
@@ -84,9 +83,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($items as $key => $i)
+                        @foreach($items as $i)
                             <tr>
-                                <th>{{ $key + 1 }}</th>
                                 <td>{{ $i -> itemName }}</td>
                                 <td>{{ $i -> itemAge }}</td>
                                 <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>

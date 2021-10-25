@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
+        Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
         Route::get('/report/download', [PurchasingController::class, 'downloadReport'])->name('downloadReport');

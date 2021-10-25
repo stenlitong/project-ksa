@@ -110,7 +110,6 @@ unset($__errorArgs, $__bag); ?>
                 <table class="table mb-5">
                     <thead class="thead bg-danger">
                     <tr>
-                        <th scope="col" style="color: white">No</th>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
@@ -122,9 +121,8 @@ unset($__errorArgs, $__bag); ?>
                     </tr>
                     </thead>
                     <tbody>
-                        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <th><?php echo e($key + 1); ?></th>
                                 <td><?php echo e($i -> itemName); ?></td>
                                 <td><?php echo e($i -> itemAge); ?></td>
                                 <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>

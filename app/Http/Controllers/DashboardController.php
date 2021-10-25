@@ -16,7 +16,8 @@ class DashboardController extends Controller
             $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->where('created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
 
             // Get the orderDetail from orders_id within the orderHead table 
-            $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
+            // $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
+            $order_id = $orderHeads->pluck('order_id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
@@ -44,7 +45,7 @@ class DashboardController extends Controller
             }
 
             // Get all the order detail
-            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = $orderHeads->pluck('order_id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
@@ -75,7 +76,8 @@ class DashboardController extends Controller
             }
 
             // Then find all the order details from the orderHeads
-            $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            // $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = $orderHeads->pluck('order_id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
@@ -106,7 +108,8 @@ class DashboardController extends Controller
             }
 
             // Then find all the order details from the orderHeads
-            $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            // $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = $orderHeads->pluck('order_id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order

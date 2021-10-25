@@ -136,7 +136,7 @@ unset($__errorArgs, $__bag); ?>
                                     <label for="department" class="mb-3">Department (optional)</label>
                                     <br>
                                     <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
-                                        <option value="">None</option>
+                                        <option value="None">None</option>
                                         <option value="Deck">Deck</option>
                                         <option value="Mesin">Mesin</option>
                                     </select>
@@ -147,7 +147,7 @@ unset($__errorArgs, $__bag); ?>
                                     <label for="golongan" class="mb-3">Golongan</label>
                                     <br>
                                     <select class="form-control" name="golongan" id="golongan" style="width: 500px; height:50px;">
-                                        <option value="none">None</option>
+                                        <option value="None">None</option>
                                         <option value="Floating">Floating</option>
                                         <option value="Dock">Dock</option>
                                     </select>
@@ -197,7 +197,7 @@ unset($__errorArgs, $__bag); ?>
                                         <form method="POST" action="/logistic/<?php echo e($c -> id); ?>/delete">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('delete'); ?>
-                                            <td><button class="btn btn-danger">Delete Item</button></td>
+                                            <td><button class="btn btn-danger btn-sm">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -226,12 +226,12 @@ unset($__errorArgs, $__bag); ?>
                                     <label for="tugs">Pilih Tug:</label>
                                 </div>
                                 <div class="col">
-                                    <input list="tugName" name="tugName" class="mt-2 mb-2" style="width: 400px; height:45px"/>
-                                    <datalist id="tugName">
+                                    <select class="form-control" name="tugName" id="tugName" style=" height:50px; width: 400px;">
                                         <?php $__currentLoopData = $tugs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($t -> tugName); ?>"><?php echo e($t -> tugName); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </datalist>
+                                    </select>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -241,12 +241,12 @@ unset($__errorArgs, $__bag); ?>
                                     <label for="bargeName">Pilih Barge (Optional):</label>
                                 </div>
                                 <div class="col">
-                                    <input list="bargeName" name="bargeName" class="mb-2" style="width: 400px; height:45px"/>
-                                    <datalist id="bargeName">
+                                    <select class="form-control" name="bargeName" id="bargeName" style=" height: 50px; width: 400px;">
+                                        <option value="">None</option>
                                         <?php $__currentLoopData = $barges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($b -> bargeName); ?>"><?php echo e($b -> bargeName); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </datalist>
+                                </select>
                                 </div>
                             </div>
                         </div>
@@ -279,10 +279,11 @@ unset($__errorArgs, $__bag); ?>
         th{
             color: white;
         }
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 100px;
             max-width: 160px;
+            text-align: center;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

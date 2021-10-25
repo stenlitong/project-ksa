@@ -57,19 +57,6 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-                <?php $__errorArgs = ['bargeName'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Nama Barge Invalid
-                    </div>
-                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-
                 <div class="row">
                     <div class="col">
                         <form method="POST" action="/crew/<?php echo e(Auth::user()->id); ?>/add-cart">
@@ -159,21 +146,23 @@ unset($__errorArgs, $__bag); ?>
                     <div class="modal-body"> 
                         <div class="row">
                             <div class="col">
-                                <label>Tug<input list="tugName" name="tugName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                                <datalist id="tugName">
+                                <label>Tug</label>
+                                <select class="form-control" name="tugName" id="tugName" style=" height:50px;">
                                     <?php $__currentLoopData = $tugs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($t -> tugName); ?>"><?php echo e($t -> tugName); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </datalist>
+                                </select>
+                                
                             </div>
                             <div class="col">
-                                <label>Barge (Optional)<input list="bargeName" name="bargeName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                                <datalist id="bargeName">
-                                    <option value="">None</option>
+                                <label>Barge (Optional)</label>
+                                <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;">
+                                        <option value="">None</option>
                                     <?php $__currentLoopData = $barges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($b -> bargeName); ?>"><?php echo e($b -> bargeName); ?></option>
+                                        <option value="<?php echo e($b -> bargeName); ?>"><?php echo e($b -> bargeName); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </datalist>
+                                </select>
+                                
                             </div>
                         </div>
                     </div>
@@ -187,10 +176,11 @@ unset($__errorArgs, $__bag); ?>
     </div>
 
     <style>
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 100px;
             max-width: 160px;
+            text-align: center;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

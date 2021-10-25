@@ -40,12 +40,6 @@
                     </div>
                 @enderror
 
-                @error('bargeName')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Nama Barge Invalid
-                    </div>
-                @enderror
-
                 <div class="row">
                     <div class="col">
                         <form method="POST" action="/crew/{{ Auth::user()->id }}/add-cart">
@@ -135,21 +129,32 @@
                     <div class="modal-body"> 
                         <div class="row">
                             <div class="col">
-                                <label>Tug<input list="tugName" name="tugName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                                <datalist id="tugName">
+                                <label>Tug</label>
+                                <select class="form-control" name="tugName" id="tugName" style=" height:50px;">
                                     @foreach($tugs as $t)
                                         <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                     @endforeach
-                                </datalist>
+                                </select>
+                                {{-- <datalist id="tugName">
+                                    @foreach($tugs as $t)
+                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                    @endforeach
+                                </datalist> --}}
                             </div>
                             <div class="col">
-                                <label>Barge (Optional)<input list="bargeName" name="bargeName" class="mt-3 mb-3" style="width: 200px; height:45px"/></label>
-                                <datalist id="bargeName">
+                                <label>Barge (Optional)</label>
+                                <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;">
+                                        <option value="">None</option>
+                                    @foreach($barges as $b)
+                                        <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <datalist id="bargeName">
                                     <option value="">None</option>
                                     @foreach($barges as $b)
                                     <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                     @endforeach
-                                </datalist>
+                                </datalist> --}}
                             </div>
                         </div>
                     </div>
@@ -163,10 +168,11 @@
     </div>
 
     <style>
-        td{
+        td, th{
             word-wrap: break-word;
             min-width: 100px;
             max-width: 160px;
+            text-align: center;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

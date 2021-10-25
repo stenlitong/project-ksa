@@ -391,9 +391,9 @@ class LogisticController extends Controller
         }
 
         // Generate unique id for the order_id || Create the order from the cart
-        do{
-            $unique_id = Str::random(8);
-        }while(OrderHead::where('order_id', $unique_id)->exists());
+        // do{
+        //     $unique_id = Str::random(8);
+        // }while(OrderHead::where('order_id', $unique_id)->exists());
 
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
@@ -401,7 +401,6 @@ class LogisticController extends Controller
         // Create Order Head
         $orderHead = OrderHead::create([
             'user_id' => Auth::user()->id,
-            'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
             'order_tracker' => 2,
@@ -430,7 +429,8 @@ class LogisticController extends Controller
         // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
         $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
 
-        OrderHead::where('id', $pr_id)->update([
+        OrderHead::find($orderHead->id)->update([
+            'order_id' => 'LOID#' . $orderHead->id,
             'noPr' => $pr_number,
             'company' => $request->company,
             'prDate' => now()
@@ -439,7 +439,7 @@ class LogisticController extends Controller
         // Then fill the Order Detail with the cart items
         foreach($carts as $c){
             OrderDetail::create([
-                'orders_id' => $unique_id,
+                'orders_id' => 'LOID#' . $orderHead->id,
                 'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
                 'unit' => $c->item->unit,

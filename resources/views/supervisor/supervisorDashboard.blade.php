@@ -30,7 +30,7 @@
                 </div>
             @endif
 
-            @error('descriptions')
+            @error('reason')
             <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                 Alasan Wajib Diisi
             </div>
@@ -67,7 +67,7 @@
                                 <td><span style="color: red; font-weight: bold">{{ $oh -> status}}</span></td>
                             @elseif(strpos($oh -> status, 'Completed') !== false)
                                 <td><span style="color: green; font-weight: bold">{{ $oh -> status}}</span></td>
-                            @elseif(strpos($oh -> status, 'Delivered') !== false) !== false)
+                            @elseif(strpos($oh -> status, 'Delivered') !== false)
                                 <td><span style="color: blue; font-weight: bold">{{ $oh -> status}}</span></td>
                             @else
                                 <td>{{ $oh -> status}}</td>

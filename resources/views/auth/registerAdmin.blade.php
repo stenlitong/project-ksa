@@ -23,14 +23,14 @@
                 <div>
                     <x-label for="name" :value="__('Name')" />
                     
-                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus placeholder="Input Nama..."/>
                 </div>
                 
                 <!-- Email Address -->
                 <div class="mt-4">
                     <x-label for="email" :value="__('Email')" />
                     
-                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required placeholder="Input Email..."/>
                 </div>
                 
                 <!-- No Telp -->
@@ -49,7 +49,7 @@
                 <div>
                     <x-label for="no_induk_pegawai" :value="__('No Induk Pegawai')" />
                     
-                    <x-input id="no_induk_pegawai" class="block mt-1 w-full" type="text" name="no_induk_pegawai" :value="old('no_induk_pegawai')" required autofocus />
+                    <x-input id="no_induk_pegawai" class="block mt-1 w-full" type="text" name="no_induk_pegawai" :value="old('no_induk_pegawai')" required autofocus placeholder="Input Nomor Induk Pegawai..."/>
                 </div>
                 
                 <br>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PurchasingReportExport;
+use App\Exports\POExport;
 use Illuminate\Http\Request;
 Use \Carbon\Carbon;
 use App\Models\OrderHead;
@@ -151,7 +152,7 @@ class PurchasingController extends Controller
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
             'supplier_id' => 'required|exists:suppliers,id',
-            'price' => 'required',
+            'price' => 'required|integer|min:1',
             'descriptions' => 'nullable'
         ]);
 
@@ -192,6 +193,10 @@ class PurchasingController extends Controller
             'reason' => $request->reason
         ]);
         return redirect('/dashboard')->with('statusB', 'Order Rejected');
+    }
+
+    public function downloadPo(OrderHead $orderHeads){
+        return (new POExport($orderHeads -> order_id))->download('PO-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.xlsx');
     }
 
     public function editSupplier(Request $request, Supplier $suppliers){

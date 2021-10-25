@@ -14,13 +14,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo e(Route("crew.task")); ?>">
+                <a class="nav-link" href="/dashboard">
                     <span data-feather="file"></span>
                     My Task
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="/dashboard">
                     <span data-feather="file"></span>
                     Ongoing Task
                 </a>

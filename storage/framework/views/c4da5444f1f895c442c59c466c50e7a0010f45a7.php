@@ -165,45 +165,45 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
-                                            <label>Unit<input list="unit" name="unit" class="mt-2" style="width: 400px; height:40px"/></label>
-                                            <datalist id="unit">
-                                            <option value="Bks">
-                                            <option value="Btg">
-                                            <option value="Btl">
-                                            <option value="Cm">
-                                            <option value="Crt">
-                                            <option value="Cyl">
-                                            <option value="Doz">
-                                            <option value="Drm">
-                                            <option value="Duz">
-                                            <option value="Gln">
-                                            <option value="Jrg">
-                                            <option value="Kbk">
-                                            <option value="Kg">
-                                            <option value="Klg">
-                                            <option value="Ktk">
-                                            <option value="Lbr">
-                                            <option value="Lgt">
-                                            <option value="Ls">
-                                            <option value="Ltr">
-                                            <option value="Mtr">
-                                            <option value="Pak">
-                                            <option value="Pal">
-                                            <option value="Pax">
-                                            <option value="Pc">
-                                            <option value="Pcs">
-                                            <option value="Plt">
-                                            <option value="Psg">
-                                            <option value="Ptg">
-                                            <option value="Ret">
-                                            <option value="Rol">
-                                            <option value="Sak">
-                                            <option value="SET">
-                                            <option value="Tbg">
-                                            <option value="Trk">
-                                            <option value="Unt">
-                                            <option value="Zak">
-                                            </datalist>
+                                            <label for="unit">Unit</label>
+                                            <select class="form-control" name="unit" id="unit">
+                                                <option value="Bks">Bks</option>
+                                                    <option value="Btg">Btg</option>
+                                                    <option value="Btl">Btl</option>
+                                                    <option value="Cm">Cm</option>
+                                                    <option value="Crt">Crt</option>
+                                                    <option value="Cyl">Cyl</option>
+                                                    <option value="Doz">Doz</option>
+                                                    <option value="Drm">Drm</option>
+                                                    <option value="Duz">Duz</option>
+                                                    <option value="Gln">Gln</option>
+                                                    <option value="Jrg">Jrg</option>
+                                                    <option value="Kbk">Kbk</option>
+                                                    <option value="Kg">Kg</option>
+                                                    <option value="Klg">Klg</option>
+                                                    <option value="Ktk">Ktk</option>
+                                                    <option value="Lbr">Lbr</option>
+                                                    <option value="Lgt">Lgt</option>
+                                                    <option value="Ls">Ls</option>
+                                                    <option value="Ltr">Ltr</option>
+                                                    <option value="Mtr">Mtr</option>
+                                                    <option value="Pak">Pak</option>
+                                                    <option value="Pal">Pal</option>
+                                                    <option value="Pax">Pax</option>
+                                                    <option value="Pc">Pc</option>
+                                                    <option value="Pcs">Pcs</option>
+                                                    <option value="Plt">Plt</option>
+                                                    <option value="Psg">Psg</option>
+                                                    <option value="Ptg">Ptg</option>
+                                                    <option value="Ret">Ret</option>
+                                                    <option value="Rol">Rol</option>
+                                                    <option value="Sak">Sak</option>
+                                                    <option value="SET">SET</option>
+                                                    <option value="Tbg">Tbg</option>
+                                                    <option value="Trk">Trk</option>
+                                                    <option value="Unt">Unt</option>
+                                                    <option value="Zak">Zak</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +247,6 @@ unset($__errorArgs, $__bag); ?>
             <table class="table mb-5">
                 <thead class="thead bg-danger">
                     <tr>
-                        <th scope="col" style="color: white">No</th>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
@@ -256,14 +255,13 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Cabang</th>
                         <th scope="col" style="color: white">Deskripsi</th>
                         <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
-                        <th scope="col" style="color: white">Action</th>
+                            <th scope="col" style="color: white">Action</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <th><?php echo e($key + 1); ?></th>
                         <td><?php echo e($i -> itemName); ?></td>
                         <td><?php echo e($i -> itemAge); ?></td>
                         <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
@@ -343,45 +341,45 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                         <div class="col">
                                             <div class="form-group">
-                                                <label>Unit<input list="unit" name="unit" class="mt-2" style="width: 400px; height:40px"/></label>
-                                                <datalist id="unit">
-                                                <option value="Bks">
-                                                <option value="Btg">
-                                                <option value="Btl">
-                                                <option value="Cm">
-                                                <option value="Crt">
-                                                <option value="Cyl">
-                                                <option value="Doz">
-                                                <option value="Drm">
-                                                <option value="Duz">
-                                                <option value="Gln">
-                                                <option value="Jrg">
-                                                <option value="Kbk">
-                                                <option value="Kg">
-                                                <option value="Klg">
-                                                <option value="Ktk">
-                                                <option value="Lbr">
-                                                <option value="Lgt">
-                                                <option value="Ls">
-                                                <option value="Ltr">
-                                                <option value="Mtr">
-                                                <option value="Pak">
-                                                <option value="Pal">
-                                                <option value="Pax">
-                                                <option value="Pc">
-                                                <option value="Pcs">
-                                                <option value="Plt">
-                                                <option value="Psg">
-                                                <option value="Ptg">
-                                                <option value="Ret">
-                                                <option value="Rol">
-                                                <option value="Sak">
-                                                <option value="SET">
-                                                <option value="Tbg">
-                                                <option value="Trk">
-                                                <option value="Unt">
-                                                <option value="Zak">
-                                                </datalist>
+                                                <label for="unit">Unit</label>
+                                                <select class="form-control" name="unit" id="unit">
+                                                    <option value="Bks">Bks</option>
+                                                    <option value="Btg">Btg</option>
+                                                    <option value="Btl">Btl</option>
+                                                    <option value="Cm">Cm</option>
+                                                    <option value="Crt">Crt</option>
+                                                    <option value="Cyl">Cyl</option>
+                                                    <option value="Doz">Doz</option>
+                                                    <option value="Drm">Drm</option>
+                                                    <option value="Duz">Duz</option>
+                                                    <option value="Gln">Gln</option>
+                                                    <option value="Jrg">Jrg</option>
+                                                    <option value="Kbk">Kbk</option>
+                                                    <option value="Kg">Kg</option>
+                                                    <option value="Klg">Klg</option>
+                                                    <option value="Ktk">Ktk</option>
+                                                    <option value="Lbr">Lbr</option>
+                                                    <option value="Lgt">Lgt</option>
+                                                    <option value="Ls">Ls</option>
+                                                    <option value="Ltr">Ltr</option>
+                                                    <option value="Mtr">Mtr</option>
+                                                    <option value="Pak">Pak</option>
+                                                    <option value="Pal">Pal</option>
+                                                    <option value="Pax">Pax</option>
+                                                    <option value="Pc">Pc</option>
+                                                    <option value="Pcs">Pcs</option>
+                                                    <option value="Plt">Plt</option>
+                                                    <option value="Psg">Psg</option>
+                                                    <option value="Ptg">Ptg</option>
+                                                    <option value="Ret">Ret</option>
+                                                    <option value="Rol">Rol</option>
+                                                    <option value="Sak">Sak</option>
+                                                    <option value="SET">SET</option>
+                                                    <option value="Tbg">Tbg</option>
+                                                    <option value="Trk">Trk</option>
+                                                    <option value="Unt">Unt</option>
+                                                    <option value="Zak">Zak</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

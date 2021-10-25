@@ -150,11 +150,11 @@
                                 <tr>
                                     <td><strong>{{ $oh -> order_id }}</strong></td>
                                     @if(strpos($oh -> status, 'Rejected') !== false)
-                                        <td style="color: red">{{ $oh -> status}}</td>
+                                        <td style="color: red; font-weight: bold">{{ $oh -> status}}</td>
                                     @elseif(strpos($oh -> status, 'Completed') !== false)
-                                        <td style="color: green">{{ $oh -> status}}</td>
+                                        <td style="color: green; font-weight: bold">{{ $oh -> status}}</td>
                                     @elseif(strpos($oh -> status, 'Item Delivered') !== false)
-                                        <td style="color: blue">{{ $oh -> status}}</td>
+                                        <td style="color: blue; font-weight: bold">{{ $oh -> status}}</td>
                                     @else
                                         <td>{{ $oh -> status }}</td>
                                     @endif

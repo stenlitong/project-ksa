@@ -33,7 +33,7 @@
                 </div>
             <?php endif; ?>
 
-            <?php $__errorArgs = ['descriptions'];
+            <?php $__errorArgs = ['reason'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -77,7 +77,7 @@ unset($__errorArgs, $__bag); ?>
                                 <td><span style="color: red; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
                             <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
                                 <td><span style="color: green; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
-                            <?php elseif(strpos($oh -> status, 'Delivered') !== false): ?> !== false)
+                            <?php elseif(strpos($oh -> status, 'Delivered') !== false): ?>
                                 <td><span style="color: blue; font-weight: bold"><?php echo e($oh -> status); ?></span></td>
                             <?php else: ?>
                                 <td><?php echo e($oh -> status); ?></td>

@@ -16,7 +16,7 @@ class CreateOrderHeadsTable extends Migration
         Schema::create('order_heads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('order_id');
+            $table->string('order_id')->nullable();
             $table->string('cabang');
             $table->string('boatName')->nullable();
             $table->string('noPr')->nullable();
@@ -41,7 +41,7 @@ class CreateOrderHeadsTable extends Migration
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *

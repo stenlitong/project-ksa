@@ -136,29 +136,32 @@ class CrewController extends Controller
         }
 
         // Else, generate unique id for the order_id and checks the order_id is already exist || Create the order from the cart
-        do{
-            $unique_id = Str::random(8);
-        }while(OrderHead::where('order_id', $unique_id)->exists());
+        // do{
+        //     $unique_id = Str::random(8);
+        // }while(OrderHead::where('order_id', $unique_id)->exists());
 
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
 
         // Create Order Head firstly
-        OrderHead::create([
+        $o_id = OrderHead::create([
             'user_id' => Auth::user()->id,
-            'order_id' => $unique_id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
             'order_tracker' => 1,
             'status' => 'Request In Progress By Logistic'
         ]);
-        
+
+        OrderHead::find($o_id->id)->update([
+            'order_id' => 'COID#' . $o_id->id,
+        ]);
+
         // Then fill the Order Detail with the cart items of the following Order Head
         foreach($carts as $c){
             $serialNo = Item::where('id', $c->item_id)->pluck('serialNo');
             $unit = Item::where('id', $c->item_id)->pluck('unit');
             OrderDetail::create([
-                'orders_id' => $unique_id,
+                'orders_id' => 'COID#' . $o_id->id,
                 'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
                 'unit' => $unit[0],
