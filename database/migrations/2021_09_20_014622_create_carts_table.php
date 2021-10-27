@@ -21,8 +21,8 @@ class CreateCartsTable extends Migration
             $table->string('department')->nullable();
             $table->string('golongan')->nullable();
             $table->string('note')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

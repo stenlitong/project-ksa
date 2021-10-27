@@ -27,24 +27,21 @@
                     @endif
 
                     <div class="row ml-3 flex-row flex-nowrap scrolling-wrapper">
-                        @foreach($suppliers as $s)
+                        @if(count($suppliers) == 0)
                             <div class="card border-dark w-100 mr-3">
                                 <div class="card-body mr-3">
                                 <div class="row">
                                     <div class="col ml-2">
                                         <img src="/images/profile.png" style="height: 150px; width: 150px;">
-                                        <p style="font-size: 200%; max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
-                                        <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> {{ $s -> noTelp }}</p>
-                                        <p style="font-size: 125%; max-width: 270px">{{ $s -> supplierEmail }}</p>
+                                        <p style="font-size: 200%; max-width: 270px"><strong>--</strong></p>
+                                        <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> --</p>
+                                        <p style="font-size: 125%; max-width: 270px">--</p>
                                     </div>
                                     <div class="col" style="margin-left: -100px ">
                                         <div class="d-flex justify-content-between ratings">
                                             <h4>Quality</h4>
                                             <div class="rating d-flex justify-content-end mt-2">
-                                                @for($i = 1 ; $i <= $s->quality ; $i++)
-                                                    <i class="fa fa-star checked"></i>
-                                                @endfor
-                                                @for($j = $s->quality + 1 ; $j <= 5 ; $j++)
+                                                @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
                                                 @endfor
                                             </div>
@@ -52,10 +49,7 @@
                                         <div class="d-flex justify-content-between ratings">
                                             <h4>Top</h4>
                                             <div class="rating d-flex justify-content-end mt-2">
-                                                @for($i = 1 ; $i <= $s->top ; $i++)
-                                                    <i class="fa fa-star checked"></i>
-                                                @endfor
-                                                @for($j = $s->top + 1 ; $j <= 5 ; $j++)
+                                                @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
                                                 @endfor
                                             </div>
@@ -63,10 +57,7 @@
                                         <div class="d-flex justify-content-between ratings">
                                             <h4>Price</h4>
                                             <div class="rating d-flex justify-content-end mt-2">
-                                                @for($i = 1 ; $i <= $s->price ; $i++)
-                                                    <i class="fa fa-star checked"></i>
-                                                @endfor
-                                                @for($j = $s->price + 1 ; $j <= 5 ; $j++)
+                                                @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
                                                 @endfor
                                             </div>
@@ -74,10 +65,7 @@
                                         <div class="d-flex justify-content-between ratings">
                                             <h4>Delivery Time</h4>
                                             <div class="rating d-flex justify-content-end mt-2">
-                                                @for($i = 1 ; $i <= $s->deliveryTime ; $i++)
-                                                    <i class="fa fa-star checked"></i>
-                                                @endfor
-                                                @for($j = $s->deliveryTime + 1 ; $j <= 5 ; $j++)
+                                                @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
                                                 @endfor
                                             </div>
@@ -85,20 +73,89 @@
                                         <div class="d-flex justify-content-between ratings">
                                             <h4>Item<br>Availability</h4>
                                             <div class="rating d-flex justify-content-end mt-3">
-                                                @for($i = 1 ; $i <= $s->availability ; $i++)
-                                                    <i class="fa fa-star checked"></i>
-                                                @endfor
-                                                @for($j = $s->availability + 1 ; $j <= 5 ; $j++)
+                                                @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
                                                 @endfor
                                             </div>
                                         </div>
-                                        <button class="btn btn-info mt-3" style="margin-left: 40%" data-toggle="modal" data-target="#edit-rating-{{ $s -> id }}">Edit Rating</button>
                                     </div>
                                 </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @else
+                            @foreach($suppliers as $s)
+                                <div class="card border-dark w-100 mr-3">
+                                    <div class="card-body mr-3">
+                                    <div class="row">
+                                        <div class="col ml-2">
+                                            <img src="/images/profile.png" style="height: 150px; width: 150px;">
+                                            <p style="font-size: 200%; max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
+                                            <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> {{ $s -> noTelp }}</p>
+                                            <p style="font-size: 125%; max-width: 270px">{{ $s -> supplierEmail }}</p>
+                                        </div>
+                                        <div class="col" style="margin-left: -100px ">
+                                            <div class="d-flex justify-content-between ratings">
+                                                <h4>Quality</h4>
+                                                <div class="rating d-flex justify-content-end mt-2">
+                                                    @for($i = 1 ; $i <= $s->quality ; $i++)
+                                                        <i class="fa fa-star checked"></i>
+                                                    @endfor
+                                                    @for($j = $s->quality + 1 ; $j <= 5 ; $j++)
+                                                        <i class = "fa fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between ratings">
+                                                <h4>Top</h4>
+                                                <div class="rating d-flex justify-content-end mt-2">
+                                                    @for($i = 1 ; $i <= $s->top ; $i++)
+                                                        <i class="fa fa-star checked"></i>
+                                                    @endfor
+                                                    @for($j = $s->top + 1 ; $j <= 5 ; $j++)
+                                                        <i class = "fa fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between ratings">
+                                                <h4>Price</h4>
+                                                <div class="rating d-flex justify-content-end mt-2">
+                                                    @for($i = 1 ; $i <= $s->price ; $i++)
+                                                        <i class="fa fa-star checked"></i>
+                                                    @endfor
+                                                    @for($j = $s->price + 1 ; $j <= 5 ; $j++)
+                                                        <i class = "fa fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between ratings">
+                                                <h4>Delivery Time</h4>
+                                                <div class="rating d-flex justify-content-end mt-2">
+                                                    @for($i = 1 ; $i <= $s->deliveryTime ; $i++)
+                                                        <i class="fa fa-star checked"></i>
+                                                    @endfor
+                                                    @for($j = $s->deliveryTime + 1 ; $j <= 5 ; $j++)
+                                                        <i class = "fa fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between ratings">
+                                                <h4>Item<br>Availability</h4>
+                                                <div class="rating d-flex justify-content-end mt-3">
+                                                    @for($i = 1 ; $i <= $s->availability ; $i++)
+                                                        <i class="fa fa-star checked"></i>
+                                                    @endfor
+                                                    @for($j = $s->availability + 1 ; $j <= 5 ; $j++)
+                                                        <i class = "fa fa-star"></i>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-info mt-3" style="margin-left: 40%" data-toggle="modal" data-target="#edit-rating-{{ $s -> id }}">Edit Rating</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
 

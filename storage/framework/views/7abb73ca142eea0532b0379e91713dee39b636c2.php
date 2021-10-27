@@ -8,7 +8,7 @@
         <?php echo $__env->make('logistic.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3 mb-2" style="text-align: center">Order # <?php echo e($orderHeads -> order_id); ?></h2>
+            <h2 class="mt-3 mb-2" style="text-align: center">Order <?php echo e($orderHeads -> order_id); ?></h2>
 
                 <div class="row mt-5">
                     <div class="col">
@@ -72,7 +72,7 @@
                                 <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><?php echo e($od -> item -> itemName); ?></td>
-                                    <td><?php echo e($od -> quantity); ?> <?php echo e($od -> unit); ?></td>
+                                    <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
                                     <td><?php echo e($od -> department); ?></td>
                                     <?php if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock): ?>
                                         <td style="color: red; font-weight: bold"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>

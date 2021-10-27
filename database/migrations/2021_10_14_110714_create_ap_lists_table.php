@@ -22,7 +22,7 @@ class CreateApListsTable extends Migration
             $table->string('status');
             $table->integer('tracker');
             $table->string('description')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

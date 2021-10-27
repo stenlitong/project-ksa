@@ -48,8 +48,8 @@
             </div>
             
             <div class="center-items mt-5">
-                <img src="/images/logo.png" alt="" style="width: 100%; height: 100%;">
-                <h1 style="color: white; margin-top: -50px">The Best Service For Our Customer</h1>
+                <img src="/images/logo_ksa_1.png" class="mt-5" style="width: 50%; height: 50%;">
+                <h1 style="color: white;" class="mt-5">The Best Service For Our Customer</h1>
             </div>
         </div>
     </body>
@@ -58,8 +58,12 @@
 <style>
     body{
         background-image: url('/images/background-img-2.jpg');
+        height: 100%;
+        width: 100%;
         background-repeat: no-repeat;
         background-size: cover;
+        margin: 0;
+        padding: 0;
     }
     a{
         padding: 10px;
@@ -72,7 +76,6 @@
         width: 50%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
     }
     

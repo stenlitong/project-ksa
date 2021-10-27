@@ -99,10 +99,10 @@
 
                             <td>
                                 @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
-                                    <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning btn-sm" target="_blank">Download PR</a>
+                                    <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 @endif
                                 @if(strpos($oh -> status, 'Delivered') !== false)
-                                    <a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary btn-sm">Accept</a>
+                                    <a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a>
                                 @endif
                             </td>
 
@@ -144,7 +144,10 @@
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
-                                                <th scope="col">Terakhir Diberikan</th>
+
+                                                @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                    <th scope="col">Terakhir Diberikan</th>
+                                                @endif
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
                                                 
@@ -231,6 +234,8 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
+            height: 650px;
+            /* height: 100%; */
         }
         th{
             color: white;

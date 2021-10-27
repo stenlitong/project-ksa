@@ -8,7 +8,7 @@
         @include('purchasing.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3" style="text-align: center">Order # {{ $orderHeads -> order_id }}</h2>
+            <h2 class="mt-3" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
 
             @error('boatName')
             <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -127,13 +127,15 @@
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($orderDetails as $od)
+                                @foreach($orderDetails as $key => $od)
                                 <tr>
+                                    <td>{{ $od -> $key + 1 }}</td>
                                     <td>{{ $od -> item -> itemName }}</td>
                                     <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
                                 </tr>

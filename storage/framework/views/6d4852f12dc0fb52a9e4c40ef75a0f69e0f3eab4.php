@@ -125,7 +125,7 @@ unset($__errorArgs, $__bag); ?>
                         <div class="form-group p-2">
                             <label for="supplierName">Nama Supplier</label>
                             <input name="supplierName" type="text" class="form-control" id="supplierName" placeholder="Input nama supplier..."
-                                style="width: 500px; height: 50px">
+                                style="width: 500px; height: 50px" value=<?php echo e(old('supplierName')); ?>>
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mr-2">
@@ -137,7 +137,7 @@ unset($__errorArgs, $__bag); ?>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">(+62)</div>
                                 </div>
-                                <input type="text" class="form-control" id="noTelp" name="noTelp" style="width: 450px; height: 50px" placeholder="Input nomor telepon dalam angka...">
+                                <input type="text" class="form-control" id="noTelp" name="noTelp" style="width: 450px; height: 50px" placeholder="Input nomor telepon dalam angka..." value=<?php echo e(old('noTelp')); ?>>
                             </div>
                         </div>
                     </div>
@@ -145,21 +145,21 @@ unset($__errorArgs, $__bag); ?>
                         <div class="form-group p-2">
                             <label for="supplierEmail" class="mb-2">Email Supplier</label>
                             <input name="supplierEmail" type="text" class="form-control" id="supplierEmail" placeholder="Input email supplier..."
-                                style="width: 500px; height: 50px">
+                                style="width: 500px; height: 50px" value=<?php echo e(old('supplierEmail')); ?>>
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mr-2">
                         <div class="form-group p-2">
                             <label for="supplierAddress" class="mb-2">Alamat Supplier</label>
                             <input name="supplierAddress" type="text" class="form-control" id="supplierAddress" placeholder="Input alamat supplier..."
-                                style="width: 500px; height: 50px">
+                                style="width: 500px; height: 50px" value=<?php echo e(old('supplierAddress')); ?>>
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mr-2">
                         <div class="form-group p-2">
                             <label for="supplierNPWP" class="mb-2">NPWP Supplier</label>
                             <input name="supplierNPWP" type="text" class="form-control" id="supplierNPWP" placeholder="Input NPWP supplier..."
-                                style="width: 500px; height: 50px">
+                                style="width: 500px; height: 50px" value=<?php echo e(old('supplierNPWP')); ?>>
                         </div>
                     </div>
                     <br>

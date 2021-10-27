@@ -8,7 +8,7 @@
         @include('logistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3 mb-2" style="text-align: center">Order # {{ $orderHeads -> order_id }}</h2>
+            <h2 class="mt-3 mb-2" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
 
                 <div class="row mt-5">
                     <div class="col">
@@ -72,7 +72,7 @@
                                 @foreach($orderDetails as $od)
                                 <tr>
                                     <td>{{ $od -> item -> itemName }}</td>
-                                    <td>{{ $od -> quantity }} {{ $od -> unit }}</td>
+                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
                                     <td>{{ $od -> department }}</td>
                                     @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
                                         <td style="color: red; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>

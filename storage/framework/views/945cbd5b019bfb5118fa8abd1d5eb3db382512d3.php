@@ -88,8 +88,8 @@
             }
             td, th{
                 word-wrap: break-word;
-                min-width: 160px;
-                max-width: 160px;
+                min-width: 120px;
+                max-width: 120px;
                 text-align: center;
             }
             .icon{

@@ -24,13 +24,13 @@ class DashboardController extends Controller
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Request Completed (Crew)')
                 ->orWhere('status', 'like', 'Request Rejected By Logistic');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
             
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Request In Progress By Logistic')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
             return view('crew.crewDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }elseif(Auth::user()->hasRole('logistic')){
@@ -39,9 +39,9 @@ class DashboardController extends Controller
                 $orderHeads = OrderHead::with('user')->where(function($query){
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
-                })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
+                })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6)->withQueryString();
             }else{
-                $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
+                $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6)->withQueryString();
             }
 
             // Get all the order detail

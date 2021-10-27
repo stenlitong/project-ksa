@@ -49,15 +49,6 @@ class AdminPurchasingController extends Controller
     }
 
     public function uploadFile(Request $request){
-        // if(!empty( $request->except('_token'))){
-            // if(count($request->file()) == 0){
-                // dd('kosong');
-            // }
-        // }
-        
-        // dd(count($request->file()));
-        // dd($request);
-
         // Validate the file extension must be pdf or zip
         $request->validate([
             'filename' => 'required|mimes:pdf,zip|max:5120'

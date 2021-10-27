@@ -104,10 +104,10 @@ unset($__errorArgs, $__bag); ?>
 
                             <td>
                                 <?php if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false): ?>
-                                    <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning btn-sm" target="_blank">Download PR</a>
+                                    <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 <?php endif; ?>
                                 <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
-                                    <a href="/logistic/stock-order/<?php echo e($oh -> id); ?>/accept-order" class="btn btn-primary btn-sm">Accept</a>
+                                    <a href="/logistic/stock-order/<?php echo e($oh -> id); ?>/accept-order" class="btn btn-primary">Accept</a>
                                 <?php endif; ?>
                             </td>
 
@@ -149,7 +149,10 @@ unset($__errorArgs, $__bag); ?>
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
-                                                <th scope="col">Terakhir Diberikan</th>
+
+                                                <?php if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false): ?>
+                                                    <th scope="col">Terakhir Diberikan</th>
+                                                <?php endif; ?>
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
                                                 
@@ -165,7 +168,9 @@ unset($__errorArgs, $__bag); ?>
                                                     <tr>
                                                         <td><?php echo e($od -> item -> itemName); ?></td>
                                                         <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
-                                                        <td><?php echo e($od -> item -> lastGiven); ?></td>
+                                                        <?php if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false): ?>
+                                                            <td><?php echo e($od -> item -> lastGiven); ?></td>
+                                                        <?php endif; ?>
                                                         <td><?php echo e($od -> item -> itemAge); ?></td>
                                                         <td><?php echo e($od -> department); ?></td>
 
@@ -234,6 +239,8 @@ unset($__errorArgs, $__bag); ?>
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
+            height: 650px;
+            /* height: 100%; */
         }
         th{
             color: white;

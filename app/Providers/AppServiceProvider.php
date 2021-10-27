@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+// use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -23,7 +23,9 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
+    {   
+        // on .env change to https://localhost
+        // URL::forceScheme('https');
         Paginator::useBootstrap();
     }
 }

@@ -37,7 +37,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('approved_at')->nullable();
             $table->integer('order_tracker');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade');
             $table->timestamps();
         });
     }

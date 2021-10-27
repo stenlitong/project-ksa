@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.1">
+    {{-- <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
+    {{-- <meta name="viewport" content="width=1024"> --}}
     <title>@yield('title')</title>
 
     <!-- Bootstrap core CSS -->
@@ -15,7 +17,7 @@
     <link href="/css/dashboard.css" rel="stylesheet">
 </head>
 
-<body onload="startTime(); zoom();">
+<body onload="startTime();">
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/dashboard" style="font-weight: bold; word-break: ">PT. KSA - {{ Auth::user()->roles->first()->display_name}}</a>
@@ -35,18 +37,22 @@
         </div>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="testing">
+        <script>
+            document.body.style.zoom = "85%";
+            // document.body.style.zoom = screen.logicalXDPI;
+        </script>
         @yield('container')
     </div>
 
 </body>
 
-<script type="text/javascript">
-    function zoom() {
-        document.body.style.zoom = "100%" 
+<style>
+    body {
+        margin: 0;
+        padding: 0;
     }
-</script>
-
+</style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
 </script>

@@ -22,7 +22,7 @@ class CrewController extends Controller
         $orderHeads = OrderHead::with('user')->where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
@@ -32,7 +32,7 @@ class CrewController extends Controller
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
         
         $completed = $orderHeads->count();
 
@@ -45,7 +45,7 @@ class CrewController extends Controller
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
@@ -54,7 +54,7 @@ class CrewController extends Controller
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
         
         $in_progress = $orderHeads->count();
 

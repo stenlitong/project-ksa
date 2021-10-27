@@ -25,7 +25,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
+Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
