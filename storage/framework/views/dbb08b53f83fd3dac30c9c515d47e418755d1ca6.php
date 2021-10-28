@@ -1,14 +1,14 @@
-<div class="flex-wrap align-items-center mb-3 mt-3 ml-3 rcorners1">
+<div class="flex-wrap align-items-center mb-3 mt-3 ml-3 rcorners1 w-50 h-25">
     <?php if((int)date("H") >= 18): ?>
-        <h2>Malam, <?php echo e(Auth::user()->name); ?> !</h2>
+        <h2 class="med-query">Malam, <?php echo e(Auth::user()->name); ?> !</h2>
     <?php elseif((int)date("H") >= 15): ?>
-        <h2>Sore, <?php echo e(Auth::user()->name); ?> !</h2>
+        <h2 class="med-query">Sore, <?php echo e(Auth::user()->name); ?> !</h2>
     <?php elseif((int)date("H") >= 12): ?>
-        <h2>Siang, <?php echo e(Auth::user()->name); ?> !</h2>
+        <h2 class="med-query">Siang, <?php echo e(Auth::user()->name); ?> !</h2>
     <?php else: ?>
-        <h2>Pagi, <?php echo e(Auth::user()->name); ?> !</h2>
+        <h2 class="med-query">Pagi, <?php echo e(Auth::user()->name); ?> !</h2>
     <?php endif; ?>
-    <h3><?php echo e("Today is " . date('l') . ', ' . date('d M Y')); ?> <span id="txt"></span></h3>
+    <h3 class="med-query"><?php echo e("Today is " . date('l') . ', ' . date('d M Y')); ?> <span id="txt"></span></h3>
 </div>
 
 <style>
@@ -17,8 +17,6 @@
         /* background-color: rgba(255, 0, 0, 0.5); */
         background-color: rgba(245, 97, 97, 0.7);
         padding: 20px;
-        width: 600px;
-        height: 150px;
     }
 </style>
 

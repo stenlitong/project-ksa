@@ -83,3 +83,7 @@
         height:100vh;
     }
 </style>
+
+<script>
+    document.body.style.zoom = "85%";
+</script>

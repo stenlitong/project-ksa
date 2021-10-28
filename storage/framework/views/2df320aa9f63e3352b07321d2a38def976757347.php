@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.1">
     
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <title><?php echo $__env->yieldContent('title'); ?></title>
 
@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Custom styles for this template -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
     <link href="/css/dashboard.css" rel="stylesheet">
 </head>
 
@@ -51,11 +55,24 @@
     body {
         margin: 0;
         padding: 0;
+        /* font-family: 'Inter', sans-serif; */
+    }
+    @media (min-width: 300px) and (max-width: 767px){
+        body {
+            height:118vh;
+        }
+        .med-query{
+            color: white;
+            width: 150px;
+            word-break: break-all;
+            font-size: 16px;
+        }
     }
     @media (min-width: 768px) and (max-width: 1024px){
         body {
             height:118vh;
         }
+    }
     @media (min-width: 1025px) and (max-width: 1280px) {
         body {
             height:130vh;
@@ -63,6 +80,7 @@
     }
 }
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
 </script>

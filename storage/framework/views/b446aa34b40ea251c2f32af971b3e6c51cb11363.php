@@ -67,4 +67,8 @@
     body {
         height:100vh;
     }
-</style><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/welcome.blade.php ENDPATH**/ ?>
+</style>
+
+<script>
+    document.body.style.zoom = "85%";
+</script><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/welcome.blade.php ENDPATH**/ ?>
