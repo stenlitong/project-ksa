@@ -33,7 +33,7 @@
                 <a href="{{ Route('crew.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
@@ -111,7 +111,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $o -> order_id)
+                                            @if($od -> orders_id == $o -> id)
                                                 <tr>
                                                     <td>{{ $od -> item -> itemName }}</td>
                                                     <td>{{ $od -> quantity }}</td>
@@ -136,8 +136,12 @@
             text-align: center;
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

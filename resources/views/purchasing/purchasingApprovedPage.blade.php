@@ -52,6 +52,12 @@
             </div>
             @enderror
 
+            @error('kurs')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Kurs Invalid
+            </div>
+            @enderror
+
                 <div class="row mt-4">
                     <div class="col">
                         <form method="POST" action="">
@@ -106,12 +112,17 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price" class="mb-2">Harga</label>
+                                <label for="price" class="mb-2">Total Harga</label>
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
+                                    {{-- <div class="input-group-prepend">
                                         <div class="input-group-text">Rp.</div>
-                                    </div>
-                                    <input type="number" min="1" class="form-control" id="price" name="price" placeholder="Input total harga dalam angka..." required>
+                                    </div> --}}
+                                    <select class="form-control" id="kurs" name="kurs">
+                                        <option value="" disabled>Choose Kurs...</option>
+                                        <option value="Rp.">Rupiah</option>
+                                        <option value="$">Dollar</option>
+                                    </select>
+                                    <input type="number" min="1" class="form-control w-75" id="price" name="price" placeholder="Input total harga dalam angka..." required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -134,11 +145,11 @@
                             </thead>
                             <tbody>
                                 @foreach($orderDetails as $key => $od)
-                                <tr>
-                                    <td>{{ $od -> $key + 1 }}</td>
-                                    <td>{{ $od -> item -> itemName }}</td>
-                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $od -> item -> itemName }}</td>
+                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

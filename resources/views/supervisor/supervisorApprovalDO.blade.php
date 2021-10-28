@@ -32,7 +32,7 @@
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Dari Cabang</th>
                                     <th scope="col">Cabang Tujuan</th>
-                                    <th scope="col">Qty</th>
+                                    <th scope="col">Request Qty</th>
                                     <th scope="col">Stok Cabang Tujuan</th>
                                     <th scope="col">Nama Requester</th>
                                     <th scope="col">Status</th>
@@ -44,10 +44,10 @@
                                     @foreach($ongoingOrders as $key => $o)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $o -> item_requested -> itemName }}</td>
+                                            <td><strong>{{ $o -> item_requested -> itemName }}</strong></td>
                                             <td>{{ $o -> fromCabang}}</td>
                                             <td>{{ $o -> toCabang}}</td>
-                                            <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
+                                            <td><strong>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</strong></td>
                                             @if($o -> quantity > $o -> item_requested_from -> itemStock )
                                                 <td><span style="color: red; font-weight: bold">{{ $o -> item_requested_from -> itemStock}} {{ $o -> item_requested -> unit}}</span></td>
                                             @else
@@ -70,16 +70,16 @@
                                             @if($o -> fromCabang == Auth::user()->cabang and strpos($o -> status, 'In Progress By Supervisor Cabang ' . Auth::user()->cabang) !== false)
                                                 <td>
                                                     <div class="d-flex justify-content-around">
-                                                        <a href="/supervisor/approval-do/{{ $o -> id }}/forward" class="btn btn-success btn-sm">Approve</a>
                                                         <a href="/supervisor/approval-do/{{ $o -> id }}/deny" class="btn btn-danger btn-sm">Reject</a>
+                                                        <a href="/supervisor/approval-do/{{ $o -> id }}/forward" class="btn btn-success btn-sm">Approve</a>
                                                     </div>
                                                 </td>
                                             {{-- scenario #2 : If the order is already approved by their respective branches, then the destination branches also need to approve --}}
                                             @elseif($o -> toCabang == Auth::user()->cabang and strpos($o -> status, 'Waiting Approval By Supervisor Cabang '. Auth::user()->cabang) !== false)
                                                 <td>
                                                     <div class="d-flex justify-content-around">
-                                                        <a href="/supervisor/approval-do/{{ $o -> id }}/approve" class="btn btn-success btn-sm">Approve</a>
                                                         <a href="/supervisor/approval-do/{{ $o -> id }}/reject" class="btn btn-danger btn-sm">Reject</a>
+                                                        <a href="/supervisor/approval-do/{{ $o -> id }}/approve" class="btn btn-success btn-sm">Approve</a>
                                                     </div>
                                                 </td>
                                             @else

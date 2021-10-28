@@ -136,7 +136,7 @@ class PurchasingController extends Controller
         $poNumber = $po_id . '.' . $first_char_name . '/' . 'PO-' . $orderHeads->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
 
         // Get the order details join with the item
-        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->order_id)->get();
+        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->id)->get();
 
         $suppliers = Supplier::latest()->get();
 
@@ -152,6 +152,7 @@ class PurchasingController extends Controller
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
             'supplier_id' => 'required|exists:suppliers,id',
+            'kurs' => 'required|in:Rp.,$',
             'price' => 'required|integer|min:1',
             'descriptions' => 'nullable'
         ]);
@@ -168,7 +169,7 @@ class PurchasingController extends Controller
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
             'supplier_id' => $request->supplier_id,
-            'price' => 'Rp.' . $request->price,
+            'price' => $request->kurs . number_format($request->price, 2, ",", "."),
             'order_tracker' => 4,
             'descriptions' => $request->descriptions
         ]);
@@ -221,7 +222,7 @@ class PurchasingController extends Controller
         })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orderHeads'));
     }

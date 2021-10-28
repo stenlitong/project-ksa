@@ -17,7 +17,7 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                     <table class="table table-bordered sortable">
                         <thead class="thead bg-danger">
                         <tr>

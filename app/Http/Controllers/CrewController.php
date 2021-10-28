@@ -11,7 +11,6 @@ use App\Models\Tug;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
-use Illuminate\Support\Str;
 Use \Carbon\Carbon;
 
 class CrewController extends Controller
@@ -25,7 +24,7 @@ class CrewController extends Controller
         })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
-        $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
+        $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
         
         $in_progress = OrderHead::where(function($query){
@@ -48,7 +47,7 @@ class CrewController extends Controller
         })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
-        $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
+        $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $completed = OrderHead::where(function($query){
@@ -135,11 +134,6 @@ class CrewController extends Controller
             return redirect('/crew/order')->with('errorCart', 'Cart is Empty');
         }
 
-        // Else, generate unique id for the order_id and checks the order_id is already exist || Create the order from the cart
-        // do{
-        //     $unique_id = Str::random(8);
-        // }while(OrderHead::where('order_id', $unique_id)->exists());
-
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
 
@@ -161,7 +155,7 @@ class CrewController extends Controller
             $serialNo = Item::where('id', $c->item_id)->pluck('serialNo');
             $unit = Item::where('id', $c->item_id)->pluck('unit');
             OrderDetail::create([
-                'orders_id' => 'COID#' . $o_id->id,
+                'orders_id' => $o_id->id,
                 'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
                 'unit' => $unit[0],
@@ -193,12 +187,12 @@ class CrewController extends Controller
             'status' => 'Request Completed (Crew)',
         ]);
 
-        foreach($orderDetails as $od){
-            Item::where('id', $od -> item -> id)->update([
-                'lastGiven' => date("d/m/Y")
-            ]);
-            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
-        }
+        // foreach($orderDetails as $od){
+        //     Item::where('id', $od -> item -> id)->update([
+        //         'lastGiven' => date("d/m/Y")
+        //     ]);
+        //     Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
+        // }
 
         return redirect('/dashboard')->with('status', 'Request Order Accepted');
     }

@@ -34,7 +34,7 @@
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Dari Cabang</th>
                                     <th scope="col">Cabang Tujuan</th>
-                                    <th scope="col">Qty</th>
+                                    <th scope="col">Request Qty</th>
                                     <th scope="col">Stok Cabang Tujuan</th>
                                     <th scope="col">Nama Requester</th>
                                     <th scope="col">Status</th>
@@ -46,10 +46,10 @@
                                     <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td><?php echo e($key + 1); ?></td>
-                                            <td><?php echo e($o -> item_requested -> itemName); ?></td>
+                                            <td><strong><?php echo e($o -> item_requested -> itemName); ?></strong></td>
                                             <td><?php echo e($o -> fromCabang); ?></td>
                                             <td><?php echo e($o -> toCabang); ?></td>
-                                            <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></td>
+                                            <td><strong><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></strong></td>
                                             <?php if($o -> quantity > $o -> item_requested_from -> itemStock ): ?>
                                                 <td><span style="color: red; font-weight: bold"><?php echo e($o -> item_requested_from -> itemStock); ?> <?php echo e($o -> item_requested -> unit); ?></span></td>
                                             <?php else: ?>
@@ -72,16 +72,16 @@
                                             <?php if($o -> fromCabang == Auth::user()->cabang and strpos($o -> status, 'In Progress By Supervisor Cabang ' . Auth::user()->cabang) !== false): ?>
                                                 <td>
                                                     <div class="d-flex justify-content-around">
-                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/forward" class="btn btn-success btn-sm">Approve</a>
                                                         <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/deny" class="btn btn-danger btn-sm">Reject</a>
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/forward" class="btn btn-success btn-sm">Approve</a>
                                                     </div>
                                                 </td>
                                             
                                             <?php elseif($o -> toCabang == Auth::user()->cabang and strpos($o -> status, 'Waiting Approval By Supervisor Cabang '. Auth::user()->cabang) !== false): ?>
                                                 <td>
                                                     <div class="d-flex justify-content-around">
-                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/approve" class="btn btn-success btn-sm">Approve</a>
                                                         <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/reject" class="btn btn-danger btn-sm">Reject</a>
+                                                        <a href="/supervisor/approval-do/<?php echo e($o -> id); ?>/approve" class="btn btn-success btn-sm">Approve</a>
                                                     </div>
                                                 </td>
                                             <?php else: ?>

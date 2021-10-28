@@ -204,7 +204,7 @@ unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
 
-                    <div id="content">
+                    <div id="content" style="overflow-x:auto;">
                         <table class="table">
                             <thead class="thead bg-danger">
                             <tr>
@@ -254,7 +254,7 @@ unset($__errorArgs, $__bag); ?>
                         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order ID # <?php echo e($o->order_id); ?></span></h5>
+                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order <?php echo e($o->order_id); ?></span></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -271,7 +271,7 @@ unset($__errorArgs, $__bag); ?>
                                         </thead>
                                         <tbody>
                                             <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($od -> orders_id == $o -> order_id): ?>
+                                                <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
                                                         <td><?php echo e($od -> item -> itemName); ?></td>
                                                         <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
@@ -466,9 +466,9 @@ unset($__errorArgs, $__bag); ?>
             transition: 0.3s ease;
         }
         .scrolling-wrapper{
-                overflow-x: auto;
-            }
-            .card-block{
+            overflow-x: auto;
+        }
+        .card-block{
             background-color: #fff;
             background-position: center;
             background-size: cover;
@@ -480,8 +480,12 @@ unset($__errorArgs, $__bag); ?>
             }
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

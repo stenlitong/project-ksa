@@ -28,7 +28,7 @@
                 </div>
             @enderror
 
-            <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5">
+            <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5" style="overflow-x:auto;">
                 <table class="table table-bordered sortable">
                     <thead class="thead bg-danger">
                     <tr>

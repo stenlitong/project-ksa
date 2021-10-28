@@ -7,7 +7,7 @@
         <div class="row">
             @include('logistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
+                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
                     <h1 class="d-flex justify-content-center mb-3">My Request DO</h1>
                     <br>
                     
@@ -31,7 +31,7 @@
                                     <th scope="col" style="width: 100px">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Cabang Tujuan</th>
-                                    <th scope="col">Qty</th>
+                                    <th scope="col">Request Qty</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -40,9 +40,9 @@
                                     @foreach($ongoingOrders as $key => $o)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $o -> item_requested -> itemName }}</td>
+                                            <td><strong>{{ $o -> item_requested -> itemName }}</strong></td>
                                             <td>{{ $o -> toCabang}}</td>
-                                            <td>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</td>
+                                            <td><strong>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</strong></td>
                                             @if(strpos($o -> status, 'Rejected') !== false)
                                                 <td><strong style="color: red">{{ $o -> status }}</strong></td>
                                             @elseif(strpos($o -> status, 'On Delivery') !== false)
@@ -70,6 +70,18 @@
         </div>
 
         <style>
+            body{
+                background-image: url('/images/logistic-background.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .wrapper{
+                padding: 10px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                /* height: 800px; */
+                /* height: 100%; */
+            }
             .tableFixHead          { overflow: auto; height: 250px; }
             .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
 
@@ -98,6 +110,10 @@
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
 

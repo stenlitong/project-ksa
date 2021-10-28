@@ -120,11 +120,11 @@ unset($__errorArgs, $__bag); ?>
 
             <!-- Modal #1 -->
             <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem"
-                aria-hidden="true">
+                aria-hidden="true" data-backdrop="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addItemTitle">Add New Item</h5>
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="addItemTitle" style="color: white">Add New Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -243,7 +243,7 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
             <table class="table mb-5">
                 <thead class="thead bg-danger">
                     <tr>
@@ -262,27 +262,25 @@ unset($__errorArgs, $__bag); ?>
                 <tbody>
                     <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <td><?php echo e($i -> itemName); ?></td>
+                        <td><strong><?php echo e($i -> itemName); ?></strong></td>
                         <td><?php echo e($i -> itemAge); ?></td>
-                        <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
+                        <td><strong><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></strong></td>
                         <td><?php echo e($i -> serialNo); ?></td>
                         <td><?php echo e($i -> codeMasterItem); ?></td>
                         <td><?php echo e($i -> cabang); ?></td>
                         <td><?php echo e($i -> description); ?></td>
                         <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
                         <td>
-                            <div class="d-flex justify-content-start">
+                            <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($i->id); ?>">
                                     Edit
                                 </button>
                                 
-                                <form method="POST" action="/supervisor/item-stocks/<?php echo e($i -> id); ?>/delete-item" >
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('delete'); ?>
-                                    <button class="btn btn-danger">
-                                        Delete
-                                    </button>
-                                </form>
+                                
+                                <button class="btn btn-danger" data-toggle="modal" id="delete" data-target="#deleteItem-<?php echo e($i->id); ?>">
+                                    Delete
+                                </button>
+                                
                             </div>
                         </td>
                         <?php endif; ?>
@@ -299,8 +297,8 @@ unset($__errorArgs, $__bag); ?>
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editItemTitle">Edit Item</h5>
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="editItemTitle" style="color: white">Edit Item: <?php echo e($i -> itemName); ?> (<?php echo e($i -> cabang); ?>)</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -399,8 +397,39 @@ unset($__errorArgs, $__bag); ?>
                                             placeholder="Input Deskripsi Barang"></textarea>
                                     </div>
                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Edit Item</button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <!-- Modal #3 -->
+            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="modal fade" id="deleteItem-<?php echo e($i->id); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteItemTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="editItemTitle" style="color: white">Delete Item: <?php echo e($i -> itemName); ?> (<?php echo e($i -> cabang); ?>)</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <br>
+                                <h5 style="text-align: center">Are You Sure To Delete This Item ?</h5>
+                                <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form method="POST" action="/supervisor/item-stocks/<?php echo e($i -> id); ?>/delete-item" >
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('delete'); ?>
+                                    <button class="btn btn-danger">Delete Item</button>
                                 </form>
                             </div>
                         </div>
@@ -415,9 +444,14 @@ unset($__errorArgs, $__bag); ?>
                 min-width: 160px;
                 max-width: 160px;
                 text-align: center;
+                vertical-align: middle;
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
 

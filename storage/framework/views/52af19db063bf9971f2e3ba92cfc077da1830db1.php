@@ -7,7 +7,7 @@
         <div class="row">
             <?php echo $__env->make('logistic.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
+                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
                     <h1 class="d-flex justify-content-center">Goods In Report</h1>
                     <br>
                     
@@ -20,7 +20,7 @@
                         <?php endif; ?>
                     </div>
                     
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                         <table class="table table-bordered sortable">
                             <thead class="thead bg-danger">
                             <tr>
@@ -40,7 +40,7 @@
                                     <tr>
                                         <td><?php echo e($key + 1); ?></td>
                                         
-                                        <td><?php echo e($oh -> item -> lastGivenLogistic); ?></td>
+                                        <td><?php echo e($oh -> approved_at); ?></td>
                                         <td><?php echo e($oh -> item -> itemName); ?></td>
                                         <td><?php echo e($oh -> item -> serialNo); ?></td>
                                         <td><?php echo e($oh -> quantity); ?></td>
@@ -58,6 +58,18 @@
         </div>
 
         <style>
+            body{
+                background-image: url('/images/logistic-background.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .wrapper{
+                padding: 10px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                height: 1000px;
+                /* height: 100%; */
+            }
             .tableFixHead          { overflow: auto; height: 250px; }
             .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
 

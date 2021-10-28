@@ -33,7 +33,7 @@ class LogisticController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
             
             // Get all the order detail
-            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
@@ -60,7 +60,7 @@ class LogisticController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7);
 
             // Then get all the order detail
-            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Get the count number of the completed and in progress order to show it on the view
@@ -85,7 +85,7 @@ class LogisticController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
             
             // Get all the order detail
-            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
@@ -109,7 +109,7 @@ class LogisticController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7);
     
             // Get all the order detail
-            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+            $order_id = OrderHead::where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
     
              // Count the completed & in progress order
@@ -133,10 +133,10 @@ class LogisticController extends Controller
                 $query->where('itemName', 'like', '%' . request('search') . '%')
                 ->orWhere('cabang', 'like', '%' . request('search') . '%')
                 ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
-            })->Paginate(10)->withQueryString();
+            })->Paginate(7)->withQueryString();
             return view('logistic.stocksPage', compact('items'));
         }else{
-            $items = Item::latest()->Paginate(10)->withQueryString();
+            $items = Item::latest()->Paginate(7)->withQueryString();
             return view('logistic.stocksPage', compact('items'));
         }
     }
@@ -199,9 +199,6 @@ class LogisticController extends Controller
         // Increment the stock for the requester branch
         Item::where('id', $orderDos -> item_requested_id)->increment('itemStock', $orderDos -> quantity);
 
-        // Decrement the stock for the requested branch
-        Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
-
         // Update the status of the DO
         OrderDo::where('id', $orderDos -> id)->update([
             'order_tracker' => 2,
@@ -223,10 +220,12 @@ class LogisticController extends Controller
             'reason' => 'required'
         ]);
 
+        // Check if the order already been processed or not
         if($orderHeads -> order_tracker == 2){
             return redirect('/dashboard')->with('error', 'Order Already Been Processed');
         }
 
+        // If not, then proceed
         OrderHead::where('id', $orderHeads->id)->update([
             'status' => 'Request Rejected By Logistic',
             'order_tracker' => 2,
@@ -237,7 +236,7 @@ class LogisticController extends Controller
 
     public function approveOrderPage(OrderHead $orderHeads){
         // Get the order details join with the item
-        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->order_id)->get();
+        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->id)->get();
 
         return view('logistic.logisticApprovedOrder', compact('orderDetails', 'orderHeads'));
     }
@@ -253,8 +252,8 @@ class LogisticController extends Controller
             'description' => 'nullable',
         ]);
 
-        // Get the order details of the following order
-        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+        // Get the order details for the following order
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads->id)->get();
 
         //If the stock is not enough then redirect to dashboard with error
         foreach($orderDetails as $od){
@@ -274,6 +273,14 @@ class LogisticController extends Controller
             $status = 'Items Ready';
         }else{
             $status = 'On Delivery';
+        }
+
+        // If the stock checker passed, then decrement each item for the following order
+        foreach($orderDetails as $od){
+            Item::where('id', $od -> item -> id)->update([
+                'lastGiven' => date("d/m/Y")
+            ]);
+            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
         }
 
         // Update the status of the following order
@@ -296,7 +303,7 @@ class LogisticController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Request Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Request Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('logistic.logisticHistory', compact('orderHeads'));
     }
@@ -306,7 +313,7 @@ class LogisticController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Order Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Order Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticHistoryIn', compact('orderHeads'));
     }
@@ -390,11 +397,6 @@ class LogisticController extends Controller
             return redirect('/logistic/make-order')->with('errorCart', 'Cart is Empty');
         }
 
-        // Generate unique id for the order_id || Create the order from the cart
-        // do{
-        //     $unique_id = Str::random(8);
-        // }while(OrderHead::where('order_id', $unique_id)->exists());
-
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
         
@@ -439,7 +441,7 @@ class LogisticController extends Controller
         // Then fill the Order Detail with the cart items
         foreach($carts as $c){
             OrderDetail::create([
-                'orders_id' => 'LOID#' . $orderHead->id,
+                'orders_id' => $orderHead->id,
                 'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
                 'unit' => $c->item->unit,
@@ -462,7 +464,7 @@ class LogisticController extends Controller
         }
         
         // Get the order details of the following order
-        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads->id)->get();
         
         // Update the stock by adding the amount of the ordered items
         foreach($orderDetails as $od){
@@ -486,7 +488,7 @@ class LogisticController extends Controller
 
     public function reportPage(){
         // Find order from user/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 30 days only
         $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();

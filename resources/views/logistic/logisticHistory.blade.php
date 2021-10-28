@@ -7,7 +7,7 @@
         <div class="row">
             @include('logistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
+                <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
                     <h1 class="d-flex justify-content-center">Goods Out Report</h1>
                     <br>
                     
@@ -20,7 +20,7 @@
                         @endif
                     </div>
                     
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                         <table class="table table-bordered sortable">
                             <thead class="thead bg-danger">
                             <tr>
@@ -39,14 +39,13 @@
                                 @foreach($orderHeads as $key => $oh)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        {{-- need to fix this --}}
                                         <td>{{ $oh -> item -> lastGiven }}</td>
-                                        <td>{{ $oh -> item -> itemName }}</td>
+                                        <td><strong>{{ $oh -> item -> itemName }}</strong></td>
                                         <td>{{ $oh -> item -> serialNo}}</td>
-                                        <td>{{ $oh -> quantity}}</td>
+                                        <td><strong>{{ $oh -> quantity}}</strong></td>
                                         <td>{{ $oh -> item -> unit}}</td>
                                         <td>{{ $oh -> golongan}}</td>
-                                        <td>{{ $oh -> noResi}}</td>
+                                        <td><strong>{{ $oh -> noResi}}</strong></td>
                                         <td>{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach
@@ -58,6 +57,18 @@
         </div>
 
         <style>
+            body{
+                background-image: url('/images/logistic-background.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .wrapper{
+                padding: 10px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                height: 1000px;
+                /* height: 100%; */
+            }
             .tableFixHead          { overflow: auto; height: 250px; }
             .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
 

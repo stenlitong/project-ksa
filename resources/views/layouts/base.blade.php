@@ -52,6 +52,16 @@
         margin: 0;
         padding: 0;
     }
+    @media (min-width: 768px) and (max-width: 1024px){
+        body {
+            height:118vh;
+        }
+    @media (min-width: 1025px) and (max-width: 1280px) {
+        body {
+            height:130vh;
+        }
+    }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">

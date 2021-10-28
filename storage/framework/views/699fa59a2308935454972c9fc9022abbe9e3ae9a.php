@@ -59,7 +59,7 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
                 <table class="table" id="myTable">
                     <thead class="thead bg-danger">
                         <tr>
@@ -139,14 +139,14 @@ unset($__errorArgs, $__bag); ?>
                                     </thead>
                                     <tbody>
                                         <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php if($od -> orders_id == $o -> order_id): ?>
+                                            <?php if($od -> orders_id == $o -> id): ?>
                                                 <tr>
                                                     <td><?php echo e($od -> item -> itemName); ?></td>
-                                                    <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                                    <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <?php if(strpos($oh -> status, 'Order In Progress') !== false): ?>
-                                                        <td><?php echo e($od -> item -> itemStock); ?></td>
+                                                        <td><strong><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <?php endif; ?>
                                                 </tr>
                                             <?php endif; ?>
@@ -209,6 +209,10 @@ unset($__errorArgs, $__bag); ?>
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
         <script type="text/javascript">

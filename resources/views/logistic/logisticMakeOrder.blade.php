@@ -7,8 +7,8 @@
     <div class="row">
         @include('logistic.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 style="margin-left: 40%">Create Order</h1>
+            <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
+                <h1 style="text-align: center">Create Order</h1>
                 <br>
                 @if (session('status'))
                     <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -64,57 +64,48 @@
                     </div>
                 @enderror
                 
-                <div class="row">
+                <div class="row" id="row-wrapper">
+                    {{-- <div> --}}
                     <div class="col">
                         <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
                             @csrf
-                            <div class="d-flex justify-content-around mr-3">
-                                <div class="form-group p-2">
-                                    <label for="item_id" class="mt-3 mb-3">Item</label>
-                                    <br>
-                                    <select class="form-control" name="item_id" id="item_id" style="width: 500px; height:50px;">
-                                        @foreach($items as $i)
-                                            <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="item_id" class="mt-3 mb-3">Item</label>
+                                <br>
+                                <select class="form-control" name="item_id" id="item_id" style="height:50px;">
+                                    @foreach($items as $i)
+                                        <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }})</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-around mr-3">
-                                <div class="form-group p-2">
-                                    <label for="quantity" class="mb-3">Quantity</label>
-                                    <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
-                                        style="width: 500px; height: 50px">
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="quantity" class="mb-3">Quantity</label>
+                                <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
+                                    style="height: 50px">
                             </div>
-                            <div class="d-flex justify-content-around mr-3">
-                                <div class="form-group p-2">
-                                    <label for="department" class="mb-3">Department (optional)</label>
-                                    <br>
-                                    <select class="form-control" name="department" id="department" style="width: 500px; height:50px;">
-                                        <option value="None">None</option>
-                                        <option value="Deck">Deck</option>
-                                        <option value="Mesin">Mesin</option>
-                                    </select>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="department" class="mb-3">Department (optional)</label>
+                                <br>
+                                <select class="form-control" name="department" id="department" style="height:50px;">
+                                    <option value="None">None</option>
+                                    <option value="Deck">Deck</option>
+                                    <option value="Mesin">Mesin</option>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-around mr-3">
-                                <div class="form-group p-2">
-                                    <label for="golongan" class="mb-3">Golongan</label>
-                                    <br>
-                                    <select class="form-control" name="golongan" id="golongan" style="width: 500px; height:50px;">
-                                        <option value="None">None</option>
-                                        <option value="Floating">Floating</option>
-                                        <option value="Dock">Dock</option>
-                                    </select>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="golongan" class="mb-3">Golongan</label>
+                                <br>
+                                <select class="form-control" name="golongan" id="golongan" style="height:50px;">
+                                    <option value="None">None</option>
+                                    <option value="Floating">Floating</option>
+                                    <option value="Dock">Dock</option>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-around mr-3">
-                                <div class="form-group p-2">
-                                    <label for="note">Note (optional)</label>
-                                    <br>
-                                    <textarea class="form-control" name="note" Note="note" Note="3"
-                                        placeholder="Input Deskripsi Barang" style="width: 500px; height: 100px"></textarea>
-                                </div>
+                            <div class="form-group p-2">
+                                <label for="note">Note (optional)</label>
+                                <br>
+                                <textarea class="form-control" name="note" Note="note" Note="3"
+                                    placeholder="Input Deskripsi Barang" style="height: 100px"></textarea>
                             </div>
             
                             <br>
@@ -132,6 +123,7 @@
                         <table class="table">
                             <thead class="thead bg-danger">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Nama Barang</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Department</th>
@@ -141,8 +133,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($carts as $c)
+                                @foreach($carts as $key => $c)
                                     <tr>
+                                        <td>{{ $key + 1 }}</td>
                                         <td>{{ $c -> item -> itemName }}</td>
                                         <td>{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
                                         <td>{{ $c -> department }}</td>
@@ -159,6 +152,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </main>
@@ -235,13 +229,25 @@
     </div>
 
     <style>
+        body{
+            background-image: url('/images/logistic-background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .wrapper{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: antiquewhite;
+            height: 850px;
+            /* height: 100%; */
+        }
         th{
             color: white;
         }
         td, th{
             word-wrap: break-word;
             min-width: 100px;
-            max-width: 160px;
+            max-width: 120px;
             text-align: center;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
@@ -258,8 +264,15 @@
         .alert{
                 text-align: center;
         }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+        #row-wrapper{
+            overflow-x: auto;
+        }
     </style>
-
     @endsection
 @else
     @include('../layouts/notAuthorized')

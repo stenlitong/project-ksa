@@ -76,11 +76,11 @@
 
             <!-- Modal #1 -->
             <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem"
-                aria-hidden="true">
+                aria-hidden="true" data-backdrop="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addItemTitle">Add New Item</h5>
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="addItemTitle" style="color: white">Add New Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
             <table class="table mb-5">
                 <thead class="thead bg-danger">
                     <tr>
@@ -218,27 +218,27 @@
                 <tbody>
                     @foreach($items as $i)
                     <tr>
-                        <td>{{ $i -> itemName }}</td>
+                        <td><strong>{{ $i -> itemName }}</strong></td>
                         <td>{{ $i -> itemAge }}</td>
-                        <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                        <td><strong>{{ $i -> itemStock }} {{ $i -> unit }}</strong></td>
                         <td>{{ $i -> serialNo }}</td>
                         <td>{{ $i -> codeMasterItem }}</td>
                         <td>{{ $i -> cabang }}</td>
                         <td>{{ $i -> description }}</td>
                         @if(Auth::user()->hasRole('supervisorMaster'))
                         <td>
-                            <div class="d-flex justify-content-start">
+                            <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-{{ $i->id }}">
                                     Edit
                                 </button>
                                 
-                                <form method="POST" action="/supervisor/item-stocks/{{ $i -> id }}/delete-item" >
+                                {{-- <form method="POST" action="/supervisor/item-stocks/{{ $i -> id }}/delete-item" >
                                     @csrf
-                                    @method('delete')
-                                    <button class="btn btn-danger">
-                                        Delete
-                                    </button>
-                                </form>
+                                    @method('delete') --}}
+                                <button class="btn btn-danger" data-toggle="modal" id="delete" data-target="#deleteItem-{{ $i->id }}">
+                                    Delete
+                                </button>
+                                {{-- </form> --}}
                             </div>
                         </td>
                         @endif
@@ -255,8 +255,8 @@
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editItemTitle">Edit Item</h5>
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="editItemTitle" style="color: white">Edit Item: {{ $i -> itemName }} ({{ $i -> cabang }})</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -355,8 +355,39 @@
                                             placeholder="Input Deskripsi Barang"></textarea>
                                     </div>
                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Edit Item</button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+            <!-- Modal #3 -->
+            @foreach($items as $i)
+                <div class="modal fade" id="deleteItem-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteItemTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="editItemTitle" style="color: white">Delete Item: {{ $i -> itemName }} ({{ $i -> cabang }})</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <br>
+                                <h5 style="text-align: center">Are You Sure To Delete This Item ?</h5>
+                                <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form method="POST" action="/supervisor/item-stocks/{{ $i -> id }}/delete-item" >
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger">Delete Item</button>
                                 </form>
                             </div>
                         </div>
@@ -371,9 +402,14 @@
                 min-width: 160px;
                 max-width: 160px;
                 text-align: center;
+                vertical-align: middle;
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
 

@@ -78,5 +78,8 @@
         flex-direction: column;
         align-items: center;
     }
-    
+    @media (max-width: 768px) {
+    body {
+        height:100vh;
+    }
 </style>

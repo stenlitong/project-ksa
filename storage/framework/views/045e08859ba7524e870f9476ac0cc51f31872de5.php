@@ -36,7 +36,7 @@
                 <a href="<?php echo e(Route('crew.in-progress-order')); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
@@ -114,7 +114,7 @@
                                     </thead>
                                     <tbody>
                                         <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php if($od -> orders_id == $o -> order_id): ?>
+                                            <?php if($od -> orders_id == $o -> id): ?>
                                                 <tr>
                                                     <td><?php echo e($od -> item -> itemName); ?></td>
                                                     <td><?php echo e($od -> quantity); ?></td>
@@ -139,8 +139,12 @@
             text-align: center;
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

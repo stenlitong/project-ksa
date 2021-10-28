@@ -60,8 +60,9 @@
                     </div>
                     <div class="col mt-3">
                         <table class="table" id="myTable">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Department</th>
@@ -69,8 +70,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
+                                    <td><?php echo e($key + 1); ?></td>
                                     <td><?php echo e($od -> item -> itemName); ?></td>
                                     <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
                                     <td><?php echo e($od -> department); ?></td>
@@ -87,6 +89,19 @@
                 </div>
             </main>
     </div>
+
+    <style>
+        th{
+            color: white;
+        }
+        td, th{
+            word-wrap: break-word;
+            min-width: 120px;
+            max-width: 120px;
+            text-align: center;
+        }
+    </style>
+
     <?php $__env->stopSection(); ?>
 <?php else: ?>
     <?php echo $__env->make('../layouts/notAuthorized', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

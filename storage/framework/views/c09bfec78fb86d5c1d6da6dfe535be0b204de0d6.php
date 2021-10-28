@@ -8,7 +8,7 @@
         <?php echo $__env->make('purchasing.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3" style="text-align: center">Order # <?php echo e($orderHeads -> order_id); ?></h2>
+            <h2 class="mt-3" style="text-align: center">Order <?php echo e($orderHeads -> order_id); ?></h2>
 
             <?php $__errorArgs = ['boatName'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -101,6 +101,19 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+            <?php $__errorArgs = ['kurs'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Kurs Invalid
+            </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
                 <div class="row mt-4">
                     <div class="col">
                         <form method="POST" action="">
@@ -155,12 +168,15 @@ unset($__errorArgs, $__bag); ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price" class="mb-2">Harga</label>
+                                <label for="price" class="mb-2">Total Harga</label>
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">Rp.</div>
-                                    </div>
-                                    <input type="number" min="1" class="form-control" id="price" name="price" placeholder="Input total harga dalam angka..." required>
+                                    
+                                    <select class="form-control" id="kurs" name="kurs">
+                                        <option value="" disabled>Choose Kurs...</option>
+                                        <option value="Rp.">Rupiah</option>
+                                        <option value="$">Dollar</option>
+                                    </select>
+                                    <input type="number" min="1" class="form-control w-75" id="price" name="price" placeholder="Input total harga dalam angka..." required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -176,16 +192,18 @@ unset($__errorArgs, $__bag); ?>
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr>
-                                    <td><?php echo e($od -> item -> itemName); ?></td>
-                                    <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
-                                </tr>
+                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr>
+                                        <td><?php echo e($key + 1); ?></td>
+                                        <td><?php echo e($od -> item -> itemName); ?></td>
+                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                    </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>

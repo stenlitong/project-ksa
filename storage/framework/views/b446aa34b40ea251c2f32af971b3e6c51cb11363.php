@@ -63,5 +63,8 @@
         flex-direction: column;
         align-items: center;
     }
-    
+    @media (max-width: 768px) {
+    body {
+        height:100vh;
+    }
 </style><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/welcome.blade.php ENDPATH**/ ?>

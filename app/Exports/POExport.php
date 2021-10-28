@@ -27,7 +27,7 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
 
     public function query()
     {
-        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.order_id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPo', 'boatName', 'department', 'noPr', 'itemName', 'quantity', 'items.unit', 'items.serialNo', 'codeMasterItem', 'note');
+        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPo', 'boatName', 'department', 'noPr', 'itemName', 'quantity', 'items.unit', 'items.serialNo', 'codeMasterItem', 'note');
 
         return $orderDetail;
     }

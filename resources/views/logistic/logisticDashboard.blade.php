@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
                 <table class="table" id="myTable">
                     <thead class="thead bg-danger">
                         <tr>
@@ -159,7 +159,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach($orderDetails as $od)
-                                                @if($od -> orders_id == $o -> order_id)
+                                                @if($od -> orders_id == $o -> id)
                                                     <tr>
                                                         <td>{{ $od -> item -> itemName }}</td>
                                                         <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
@@ -247,8 +247,12 @@
             text-align: center;
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

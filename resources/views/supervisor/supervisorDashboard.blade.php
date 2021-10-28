@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x:auto;">
                 <table class="table" id="myTable">
                     <thead class="thead bg-danger">
                         <tr>
@@ -129,14 +129,14 @@
                                     </thead>
                                     <tbody>
                                         @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $o -> order_id)
+                                            @if($od -> orders_id == $o -> id)
                                                 <tr>
                                                     <td>{{ $od -> item -> itemName }}</td>
-                                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                    <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
                                                     @if(strpos($oh -> status, 'Order In Progress') !== false)
-                                                        <td>{{ $od -> item -> itemStock }}</td>
+                                                        <td><strong>{{ $od -> item -> itemStock }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif
                                                 </tr>
                                             @endif
@@ -199,6 +199,10 @@
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
         <script type="text/javascript">

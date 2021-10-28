@@ -101,10 +101,11 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </form>
                     </div>
-                    <div class="col mt-5 table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                    <div class="col mt-5 table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                         <table class="table">
                             <thead class="thead-dark">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Nama Barang</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Department</th>
@@ -112,8 +113,9 @@ unset($__errorArgs, $__bag); ?>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $carts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $carts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
+                                        <td><?php echo e($key + 1); ?></td>
                                         <td><?php echo e($c -> item -> itemName); ?></td>
                                         <td><?php echo e($c -> quantity); ?> <?php echo e($c -> item -> unit); ?></td>
                                         <td><?php echo e($c -> department); ?></td>
@@ -179,8 +181,9 @@ unset($__errorArgs, $__bag); ?>
         td, th{
             word-wrap: break-word;
             min-width: 100px;
-            max-width: 160px;
+            max-width: 120px;
             text-align: center;
+            vertical-align: middle;
         }
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
@@ -195,7 +198,11 @@ unset($__errorArgs, $__bag); ?>
         }
         .alert{
                 text-align: center;
-            }
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <?php $__env->stopSection(); ?>

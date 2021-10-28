@@ -193,7 +193,7 @@
                         </div>
                     </div>
 
-                    <div id="content">
+                    <div id="content" style="overflow-x:auto;">
                         <table class="table">
                             <thead class="thead bg-danger">
                             <tr>
@@ -242,7 +242,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order ID # {{ $o->order_id }}</span></h5>
+                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order {{ $o->order_id }}</span></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -259,7 +259,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach($orderDetails as $od)
-                                                @if($od -> orders_id == $o -> order_id)
+                                                @if($od -> orders_id == $o -> id)
                                                     <tr>
                                                         <td>{{ $od -> item -> itemName }}</td>
                                                         <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
@@ -454,9 +454,9 @@
             transition: 0.3s ease;
         }
         .scrolling-wrapper{
-                overflow-x: auto;
-            }
-            .card-block{
+            overflow-x: auto;
+        }
+        .card-block{
             background-color: #fff;
             background-position: center;
             background-size: cover;
@@ -468,8 +468,12 @@
             }
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

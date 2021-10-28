@@ -7,7 +7,8 @@
         @include('logistic.sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-            <h1 class="mb-3" style="margin-left: 40%">Stock Availability</h1>
+            <div class="wrapper">
+            <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
 
             <br>
             
@@ -68,7 +69,7 @@
                 {{ $items->links() }}
             </div>
 
-            <div id="content">
+            <div id="content" style="overflow-x: auto">
                 <table class="table mb-5">
                     <thead class="thead bg-danger">
                     <tr>
@@ -101,6 +102,8 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+
             </div>
 
             <!-- Modal #1 -->
@@ -165,6 +168,18 @@
         </main>
 
         <style>
+            body{
+                background-image: url('/images/logistic-background.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .wrapper{
+                padding: 10px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                height: 700px;
+                /* height: 100%; */
+            }
             th, td{
                 word-wrap: break-word;
                 min-width: 140px;
@@ -173,6 +188,10 @@
             }
             .alert{
                 text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
             }
         </style>
 

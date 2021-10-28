@@ -24,7 +24,7 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
@@ -52,7 +52,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
     
             $completed = $orderHeads->count();
     
@@ -65,7 +65,7 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
@@ -73,7 +73,7 @@ class SupervisorController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -93,7 +93,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
@@ -146,7 +146,7 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)', 'and', 'order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorReport', compact('orderHeads'));
     }
@@ -160,7 +160,7 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryOut', compact('orderHeads'));
     }
@@ -170,7 +170,7 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.order_id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryIn', compact('orderHeads'));
     }
@@ -322,12 +322,15 @@ class SupervisorController extends Controller
             if($orderDos -> order_tracker == 4){
                 return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
             }
-    
+            
             OrderDo::where('id', $orderDos -> id)->update([
                 'order_tracker' => 4,
                 'status' => 'On Delivery'
             ]);
-    
+            
+            // Decrement the stock for the requested branch
+            Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
+
             return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
         }
     }

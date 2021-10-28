@@ -60,8 +60,9 @@
                     </div>
                     <div class="col mt-3">
                         <table class="table" id="myTable">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                                 <tr>
+                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Department</th>
@@ -69,8 +70,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($orderDetails as $od)
+                                @foreach($orderDetails as $key => $od)
                                 <tr>
+                                    <td>{{ $key + 1 }}</td>
                                     <td>{{ $od -> item -> itemName }}</td>
                                     <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
                                     <td>{{ $od -> department }}</td>
@@ -87,6 +89,19 @@
                 </div>
             </main>
     </div>
+
+    <style>
+        th{
+            color: white;
+        }
+        td, th{
+            word-wrap: break-word;
+            min-width: 120px;
+            max-width: 120px;
+            text-align: center;
+        }
+    </style>
+
     @endsection
 @else
     @include('../layouts/notAuthorized')

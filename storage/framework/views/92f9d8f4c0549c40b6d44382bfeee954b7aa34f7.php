@@ -53,8 +53,8 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col mt-3">
-                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
+                    <div class="col mt-3" id="content">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                             <table class="table sortable">
                                 <thead class="thead bg-secondary">
                                     <tr>
@@ -124,6 +124,12 @@ unset($__errorArgs, $__bag); ?>
                 text-align: center;
             }
         </style>
+        <script>
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+        </script>
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     <?php $__env->stopSection(); ?>
 
