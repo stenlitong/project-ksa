@@ -175,6 +175,10 @@
                 document.getElementById('div2').innerHTML='';
             }
         }
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000);
     </script>
 
     <style>

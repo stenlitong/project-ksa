@@ -9,6 +9,7 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
             <h2 class="mt-3 mb-2" style="text-align: center">Order <?php echo e($orderHeads -> order_id); ?></h2>
+            <h1 class="mt-3 mb-2" style="text-align: center">Mail Of Goods Out</h1>
 
                 <div class="row mt-5">
                     <div class="col">

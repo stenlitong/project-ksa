@@ -39,9 +39,9 @@ class DashboardController extends Controller
                 $orderHeads = OrderHead::with('user')->where(function($query){
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
-                })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6)->withQueryString();
+                })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
             }else{
-                $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6)->withQueryString();
+                $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(7)->withQueryString();
             }
 
             // Get all the order detail

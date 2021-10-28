@@ -30,7 +30,6 @@
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Satuan</th>
-                                <th scope="col">Golongan</th>
                                 <th scope="col">No. Resi</th>
                                 <th scope="col">Note</th>
                             </tr>
@@ -44,7 +43,6 @@
                                         <td><?php echo e($oh -> item -> serialNo); ?></td>
                                         <td><?php echo e($oh -> quantity); ?></td>
                                         <td><?php echo e($oh -> item -> unit); ?></td>
-                                        <td><?php echo e($oh -> golongan); ?></td>
                                         <td><?php echo e($oh -> noResi); ?></td>
                                         <td><?php echo e($oh -> note); ?></td>
                                     </tr>

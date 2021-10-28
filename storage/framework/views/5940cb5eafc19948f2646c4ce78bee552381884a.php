@@ -8,7 +8,7 @@
         <?php echo $__env->make('logistic.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
-                <h1 style="text-align: center">Create Order</h1>
+                <h1 class="mt-3" style="text-align: center">Create Order</h1>
                 <br>
                 <?php if(session('status')): ?>
                     <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -180,17 +180,17 @@ unset($__errorArgs, $__bag); ?>
                             <tbody>
                                 <?php $__currentLoopData = $carts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td><?php echo e($key + 1); ?></td>
-                                        <td><?php echo e($c -> item -> itemName); ?></td>
-                                        <td><?php echo e($c -> quantity); ?> <?php echo e($c -> item -> unit); ?></td>
-                                        <td><?php echo e($c -> department); ?></td>
-                                        <td><?php echo e($c -> golongan); ?></td>
-                                        <td><?php echo e($c -> note); ?></td>
+                                        <td class="bg-white"><?php echo e($key + 1); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> item -> itemName); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> quantity); ?> <?php echo e($c -> item -> unit); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> department); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> golongan); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> note); ?></td>
                                         
                                         <form method="POST" action="/logistic/<?php echo e($c -> id); ?>/delete">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('delete'); ?>
-                                            <td><button class="btn btn-danger btn-sm">Delete Item</button></td>
+                                            <td class="bg-white"><button class="btn btn-danger btn-sm">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -269,6 +269,12 @@ unset($__errorArgs, $__bag); ?>
         </div>
     </div>
 
+    <script>
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
+    </script>
+
     <style>
         body{
             background-image: url('/images/logistic-background.png');
@@ -279,7 +285,7 @@ unset($__errorArgs, $__bag); ?>
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 850px;
+            height: 1100px;
             /* height: 100%; */
         }
         th{
@@ -296,7 +302,7 @@ unset($__errorArgs, $__bag); ?>
 
         .my-custom-scrollbar {
             position: relative;
-            height: 600px;
+            height: 700px;
             overflow: auto;
         }
         .table-wrapper-scroll-y {

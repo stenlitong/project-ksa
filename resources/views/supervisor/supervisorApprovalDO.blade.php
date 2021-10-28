@@ -133,6 +133,10 @@
                 $('#content').load(location.href + ' #content')
             }
             setInterval(refreshDiv, 60000);
+
+            setTimeout(function() {
+                $('.alert').fadeOut('fast');
+            }, 3000);
         </script>
         
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>

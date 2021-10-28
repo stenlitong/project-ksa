@@ -481,6 +481,10 @@
             $('#content').load(location.href + ' #content')
         }
         setInterval(refreshDiv, 60000);
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000);
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />

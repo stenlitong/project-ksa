@@ -8,7 +8,7 @@
         <?php echo $__env->make('crew.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 style="margin-left: 40%">Create Order</h1>
+                <h1 style="text-align: center">Create Order</h1>
                 <br>
                 <?php if(session('status')): ?>
                     <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -204,6 +204,12 @@ unset($__errorArgs, $__bag); ?>
             width: 100%;
         }
     </style>
+
+    <script>
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
+    </script>
 
     <?php $__env->stopSection(); ?>
 <?php else: ?>

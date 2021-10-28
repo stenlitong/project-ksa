@@ -105,6 +105,12 @@ unset($__errorArgs, $__bag); ?>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+    <script>
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000);
+    </script>
+        
     <style>
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

@@ -33,13 +33,13 @@
                         <tbody>
                             @foreach($orderHeads as $key=>$oh)
                                 <tr>
-                                    <td>{{ $key + 1  }}</td>
-                                    <td>{{ $oh -> prDate }}</td>
-                                    <td>{{ $oh -> noPr }}</td>
-                                    <td>{{ $oh -> supplier -> supplierName}}</td>
-                                    <td>{{ $oh -> noPo}}</td>
-                                    <td>{{ $oh -> boatName}}</td>
-                                    <td>{{ $oh -> descriptions}}</td>
+                                    <td class="bg-white">{{ $key + 1  }}</td>
+                                    <td class="bg-white">{{ $oh -> prDate }}</td>
+                                    <td class="bg-white">{{ $oh -> noPr }}</td>
+                                    <td class="bg-white">{{ $oh -> supplier -> supplierName}}</td>
+                                    <td class="bg-white">{{ $oh -> noPo}}</td>
+                                    <td class="bg-white">{{ $oh -> boatName}}</td>
+                                    <td class="bg-white">{{ $oh -> descriptions}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -58,7 +58,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 1000px;
+            height: 1100px;
             /* height: 100%; */
         }
         .tableFixHead          { overflow: auto; height: 250px; }

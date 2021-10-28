@@ -13,12 +13,6 @@
             <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
 
-            <div class="d-flex justify-content-end">
-                {{ $orderHeads->links() }}
-            </div>
-
-            <br>
-
             @if(session('error'))
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     {{ session('error') }}
@@ -36,6 +30,12 @@
                     Alasan Wajib Diisi
                 </div>
             @enderror
+
+            <br>
+
+            <div class="d-flex justify-content-end">
+                {{ $orderHeads->links() }}
+            </div>
 
             <div class="d-flex mb-3">
                 <form class="mr-auto w-50" action="">
@@ -234,7 +234,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 650px;
+            height: 850px;
             /* height: 100%; */
         }
         th{
@@ -260,6 +260,10 @@
             $('#content').load(location.href + ' #content')
         }
         setInterval(refreshDiv, 60000);
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
     </script>
 
     @endsection

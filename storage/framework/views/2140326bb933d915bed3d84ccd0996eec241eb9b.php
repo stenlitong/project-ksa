@@ -13,13 +13,6 @@
             <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang <?php echo e(Auth::user()->cabang); ?></h2>
 
-            <div class="d-flex justify-content-end">
-                <?php echo e($orderHeads->links()); ?>
-
-            </div>
-
-            <br>
-
             <?php if(session('error')): ?>
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     <?php echo e(session('error')); ?>
@@ -46,6 +39,13 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
+
+            <br>
+
+            <div class="d-flex justify-content-end">
+                <?php echo e($orderHeads->links()); ?>
+
+            </div>
 
             <div class="d-flex mb-3">
                 <form class="mr-auto w-50" action="">
@@ -239,7 +239,7 @@ unset($__errorArgs, $__bag); ?>
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 650px;
+            height: 850px;
             /* height: 100%; */
         }
         th{
@@ -265,6 +265,10 @@ unset($__errorArgs, $__bag); ?>
             $('#content').load(location.href + ' #content')
         }
         setInterval(refreshDiv, 60000);
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
     </script>
 
     <?php $__env->stopSection(); ?>

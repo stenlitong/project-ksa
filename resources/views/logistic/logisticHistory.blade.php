@@ -30,7 +30,6 @@
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Satuan</th>
-                                <th scope="col">Golongan</th>
                                 <th scope="col">No. Resi</th>
                                 <th scope="col">Note</th>
                             </tr>
@@ -38,15 +37,14 @@
                             <tbody>
                                 @foreach($orderHeads as $key => $oh)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $oh -> item -> lastGiven }}</td>
-                                        <td><strong>{{ $oh -> item -> itemName }}</strong></td>
-                                        <td>{{ $oh -> item -> serialNo}}</td>
-                                        <td><strong>{{ $oh -> quantity}}</strong></td>
-                                        <td>{{ $oh -> item -> unit}}</td>
-                                        <td>{{ $oh -> golongan}}</td>
-                                        <td><strong>{{ $oh -> noResi}}</strong></td>
-                                        <td>{{ $oh -> note}}</td>
+                                        <td class="bg-white">{{ $key + 1 }}</td>
+                                        <td class="bg-white">{{ $oh -> item -> lastGiven }}</td>
+                                        <td class="bg-white"><strong>{{ $oh -> item -> itemName }}</strong></td>
+                                        <td class="bg-white">{{ $oh -> item -> serialNo}}</td>
+                                        <td class="bg-white"><strong>{{ $oh -> quantity}}</strong></td>
+                                        <td class="bg-white">{{ $oh -> item -> unit}}</td>
+                                        <td class="bg-white"><strong>{{ $oh -> noResi}}</strong></td>
+                                        <td class="bg-white">{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

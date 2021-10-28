@@ -38,16 +38,15 @@
                             <tbody>
                                 @foreach($orderHeads as $key => $oh)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        {{-- Need to fix this --}}
-                                        <td>{{ $oh -> approved_at }}</td>
-                                        <td>{{ $oh -> item -> itemName }}</td>
-                                        <td>{{ $oh -> item -> serialNo}}</td>
-                                        <td>{{ $oh -> quantity}}</td>
-                                        <td>{{ $oh -> item -> unit}}</td>
-                                        <td>{{ $oh -> golongan}}</td>
-                                        <td>{{ $oh -> supplierName}}</td>
-                                        <td>{{ $oh -> note}}</td>
+                                        <td class="bg-white">{{ $key + 1 }}</td>
+                                        <td class="bg-white">{{ $oh -> approved_at }}</td>
+                                        <td class="bg-white">{{ $oh -> item -> itemName }}</td>
+                                        <td class="bg-white">{{ $oh -> item -> serialNo}}</td>
+                                        <td class="bg-white">{{ $oh -> quantity}}</td>
+                                        <td class="bg-white">{{ $oh -> item -> unit}}</td>
+                                        <td class="bg-white">{{ $oh -> golongan}}</td>
+                                        <td class="bg-white">{{ $oh -> supplierName}}</td>
+                                        <td class="bg-white"{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

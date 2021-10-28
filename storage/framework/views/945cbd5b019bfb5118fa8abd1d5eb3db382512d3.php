@@ -35,27 +35,30 @@
                                     <th scope="col">Cabang Tujuan</th>
                                     <th scope="col">Request Qty</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Download</th>
                                     <th scope="col">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                     <?php $__currentLoopData = $ongoingOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td><?php echo e($key + 1); ?></td>
-                                            <td><strong><?php echo e($o -> item_requested -> itemName); ?></strong></td>
-                                            <td><?php echo e($o -> toCabang); ?></td>
-                                            <td><strong><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></strong></td>
+                                            <td class="bg-white"><?php echo e($key + 1); ?></td>
+                                            <td class="bg-white"><strong><?php echo e($o -> item_requested -> itemName); ?></strong></td>
+                                            <td class="bg-white"><?php echo e($o -> toCabang); ?></td>
+                                            <td class="bg-white"><strong><?php echo e($o -> quantity); ?> <?php echo e($o -> item_requested -> unit); ?></strong></td>
                                             <?php if(strpos($o -> status, 'Rejected') !== false): ?>
-                                                <td><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
+                                                <td class="bg-white"><strong style="color: red"><?php echo e($o -> status); ?></strong></td>
                                             <?php elseif(strpos($o -> status, 'On Delivery') !== false): ?>
-                                                <td><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
+                                                <td class="bg-white"><strong style="color: blue"><?php echo e($o -> status); ?></strong></td>
                                             <?php elseif(strpos($o -> status, 'Accepted') !== false): ?>
-                                                <td><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
+                                                <td class="bg-white"><strong style="color: green"><?php echo e($o -> status); ?></strong></td>
                                             <?php else: ?>
-                                                <td><?php echo e($o -> status); ?></td>
+                                                <td class="bg-white"><?php echo e($o -> status); ?></td>
                                             <?php endif; ?>
-                                            <td>
+                                            <td class="bg-white">
                                                 <a href="/logistic/request-do/<?php echo e($o -> id); ?>/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
+                                            </td>
+                                            <td class="bg-white">
                                                 <?php if(strpos($o -> status, 'On Delivery') !== false): ?>
                                                     <a href="/logistic/request-do/<?php echo e($o -> id); ?>/accept-do" class="btn btn-info">Accept Delivery</a>
                                                 <?php endif; ?>
@@ -124,6 +127,10 @@
                 $('#content').load(location.href + ' #content')
             }
             setInterval(refreshDiv, 60000);
+
+            setTimeout(function() {
+                $('.alert').fadeOut('fast');
+            }, 3000); 
         </script>
 
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>

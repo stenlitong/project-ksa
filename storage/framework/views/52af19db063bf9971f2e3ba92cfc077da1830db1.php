@@ -38,16 +38,15 @@
                             <tbody>
                                 <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td><?php echo e($key + 1); ?></td>
-                                        
-                                        <td><?php echo e($oh -> approved_at); ?></td>
-                                        <td><?php echo e($oh -> item -> itemName); ?></td>
-                                        <td><?php echo e($oh -> item -> serialNo); ?></td>
-                                        <td><?php echo e($oh -> quantity); ?></td>
-                                        <td><?php echo e($oh -> item -> unit); ?></td>
-                                        <td><?php echo e($oh -> golongan); ?></td>
-                                        <td><?php echo e($oh -> supplierName); ?></td>
-                                        <td><?php echo e($oh -> note); ?></td>
+                                        <td class="bg-white"><?php echo e($key + 1); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> approved_at); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> item -> itemName); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> item -> serialNo); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> quantity); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> item -> unit); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> golongan); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> supplierName); ?></td>
+                                        <td class="bg-white"<?php echo e($oh -> note); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

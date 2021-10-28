@@ -201,6 +201,12 @@
     </div>
 @endforeach
 
+<script>
+    setTimeout(function() {
+        $('.alert').fadeOut('fast');
+    }, 3000);
+</script>
+
 <style>
   .scrolling-wrapper{
         overflow-y: auto;

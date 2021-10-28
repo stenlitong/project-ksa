@@ -28,44 +28,46 @@
                 </div>
             @enderror
 
-            <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5" style="overflow-x:auto;">
-                <table class="table table-bordered sortable">
-                    <thead class="thead bg-danger">
-                    <tr>
-                        <th scope="col">Tanggal</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Nama File</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Approval</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($documents as $doc)
+            <div id="content">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5" style="overflow-x:auto;">
+                    <table class="table table-bordered sortable">
+                        <thead class="thead bg-danger">
                         <tr>
-                            <td>{{ $doc -> submissionTime }}</td>
-                            @if(strpos($doc -> status, 'Denied') !== false)
-                                <td><span style="color: red;font-weight: bold;">{{ $doc -> status }}</span></td>
-                            @elseif(strpos($doc -> status, 'Approved') !== false)
-                                <td><span style="color: green;font-weight: bold;">{{ $doc -> status }}</span></td>
-                            @else
-                                <td>{{ $doc -> status }}</td>
-                            @endif
-                            <td>{{ $doc -> filename }}</td>
-                            <td>{{ $doc -> description }}</td>
-                            <td><a href="/purchasing/form-ap/{{ $doc -> id }}/download" target="_blank"><span class="icon" data-feather="download"></span></a></td>
-                            @if(strpos($doc -> status, 'Denied') !== false || strpos($doc -> status, 'Approved') !== false)
-                                <td></td>
-                            @else
-                                <td>
-                                    <a href="/purchasing/form-ap/{{ $doc -> id }}/approve" class="btn btn-success">Accept</a>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-form-{{ $doc -> id }}">Reject</button>
-                                </td>
-                            @endif
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Nama File</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Approval</th>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($documents as $doc)
+                            <tr>
+                                <td>{{ $doc -> submissionTime }}</td>
+                                @if(strpos($doc -> status, 'Denied') !== false)
+                                    <td><span style="color: red;font-weight: bold;">{{ $doc -> status }}</span></td>
+                                @elseif(strpos($doc -> status, 'Approved') !== false)
+                                    <td><span style="color: green;font-weight: bold;">{{ $doc -> status }}</span></td>
+                                @else
+                                    <td>{{ $doc -> status }}</td>
+                                @endif
+                                <td>{{ $doc -> filename }}</td>
+                                <td>{{ $doc -> description }}</td>
+                                <td><a href="/purchasing/form-ap/{{ $doc -> id }}/download" target="_blank"><span class="icon" data-feather="download"></span></a></td>
+                                @if(strpos($doc -> status, 'Denied') !== false || strpos($doc -> status, 'Approved') !== false)
+                                    <td></td>
+                                @else
+                                    <td>
+                                        <a href="/purchasing/form-ap/{{ $doc -> id }}/approve" class="btn btn-success">Accept</a>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-form-{{ $doc -> id }}">Reject</button>
+                                    </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
@@ -96,6 +98,16 @@
         </div>
     @endforeach
 
+    <script>
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000);
+    </script>
+        
     <style>
         .tableFixHead          { overflow: auto; height: 250px; }
         .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }

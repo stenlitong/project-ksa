@@ -30,7 +30,6 @@
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Satuan</th>
-                                <th scope="col">Golongan</th>
                                 <th scope="col">No. Resi</th>
                                 <th scope="col">Note</th>
                             </tr>
@@ -44,7 +43,6 @@
                                         <td>{{ $oh -> item -> serialNo}}</td>
                                         <td>{{ $oh -> quantity}}</td>
                                         <td>{{ $oh -> item -> unit}}</td>
-                                        <td>{{ $oh -> golongan}}</td>
                                         <td>{{ $oh -> noResi}}</td>
                                         <td>{{ $oh -> note}}</td>
                                     </tr>

@@ -33,13 +33,13 @@
                         <tbody>
                             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($key + 1); ?></td>
-                                    <td><?php echo e($oh -> prDate); ?></td>
-                                    <td><?php echo e($oh -> noPr); ?></td>
-                                    <td><?php echo e($oh -> supplier -> supplierName); ?></td>
-                                    <td><?php echo e($oh -> noPo); ?></td>
-                                    <td><?php echo e($oh -> boatName); ?></td>
-                                    <td><?php echo e($oh -> descriptions); ?></td>
+                                    <td class="bg-white"><?php echo e($key + 1); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> prDate); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> noPr); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> supplier -> supplierName); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> noPo); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> boatName); ?></td>
+                                    <td class="bg-white"><?php echo e($oh -> descriptions); ?></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
@@ -58,7 +58,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 1000px;
+            height: 1100px;
             /* height: 100%; */
         }
         .tableFixHead          { overflow: auto; height: 250px; }

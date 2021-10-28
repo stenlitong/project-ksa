@@ -8,7 +8,7 @@
         @include('logistic.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
-                <h1 style="text-align: center">Create Order</h1>
+                <h1 class="mt-3" style="text-align: center">Create Order</h1>
                 <br>
                 @if (session('status'))
                     <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -135,17 +135,17 @@
                             <tbody>
                                 @foreach($carts as $key => $c)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $c -> item -> itemName }}</td>
-                                        <td>{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
-                                        <td>{{ $c -> department }}</td>
-                                        <td>{{ $c -> golongan }}</td>
-                                        <td>{{ $c -> note }}</td>
+                                        <td class="bg-white">{{ $key + 1 }}</td>
+                                        <td class="bg-white">{{ $c -> item -> itemName }}</td>
+                                        <td class="bg-white">{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
+                                        <td class="bg-white">{{ $c -> department }}</td>
+                                        <td class="bg-white">{{ $c -> golongan }}</td>
+                                        <td class="bg-white">{{ $c -> note }}</td>
                                         {{-- Delete Item --}}
                                         <form method="POST" action="/logistic/{{ $c -> id }}/delete">
                                             @csrf
                                             @method('delete')
-                                            <td><button class="btn btn-danger btn-sm">Delete Item</button></td>
+                                            <td class="bg-white"><button class="btn btn-danger btn-sm">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 @endforeach
@@ -228,6 +228,12 @@
         </div>
     </div>
 
+    <script>
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
+    </script>
+
     <style>
         body{
             background-image: url('/images/logistic-background.png');
@@ -238,7 +244,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 850px;
+            height: 1100px;
             /* height: 100%; */
         }
         th{
@@ -255,7 +261,7 @@
 
         .my-custom-scrollbar {
             position: relative;
-            height: 600px;
+            height: 700px;
             overflow: auto;
         }
         .table-wrapper-scroll-y {

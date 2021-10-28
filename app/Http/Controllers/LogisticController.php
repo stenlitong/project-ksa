@@ -231,7 +231,7 @@ class LogisticController extends Controller
             'order_tracker' => 2,
             'reason' => $request->reason
         ]);
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('status', 'Order Rejected Successfully');
     }
 
     public function approveOrderPage(OrderHead $orderHeads){
