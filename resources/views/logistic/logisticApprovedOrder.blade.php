@@ -8,84 +8,141 @@
         @include('logistic.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3 mb-2" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
-            <h1 class="mt-3 mb-2" style="text-align: center">Mail Of Goods Out</h1>
+                <div class="wrapper flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
+                    <h2 class="mt-3 mb-2" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
+                    <h1 class="mt-3 mb-2" style="text-align: center">Mail Of Goods Out</h1>
+                    @if(session('error'))
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
+                    @if(session('status'))
+                        <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-                <div class="row mt-5">
-                    <div class="col">
-                        <form method="POST" action="/logistic/order/{{ $orderHeads -> id }}/approve">
-                            @csrf
-                            <div class="form-group">
-                                <label for="boatName">Nama Kapal</label>
-                                <input type="text" class="form-control" id="boatName" name="boatName" value="{{ $orderHeads -> boatName }}" readonly>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="sender">Yang Menyerahkan</label>
-                                        <input type="text" class="form-control" id="sender" name="sender" value="{{ Auth::user()->name }}" readonly>
-                                    </div>
+                    @error('acceptedQuantity')
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            Invalid Quantity
+                        </div>
+                    @enderror
+
+                    <div class="row mt-5">
+                        <div class="col">
+                            <form method="POST" action="/logistic/order/{{ $orderHeads -> id }}/approve">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="boatName">Nama Kapal</label>
+                                    <input type="text" class="form-control" id="boatName" name="boatName" value="{{ $orderHeads -> boatName }}" readonly>
                                 </div>
-                                <div class="col">
-                                    <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
                                         <div class="form-group">
-                                            <label for="receiver">Yang Menerima</label>
-                                            <input type="text" class="form-control" id="receiver" name="receiver" value="{{ $orderHeads -> user -> name }}" readonly>
+                                            <label for="sender">Yang Menyerahkan</label>
+                                            <input type="text" class="form-control" id="sender" name="sender" value="{{ Auth::user()->name }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="receiver">Yang Menerima</label>
+                                                <input type="text" class="form-control" id="receiver" name="receiver" value="{{ $orderHeads -> user -> name }}" readonly>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="expedition">Ekspedisi</label>
-                                <select class="form-control" id="expedition" name="expedition">
-                                    <option value="onsite">Onsite</option>
-                                    <option value="JNE">JNE</option>
-                                    <option value="TIKI">TIKI</option>
-                                    <option value="JWT">JWT</option>
-                                    <option value="Lion">Lion</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="noResi">Nomor Resi (optional)</label>
-                                <input type="text" class="form-control" id="noResi" name="noResi"
-                                    placeholder="Input Nomor Resi (optional)">
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Deskripsi (optional)</label>
-                                <textarea class="form-control" name="description" id="description" rows="3"
-                                    placeholder="Input Keterangan"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary" style="margin-left: 45%">Submit</button>
-                        </form>
-                    </div>
-                    <div class="col mt-3">
-                        <table class="table" id="myTable">
-                            <thead class="thead bg-danger">
-                                <tr>
-                                    <th scope="col">Nomor</th>
-                                    <th scope="col">Item Barang</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">Stok</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($orderDetails as $key => $od)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $od -> item -> itemName }}</td>
-                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                    <td>{{ $od -> department }}</td>
-                                    @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
-                                        <td style="color: red; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
-                                    @else
-                                        <td style="color: green; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
-                                    @endif
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                <div class="form-group">
+                                    <label for="expedition">Ekspedisi</label>
+                                    <select class="form-control" id="expedition" name="expedition">
+                                        <option value="onsite">Onsite</option>
+                                        <option value="JNE">JNE</option>
+                                        <option value="TIKI">TIKI</option>
+                                        <option value="JWT">JWT</option>
+                                        <option value="Lion">Lion</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="noResi">Nomor Resi (optional)</label>
+                                    <input type="text" class="form-control" id="noResi" name="noResi"
+                                        placeholder="Input Nomor Resi (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Deskripsi (optional)</label>
+                                    <textarea class="form-control" name="description" id="description" rows="3"
+                                        placeholder="Input Keterangan"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" style="margin-left: 45%">Submit</button>
+                            </form>
+                        </div>
+                        {{-- <div class="col mt-3" style="overflow-x:auto;">
+                            <table class="table" id="myTable">
+                                <thead class="thead bg-danger">
+                                    <tr>
+                                        <th scope="col">Nomor</th>
+                                        <th scope="col">Item Barang</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Department</th>
+                                        <th scope="col">Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orderDetails as $key => $od)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $od -> item -> itemName }}</td>
+                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                        <td>{{ $od -> department }}</td>
+                                        @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
+                                            <td style="color: red; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
+                                        @else
+                                            <td style="color: green; font-weight: bold">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
+                                        @endif
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div> --}}
+                        <div class="col mt-3 table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
+                            <table class="table">
+                                <thead class="thead bg-danger">
+                                    <tr>
+                                        <th scope="col">Nama Barang</th>
+                                        <th scope="col">Request Quantity</th>
+                                        <th scope="col">Department</th>
+                                        <th scope="col">Stok</th>
+                                        <th scope="col">Accepted Qty</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orderDetails as $od)
+                                    <tr>
+                                        <td class="bg-white"><strong>{{ $od -> item -> itemName }}</strong></td>
+                                        <td class="bg-white"><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
+                                        <td class="bg-white">{{ $od -> department }}</td>
+                                        @if(preg_replace('/[a-zA-z ]/', '', $od -> quantity) > $od -> item -> itemStock)
+                                            <td class="bg-white" style="color: red"><strong>{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</strong></td>
+                                        @else
+                                            <td class="bg-white" style="color: green"><strong>{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</strong></td>
+                                        @endif
+                                        <form action="/logistic/order/{{ $orderHeads -> id }}/edit/{{ $od -> id }}" method="POST">
+                                            @csrf
+                                            @method('patch')
+                                            <td class="bg-white">
+                                                <input class="w-50" type="number" min="1" max="{{ $od -> item -> itemStock }}" value="{{ $od -> acceptedQuantity }}" name="acceptedQuantity" id="acceptedQuantity"> {{ $od -> item -> unit }}
+                                            </td>
+                                            <td class="bg-white">
+                                                <button type="submit" class="btn btn-info btn-sm">Save</button>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -100,8 +157,48 @@
             min-width: 120px;
             max-width: 120px;
             text-align: center;
+            vertical-align: middle;
+        }
+        label{
+            font-weight: bold;
+        }
+        .wrapper{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: antiquewhite;
+            height: 850px;
+            /* height: 100%; */
+        }
+        .tableFixHead          { overflow: auto; height: 250px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+        .my-custom-scrollbar {
+            position: relative;
+            height: 600px;
+            overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+        .alert{
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
         }
     </style>
+
+    <script type="text/javascript">
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+        setInterval(refreshDiv, 60000);
+
+        setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
+    </script>
 
     @endsection
 @else

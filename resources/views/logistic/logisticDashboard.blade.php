@@ -9,7 +9,6 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 30px">
             
             @include('../layouts/time')
-
             <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
 
@@ -64,23 +63,23 @@
                     <tbody>
                         @foreach($orderHeads as $oh)
                         <tr>
-                            <td><strong>{{ $oh -> order_id}}</strong></td>
+                            <td class="bg-white"><strong>{{ $oh -> order_id}}</strong></td>
                             @if(strpos($oh -> status, 'Rejected') !== false)
-                                <td><span style="color: red;font-weight: bold;">{{ $oh -> status}}</span></td>
+                                <td class="bg-white"><span style="color: red;font-weight: bold;">{{ $oh -> status}}</span></td>
                             @elseif(strpos($oh -> status, 'Completed') !== false)
-                                <td><span style="color: green;font-weight: bold;">{{ $oh -> status}}</span></td>
+                                <td class="bg-white"><span style="color: green;font-weight: bold;">{{ $oh -> status}}</span></td>
                             @elseif(strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Items Ready') !== false)
-                                <td><span style="color: blue;font-weight: bold;">{{ $oh -> status}}</span></td>
+                                <td class="bg-white"><span style="color: blue;font-weight: bold;">{{ $oh -> status}}</span></td>
                             @elseif(strpos($oh -> status, 'Delivered') !== false)
-                                <td><span style="color: #16c9e9;font-weight: bold;">{{ $oh -> status }}</span></td>
+                                <td class="bg-white"><span style="color: #16c9e9;font-weight: bold;">{{ $oh -> status }}</span></td>
                             @else
-                                <td>{{ $oh -> status}}</td>
+                                <td class="bg-white">{{ $oh -> status}}</td>
                             @endif
 
                             @if(strpos($oh -> status, 'Rejected') !== false)
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
+                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
                             @else
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
+                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
                             @endif
 
                             {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
@@ -92,13 +91,13 @@
                                 </td>
                             @else --}}
                                 {{-- Button to trigger the modal detail --}}
-                                <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
+                                <td class="bg-white"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">
                                     Detail
                                 </button></td>
                             {{-- @endif --}}
 
-                            <td>
-                                @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
+                            <td class="bg-white">
+                                @if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false)
                                     <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 @endif
                                 @if(strpos($oh -> status, 'Delivered') !== false)
@@ -118,7 +117,7 @@
             @foreach($orderHeads as $o)
                     <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
                                     <div class="d-flex justify-content-between">
@@ -129,6 +128,10 @@
                                         <div class="d-flex-column ml-5">
                                             <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
                                             <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
+                                        </div>
+                                        <div class="d-flex-column ml-5">
+                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
+                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->created_by }}</h5>
                                         </div>
                                     </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -150,6 +153,7 @@
                                                 @endif
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
+                                                <th scope="col">Golongan</th>
                                                 
                                                 @if(strpos($o -> status, 'Request In Progress') !== false)
                                                     <th scope="col">Stok Barang</th>
@@ -161,13 +165,14 @@
                                             @foreach($orderDetails as $od)
                                                 @if($od -> orders_id == $o -> id)
                                                     <tr>
-                                                        <td>{{ $od -> item -> itemName }}</td>
-                                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                        <td><strong>{{ $od -> item -> itemName }}</strong></td>
+                                                        <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                         @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
                                                             <td>{{ $od -> item -> lastGiven }}</td>
                                                         @endif
                                                         <td>{{ $od -> item -> itemAge }}</td>
                                                         <td>{{ $od -> department }}</td>
+                                                        <td>{{ $od -> item -> golongan }}</td>
 
                                                         @if(strpos($o -> status, 'Request In Progress') !== false)
                                                             @if($od -> quantity > $od -> item -> itemStock)
@@ -226,7 +231,7 @@
 
     <style>
         body{
-            background-image: url('/images/logistic-background.png');
+            /* background-image: url('/images/logistic-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

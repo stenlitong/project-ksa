@@ -119,7 +119,7 @@ unset($__errorArgs, $__bag); ?>
                                 <br>
                                 <select class="form-control" name="item_id" id="item_id" style="height:50px;">
                                     <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($i -> id); ?>"><?php echo e($i -> itemName); ?> (<?php echo e($i -> cabang); ?>)</option>
+                                        <option value="<?php echo e($i -> id); ?>"><?php echo e($i -> itemName); ?> (<?php echo e($i -> cabang); ?>) <?php echo e($i -> unit); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
@@ -277,7 +277,7 @@ unset($__errorArgs, $__bag); ?>
 
     <style>
         body{
-            background-image: url('/images/logistic-background.png');
+            /* background-image: url('/images/logistic-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

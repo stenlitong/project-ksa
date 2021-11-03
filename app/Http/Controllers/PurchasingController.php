@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\PurchasingReportExport;
 use App\Exports\POExport;
 use Illuminate\Http\Request;
-Use \Carbon\Carbon;
+// Use \Carbon\Carbon;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
@@ -18,31 +18,41 @@ use Storage;
 class PurchasingController extends Controller
 {
     public function completedOrder(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6);
+            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
             
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
             
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
@@ -53,7 +63,7 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $completed = $orderHeads->count();
     
@@ -65,11 +75,21 @@ class PurchasingController extends Controller
     }
 
     public function inProgressOrder(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
@@ -77,19 +97,19 @@ class PurchasingController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(6);
+            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
@@ -100,7 +120,7 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang, 'and','order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
@@ -214,15 +234,24 @@ class PurchasingController extends Controller
     }
 
     public function reportPage(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from user/goods in
-        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3', 'and', 'cabang', 'like', Auth::user()->cabang)->orWhere('role_user.role_id' , '=', '4', 'and', 'cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
             $query->where('role_user.role_id' , '=', '3')
             ->orWhere('role_user.role_id' , '=', '4');
         })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orderHeads'));
     }

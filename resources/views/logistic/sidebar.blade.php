@@ -2,37 +2,67 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/dashboard">
+                    <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                            echo('active');
+                        }
+                    @endphp" aria-current="page" href="/dashboard">
                     <span data-feather="home"></span>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.stocks") }}">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'stocks'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.stocks") }}">
                     <span data-feather="layers"></span>
                     Item Stocks
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.makeOrder") }}">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'make-order'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.makeOrder") }}">
                     <span data-feather="plus-circle"></span>
                     Make Order
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.requestDo") }}">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'request-do'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.requestDo") }}">
                     <span data-feather="shopping-bag"></span>
                     Request DO
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.historyOut") }}">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'history-out' || basename($_SERVER['PHP_SELF']) == 'history-in'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.historyOut") }}">
                     <span data-feather="file"></span>
                     Report Goods In/Out
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ Route("logistic.report") }}">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['PHP_SELF']) == 'report'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.report") }}">
                     <span data-feather="archive"></span>
                     Report PR/PO
                 </a>

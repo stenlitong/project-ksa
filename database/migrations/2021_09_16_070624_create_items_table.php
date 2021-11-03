@@ -19,6 +19,8 @@ class CreateItemsTable extends Migration
             $table->integer('itemStock');
             $table->string('unit');
             $table->string('serialNo')->nullable();
+            $table->string('golongan');
+            $table->string('itemPrice');
             $table->string('codeMasterItem');
             $table->string('itemAge');
             $table->string('cabang');

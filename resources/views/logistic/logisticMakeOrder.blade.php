@@ -74,7 +74,7 @@
                                 <br>
                                 <select class="form-control" name="item_id" id="item_id" style="height:50px;">
                                     @foreach($items as $i)
-                                        <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }})</option>
+                                        <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> cabang }}) {{ $i -> unit }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -236,7 +236,7 @@
 
     <style>
         body{
-            background-image: url('/images/logistic-background.png');
+            /* background-image: url('/images/logistic-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

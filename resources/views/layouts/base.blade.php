@@ -59,7 +59,7 @@
     }
     @media (min-width: 300px) and (max-width: 767px){
         body {
-            height:118vh;
+            height:90vh;
         }
         .med-query{
             color: white;
@@ -70,7 +70,7 @@
     }
     @media (min-width: 768px) and (max-width: 1024px){
         body {
-            height:118vh;
+            height:120vh;
         }
     }
     @media (min-width: 1025px) and (max-width: 1280px) {

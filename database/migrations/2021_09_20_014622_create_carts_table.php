@@ -20,6 +20,7 @@ class CreateCartsTable extends Migration
             $table->string('quantity');
             $table->string('department')->nullable();
             $table->string('golongan')->nullable();
+            $table->string('cabang');
             $table->string('note')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');

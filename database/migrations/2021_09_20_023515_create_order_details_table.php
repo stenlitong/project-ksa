@@ -17,9 +17,9 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('orders_id');
             $table->unsignedBigInteger('item_id');
-            $table->string('quantity');
+            $table->integer('quantity');
+            $table->integer('acceptedQuantity');
             $table->string('department')->nullable();
-            $table->string('golongan')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
 

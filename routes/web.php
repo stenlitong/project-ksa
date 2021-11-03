@@ -29,6 +29,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
+        Route::post('/change-branch', [CrewController::class, 'changeBranch'])->name('changeBranch');
         Route::get('/completed-order', [CrewController::class, 'completedOrder'])->name('completed-order');
         Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
@@ -43,6 +44,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/in-progress-order', [LogisticController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/completed-order', [LogisticController::class, 'completedOrder'])->name('completed-order');
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
+        Route::patch('/order/{orderHeads}/edit/{orderDetails}', [LogisticController::class, 'editAcceptedQuantity']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [LogisticController::class, 'rejectOrder']);
         Route::get('/history-out', [LogisticController::class, 'historyOutPage'])->name('historyOut');
@@ -114,6 +116,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
         Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
         Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
+        Route::delete('/{suppliers}/delete', [AdminPurchasingController::class, 'deleteSupplier']);
         Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
         Route::post('/form-ap/upload', [AdminPurchasingController::class, 'uploadFile']);
         Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);

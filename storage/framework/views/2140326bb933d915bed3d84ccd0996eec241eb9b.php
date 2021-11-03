@@ -9,7 +9,6 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 30px">
             
             <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
             <div class="wrapper">
             <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang <?php echo e(Auth::user()->cabang); ?></h2>
 
@@ -74,36 +73,36 @@ unset($__errorArgs, $__bag); ?>
                     <tbody>
                         <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><strong><?php echo e($oh -> order_id); ?></strong></td>
+                            <td class="bg-white"><strong><?php echo e($oh -> order_id); ?></strong></td>
                             <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                                <td><span style="color: red;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
+                                <td class="bg-white"><span style="color: red;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
                             <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
-                                <td><span style="color: green;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
+                                <td class="bg-white"><span style="color: green;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
                             <?php elseif(strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Items Ready') !== false): ?>
-                                <td><span style="color: blue;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
+                                <td class="bg-white"><span style="color: blue;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
                             <?php elseif(strpos($oh -> status, 'Delivered') !== false): ?>
-                                <td><span style="color: #16c9e9;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
+                                <td class="bg-white"><span style="color: #16c9e9;font-weight: bold;"><?php echo e($oh -> status); ?></span></td>
                             <?php else: ?>
-                                <td><?php echo e($oh -> status); ?></td>
+                                <td class="bg-white"><?php echo e($oh -> status); ?></td>
                             <?php endif; ?>
 
                             <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($oh -> reason); ?></td>
+                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($oh -> reason); ?></td>
                             <?php else: ?>
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($oh -> descriptions); ?></td>
+                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;"><?php echo e($oh -> descriptions); ?></td>
                             <?php endif; ?>
 
                             
 
                             
                                 
-                                <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">
+                                <td class="bg-white"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">
                                     Detail
                                 </button></td>
                             
 
-                            <td>
-                                <?php if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false): ?>
+                            <td class="bg-white">
+                                <?php if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false): ?>
                                     <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 <?php endif; ?>
                                 <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
@@ -123,7 +122,7 @@ unset($__errorArgs, $__bag); ?>
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
                                     <div class="d-flex justify-content-between">
@@ -134,6 +133,10 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="d-flex-column ml-5">
                                             <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
                                             <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->boatName); ?></h5>
+                                        </div>
+                                        <div class="d-flex-column ml-5">
+                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
+                                            <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->created_by); ?></h5>
                                         </div>
                                     </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -155,6 +158,7 @@ unset($__errorArgs, $__bag); ?>
                                                 <?php endif; ?>
                                                 <th scope="col">Umur Barang</th>
                                                 <th scope="col">Department</th>
+                                                <th scope="col">Golongan</th>
                                                 
                                                 <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
                                                     <th scope="col">Stok Barang</th>
@@ -166,13 +170,14 @@ unset($__errorArgs, $__bag); ?>
                                             <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
-                                                        <td><?php echo e($od -> item -> itemName); ?></td>
-                                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                                        <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
+                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                         <?php if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false): ?>
                                                             <td><?php echo e($od -> item -> lastGiven); ?></td>
                                                         <?php endif; ?>
                                                         <td><?php echo e($od -> item -> itemAge); ?></td>
                                                         <td><?php echo e($od -> department); ?></td>
+                                                        <td><?php echo e($od -> item -> golongan); ?></td>
 
                                                         <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
                                                             <?php if($od -> quantity > $od -> item -> itemStock): ?>
@@ -231,7 +236,7 @@ unset($__errorArgs, $__bag); ?>
 
     <style>
         body{
-            background-image: url('/images/logistic-background.png');
+            /* background-image: url('/images/logistic-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

@@ -15,36 +15,46 @@ use App\Exports\PurchasingReportExport;
 use App\Models\OrderDo;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Auth;
-Use \Carbon\Carbon;
+// Use \Carbon\Carbon;
 
 class SupervisorController extends Controller
 {
     public function completedOrder(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from logistic role, then they can approve and send it to the purchasing role
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
+            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
 
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
@@ -52,7 +62,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
     
             $completed = $orderHeads->count();
     
@@ -61,11 +71,21 @@ class SupervisorController extends Controller
     }
 
     public function inProgressOrder(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from logistic role, then they can approve and send it to the purchasing role
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
@@ -73,19 +93,19 @@ class SupervisorController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(8);
+            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
@@ -93,7 +113,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
@@ -138,15 +158,25 @@ class SupervisorController extends Controller
 
     public function downloadPr(OrderHead $orderHeads){
         // Find the order id then, return download        
-        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.xlsx');
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf');
     }
 
     public function reportsPage(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
-        // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find all the items that has been approved from the logistic | last 6 month
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorReport', compact('orderHeads'));
     }
@@ -156,21 +186,41 @@ class SupervisorController extends Controller
     }
 
     public function historyOut(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from crew role/goods out
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
-        // Find all the items that has been approved/completed from the user feedback | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_details.created_at', 'desc')->get();
+        // Find all the items that has been approved/completed from the user feedback | last 6 month
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_details.created_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryOut', compact('orderHeads'));
     }
 
     public function historyIn(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find order from logistic role/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
-        // Find all the items that has been approved from the user | last 30 days only
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find all the items that has been approved from the user | last 6 month
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryIn', compact('orderHeads'));
     }
@@ -195,7 +245,8 @@ class SupervisorController extends Controller
             })->Paginate(10)->withQueryString();
             return view('supervisor.supervisorItemStock', compact('items'));
         }else{
-            $items = Item::latest()->Paginate(10)->withQueryString();
+            $items = Item::orderBy('cabang')->Paginate(7)->withQueryString();
+            // $items = Item::latest()->Paginate(10)->withQueryString();
             return view('supervisor.supervisorItemStock', compact('items'));
         }
     }
@@ -208,6 +259,8 @@ class SupervisorController extends Controller
             'umur' => 'required',
             'itemStock' => 'required|numeric|min:1',
             'unit' => 'required',
+            'itemPrice' => 'required|min:1|numeric',
+            'golongan' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
             'cabang' => 'required',
@@ -217,12 +270,17 @@ class SupervisorController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
         
+        // Formatting the item price
+        $new_itemPrice = 'Rp. ' . $request->itemPrice;
+
         // Create the item
         Item::create([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request -> itemStock,
             'unit' => $request -> unit,
+            'itemPrice' => $new_itemPrice,
+            'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
             'cabang' => $request->cabang,
@@ -246,6 +304,8 @@ class SupervisorController extends Controller
             'umur' => 'required',
             'itemStock' => 'required|numeric|min:1',
             'unit' => 'required',
+            'itemPrice' => 'required|min:1|numeric',
+            'golongan' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
             'description' => 'nullable'
@@ -254,12 +314,17 @@ class SupervisorController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
+        // Formatting the item price
+        $new_itemPrice = 'Rp. ' . $request->itemPrice;
+
         // Update the item
         Item::where('id', $item->id)->update([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request->itemStock,
             'unit' => $request -> unit,
+            'itemPrice' => $new_itemPrice,
+            'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
             'description' => $request -> description
@@ -269,11 +334,21 @@ class SupervisorController extends Controller
     }
 
     public function approvalDoPage(){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
         // Find all of the ongoing DO from the requested branch OR the destination branch
         $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where(function($query){
             $query->where('fromCabang', Auth::user()->cabang)
             ->orWhere('toCabang', Auth::user()->cabang);
-        })->where('order_dos.created_at', '>=', Carbon::now()->subDays(30))->latest()->get();
+        })->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
 
         return view('supervisor.supervisorApprovalDO', compact('ongoingOrders'));
     }

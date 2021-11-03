@@ -49,7 +49,7 @@
                                 <br>
                                 <select class="form-control" name="item_id" id="item_id" style=" height:50px;">
                                     @foreach($items as $i)
-                                        <option value="{{ $i -> id }}">{{ $i -> itemName }}</option>
+                                        <option value="{{ $i -> id }}">{{ $i -> itemName }} ({{ $i -> unit }}) - ({{ Auth::user()->cabang }})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -86,7 +86,7 @@
                     </div>
                     <div class="col mt-5 table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                         <table class="table">
-                            <thead class="thead-dark">
+                            <thead class="thead bg-danger">
                                 <tr>
                                     <th scope="col">Nomor</th>
                                     <th scope="col">Nama Barang</th>
@@ -106,7 +106,7 @@
                                         <form method="POST" action="/crew/{{ $c -> id }}/delete">
                                             @csrf
                                             @method('delete')
-                                            <td><button class="btn btn-danger">Delete Item</button></td>
+                                            <td><button class="btn btn-warning">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 @endforeach
@@ -120,7 +120,7 @@
         <div class="modal fade" id="submit-order" tabindex="-1" role="dialog" aria-labelledby="submit-orderTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-danger" style="color: white">
                     <h5 class="modal-title" id="submitTitle">Input Nama Kapal</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -170,6 +170,9 @@
     </div>
 
     <style>
+        th{
+            color: white;
+        }
         td, th{
             word-wrap: break-word;
             min-width: 100px;
@@ -182,7 +185,7 @@
 
         .my-custom-scrollbar {
             position: relative;
-            height: 550px;
+            height: 600px;
             overflow: auto;
         }
         .table-wrapper-scroll-y {

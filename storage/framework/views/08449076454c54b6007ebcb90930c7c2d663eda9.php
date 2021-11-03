@@ -50,7 +50,7 @@
 
     <style>
         body{
-            background-image: url('/images/logistic-background.png');
+            /* background-image: url('/images/logistic-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

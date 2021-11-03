@@ -7,7 +7,7 @@
         <?php echo $__env->make('supervisor.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-            <h1 class="mb-3" style="margin-left: 40%">Stock Availability</h1>
+            <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
 
             <br>
             <?php if(session('status')): ?>
@@ -207,6 +207,27 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="noTelp">Harga Barang</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp.</div>
+                                            </div>
+                                            <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="golongan">Golongan</label>
+                                            <select class="form-control" id="golongan" name="golongan">
+                                                <option value="None">None</option>
+                                                <option value="Floating">Floating</option>
+                                                <option value="Dock">Dock</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="serialNo">Serial Number / Part Number (optional)</label>
                                     <input type="text" class="form-control" id="serialNo" name="serialNo"
@@ -250,6 +271,8 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Harga Barang</th>
+                        <th scope="col" style="color: white">Golongan</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
                         <th scope="col" style="color: white">Cabang</th>
@@ -265,8 +288,10 @@ unset($__errorArgs, $__bag); ?>
                         <td><strong><?php echo e($i -> itemName); ?></strong></td>
                         <td><?php echo e($i -> itemAge); ?></td>
                         <td><strong><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                        <td><?php echo e($i -> itemPrice); ?></td>
+                        <td><?php echo e($i -> golongan); ?></td>
                         <td><?php echo e($i -> serialNo); ?></td>
-                        <td><?php echo e($i -> codeMasterItem); ?></td>
+                        <td><strong><?php echo e($i -> codeMasterItem); ?></strong></td>
                         <td><?php echo e($i -> cabang); ?></td>
                         <td><?php echo e($i -> description); ?></td>
                         <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
@@ -381,6 +406,27 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="noTelp">Harga Barang</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp.</div>
+                                                </div>
+                                                <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="golongan">Golongan</label>
+                                                <select class="form-control" id="golongan" name="golongan">
+                                                    <option value="None">None</option>
+                                                    <option value="Floating">Floating</option>
+                                                    <option value="Dock">Dock</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label for="serialNo">Serial Number / Part Number (optional)</label>
                                         <input type="text" class="form-control" id="serialNo" name="serialNo"
@@ -394,7 +440,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group">
                                         <label for="description">Deskripsi (optional)</label>
                                         <textarea class="form-control" name="description" id="description" rows="3"
-                                            placeholder="Input Deskripsi Barang"></textarea>
+                                            placeholder="Input Deskripsi Barang"><?php echo e($i -> description); ?></textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -441,8 +487,8 @@ unset($__errorArgs, $__bag); ?>
         <style>
             th, td{
                 word-wrap: break-word;
-                min-width: 160px;
-                max-width: 160px;
+                min-width: 120px;
+                max-width: 120px;
                 text-align: center;
                 vertical-align: middle;
             }

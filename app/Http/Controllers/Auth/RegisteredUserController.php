@@ -37,10 +37,11 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {
+    {   
+        // digits_between:6,7
         $request->validate([
             'name' => ['required', 'regex:/^[a-zA-Z\s-]*$/'],
-            'no_induk_pegawai' => ['required', 'numeric', 'digits:6', 'unique:users'],
+            'no_induk_pegawai' => ['required', 'numeric', 'digits_between:6,7', 'unique:users'],
             'user_noTelp' => ['required', 'numeric','digits_between:8,11', 'unique:users'],
             'email' => ['required', 'string', 'email:rfc,dns', 'ends_with:ptksa.id,gmail.com', 'max:255', 'unique:users'],
             'cabang' => ['required', 'string'],
@@ -59,6 +60,7 @@ class RegisteredUserController extends Controller
         $user->attachRole($request->role_id);
         event(new Registered($user));
 
+        // Preferences: auto login after register || change the code below
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);

@@ -100,6 +100,17 @@ unset($__errorArgs, $__bag); ?>
                         </div>
                     </form>
                 </div>
+                <div class="col">
+                    <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
+                        <option>Pilih Cabang</option>
+                        <option value="/logistic/stocks?search=Jakarta">Jakarta</option>
+                        <option value="/logistic/stocks?search=Banjarmasin">Banjarmasin</option>
+                        <option value="/logistic/stocks?search=Samarinda">Samarinda</option>
+                        <option value="/logistic/stocks?search=Bunati">Bunati</option>
+                        <option value="/logistic/stocks?search=Babelan">Babelan</option>
+                        <option value="/logistic/stocks?search=Berau">Berau</option>
+                       </select>
+                </div>
             </div>
             
             <div class="d-flex justify-content-end">
@@ -124,17 +135,17 @@ unset($__errorArgs, $__bag); ?>
                     <tbody>
                         <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td><?php echo e($i -> itemName); ?></td>
-                                <td><?php echo e($i -> itemAge); ?></td>
-                                <td><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
-                                <td><?php echo e($i -> serialNo); ?></td>
-                                <td><?php echo e($i -> codeMasterItem); ?></td>
-                                <td><?php echo e($i -> cabang); ?></td>
-                                <td><?php echo e($i -> description); ?></td>
+                                <td class="bg-white"><?php echo e($i -> itemName); ?></td>
+                                <td class="bg-white"><?php echo e($i -> itemAge); ?></td>
+                                <td class="bg-white"><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
+                                <td class="bg-white"><?php echo e($i -> serialNo); ?></td>
+                                <td class="bg-white"><?php echo e($i -> codeMasterItem); ?></td>
+                                <td class="bg-white"><?php echo e($i -> cabang); ?></td>
+                                <td class="bg-white"><?php echo e($i -> description); ?></td>
                                 <?php if($i -> cabang != Auth::user()->cabang): ?>
-                                    <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-<?php echo e($i -> id); ?>" style="color: white">Request Delivery</button></td>
+                                    <td class="bg-white"><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-<?php echo e($i -> id); ?>" style="color: white">Request Delivery</button></td>
                                 <?php else: ?>
-                                    <td></td>
+                                    <td class="bg-white"></td>
                                 <?php endif; ?>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -207,7 +218,7 @@ unset($__errorArgs, $__bag); ?>
 
         <style>
             body{
-                background-image: url('/images/logistic-background.png');
+                /* background-image: url('/images/logistic-background.png'); */
                 background-repeat: no-repeat;
                 background-size: cover;
             }
@@ -215,9 +226,10 @@ unset($__errorArgs, $__bag); ?>
                 padding: 10px;
                 border-radius: 10px;
                 background-color: antiquewhite;
-                height: 700px;
+                height: 1000px;
                 /* height: 100%; */
             }
+            
             th, td{
                 word-wrap: break-word;
                 min-width: 140px;

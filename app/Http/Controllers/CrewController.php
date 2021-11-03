@@ -11,17 +11,35 @@ use App\Models\Tug;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
-Use \Carbon\Carbon;
+// Use \Carbon\Carbon;
 
 class CrewController extends Controller
 {
     
+    public function changeBranch(Request $request){
+        User::find(Auth::user()->id)->update([
+            'cabang' => $request->cabang
+        ]);      
+
+        return redirect('/dashboard')->with('status', 'Change Branch Successfully');
+    }
+
     public function completedOrder(){
-        // Get all the order within the logged in user within 30 days from date now
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
+        // Get all the order within the logged in user within 6 month
         $orderHeads = OrderHead::with('user')->where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->latest()->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
@@ -31,7 +49,7 @@ class CrewController extends Controller
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->count();
         
         $completed = $orderHeads->count();
 
@@ -39,12 +57,22 @@ class CrewController extends Controller
     }
 
     public function inProgressOrder(){
-        // Get all the order within the logged in user within 30 days from date now
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
+        // Get all the order within the logged in user within 6 month
         $orderHeads = OrderHead::with('user')->where(function($query){
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
@@ -53,7 +81,7 @@ class CrewController extends Controller
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('user_id', 'like', Auth::user()->id)->where('order_heads.created_at', '>=', Carbon::now()->subDays(30))->count();
+        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->count();
         
         $in_progress = $orderHeads->count();
 
@@ -73,7 +101,7 @@ class CrewController extends Controller
         $items = Item::where('cabang', Auth::user()->cabang)->get();
         $barges = Barge::all();
         $tugs = Tug::all();
-        $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
+        $carts = Cart::with('item')->where('cabang', Auth::user()->cabang)->where('user_id', Auth::user()->id)->get();
 
         return view('crew.crewOrder', compact('items', 'carts', 'tugs', 'barges'));
     }
@@ -93,19 +121,17 @@ class CrewController extends Controller
         }
 
          // Find if the same configuration of item is already exist in cart or no
-         $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->where('golongan', $request->golongan)->first();
+         $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->first();
 
          if($itemExistInCart){
             Cart::find($itemExistInCart->id)->increment('quantity', $request->quantity);
-            Cart::find($itemExistInCart->id)->update([
-                'note' => $request->note
-            ]);
          }else{
             // Else add item to the cart
             Cart::create([
                 'user_id' => Auth::user()->id,
                 'item_id' => $request->item_id,
                 'quantity' => $request->quantity,
+                'cabang' => Auth::user()->cabang,
                 'department' => $request->department
             ]);  
          }
@@ -127,7 +153,7 @@ class CrewController extends Controller
         ]);
 
         // Find the cart of the following user
-        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $carts = Cart::where('user_id', Auth::user()->id)->where('cabang', Auth::user()->cabang)->get();
 
         // Validate cart size, if the cart size is zero then return error message
         if(count($carts) == 0){
@@ -141,6 +167,7 @@ class CrewController extends Controller
         $o_id = OrderHead::create([
             'user_id' => Auth::user()->id,
             'cabang' => Auth::user()->cabang,
+            'created_by' => Auth::user()->name,
             'boatName' => $boatName,
             'order_tracker' => 1,
             'status' => 'Request In Progress By Logistic'
@@ -158,6 +185,7 @@ class CrewController extends Controller
                 'orders_id' => $o_id->id,
                 'item_id' => $c->item_id,
                 'quantity' => $c->quantity,
+                'acceptedQuantity' => $c->quantity,
                 'unit' => $unit[0],
                 'serialNo' => $serialNo[0],
                 'department' => $c->department,
@@ -165,14 +193,14 @@ class CrewController extends Controller
         }
 
         // After all of that, emptying the cart items to reset the cart
-        Cart::where('user_id', Auth::user()->id)->delete();
+        Cart::where('user_id', Auth::user()->id)->where('cabang', Auth::user()->cabang)->delete();
 
         return redirect('/dashboard')->with('status', 'Submit Request Order Success');
     }
 
     public function acceptOrder(OrderHead $orderHeads){
         // Get the order details of the following order
-        $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
+        // $orderDetails = OrderDetail::where('orders_id', $orderHeads->order_id)->get();
 
         if($orderHeads -> order_tracker == 1){
             return redirect('/dashboard')->with('error', 'Request Order Already Accepted');

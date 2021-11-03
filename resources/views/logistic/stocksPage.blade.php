@@ -63,6 +63,17 @@
                         </div>
                     </form>
                 </div>
+                <div class="col">
+                    <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
+                        <option>Pilih Cabang</option>
+                        <option value="/logistic/stocks?search=Jakarta">Jakarta</option>
+                        <option value="/logistic/stocks?search=Banjarmasin">Banjarmasin</option>
+                        <option value="/logistic/stocks?search=Samarinda">Samarinda</option>
+                        <option value="/logistic/stocks?search=Bunati">Bunati</option>
+                        <option value="/logistic/stocks?search=Babelan">Babelan</option>
+                        <option value="/logistic/stocks?search=Berau">Berau</option>
+                       </select>
+                </div>
             </div>
             
             <div class="d-flex justify-content-end">
@@ -86,17 +97,17 @@
                     <tbody>
                         @foreach($items as $i)
                             <tr>
-                                <td>{{ $i -> itemName }}</td>
-                                <td>{{ $i -> itemAge }}</td>
-                                <td>{{ $i -> itemStock }} {{ $i -> unit }}</td>
-                                <td>{{ $i -> serialNo }}</td>
-                                <td>{{ $i -> codeMasterItem }}</td>
-                                <td>{{ $i -> cabang }}</td>
-                                <td>{{ $i -> description }}</td>
+                                <td class="bg-white">{{ $i -> itemName }}</td>
+                                <td class="bg-white">{{ $i -> itemAge }}</td>
+                                <td class="bg-white">{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                                <td class="bg-white">{{ $i -> serialNo }}</td>
+                                <td class="bg-white">{{ $i -> codeMasterItem }}</td>
+                                <td class="bg-white">{{ $i -> cabang }}</td>
+                                <td class="bg-white">{{ $i -> description }}</td>
                                 @if($i -> cabang != Auth::user()->cabang)
-                                    <td><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-{{ $i -> id }}" style="color: white">Request Delivery</button></td>
+                                    <td class="bg-white"><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-{{ $i -> id }}" style="color: white">Request Delivery</button></td>
                                 @else
-                                    <td></td>
+                                    <td class="bg-white"></td>
                                 @endif
                             </tr>
                         @endforeach
@@ -169,7 +180,7 @@
 
         <style>
             body{
-                background-image: url('/images/logistic-background.png');
+                /* background-image: url('/images/logistic-background.png'); */
                 background-repeat: no-repeat;
                 background-size: cover;
             }
@@ -177,9 +188,10 @@
                 padding: 10px;
                 border-radius: 10px;
                 background-color: antiquewhite;
-                height: 700px;
+                height: 1000px;
                 /* height: 100%; */
             }
+            
             th, td{
                 word-wrap: break-word;
                 min-width: 140px;

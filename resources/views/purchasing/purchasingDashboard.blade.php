@@ -33,13 +33,13 @@
                                 <div class="row">
                                     <div class="col ml-2">
                                         <img src="/images/profile.png" style="height: 150px; width: 150px;">
-                                        <p style="font-size: 200%; max-width: 270px"><strong>--</strong></p>
-                                        <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> --</p>
-                                        <p style="font-size: 125%; max-width: 270px">--</p>
+                                        <p style=" max-width: 270px"><strong>--</strong></p>
+                                        <p style="max-width: 270px"><strong>(+62)</strong> --</p>
+                                        <p style="max-width: 270px">--</p>
                                     </div>
-                                    <div class="col" style="margin-left: -100px ">
+                                    <div class="col" style="">
                                         <div class="d-flex justify-content-between ratings">
-                                            <h4>Quality</h4>
+                                            <h5 class="smaller-screen-size">Quality</h5>
                                             <div class="rating d-flex justify-content-end mt-2">
                                                 @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
@@ -47,7 +47,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between ratings">
-                                            <h4>Top</h4>
+                                            <h5 class="smaller-screen-size">Top</h5>
                                             <div class="rating d-flex justify-content-end mt-2">
                                                 @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
@@ -55,7 +55,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between ratings">
-                                            <h4>Price</h4>
+                                            <h5 class="smaller-screen-size">Price</h5>
                                             <div class="rating d-flex justify-content-end mt-2">
                                                 @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
@@ -63,7 +63,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between ratings">
-                                            <h4>Delivery Time</h4>
+                                            <h5 class="smaller-screen-size">Delivery Time</h5>
                                             <div class="rating d-flex justify-content-end mt-2">
                                                 @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between ratings">
-                                            <h4>Item<br>Availability</h4>
+                                            <h5 class="smaller-screen-size">Item<br>Availability</h5>
                                             <div class="rating d-flex justify-content-end mt-3">
                                                 @for($j = 1 ; $j <= 5 ; $j++)
                                                     <i class = "fa fa-star"></i>
@@ -89,13 +89,13 @@
                                     <div class="row">
                                         <div class="col ml-2">
                                             <img src="/images/profile.png" style="height: 150px; width: 150px;">
-                                            <p style="font-size: 200%; max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
-                                            <p style="font-size: 125%; max-width: 270px"><strong>(+62)</strong> {{ $s -> noTelp }}</p>
-                                            <p style="font-size: 125%; max-width: 270px">{{ $s -> supplierEmail }}</p>
+                                            <p style="max-width: 270px"><strong>{{ $s -> supplierName }}</strong></p>
+                                            <p style="max-width: 270px"><strong>(+62)</strong> {{ $s -> noTelp }}</p>
+                                            <p style="max-width: 270px">{{ $s -> supplierEmail }}</p>
                                         </div>
-                                        <div class="col" style="margin-left: -100px ">
+                                        <div class="col" style="">
                                             <div class="d-flex justify-content-between ratings">
-                                                <h4>Quality</h4>
+                                                <h5 class="smaller-screen-size">Quality</h5>
                                                 <div class="rating d-flex justify-content-end mt-2">
                                                     @for($i = 1 ; $i <= $s->quality ; $i++)
                                                         <i class="fa fa-star checked"></i>
@@ -106,7 +106,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between ratings">
-                                                <h4>Top</h4>
+                                                <h5 class="smaller-screen-size">Top</h5>
                                                 <div class="rating d-flex justify-content-end mt-2">
                                                     @for($i = 1 ; $i <= $s->top ; $i++)
                                                         <i class="fa fa-star checked"></i>
@@ -117,7 +117,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between ratings">
-                                                <h4>Price</h4>
+                                                <h5 class="smaller-screen-size">Price</h5>
                                                 <div class="rating d-flex justify-content-end mt-2">
                                                     @for($i = 1 ; $i <= $s->price ; $i++)
                                                         <i class="fa fa-star checked"></i>
@@ -128,7 +128,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between ratings">
-                                                <h4>Delivery Time</h4>
+                                                <h5 class="smaller-screen-size">Delivery Time</h5>
                                                 <div class="rating d-flex justify-content-end mt-2">
                                                     @for($i = 1 ; $i <= $s->deliveryTime ; $i++)
                                                         <i class="fa fa-star checked"></i>
@@ -139,7 +139,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between ratings">
-                                                <h4>Item<br>Availability</h4>
+                                                <h5 class="smaller-screen-size">Item<br>Availability</h5>
                                                 <div class="rating d-flex justify-content-end mt-3">
                                                     @for($i = 1 ; $i <= $s->availability ; $i++)
                                                         <i class="fa fa-star checked"></i>
@@ -298,7 +298,7 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="form-group d-flex justify-content-between ratings">
-                                    <h4>Quality</h4>
+                                    <h5 class="smaller-screen-size">Quality</h5>
                                     <div class="rating-css">
                                         <div class="star-icon">
                                             <input type="radio" value="1" name="quality" checked id="rating1">
@@ -315,7 +315,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-flex justify-content-between ratings">
-                                    <h4>Top</h4>
+                                    <h5 class="smaller-screen-size">Top</h5>
                                     <div class="rating-css star-icon">
                                         <input type="radio" value="1" name="top" checked id="b1">
                                         <label for="b1" class="fa fa-star"></label>
@@ -330,7 +330,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-flex justify-content-between ratings">
-                                    <h4>Price</h4>
+                                    <h5 class="smaller-screen-size">Price</h5>
                                     <div class="rating-css star-icon">
                                         <input type="radio" value="1" name="price" checked id="c1">
                                         <label for="c1" class="fa fa-star"></label>
@@ -345,7 +345,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-flex justify-content-between ratings">
-                                    <h4>Delivery Time</h4>
+                                    <h5 class="smaller-screen-size">Delivery Time</h5>
                                     <div class="rating-css star-icon">
                                         <input type="radio" value="1" name="deliveryTime" checked id="d1">
                                         <label for="d1" class="fa fa-star"></label>
@@ -360,7 +360,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group d-flex justify-content-between ratings">
-                                    <h4>Availability</h4>
+                                    <h5 class="smaller-screen-size">Availability</h5>
                                     <div class="rating-css star-icon">
                                         <input type="radio" value="1" name="availability" checked id="e1">
                                         <label for="e1" class="fa fa-star"></label>
@@ -473,6 +473,16 @@
         .modal-backdrop {
             height: 100%;
             width: 100%;
+        }
+        @media (min-width: 300px) and (max-width: 768){
+            .smaller-screen-size{
+                width: 150px;
+                word-break: break-all;
+                font-size: 12px;
+            }
+            .fa-star{
+                font-size: 14px;
+            }
         }
     </style>
 

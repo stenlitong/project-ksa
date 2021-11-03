@@ -9,9 +9,27 @@
 
         
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @include('../layouts/time')
+            <div class="d-flex">
+                @include('../layouts/time')
+                <div class="ml-auto mr-5 mt-5">
+                    <h5 class="">Cabang: {{ Auth::user()->cabang }}</h5>
+                    <form action="{{ Route('crew.changeBranch') }}" method="POST">
+                        @csrf
+                        <select class="form-select mt-3" aria-label="Default select example" name="cabang" id="cabang">
+                            <option selected disabled>Pilih Cabang</option>
+                            <option value="Jakarta" id="Jakarta">Jakarta</option>
+                            <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
+                            <option value="Samarinda" id="Samarinda">Samarinda</option>
+                            <option value="Bunati" id="Bunati">Bunati</option>
+                            <option value="Babelan" id="Babelan">Babelan</option>
+                            <option value="Berau" id="Berau">Berau</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary mt-3">Submit</button>
+                    </form>
+                </div>
+            </div>
             
-            <h2 class="mt-3 mb-3" style="text-align: center">Order List</h2>
+            <h2 class="mt-3 mb-3" style="text-align: center"><strong>Order List</strong></h2>
             <div class="d-flex justify-content-end">
                 {{ $orderHeads->links() }}
             </div>
@@ -35,7 +53,7 @@
 
             <div id="content" style="overflow-x:auto;">
                 <table class="table">
-                    <thead class="thead-dark">
+                    <thead class="thead bg-danger">
                         <tr>
                             <th scope="col">Order ID</th>
                             <th scope="col">Status</th>
@@ -46,7 +64,7 @@
                     <tbody>
                         @foreach($orderHeads as $o)
                         <tr>
-                            <th>{{ $o -> order_id}}</th>
+                            <td><strong>{{ $o -> order_id}}</strong></td>
                             @if(strpos($o -> status, 'Rejected') !== false)
                                 <td style="color: red; font-weight: bold">{{ $o -> status}}</td>
                             @elseif(strpos($o -> status, 'Completed') !== false)
@@ -102,11 +120,11 @@
                             </div>
                             <div class="modal-body">
                                 <table class="table">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
-                                            <th scope="col">Satuan</th>
+                                            <th scope="col">Department</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -114,8 +132,8 @@
                                             @if($od -> orders_id == $o -> id)
                                                 <tr>
                                                     <td>{{ $od -> item -> itemName }}</td>
-                                                    <td>{{ $od -> quantity }}</td>
-                                                    <td>{{ $od -> item ->unit }}</td>
+                                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                    <td>{{ $od -> department }}</td>
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -129,6 +147,9 @@
     </div>
 
     <style>
+        th{
+            color: white;
+        }
         td, th{
             word-wrap: break-word;
             min-width: 200px;

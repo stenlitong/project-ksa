@@ -41,6 +41,13 @@ class AdminPurchasingController extends Controller
         return redirect('/dashboard')->with('status', 'Edited Successfully');
     }
 
+    public function deleteSupplier(Request $request, Supplier $suppliers){
+        // Find the supplier by the id in the request params
+        Supplier::destroy($suppliers->id);
+
+        return redirect('/dashboard')->with('status', 'Deleted Successfully');
+    }
+
     public function formApPage(){
         // Show the form AP page
         $documents = ApList::where('cabang', Auth::user()->cabang)->latest()->get();
