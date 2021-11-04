@@ -13,7 +13,6 @@
             <div class="row">
                 <div class="col" style="max-width: 850px">
                     <h2 class="mt-3 mb-4" style="text-align: center">Supplier</h2>
-
                     @if(session('statusA'))
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
                             {{ session('statusA') }}

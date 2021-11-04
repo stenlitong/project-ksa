@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
-                    if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
                         echo('active');
                     }
                 ?>" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
-                    if(basename($_SERVER['PHP_SELF']) == 'order'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'order'){
                         echo('active');
                     }
                 ?>" href="<?php echo e(Route("crew.order")); ?>">

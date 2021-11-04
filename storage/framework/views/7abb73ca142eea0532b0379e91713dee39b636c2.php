@@ -126,7 +126,7 @@ unset($__errorArgs, $__bag); ?>
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('patch'); ?>
                                             <td class="bg-white">
-                                                <input class="w-50" type="number" min="1" max="<?php echo e($od -> item -> itemStock); ?>" value="<?php echo e($od -> acceptedQuantity); ?>" name="acceptedQuantity" id="acceptedQuantity"> <?php echo e($od -> item -> unit); ?>
+                                                <input class="w-75" type="number" min="1" max="<?php echo e($od -> item -> itemStock); ?>" value="<?php echo e($od -> acceptedQuantity); ?>" name="acceptedQuantity" id="acceptedQuantity"> <?php echo e($od -> item -> unit); ?>
 
                                             </td>
                                             <td class="bg-white">
@@ -158,7 +158,8 @@ unset($__errorArgs, $__bag); ?>
             font-weight: bold;
         }
         .wrapper{
-            padding: 10px;
+            padding: 15px;
+            margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
             height: 850px;

@@ -60,7 +60,7 @@
 
                 <div class="row mt-4">
                     <div class="col">
-                        <form method="POST" action="">
+                        <form method="POST" action="/purchasing/order/{{ $orderHeads -> id }}/approve">
                             @csrf
                             <div class="form-group">
                                 <label for="boatName">Nama Kapal</label>
@@ -117,7 +117,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ $orderHeads -> totalPrice }}" readonly>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".")}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -136,6 +136,8 @@
                                     <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Harga per Barang</th>
+                                    <th scope="col">Harga</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,6 +146,8 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $od -> item -> itemName }}</td>
                                         <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                        <td>Rp. {{ number_format($od -> item -> itemPrice, 2, ",", ".")}}</td>
+                                        <td>Rp. {{ number_format($od -> quantity * $od -> item -> itemPrice, 2, ",", ".")}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

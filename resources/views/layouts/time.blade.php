@@ -1,4 +1,4 @@
-<div class="flex-wrap align-items-center mb-3 mt-3 ml-3 rcorners1 w-25">
+<div class="flex-wrap align-items-center mb-3 mt-3 ml-3 rcorners1 w-50">
     @if((int)date("H") >= 18)
         <h2 class="med-query">Malam, {{ Auth::user()->name }} !</h2>
     @elseif((int)date("H") >= 15)

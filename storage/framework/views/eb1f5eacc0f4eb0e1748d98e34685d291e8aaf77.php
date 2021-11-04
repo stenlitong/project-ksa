@@ -4,7 +4,7 @@
             <li class="nav-item">
                     <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
                             echo('active');
                         }
                     ?>" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'stocks'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'stocks'){
                             echo('active');
                         }
                     ?>" href="<?php echo e(Route("logistic.stocks")); ?>">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'make-order'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'make-order'){
                             echo('active');
                         }
                     ?>" href="<?php echo e(Route("logistic.makeOrder")); ?>">
@@ -37,7 +37,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'request-do'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'request-do'){
                             echo('active');
                         }
                     ?>" href="<?php echo e(Route("logistic.requestDo")); ?>">
@@ -48,7 +48,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'history-out' || basename($_SERVER['PHP_SELF']) == 'history-in'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'history-out' || basename($_SERVER['REQUEST_URI']) == 'history-in'){
                             echo('active');
                         }
                     ?>" href="<?php echo e(Route("logistic.historyOut")); ?>">
@@ -59,7 +59,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     <?php
-                        if(basename($_SERVER['PHP_SELF']) == 'report'){
+                        if(basename($_SERVER['REQUEST_URI']) == 'report'){
                             echo('active');
                         }
                     ?>" href="<?php echo e(Route("logistic.report")); ?>">

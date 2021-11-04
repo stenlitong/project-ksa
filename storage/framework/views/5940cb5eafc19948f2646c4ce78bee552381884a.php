@@ -109,7 +109,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                 
-                <div class="row" id="row-wrapper">
+                <div class="row">
                     
                     <div class="col">
                         <form method="POST" action="/logistic/<?php echo e(Auth::user()->id); ?>/add-cart">
@@ -135,15 +135,6 @@ unset($__errorArgs, $__bag); ?>
                                     <option value="None">None</option>
                                     <option value="Deck">Deck</option>
                                     <option value="Mesin">Mesin</option>
-                                </select>
-                            </div>
-                            <div class="form-group p-2">
-                                <label for="golongan" class="mb-3">Golongan</label>
-                                <br>
-                                <select class="form-control" name="golongan" id="golongan" style="height:50px;">
-                                    <option value="None">None</option>
-                                    <option value="Floating">Floating</option>
-                                    <option value="Dock">Dock</option>
                                 </select>
                             </div>
                             <div class="form-group p-2">

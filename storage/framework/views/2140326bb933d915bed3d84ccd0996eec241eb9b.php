@@ -151,11 +151,9 @@ unset($__errorArgs, $__bag); ?>
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
-
+                                                <th scope="col">Request Quantity</th>
                                                 <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
                                                     <th scope="col">Accepted Quantity</th>
-                                                <?php else: ?>
-                                                    <th scope="col">Quantity</th>
                                                 <?php endif; ?>
 
                                                 
@@ -177,10 +175,9 @@ unset($__errorArgs, $__bag); ?>
                                                 <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
                                                         <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
+                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                         <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
                                                             <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
-                                                        <?php else: ?>
-                                                            <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                         <?php endif; ?>
 
                                                         <?php if(strpos($o -> order_id, 'COID') !== false): ?>
@@ -253,7 +250,8 @@ unset($__errorArgs, $__bag); ?>
             background-size: cover;
         }
         .wrapper{
-            padding: 10px;
+            padding: 15px;
+            margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
             height: 850px;

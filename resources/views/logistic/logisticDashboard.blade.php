@@ -146,11 +146,9 @@
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
-
+                                                <th scope="col">Request Quantity</th>
                                                 @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
                                                     <th scope="col">Accepted Quantity</th>
-                                                @else
-                                                    <th scope="col">Quantity</th>
                                                 @endif
 
                                                 {{-- @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false) --}}
@@ -172,10 +170,9 @@
                                                 @if($od -> orders_id == $o -> id)
                                                     <tr>
                                                         <td><strong>{{ $od -> item -> itemName }}</strong></td>
+                                                        <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                         @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
                                                             <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
-                                                        @else
-                                                            <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                         @endif
 
                                                         @if(strpos($o -> order_id, 'COID') !== false)
@@ -248,7 +245,8 @@
             background-size: cover;
         }
         .wrapper{
-            padding: 10px;
+            padding: 15px;
+            margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
             height: 850px;

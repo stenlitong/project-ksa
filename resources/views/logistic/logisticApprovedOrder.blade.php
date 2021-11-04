@@ -144,7 +144,7 @@
                                             @csrf
                                             @method('patch')
                                             <td class="bg-white">
-                                                <input class="w-50" type="number" min="1" max="{{ $od -> item -> itemStock }}" value="{{ $od -> acceptedQuantity }}" name="acceptedQuantity" id="acceptedQuantity"> {{ $od -> item -> unit }}
+                                                <input class="w-75" type="number" min="1" max="{{ $od -> item -> itemStock }}" value="{{ $od -> acceptedQuantity }}" name="acceptedQuantity" id="acceptedQuantity"> {{ $od -> item -> unit }}
                                             </td>
                                             <td class="bg-white">
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
@@ -175,7 +175,8 @@
             font-weight: bold;
         }
         .wrapper{
-            padding: 10px;
+            padding: 15px;
+            margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
             height: 850px;

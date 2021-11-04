@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['PHP_SELF']) == 'item-stocks'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'item-stocks'){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="{{ Route('supervisor.itemStock') }}">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['PHP_SELF']) == 'approval-do'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'approval-do'){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="{{ Route('supervisor.approvalDoPage') }}">
@@ -37,7 +37,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['PHP_SELF']) == 'goods-out' || basename($_SERVER['PHP_SELF']) == 'goods-in'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'goods-out' || basename($_SERVER['REQUEST_URI']) == 'goods-in'){
                         echo('active');
                     }
                 @endphp" href="{{ Route('supervisor.historyOut') }}">
@@ -48,7 +48,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['PHP_SELF']) == 'report'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'report'){
                         echo('active');
                     }
                 @endphp" href="{{ Route('supervisor.report') }}">

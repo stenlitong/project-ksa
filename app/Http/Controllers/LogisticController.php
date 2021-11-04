@@ -315,7 +315,7 @@ class LogisticController extends Controller
 
         //If the stock is not enough then redirect to dashboard with error
         foreach($orderDetails as $od){
-            $itemSum = $orderDetails->where('item_id', $od -> item_id)->sum('quantity');
+            $itemSum = $orderDetails->where('item_id', $od -> item_id)->sum('acceptedQuantity');
 
             // Pluck return an array
             if(Item::where('id', $od -> item -> id)->pluck('itemStock')[0] < $itemSum){
@@ -341,7 +341,7 @@ class LogisticController extends Controller
             Item::where('id', $od -> item -> id)->update([
                 'lastGiven' => date("d/m/Y")
             ]);
-            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
+            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> acceptedQuantity);
             // $sumPrice += $od -> acceptedQuantity * filter_var($od -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
             $sumPrice += $od -> acceptedQuantity * $od -> item -> itemPrice;
         }
@@ -398,7 +398,7 @@ class LogisticController extends Controller
         $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
 
         OrderHead::find($orderHead->id)->update([
-            'order_id' => 'ROID#' . $orderHead->id,
+            'order_id' => 'ROID#' . $orderHeads->id,
             'noPr' => $pr_number,
             'company' => $request->company,
             'prDate' => date("d/m/Y")
@@ -489,7 +489,6 @@ class LogisticController extends Controller
             'item_id' => 'required',
             'quantity' => 'required|numeric|min:1',
             'department' => 'nullable',
-            'golongan' => 'required',
             'note' => 'nullable'
         ]);
 
@@ -510,7 +509,6 @@ class LogisticController extends Controller
         }else{
             // Add cabang to the cart
             $validated['cabang'] = Auth::user()->cabang;
-
             // Then add item to the cart
             $validated['user_id'] = Auth::user()->id;
             Cart::create($validated);
@@ -595,7 +593,6 @@ class LogisticController extends Controller
                 'item_id' => $c -> item_id,
                 'quantity' => $c -> quantity,
                 'unit' => $c -> item -> unit,
-                'golongan' => $c -> golongan,
                 'serialNo' => $c -> item->serialNo,
                 'department' => $c -> department,
                 'note' => $c -> note

@@ -155,7 +155,7 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <td><?php echo e($od -> item -> golongan); ?></td>
-                                                    <?php if(strpos($oh -> status, 'Order In Progress By Supervisor') !== false): ?>
+                                                    <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                         <td><strong><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <?php endif; ?>
                                                     <td><?php echo e($od -> note); ?></td>

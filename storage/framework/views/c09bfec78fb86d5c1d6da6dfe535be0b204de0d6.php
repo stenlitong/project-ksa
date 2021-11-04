@@ -116,7 +116,7 @@ unset($__errorArgs, $__bag); ?>
 
                 <div class="row mt-4">
                     <div class="col">
-                        <form method="POST" action="">
+                        <form method="POST" action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/approve">
                             <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <label for="boatName">Nama Kapal</label>
@@ -173,7 +173,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e($orderHeads -> totalPrice); ?>" readonly>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e(number_format($orderHeads -> totalPrice, 2, ",", ".")); ?>" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -192,6 +192,8 @@ unset($__errorArgs, $__bag); ?>
                                     <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Harga per Barang</th>
+                                    <th scope="col">Harga</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,6 +202,8 @@ unset($__errorArgs, $__bag); ?>
                                         <td><?php echo e($key + 1); ?></td>
                                         <td><?php echo e($od -> item -> itemName); ?></td>
                                         <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                        <td>Rp. <?php echo e(number_format($od -> item -> itemPrice, 2, ",", ".")); ?></td>
+                                        <td>Rp. <?php echo e(number_format($od -> quantity * $od -> item -> itemPrice, 2, ",", ".")); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

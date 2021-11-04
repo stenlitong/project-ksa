@@ -9,7 +9,15 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
             <div class="wrapper">
             <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
-
+                
+<?php
+// Program to display complete URL
+  
+$link = $_SERVER['PHP_SELF'];
+  
+// Display the complete URL
+echo $link;
+?>
             <br>
             
             @if(session('itemInvalid'))
@@ -186,7 +194,8 @@
                 background-size: cover;
             }
             .wrapper{
-                padding: 10px;
+                padding: 15px;
+                margin: 15px;
                 border-radius: 10px;
                 background-color: antiquewhite;
                 height: 1000px;

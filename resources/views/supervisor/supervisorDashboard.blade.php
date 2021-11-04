@@ -145,7 +145,7 @@
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> item -> golongan }}</td>
-                                                    @if(strpos($oh -> status, 'Order In Progress By Supervisor') !== false)
+                                                    @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                         <td><strong>{{ $od -> item -> itemStock }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif
                                                     <td>{{ $od -> note }}</td>
