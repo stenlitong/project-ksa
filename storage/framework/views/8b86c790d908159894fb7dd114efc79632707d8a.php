@@ -29,7 +29,6 @@
                                 <th scope="col">Item Barang Keluar</th>
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
-                                <th scope="col">Satuan</th>
                                 <th scope="col">No. Resi</th>
                                 <th scope="col">Note</th>
                             </tr>
@@ -41,10 +40,9 @@
                                         <td class="bg-white"><?php echo e($oh -> item -> lastGiven); ?></td>
                                         <td class="bg-white"><strong><?php echo e($oh -> item -> itemName); ?></strong></td>
                                         <td class="bg-white"><?php echo e($oh -> item -> serialNo); ?></td>
-                                        <td class="bg-white"><strong><?php echo e($oh -> quantity); ?></strong></td>
-                                        <td class="bg-white"><?php echo e($oh -> item -> unit); ?></td>
+                                        <td class="bg-white"><strong><?php echo e($oh -> quantity); ?> <?php echo e($oh -> item -> unit); ?></strong></td>
                                         <td class="bg-white"><strong><?php echo e($oh -> noResi); ?></strong></td>
-                                        <td class="bg-white"><?php echo e($oh -> note); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> descriptions); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

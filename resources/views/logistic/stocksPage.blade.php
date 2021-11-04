@@ -65,7 +65,8 @@
                 </div>
                 <div class="col">
                     <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
-                        <option>Pilih Cabang</option>
+                        <option selected disabled>Pilih Cabang</option>
+                        <option value="/logistic/stocks?search=All">Semua Cabang</option>
                         <option value="/logistic/stocks?search=Jakarta">Jakarta</option>
                         <option value="/logistic/stocks?search=Banjarmasin">Banjarmasin</option>
                         <option value="/logistic/stocks?search=Samarinda">Samarinda</option>

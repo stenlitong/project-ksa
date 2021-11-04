@@ -158,7 +158,7 @@ class SupervisorController extends Controller
 
     public function downloadPr(OrderHead $orderHeads){
         // Find the order id then, return download        
-        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf');
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
     }
 
     public function reportsPage(){
@@ -255,11 +255,11 @@ class SupervisorController extends Controller
          // Storing the item to the stock
          $request->validate([
             'itemName' => 'required',
-            'itemAge' => 'required|numeric|min:1',
+            'itemAge' => 'required|integer|min:1',
             'umur' => 'required',
-            'itemStock' => 'required|numeric|min:1',
+            'itemStock' => 'required|integer|min:1',
             'unit' => 'required',
-            'itemPrice' => 'required|min:1|numeric',
+            'itemPrice' => 'required|integer|min:1',
             'golongan' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
@@ -270,16 +270,13 @@ class SupervisorController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
         
-        // Formatting the item price
-        $new_itemPrice = 'Rp. ' . $request->itemPrice;
-
         // Create the item
         Item::create([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request -> itemStock,
             'unit' => $request -> unit,
-            'itemPrice' => $new_itemPrice,
+            'itemPrice' => $request -> itemPrice,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
@@ -300,11 +297,11 @@ class SupervisorController extends Controller
         // Edit the requested item
         $request->validate([
             'itemName' => 'required',
-            'itemAge' => 'required|numeric|min:1',
+            'itemAge' => 'required|integer|min:1',
             'umur' => 'required',
-            'itemStock' => 'required|numeric|min:1',
+            'itemStock' => 'required|integer|min:1',
             'unit' => 'required',
-            'itemPrice' => 'required|min:1|numeric',
+            'itemPrice' => 'required|min:1|integer',
             'golongan' => 'required',
             'serialNo' => 'nullable',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
@@ -314,16 +311,13 @@ class SupervisorController extends Controller
         // Formatting the item age
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
-        // Formatting the item price
-        $new_itemPrice = 'Rp. ' . $request->itemPrice;
-
         // Update the item
         Item::where('id', $item->id)->update([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request->itemStock,
             'unit' => $request -> unit,
-            'itemPrice' => $new_itemPrice,
+            'itemPrice' => $request -> itemPrice,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,

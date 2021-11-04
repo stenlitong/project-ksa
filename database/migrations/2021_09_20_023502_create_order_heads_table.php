@@ -26,6 +26,7 @@ class CreateOrderHeadsTable extends Migration
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->string('created_by');
             $table->string('sender')->nullable();
+            $table->string('receiver')->nullable();
             $table->string('expedition')->nullable();
             $table->string('noResi')->nullable();
             $table->string('prDate')->nullable();

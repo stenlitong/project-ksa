@@ -69,12 +69,24 @@
                                         placeholder="Input Nomor Resi (optional)">
                                 </div>
                                 <div class="form-group">
+                                    <label for="company">Perusahaan (PR Requirements)</label>
+                                    <select class="form-control" name="company" id="company">
+                                        <option value="KSA">KSA</option>
+                                        <option value="ISA">ISA</option>
+                                        <option value="KSAO">KSA OFFSHORE</option>
+                                        <option value="KSAM">KSA MARITIME</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="description">Deskripsi (optional)</label>
                                     <textarea class="form-control" name="description" id="description" rows="3"
                                         placeholder="Input Keterangan"></textarea>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary" style="margin-left: 45%">Submit</button>
+                                <div class="d-flex justify-content-center">
+                                    <a href="/dashboard" class="btn btn-danger">Cancel</a>
+                                    <button type="submit" class="btn btn-primary ml-2">Submit</button>
+                                </div>
                             </form>
                         </div>
                         {{-- <div class="col mt-3" style="overflow-x:auto;">

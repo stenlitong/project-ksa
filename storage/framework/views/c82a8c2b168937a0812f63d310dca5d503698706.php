@@ -44,7 +44,7 @@
                                         <td><?php echo e($oh -> quantity); ?></td>
                                         <td><?php echo e($oh -> item -> unit); ?></td>
                                         <td><?php echo e($oh -> noResi); ?></td>
-                                        <td><?php echo e($oh -> note); ?></td>
+                                        <td><?php echo e($oh -> descriptions); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

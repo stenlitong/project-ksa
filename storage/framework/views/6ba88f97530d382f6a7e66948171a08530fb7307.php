@@ -37,44 +37,46 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5" style="overflow-x:auto;">
-                <table class="table table-bordered sortable">
-                    <thead class="thead bg-danger">
-                    <tr>
-                        <th scope="col">Tanggal</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Nama File</th>
-                        <th scope="col">Keterangan</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Approval</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <?php $__currentLoopData = $documents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div id="content">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead mt-5" style="overflow-x:auto;">
+                    <table class="table table-bordered sortable">
+                        <thead class="thead bg-danger">
                         <tr>
-                            <td><?php echo e($doc -> submissionTime); ?></td>
-                            <?php if(strpos($doc -> status, 'Denied') !== false): ?>
-                                <td><span style="color: red;font-weight: bold;"><?php echo e($doc -> status); ?></span></td>
-                            <?php elseif(strpos($doc -> status, 'Approved') !== false): ?>
-                                <td><span style="color: green;font-weight: bold;"><?php echo e($doc -> status); ?></span></td>
-                            <?php else: ?>
-                                <td><?php echo e($doc -> status); ?></td>
-                            <?php endif; ?>
-                            <td><?php echo e($doc -> filename); ?></td>
-                            <td><?php echo e($doc -> description); ?></td>
-                            <td><a href="/purchasing/form-ap/<?php echo e($doc -> id); ?>/download" target="_blank"><span class="icon" data-feather="download"></span></a></td>
-                            <?php if(strpos($doc -> status, 'Denied') !== false || strpos($doc -> status, 'Approved') !== false): ?>
-                                <td></td>
-                            <?php else: ?>
-                                <td>
-                                    <a href="/purchasing/form-ap/<?php echo e($doc -> id); ?>/approve" class="btn btn-success">Accept</a>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-form-<?php echo e($doc -> id); ?>">Reject</button>
-                                </td>
-                            <?php endif; ?>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Nama File</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Approval</th>
                         </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php $__currentLoopData = $documents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td><?php echo e($doc -> submissionTime); ?></td>
+                                <?php if(strpos($doc -> status, 'Denied') !== false): ?>
+                                    <td><span style="color: red;font-weight: bold;"><?php echo e($doc -> status); ?></span></td>
+                                <?php elseif(strpos($doc -> status, 'Approved') !== false): ?>
+                                    <td><span style="color: green;font-weight: bold;"><?php echo e($doc -> status); ?></span></td>
+                                <?php else: ?>
+                                    <td><?php echo e($doc -> status); ?></td>
+                                <?php endif; ?>
+                                <td><?php echo e($doc -> filename); ?></td>
+                                <td><?php echo e($doc -> description); ?></td>
+                                <td><a href="/purchasing/form-ap/<?php echo e($doc -> id); ?>/download" target="_blank"><span class="icon" data-feather="download"></span></a></td>
+                                <?php if(strpos($doc -> status, 'Denied') !== false || strpos($doc -> status, 'Approved') !== false): ?>
+                                    <td></td>
+                                <?php else: ?>
+                                    <td>
+                                        <a href="/purchasing/form-ap/<?php echo e($doc -> id); ?>/approve" class="btn btn-success">Accept</a>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-form-<?php echo e($doc -> id); ?>">Reject</button>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
@@ -106,6 +108,10 @@ unset($__errorArgs, $__bag); ?>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <script>
+        function refreshDiv(){
+            $('#content').load(location.href + ' #content')
+        }
+
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000);

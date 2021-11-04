@@ -248,22 +248,29 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                    <div class="d-flex justify-content-around">
+                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                        <h5>Nomor PO : {{ $o -> noPo }}</h5>
+                                    </div>
                                     <table class="table">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Department</th>
+                                                <th scope="col">Golongan</th>
+                                                <th scope="col">Note</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($orderDetails as $od)
                                                 @if($od -> orders_id == $o -> id)
                                                     <tr>
-                                                        <td>{{ $od -> item -> itemName }}</td>
-                                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                        <td><strong>{{ $od -> item -> itemName }}</strong></td>
+                                                        <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                         <td>{{ $od -> department }}</td>
+                                                        <td>{{ $od -> item -> golongan }}</td>
+                                                        <td>{{ $od -> note }}</td>
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -392,8 +399,8 @@
             <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $oh -> order_id }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

@@ -44,7 +44,7 @@
                                         <td>{{ $oh -> quantity}}</td>
                                         <td>{{ $oh -> item -> unit}}</td>
                                         <td>{{ $oh -> noResi}}</td>
-                                        <td>{{ $oh -> note}}</td>
+                                        <td>{{ $oh -> descriptions}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

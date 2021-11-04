@@ -19,7 +19,7 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
     public function __construct($order_id)
     {
         $this->order_id = $order_id;
-        $this->price = OrderHead::where('order_id', $order_id)->pluck('price')[0];
+        $this->price = OrderHead::where('order_id', $order_id)->pluck('totalPrice')[0];
         $this->invoiceAddress = OrderHead::where('order_id', $order_id)->pluck('invoiceAddress')[0];
         $this->itemAddress = OrderHead::where('order_id', $order_id)->pluck('itemAddress')[0];
         $this->cabang = OrderHead::where('order_id', $order_id)->pluck('cabang')[0];
@@ -53,7 +53,7 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
 
                 $event->sheet->appendRows(array(
                     array(' '),
-                    array('Total Harga', $this->price),
+                    array('Total Harga', 'Rp. ' . number_format($this->price, 2, ",", ".")),
                     array('Alamat Pengiriman Invoice', $this->invoiceAddress),
                     array('Alamat Pengiriman Barang', $this->itemAddress),
                     array('Cabang', $this->cabang),

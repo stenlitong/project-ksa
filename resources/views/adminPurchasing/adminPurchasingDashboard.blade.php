@@ -209,6 +209,9 @@
 </script>
 
 <style>
+    .alert{
+        text-align: center;
+    }
     .modal-backdrop {
         height: 100%;
         width: 100%;
@@ -228,9 +231,6 @@
 		box-shadow: none;
 		opacity: 0.9;
 	}
-    .alert{
-        text-align: center;
-    }
     @media (min-width: 300px) and (max-width: 768){
         .smaller-screen-size{
             width: 150px;

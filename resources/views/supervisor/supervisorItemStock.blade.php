@@ -34,6 +34,12 @@
             </div>
             @enderror
 
+            @error('itemPrice')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Harga Barang Invalid
+            </div>
+            @enderror
+
             @error('unit')
             <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                 Satuan Unit Invalid
@@ -244,7 +250,7 @@
                         <td><strong>{{ $i -> itemName }}</strong></td>
                         <td>{{ $i -> itemAge }}</td>
                         <td><strong>{{ $i -> itemStock }} {{ $i -> unit }}</strong></td>
-                        <td>{{ $i -> itemPrice }}</td>
+                        <td>Rp. {{ $i -> itemPrice }}</td>
                         <td>{{ $i -> golongan }}</td>
                         <td>{{ $i -> serialNo }}</td>
                         <td><strong>{{ $i -> codeMasterItem }}</strong></td>

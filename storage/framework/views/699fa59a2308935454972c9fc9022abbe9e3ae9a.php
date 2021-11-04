@@ -91,7 +91,10 @@ unset($__errorArgs, $__bag); ?>
 
                             <td>
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                <a href="/supervisor/<?php echo e($oh -> id); ?>/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                                <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
+                                <?php else: ?>
+                                    <a href="/supervisor/<?php echo e($oh -> id); ?>/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                                <?php endif; ?>
                             </td>
 
                         </tr>
@@ -129,25 +132,33 @@ unset($__errorArgs, $__bag); ?>
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">Item Barang</th>
-                                            <th scope="col">Quantity</th>
+                                            <?php if(strpos($o -> order_id, 'ROID') !== false): ?>
+                                                <th scope="col">Accepted Quantity</th>
+                                            <?php else: ?>
+                                                <th scope="col">Quantity</th>
+                                            <?php endif; ?>
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
-                                            <?php if(strpos($oh -> status, 'Order In Progress') !== false): ?>
+                                            <th scope="col">Golongan</th>
+                                            <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                 <th scope="col">Stok Barang</th>
                                             <?php endif; ?>
+                                            <th scope="col">Note</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <?php if($od -> orders_id == $o -> id): ?>
                                                 <tr>
-                                                    <td><?php echo e($od -> item -> itemName); ?></td>
+                                                    <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
                                                     <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
-                                                    <?php if(strpos($oh -> status, 'Order In Progress') !== false): ?>
+                                                    <td><?php echo e($od -> item -> golongan); ?></td>
+                                                    <?php if(strpos($oh -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                         <td><strong><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <?php endif; ?>
+                                                    <td><?php echo e($od -> note); ?></td>
                                                 </tr>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -175,8 +186,8 @@ unset($__errorArgs, $__bag); ?>
             <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

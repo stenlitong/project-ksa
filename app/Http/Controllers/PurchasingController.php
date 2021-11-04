@@ -172,8 +172,8 @@ class PurchasingController extends Controller
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
             'supplier_id' => 'required|exists:suppliers,id',
-            'kurs' => 'required|in:Rp.,$',
-            'price' => 'required|integer|min:1',
+            // 'kurs' => 'required|in:Rp.,$',
+            // 'price' => 'required|integer|min:1',
             'descriptions' => 'nullable'
         ]);
 
@@ -189,7 +189,6 @@ class PurchasingController extends Controller
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
             'supplier_id' => $request->supplier_id,
-            'price' => $request->kurs . number_format($request->price, 2, ",", "."),
             'order_tracker' => 4,
             'descriptions' => $request->descriptions
         ]);

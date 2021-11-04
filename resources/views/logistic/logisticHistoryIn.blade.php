@@ -29,7 +29,6 @@
                                 <th scope="col">Item Barang Masuk</th>
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
-                                <th scope="col">Satuan</th>
                                 <th scope="col">Golongan</th>
                                 <th scope="col">Nama Supplier</th>
                                 <th scope="col">Note</th>
@@ -40,13 +39,12 @@
                                     <tr>
                                         <td class="bg-white">{{ $key + 1 }}</td>
                                         <td class="bg-white">{{ $oh -> approved_at }}</td>
-                                        <td class="bg-white">{{ $oh -> item -> itemName }}</td>
+                                        <td class="bg-white"><strong>{{ $oh -> item -> itemName }}</strong></td>
                                         <td class="bg-white">{{ $oh -> item -> serialNo}}</td>
-                                        <td class="bg-white">{{ $oh -> quantity}}</td>
-                                        <td class="bg-white">{{ $oh -> item -> unit}}</td>
-                                        <td class="bg-white">{{ $oh -> golongan}}</td>
+                                        <td class="bg-white"><strong>{{ $oh -> quantity}} {{ $oh -> item -> unit}}</strong></td>
+                                        <td class="bg-white">{{ $oh -> item -> golongan}}</td>
                                         <td class="bg-white">{{ $oh -> supplierName}}</td>
-                                        <td class="bg-white"{{ $oh -> note}}</td>
+                                        <td class="bg-white">{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -81,7 +81,10 @@
 
                             <td>
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                                @if(strpos($oh -> status, 'Rejected') !== false)
+                                @else
+                                    <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
+                                @endif
                             </td>
 
                         </tr>
@@ -119,25 +122,33 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">Item Barang</th>
-                                            <th scope="col">Quantity</th>
+                                            @if(strpos($o -> order_id, 'ROID') !== false)
+                                                <th scope="col">Accepted Quantity</th>
+                                            @else
+                                                <th scope="col">Quantity</th>
+                                            @endif
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
-                                            @if(strpos($oh -> status, 'Order In Progress') !== false)
+                                            <th scope="col">Golongan</th>
+                                            @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                 <th scope="col">Stok Barang</th>
                                             @endif
+                                            <th scope="col">Note</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($orderDetails as $od)
                                             @if($od -> orders_id == $o -> id)
                                                 <tr>
-                                                    <td>{{ $od -> item -> itemName }}</td>
+                                                    <td><strong>{{ $od -> item -> itemName }}</strong></td>
                                                     <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
-                                                    @if(strpos($oh -> status, 'Order In Progress') !== false)
+                                                    <td>{{ $od -> item -> golongan }}</td>
+                                                    @if(strpos($oh -> status, 'Order In Progress By Supervisor') !== false)
                                                         <td><strong>{{ $od -> item -> itemStock }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif
+                                                    <td>{{ $od -> note }}</td>
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -165,8 +176,8 @@
             <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

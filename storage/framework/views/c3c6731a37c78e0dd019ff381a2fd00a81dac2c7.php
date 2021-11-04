@@ -2,13 +2,23 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="/dashboard">
+                <a class="nav-link 
+                <?php
+                    if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                        echo('active');
+                    }
+                ?>" href="/dashboard">
                     <span data-feather="user-plus"></span>
                     Add More Contact
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="<?php echo e(Route('adminPurchasing.formApPage')); ?>">
+            <li class="nav-item ">
+                <a class="nav-link 
+                <?php
+                    if(basename($_SERVER['PHP_SELF']) == 'form-ap'){
+                        echo('active');
+                    }
+                ?>" aria-current="page" href="<?php echo e(Route('adminPurchasing.formApPage')); ?>">
                     <span data-feather="file-plus"></span>
                     Form AP
                 </a>

@@ -146,9 +146,15 @@
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
-                                                <th scope="col">Quantity</th>
 
-                                                @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                                    <th scope="col">Accepted Quantity</th>
+                                                @else
+                                                    <th scope="col">Quantity</th>
+                                                @endif
+
+                                                {{-- @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false) --}}
+                                                @if(strpos($o -> order_id, 'COID') !== false)
                                                     <th scope="col">Terakhir Diberikan</th>
                                                 @endif
                                                 <th scope="col">Umur Barang</th>
@@ -166,10 +172,16 @@
                                                 @if($od -> orders_id == $o -> id)
                                                     <tr>
                                                         <td><strong>{{ $od -> item -> itemName }}</strong></td>
-                                                        <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
-                                                        @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false)
+                                                        @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                                            <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
+                                                        @else
+                                                            <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
+                                                        @endif
+
+                                                        @if(strpos($o -> order_id, 'COID') !== false)
                                                             <td>{{ $od -> item -> lastGiven }}</td>
                                                         @endif
+
                                                         <td>{{ $od -> item -> itemAge }}</td>
                                                         <td>{{ $od -> department }}</td>
                                                         <td>{{ $od -> item -> golongan }}</td>
@@ -205,8 +217,8 @@
                 <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

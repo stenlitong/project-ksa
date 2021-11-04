@@ -56,6 +56,19 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+            <?php $__errorArgs = ['itemPrice'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Harga Barang Invalid
+            </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
             <?php $__errorArgs = ['unit'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -288,7 +301,7 @@ unset($__errorArgs, $__bag); ?>
                         <td><strong><?php echo e($i -> itemName); ?></strong></td>
                         <td><?php echo e($i -> itemAge); ?></td>
                         <td><strong><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></strong></td>
-                        <td><?php echo e($i -> itemPrice); ?></td>
+                        <td>Rp. <?php echo e($i -> itemPrice); ?></td>
                         <td><?php echo e($i -> golongan); ?></td>
                         <td><?php echo e($i -> serialNo); ?></td>
                         <td><strong><?php echo e($i -> codeMasterItem); ?></strong></td>

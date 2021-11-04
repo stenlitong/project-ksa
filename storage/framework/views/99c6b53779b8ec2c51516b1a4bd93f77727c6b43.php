@@ -260,22 +260,29 @@ unset($__errorArgs, $__bag); ?>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                    <div class="d-flex justify-content-around">
+                                        <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                        <h5>Nomor PO : <?php echo e($o -> noPo); ?></h5>
+                                    </div>
                                     <table class="table">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Department</th>
+                                                <th scope="col">Golongan</th>
+                                                <th scope="col">Note</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
-                                                        <td><?php echo e($od -> item -> itemName); ?></td>
-                                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                                        <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
+                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                         <td><?php echo e($od -> department); ?></td>
+                                                        <td><?php echo e($od -> item -> golongan); ?></td>
+                                                        <td><?php echo e($od -> note); ?></td>
                                                     </tr>
                                                 <?php endif; ?>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -404,8 +411,8 @@ unset($__errorArgs, $__bag); ?>
             <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($oh -> order_id); ?></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

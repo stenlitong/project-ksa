@@ -149,10 +149,10 @@ unset($__errorArgs, $__bag); ?>
                             <div class="form-group p-2">
                                 <label for="note">Note (optional)</label>
                                 <br>
-                                <textarea class="form-control" name="note" Note="note" Note="3"
+                                <textarea class="form-control" name="note" Note="3"
                                     placeholder="Input Deskripsi Barang" style="height: 100px"></textarea>
                             </div>
-            
+
                             <br>
                             <div class="d-flex ml-3 justify-content-center">
                                 
@@ -190,7 +190,7 @@ unset($__errorArgs, $__bag); ?>
                                         <form method="POST" action="/logistic/<?php echo e($c -> id); ?>/delete">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('delete'); ?>
-                                            <td class="bg-white"><button class="btn btn-danger btn-sm">Delete Item</button></td>
+                                            <td class="bg-white"><button class="btn btn-warning btn-sm">Delete Item</button></td>
                                         </form>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -203,7 +203,7 @@ unset($__errorArgs, $__bag); ?>
         </main>
 
         <div class="modal fade" id="submit-order" tabindex="-1" role="dialog" aria-labelledby="submit-orderTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="max-width: 600px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
                     <h5 class="modal-title ml-3" id="submitTitle" style="color: white">Input PR Requirements</h5>
@@ -214,49 +214,51 @@ unset($__errorArgs, $__bag); ?>
                 <form method="POST" action="/logistic/<?php echo e(Auth::user()->id); ?>/submit-order">
                     <?php echo csrf_field(); ?>
                     <div class="modal-body"> 
-                        <div class="d-flex justify-content-start mr-3">
-                            <div class="form-group p-2">
-                                <div class="col">
-                                    <label for="tugs">Pilih Tug:</label>
-                                </div>
-                                <div class="col">
-                                    <select class="form-control" name="tugName" id="tugName" style=" height:50px; width: 400px;">
-                                        <?php $__currentLoopData = $tugs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($t -> tugName); ?>"><?php echo e($t -> tugName); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </select>
-                                    
-                                </div>
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="tugs">Pilih Tug:</label>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-start mr-3">
-                            <div class="form-group p-2">
-                                <div class="col">
-                                    <label for="bargeName">Pilih Barge (Optional):</label>
-                                </div>
-                                <div class="col">
-                                    <select class="form-control" name="bargeName" id="bargeName" style=" height: 50px; width: 400px;">
-                                        <option value="">None</option>
-                                        <?php $__currentLoopData = $barges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($b -> bargeName); ?>"><?php echo e($b -> bargeName); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col">
+                                <select class="form-control" name="tugName" id="tugName">
+                                    <?php $__currentLoopData = $tugs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($t -> tugName); ?>"><?php echo e($t -> tugName); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                </div>
+                                
                             </div>
                         </div>
-                        <div class="d-flex justify-content-start mr-3">
-                            <div class="form-group p-2">
-                                <div class="col">
-                                    <label for="company" class="mb-3">Perusahaan</label>
-                                </div>
-                                <div class="col">
-                                    <select class="form-control" name="company" id="company" style="width: 400px; height:50px;">
-                                        <option value="KSA">KSA</option>
-                                        <option value="ISA">ISA</option>
-                                        <option value="KSAO">KSA OFFSHORE</option>
-                                        <option value="KSAM">KSA MARITIME</option>
-                                    </select>
-                                </div>
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="bargeName">Pilih Barge (optional):</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="bargeName" id="bargeName">
+                                    <option value="">None</option>
+                                    <?php $__currentLoopData = $barges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($b -> bargeName); ?>"><?php echo e($b -> bargeName); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="company" class="mb-3">Perusahaan</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="company" id="company">
+                                    <option value="KSA">KSA</option>
+                                    <option value="ISA">ISA</option>
+                                    <option value="KSAO">KSA OFFSHORE</option>
+                                    <option value="KSAM">KSA MARITIME</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group p-2">
+                            <div class="col">
+                                <label for="descriptions" class="mb-3">Deskripsi (optional)</label>
+                            </div>
+                            <div class="col">
+                                <textarea class="form-control" name="descriptions" id="descriptions" placeholder="Input Deskripsi..." rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -287,6 +289,9 @@ unset($__errorArgs, $__bag); ?>
             background-color: antiquewhite;
             height: 1100px;
             /* height: 100%; */
+        }
+        label{
+            font-weight: bold;
         }
         th{
             color: white;

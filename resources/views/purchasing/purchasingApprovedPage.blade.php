@@ -112,17 +112,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price" class="mb-2">Total Harga</label>
+                                <label for="price" class="mb-2">Total Harga (sudah termasuk PPN 10%)</label>
                                 <div class="input-group">
-                                    {{-- <div class="input-group-prepend">
-                                        <div class="input-group-text">Rp.</div>
-                                    </div> --}}
-                                    <select class="form-control" id="kurs" name="kurs">
-                                        <option value="" disabled>Choose Kurs...</option>
-                                        <option value="Rp.">Rupiah</option>
-                                        <option value="$">Dollar</option>
-                                    </select>
-                                    <input type="number" min="1" class="form-control w-75" id="price" name="price" placeholder="Input total harga dalam angka..." required>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-white">Rp.</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ $orderHeads -> totalPrice }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -182,6 +177,9 @@
     </script>
 
     <style>
+        label{
+            font-weight: bold;
+        }
         th{
             color: white;
         }

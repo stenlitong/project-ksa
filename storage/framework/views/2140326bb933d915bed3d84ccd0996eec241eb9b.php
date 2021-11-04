@@ -151,9 +151,15 @@ unset($__errorArgs, $__bag); ?>
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Item Barang</th>
-                                                <th scope="col">Quantity</th>
 
-                                                <?php if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false): ?>
+                                                <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
+                                                    <th scope="col">Accepted Quantity</th>
+                                                <?php else: ?>
+                                                    <th scope="col">Quantity</th>
+                                                <?php endif; ?>
+
+                                                
+                                                <?php if(strpos($o -> order_id, 'COID') !== false): ?>
                                                     <th scope="col">Terakhir Diberikan</th>
                                                 <?php endif; ?>
                                                 <th scope="col">Umur Barang</th>
@@ -171,10 +177,16 @@ unset($__errorArgs, $__bag); ?>
                                                 <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
                                                         <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
-                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
-                                                        <?php if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false): ?>
+                                                        <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
+                                                            <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                        <?php else: ?>
+                                                            <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                        <?php endif; ?>
+
+                                                        <?php if(strpos($o -> order_id, 'COID') !== false): ?>
                                                             <td><?php echo e($od -> item -> lastGiven); ?></td>
                                                         <?php endif; ?>
+
                                                         <td><?php echo e($od -> item -> itemAge); ?></td>
                                                         <td><?php echo e($od -> department); ?></td>
                                                         <td><?php echo e($od -> item -> golongan); ?></td>
@@ -210,8 +222,8 @@ unset($__errorArgs, $__bag); ?>
                 <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

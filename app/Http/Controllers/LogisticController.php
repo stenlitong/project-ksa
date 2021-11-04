@@ -149,11 +149,15 @@ class LogisticController extends Controller
     public function stocksPage(){
         // Logistic can see the stocks of all branches
         if(request('search')){
-            $items = Item::where(function($query){
-                $query->where('itemName', 'like', '%' . request('search') . '%')
-                ->orWhere('cabang', 'like', '%' . request('search') . '%')
-                ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
-            })->Paginate(7)->withQueryString();
+            if(request('search') == 'All'){
+                $items = Item::orderBy('cabang')->Paginate(7)->withQueryString();
+            }else{
+                $items = Item::where(function($query){
+                    $query->where('itemName', 'like', '%' . request('search') . '%')
+                    ->orWhere('cabang', 'like', '%' . request('search') . '%')
+                    ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
+                })->Paginate(7)->withQueryString();
+            }
             return view('logistic.stocksPage', compact('items'));
         }else{
             // $branch_items = Item::where('cabang', Auth::user()->cabang)->get();
@@ -301,6 +305,7 @@ class LogisticController extends Controller
             'sender' => 'required',
             'receiver' => 'required',
             'expedition' => 'required',
+            'company' => 'required',
             'noResi' => 'nullable',
             'description' => 'nullable',
         ]);
@@ -328,13 +333,22 @@ class LogisticController extends Controller
             $status = 'On Delivery';
         }
 
+        // Calculate the price for the PR report
+        $sumPrice = 0;
+
         // If the stock checker passed, then decrement each item for the following order
         foreach($orderDetails as $od){
             Item::where('id', $od -> item -> id)->update([
                 'lastGiven' => date("d/m/Y")
             ]);
             Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> quantity);
+            // $sumPrice += $od -> acceptedQuantity * filter_var($od -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
+            $sumPrice += $od -> acceptedQuantity * $od -> item -> itemPrice;
         }
+
+        // Calculate the PPN * 10% of the item price, then adding it into the total price
+        $ppn = 10 * $sumPrice / 100;
+        $totalPrice = $sumPrice + $ppn;
 
         // Update the status of the following order
         OrderHead::where('id', $orderHeads -> id)->update([
@@ -348,7 +362,59 @@ class LogisticController extends Controller
             'approved_at' => date("d/m/Y")
         ]);
 
-        
+        //============ After approving, then automatically create new PR ======================
+        // Create Order Head
+        $orderHead = OrderHead::create([
+            'user_id' => Auth::user()->id,
+            'cabang' => Auth::user()->cabang,
+            'boatName' => $request->boatName,
+            'created_by' => Auth::user()->name,
+            'totalPrice' => $totalPrice,
+            'order_tracker' => 2,
+            'status' => 'Order In Progress By Supervisor'
+        ]);
+
+        // Formatting the PR format requirements
+        $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+        // Cabang object
+        $cabang_arr = [
+            'Jakarta' => 'JKT',
+            'Banjarmasin' => 'BNJ',
+            'Samarinda' => 'SMD',
+            'Bunati' => 'BNT',
+            'Babelan' => 'BBL',
+            'Berau' => 'BER'
+        ];
+
+        $pr_id = $orderHead -> id;
+        $first_char_name = strtoupper(Auth::user()->name[0]);
+        $location = $cabang_arr[Auth::user()->cabang];
+        $month = date('n');
+        $month_to_roman = $month_arr_in_roman[$month - 1];
+        $year = date('Y');
+
+        // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
+        $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
+
+        OrderHead::find($orderHead->id)->update([
+            'order_id' => 'ROID#' . $orderHead->id,
+            'noPr' => $pr_number,
+            'company' => $request->company,
+            'prDate' => date("d/m/Y")
+        ]);
+
+        foreach($orderDetails as $od){
+            OrderDetail::create([
+                'orders_id' => $orderHead->id,
+                'item_id' => $od->item_id,
+                'quantity' => $od->acceptedQuantity,
+                'unit' => $od->item->unit,
+                'golongan' => $od->golongan,
+                'serialNo' => $od->item->serialNo,
+                'department' => $od->department,
+            ]);
+        }
 
         return redirect('/dashboard')->with('status', 'Order Approved');
     }
@@ -439,10 +505,13 @@ class LogisticController extends Controller
         if($itemExistInCart){
             Cart::find($itemExistInCart->id)->increment('quantity', $request->quantity);
             Cart::find($itemExistInCart->id)->update([
-                'note' => $request->note
+                'note' => $request -> note
             ]);
         }else{
-            // Else add item to the cart
+            // Add cabang to the cart
+            $validated['cabang'] = Auth::user()->cabang;
+
+            // Then add item to the cart
             $validated['user_id'] = Auth::user()->id;
             Cart::create($validated);
         }
@@ -461,7 +530,8 @@ class LogisticController extends Controller
         $request -> validate([
             'tugName' => 'required',
             'bargeName' => 'nullable',
-            'company' => 'required'
+            'company' => 'required',
+            'descriptions' => 'nullable'
         ]);
 
         // Find the cart of the following user
@@ -477,11 +547,13 @@ class LogisticController extends Controller
         
         // Create Order Head
         $orderHead = OrderHead::create([
+            'created_by' => Auth::user()->name,
             'user_id' => Auth::user()->id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
             'order_tracker' => 2,
-            'status' => 'Order In Progress By Supervisor'
+            'status' => 'Order In Progress By Supervisor',
+            'descriptions' => $request -> descriptions
         ]);
         
         // Formatting the PR format requirements
@@ -513,18 +585,31 @@ class LogisticController extends Controller
             'prDate' => date("d/m/Y")
         ]);
 
+        // Calculate the price for the PR report
+        $sumPrice = 0;
+
         // Then fill the Order Detail with the cart items
         foreach($carts as $c){
             OrderDetail::create([
-                'orders_id' => $orderHead->id,
-                'item_id' => $c->item_id,
-                'quantity' => $c->quantity,
-                'unit' => $c->item->unit,
-                'golongan' => $c->golongan,
-                'serialNo' => $c->item->serialNo,
-                'department' => $c->department,
+                'orders_id' => $orderHead -> id,
+                'item_id' => $c -> item_id,
+                'quantity' => $c -> quantity,
+                'unit' => $c -> item -> unit,
+                'golongan' => $c -> golongan,
+                'serialNo' => $c -> item->serialNo,
+                'department' => $c -> department,
+                'note' => $c -> note
             ]);
+            $sumPrice += $c -> quantity * filter_var($c -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
         }
+
+        // Calculate the PPN * 10% of the item price, then adding it into the total price
+        $ppn = 10 * $sumPrice / 100;
+        $totalPrice = $sumPrice + $ppn;
+
+        OrderHead::find($orderHead->id)->update([
+            'totalPrice' => $totalPrice
+        ]);
 
         // Emptying the cart items
         Cart::where('user_id', Auth::user()->id)->delete();
@@ -558,7 +643,7 @@ class LogisticController extends Controller
     public function downloadPr(OrderHead $orderHeads){
         // dd($orderHeads->id);
 
-        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.xlsx');
+        return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
     }
 
     public function reportPage(){

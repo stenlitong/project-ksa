@@ -29,7 +29,6 @@
                                 <th scope="col">Item Barang Masuk</th>
                                 <th scope="col">Serial Number</th>
                                 <th scope="col">Qty</th>
-                                <th scope="col">Satuan</th>
                                 <th scope="col">Golongan</th>
                                 <th scope="col">Nama Supplier</th>
                                 <th scope="col">Note</th>
@@ -40,13 +39,12 @@
                                     <tr>
                                         <td class="bg-white"><?php echo e($key + 1); ?></td>
                                         <td class="bg-white"><?php echo e($oh -> approved_at); ?></td>
-                                        <td class="bg-white"><?php echo e($oh -> item -> itemName); ?></td>
+                                        <td class="bg-white"><strong><?php echo e($oh -> item -> itemName); ?></strong></td>
                                         <td class="bg-white"><?php echo e($oh -> item -> serialNo); ?></td>
-                                        <td class="bg-white"><?php echo e($oh -> quantity); ?></td>
-                                        <td class="bg-white"><?php echo e($oh -> item -> unit); ?></td>
-                                        <td class="bg-white"><?php echo e($oh -> golongan); ?></td>
+                                        <td class="bg-white"><strong><?php echo e($oh -> quantity); ?> <?php echo e($oh -> item -> unit); ?></strong></td>
+                                        <td class="bg-white"><?php echo e($oh -> item -> golongan); ?></td>
                                         <td class="bg-white"><?php echo e($oh -> supplierName); ?></td>
-                                        <td class="bg-white"<?php echo e($oh -> note); ?></td>
+                                        <td class="bg-white"><?php echo e($oh -> note); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

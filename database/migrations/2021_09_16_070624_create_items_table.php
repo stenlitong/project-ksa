@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->string('unit');
             $table->string('serialNo')->nullable();
             $table->string('golongan');
-            $table->string('itemPrice');
+            $table->bigInteger('itemPrice');
             $table->string('codeMasterItem');
             $table->string('itemAge');
             $table->string('cabang');
