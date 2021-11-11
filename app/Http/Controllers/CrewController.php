@@ -167,7 +167,6 @@ class CrewController extends Controller
         $o_id = OrderHead::create([
             'user_id' => Auth::user()->id,
             'cabang' => Auth::user()->cabang,
-            'created_by' => Auth::user()->name,
             'boatName' => $boatName,
             'order_tracker' => 1,
             'status' => 'Request In Progress By Logistic'

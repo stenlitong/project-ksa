@@ -23,24 +23,27 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
         $this->invoiceAddress = OrderHead::where('order_id', $order_id)->pluck('invoiceAddress')[0];
         $this->itemAddress = OrderHead::where('order_id', $order_id)->pluck('itemAddress')[0];
         $this->cabang = OrderHead::where('order_id', $order_id)->pluck('cabang')[0];
+        $this->supplierName = OrderHead::where('order_id', $order_id)->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->pluck('supplierName')[0];
+        $this->ppn = OrderHead::where('order_id', $order_id)->pluck('ppn')[0];
+        $this->discount = OrderHead::where('order_id', $order_id)->pluck('discount')[0];
     }
 
     public function query()
     {
-        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPo', 'boatName', 'department', 'noPr', 'itemName', 'quantity', 'items.unit', 'items.serialNo', 'codeMasterItem', 'note');
+        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPo', 'boatName', 'noPr', 'itemName', 'quantity', 'items.unit', 'codeMasterItem', 'note');
 
         return $orderDetail;
     }
 
     public function headings(): array{
-        return ['Nomor PO', 'Nama Kapal', 'Department', 'Nomor PR', 'Nama Barang', 'Quantity', 'Satuan', 'Serial No', 'Code Master Item', 'Note'];
+        return ['Nomor PO', 'Nama Kapal', 'Nomor PR', 'Nama Barang', 'Quantity', 'Satuan', 'Code Master Item', 'Note'];
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:J1')->applyFromArray([
+                $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],
@@ -53,6 +56,9 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
 
                 $event->sheet->appendRows(array(
                     array(' '),
+                    array('Supplier', $this->supplierName),
+                    array('Tipe PPN', $this->ppn . ' %'),
+                    array('Diskon', $this->discount . ' %'),
                     array('Total Harga', 'Rp. ' . number_format($this->price, 2, ",", ".")),
                     array('Alamat Pengiriman Invoice', $this->invoiceAddress),
                     array('Alamat Pengiriman Barang', $this->itemAddress),

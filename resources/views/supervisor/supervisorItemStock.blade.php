@@ -17,45 +17,45 @@
             @endif
 
             @error('itemName')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Barang Invalid
+                </div>
             @enderror
             
             @error('itemAge')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Umur Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Umur Barang Invalid
+                </div>
             @enderror
 
             @error('itemStock')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Stok Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Stok Barang Invalid
+                </div>
             @enderror
 
-            @error('itemPrice')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Harga Barang Invalid
-            </div>
+            @error('serialNo')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Serial Number Invalid
+                </div>
             @enderror
 
             @error('unit')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Satuan Unit Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Satuan Unit Invalid
+                </div>
             @enderror
             
             @error('codeMasterItem')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Code Master Item Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Code Master Item Invalid
+                </div>
             @enderror
 
             @error('cabang')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Cabang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Cabang Invalid
+                </div>
             @enderror
 
             @if(Auth::user()->hasRole('supervisorMaster'))
@@ -171,15 +171,6 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="noTelp">Harga Barang</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp.</div>
-                                            </div>
-                                            <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
-                                        </div>
-                                    </div>
-                                    <div class="col">
                                         <div class="form-group">
                                             <label for="golongan">Golongan</label>
                                             <select class="form-control" id="golongan" name="golongan">
@@ -192,7 +183,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="serialNo">Serial Number / Part Number (optional)</label>
-                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
+                                    <input type="number" class="form-control" id="serialNo" name="serialNo"
                                         placeholder="Input Serial Number">
                                 </div>
                                 <div class="form-group">
@@ -233,7 +224,6 @@
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
-                        <th scope="col" style="color: white">Harga Barang</th>
                         <th scope="col" style="color: white">Golongan</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
@@ -250,7 +240,6 @@
                         <td><strong>{{ $i -> itemName }}</strong></td>
                         <td>{{ $i -> itemAge }}</td>
                         <td><strong>{{ $i -> itemStock }} {{ $i -> unit }}</strong></td>
-                        <td>Rp. {{ $i -> itemPrice }}</td>
                         <td>{{ $i -> golongan }}</td>
                         <td>{{ $i -> serialNo }}</td>
                         <td><strong>{{ $i -> codeMasterItem }}</strong></td>
@@ -372,21 +361,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <label for="noTelp">Harga Satuan Barang</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
-                                                </div>
-                                                <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
-                                            </div>
-                                        </div>
-                                        <div class="col">
                                             <div class="form-group">
                                                 <label for="golongan">Golongan</label>
                                                 <select class="form-control" id="golongan" name="golongan">
-                                                    <option value="None">None</option>
-                                                    <option value="Floating">Floating</option>
-                                                    <option value="Dock">Dock</option>
+                                                    <option value="None" @if ($i -> golongan == 'None') selected="selected" @endif>None</option>
+                                                    <option value="Floating" @if ($i -> golongan == 'Floating') selected="selected" @endif>Floating</option>
+                                                    <option value="Dock" @if ($i -> golongan == 'Dock') selected="selected" @endif>Dock</option>
                                                 </select>
                                             </div>
                                         </div>

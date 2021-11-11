@@ -337,17 +337,20 @@
                 }
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function (event) {
-
                     if (dropdown.value == "picSite") {
                         document.getElementById("Jakarta").disabled = true;
                         document.getElementById("Berau").disabled = true;
                         selectopt('samarinda');
-
-                    } else {
+                    } else if(dropdown.value == "purchasing"){
+                        document.getElementById("Banjarmasin").disabled = true;
+                        document.getElementById("Samarinda").disabled = true;
+                        document.getElementById("Bunati").disabled = true;
+                        document.getElementById("Babelan").disabled = true;
+                        document.getElementById("Berau").disabled = true;
+                    }else {
                         document.getElementById("Jakarta").disabled = false;
                     }
                 }
-
             </script>
         </form>
      <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>

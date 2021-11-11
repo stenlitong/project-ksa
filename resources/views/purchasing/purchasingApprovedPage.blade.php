@@ -9,59 +9,69 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
             <h2 class="mt-3" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
+            
+            @if(session('status'))
+                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                    {{ session('status') }}
+                </div>
+            @endif
 
             @error('boatName')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Kapal Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Kapal Invalid
+                </div>
             @enderror
 
             @error('noPr')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nomor PR Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nomor PR Invalid
+                </div>
             @enderror
 
             @error('noPo')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nomor PO Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nomor PO Invalid
+                </div>
             @enderror
 
             @error('invoiceAddress')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alamat Pengiriman Invoice Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alamat Pengiriman Invoice Invalid
+                </div>
             @enderror
 
             @error('itemAddress')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alamat Barang Invoice Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alamat Barang Invoice Invalid
+                </div>
             @enderror
 
             @error('supplier_id')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Supplier Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Supplier Invalid
+                </div>
             @enderror
 
-            @error('price')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Harga Invalid
-            </div>
+            @error('discount')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Diskon Invalid
+                </div>
             @enderror
 
-            @error('kurs')
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Kurs Invalid
-            </div>
+            @error('ppn')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    PPN Invalid
+                </div>
             @enderror
 
                 <div class="row mt-4">
                     <div class="col">
                         <form method="POST" action="/purchasing/order/{{ $orderHeads -> id }}/approve">
                             @csrf
+                            <div class="form-group">
+                                <label for="approvedBy">Approved By</label>
+                                <input type="text" class="form-control" id="boatName" name="boatName" value="{{ Auth::user()->name }}" readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="boatName">Nama Kapal</label>
                                 <input type="text" class="form-control" id="boatName" name="boatName" value="{{ $orderHeads -> boatName }}" readonly>
@@ -112,12 +122,28 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price" class="mb-2">Total Harga (sudah termasuk PPN 10%)</label>
+                                <label for="ppn">Tipe PPN</label>
+                                <select class="form-control" id="ppn" name="ppn">
+                                    <option value="10">PPN</option>
+                                    <option value="0">Non - PPN</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount">Discount (%)</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-white">%</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" placeholder="Input Diskon Dalam Angka">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="mb-2">Total Harga (sebelum ppn & diskon)</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".")}}" readonly>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".") }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -126,28 +152,55 @@
                                     placeholder="Input Keterangan"></textarea>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary mb-5" style="margin-left: 45%">Submit</button>
+                            <div class="d-flex justify-content-center">
+                                <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
                         </form>
                     </div>
                     <div class="col mt-3">
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
-                                <tr>
-                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Harga per Barang</th>
                                     <th scope="col">Harga</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($orderDetails as $key => $od)
+                                @foreach($orderDetails as $od)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $od -> item -> itemName }}</td>
-                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                        <td>Rp. {{ number_format($od -> item -> itemPrice, 2, ",", ".")}}</td>
-                                        <td>Rp. {{ number_format($od -> quantity * $od -> item -> itemPrice, 2, ",", ".")}}</td>
+                                        <td>
+                                            <h5>{{ $od -> item -> itemName }}</h5>
+                                        </td>
+                                        
+                                        <td>
+                                            <h5>{{ $od -> department }}</h5>
+                                        </td>
+
+                                        <td>
+                                            <h5>{{ $od -> quantity }} {{ $od -> item -> unit }}</h5>
+                                        </td>
+                                        <form action="/purchasing/order/{{ $orderHeads -> id }}/{{ $od -> id }}/edit" method="POST">
+                                            @csrf
+                                            @method('patch')
+                                            <td>
+                                                <div class="d-flex">
+                                                    <h5 class="mr-2">Rp. </h5>
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="0">
+                                                </div>
+                                            </td>
+                                            
+                                            <td>
+                                                <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
+                                            </td>
+                                            
+                                            <td>
+                                                <button type="submit" class="btn btn-info btn-sm">Save</button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -189,7 +242,7 @@
         }
         td, th{
             word-wrap: break-word;
-            min-width: 140px;
+            min-width: 160px;
             max-width: 160px;
             text-align: center;
         }

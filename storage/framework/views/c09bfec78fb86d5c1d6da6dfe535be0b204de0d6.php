@@ -9,15 +9,22 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
             <h2 class="mt-3" style="text-align: center">Order <?php echo e($orderHeads -> order_id); ?></h2>
+            
+            <?php if(session('status')): ?>
+                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('status')); ?>
+
+                </div>
+            <?php endif; ?>
 
             <?php $__errorArgs = ['boatName'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Kapal Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Kapal Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -28,9 +35,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nomor PR Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nomor PR Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -41,9 +48,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nomor PO Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nomor PO Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -54,9 +61,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alamat Pengiriman Invoice Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alamat Pengiriman Invoice Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -67,9 +74,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Alamat Barang Invoice Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Alamat Barang Invoice Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -80,35 +87,35 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Supplier Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Supplier Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <?php $__errorArgs = ['price'];
+            <?php $__errorArgs = ['discount'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Harga Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Diskon Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <?php $__errorArgs = ['kurs'];
+            <?php $__errorArgs = ['ppn'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Kurs Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    PPN Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -118,6 +125,10 @@ unset($__errorArgs, $__bag); ?>
                     <div class="col">
                         <form method="POST" action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/approve">
                             <?php echo csrf_field(); ?>
+                            <div class="form-group">
+                                <label for="approvedBy">Approved By</label>
+                                <input type="text" class="form-control" id="boatName" name="boatName" value="<?php echo e(Auth::user()->name); ?>" readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="boatName">Nama Kapal</label>
                                 <input type="text" class="form-control" id="boatName" name="boatName" value="<?php echo e($orderHeads -> boatName); ?>" readonly>
@@ -168,7 +179,23 @@ unset($__errorArgs, $__bag); ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price" class="mb-2">Total Harga (sudah termasuk PPN 10%)</label>
+                                <label for="ppn">Tipe PPN</label>
+                                <select class="form-control" id="ppn" name="ppn">
+                                    <option value="10">PPN</option>
+                                    <option value="0">Non - PPN</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount">Discount (%)</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-white">%</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" placeholder="Input Diskon Dalam Angka">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="mb-2">Total Harga (sebelum ppn & diskon)</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
@@ -182,28 +209,55 @@ unset($__errorArgs, $__bag); ?>
                                     placeholder="Input Keterangan"></textarea>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary mb-5" style="margin-left: 45%">Submit</button>
+                            <div class="d-flex justify-content-center">
+                                <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
                         </form>
                     </div>
                     <div class="col mt-3">
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
-                                <tr>
-                                    <th scope="col">Nomor</th>
                                     <th scope="col">Item Barang</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Harga per Barang</th>
                                     <th scope="col">Harga</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td><?php echo e($key + 1); ?></td>
-                                        <td><?php echo e($od -> item -> itemName); ?></td>
-                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
-                                        <td>Rp. <?php echo e(number_format($od -> item -> itemPrice, 2, ",", ".")); ?></td>
-                                        <td>Rp. <?php echo e(number_format($od -> quantity * $od -> item -> itemPrice, 2, ",", ".")); ?></td>
+                                        <td>
+                                            <h5><?php echo e($od -> item -> itemName); ?></h5>
+                                        </td>
+                                        
+                                        <td>
+                                            <h5><?php echo e($od -> department); ?></h5>
+                                        </td>
+
+                                        <td>
+                                            <h5><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></h5>
+                                        </td>
+                                        <form action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/<?php echo e($od -> id); ?>/edit" method="POST">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('patch'); ?>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <h5 class="mr-2">Rp. </h5>
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="0">
+                                                </div>
+                                            </td>
+                                            
+                                            <td>
+                                                <h5>Rp. <?php echo e(number_format($od -> totalItemPrice, 2, ",", ".")); ?></h5>
+                                            </td>
+                                            
+                                            <td>
+                                                <button type="submit" class="btn btn-info btn-sm">Save</button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
@@ -245,7 +299,7 @@ unset($__errorArgs, $__bag); ?>
         }
         td, th{
             word-wrap: break-word;
-            min-width: 140px;
+            min-width: 160px;
             max-width: 160px;
             text-align: center;
         }

@@ -145,7 +145,11 @@ unset($__errorArgs, $__bag); ?>
         }
         .alert{
                 text-align: center;
-            }
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 

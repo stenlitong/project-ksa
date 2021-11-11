@@ -8,7 +8,59 @@
         @include('purchasing.sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 150px">
-            @include('../layouts/time')
+            <div class="d-flex">
+                @include('../layouts/time')
+
+                <div class="p-2 ml-auto mt-5">
+                    <h5>Cabang</h5>
+                        @csrf
+                    <select name="cabang" class="form-select" onchange="window.location = this.value;">
+                        <option selected disabled>Pilih Cabang</option>
+                        <option value="/purchasing/dashboard/Jakarta" 
+                            @php
+                                if($default_branch == 'Jakarta'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Jakarta</option>
+                        <option value="/purchasing/dashboard/Banjarmasin"
+                            @php
+                                if($default_branch == 'Banjarmasin'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Banjarmasin</option>
+                        <option value="/purchasing/dashboard/Samarinda"
+                            @php
+                                if($default_branch == 'Samarinda'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Samarinda</option>
+                        <option value="/purchasing/dashboard/Bunati"
+                            @php
+                                if($default_branch == 'Bunati'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Bunati</option>
+                        <option value="/purchasing/dashboard/Babelan"
+                            @php
+                                if($default_branch == 'Babelan'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Babelan</option>
+                        <option value="/purchasing/dashboard/Berau"
+                            @php
+                                if($default_branch == 'Berau'){
+                                    echo('selected');
+                                }
+                            @endphp
+                        >Berau</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col" style="max-width: 850px">
@@ -159,7 +211,7 @@
                 </div>
 
                 <div class="col">
-                    <h2 class="mt-3 mb-4" style="text-align: center;">Order List</h2>
+                    <h2 class="mt-3 mb-4" style="text-align: center;">Order List Cabang {{ $default_branch }}</h2>
                     
                     @if(session('statusB'))
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -187,8 +239,8 @@
                             </div>
                         </form>
                         <div>
-                            <a href="{{ Route('purchasing.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                            <a href="{{ Route('purchasing.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                            <a href="/purchasing/completed-order/{{ $default_branch }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                            <a href="/purchasing/in-progress-order/{{ $default_branch }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
                         </div>
                     </div>
 
@@ -198,6 +250,7 @@
                             <tr>
                                 <th scope="col">Order ID</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Approved By</th>
                                 <th scope="col">Detail</th>
                             </tr>
                             </thead>
@@ -214,6 +267,7 @@
                                     @else
                                         <td>{{ $oh -> status }}</td>
                                     @endif
+                                    <td></td>
                                     <td>
                                         {{-- Modal button for order details --}}
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
@@ -233,7 +287,6 @@
                 </div>
             </div>
 
-
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
                     <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
@@ -241,7 +294,10 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order {{ $o->order_id }}</span></h5>
+                                    <div class="d-flex justify-content-around">
+                                        <h5><span style="color: white">Order : {{ $o->order_id }}</span></h5>
+                                        <h5 class="ml-5"><span style="color: white">Processed By : </span></h5>
+                                    </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

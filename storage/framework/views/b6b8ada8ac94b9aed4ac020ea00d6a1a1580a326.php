@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
-                    if(basename($_SERVER['PHP_SELF']) == 'dashboard'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
                         echo('active');
                     }
                 ?>" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
-                    if(basename($_SERVER['PHP_SELF']) == 'form-ap'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
                         echo('active');
                     }
                 ?>" href="<?php echo e(Route('purchasing.form-ap')); ?>">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
-                    if(basename($_SERVER['PHP_SELF']) == 'report'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'report'){
                         echo('active');
                     }
                 ?>" href="<?php echo e(Route('purchasing.report')); ?>">

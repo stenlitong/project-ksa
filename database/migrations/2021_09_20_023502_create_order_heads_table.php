@@ -22,9 +22,11 @@ class CreateOrderHeadsTable extends Migration
             $table->string('noPr')->nullable();
             $table->string('noPo')->nullable();
             $table->string('company')->nullable();
-            $table->string('totalPrice')->nullable();
+            $table->unsignedBigInteger('totalPrice')->default(0);
             $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->string('created_by');
+            $table->string('approvedBy')->nullable();
+            $table->integer('ppn')->nullable();
+            $table->integer('discount')->nullable();
             $table->string('sender')->nullable();
             $table->string('receiver')->nullable();
             $table->string('expedition')->nullable();

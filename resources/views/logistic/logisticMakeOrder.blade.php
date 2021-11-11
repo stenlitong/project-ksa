@@ -84,7 +84,7 @@
                                     style="height: 50px">
                             </div>
                             <div class="form-group p-2">
-                                <label for="department" class="mb-3">Department (optional)</label>
+                                <label for="department" class="mb-3">Department</label>
                                 <br>
                                 <select class="form-control" name="department" id="department" style="height:50px;">
                                     <option value="None">None</option>
@@ -130,7 +130,7 @@
                                         <td class="bg-white">{{ $c -> item -> itemName }}</td>
                                         <td class="bg-white">{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
                                         <td class="bg-white">{{ $c -> department }}</td>
-                                        <td class="bg-white">{{ $c -> golongan }}</td>
+                                        <td class="bg-white">{{ $c -> item -> golongan }}</td>
                                         <td class="bg-white">{{ $c -> note }}</td>
                                         {{-- Delete Item --}}
                                         <form method="POST" action="/logistic/{{ $c -> id }}/delete">

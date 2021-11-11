@@ -162,21 +162,11 @@ class SupervisorController extends Controller
     }
 
     public function reportsPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 6 month
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorReport', compact('orderHeads'));
     }
@@ -186,41 +176,21 @@ class SupervisorController extends Controller
     }
 
     public function historyOut(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from crew role/goods out
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_details.created_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryOut', compact('orderHeads'));
     }
 
     public function historyIn(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from logistic role/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorHistoryIn', compact('orderHeads'));
     }
@@ -259,9 +229,8 @@ class SupervisorController extends Controller
             'umur' => 'required',
             'itemStock' => 'required|integer|min:1',
             'unit' => 'required',
-            'itemPrice' => 'required|integer|min:1',
             'golongan' => 'required',
-            'serialNo' => 'nullable',
+            'serialNo' => 'nullable|numeric',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
             'cabang' => 'required',
             'description' => 'nullable'
@@ -276,7 +245,6 @@ class SupervisorController extends Controller
             'itemAge' => $new_itemAge,
             'itemStock' => $request -> itemStock,
             'unit' => $request -> unit,
-            'itemPrice' => $request -> itemPrice,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
@@ -301,9 +269,8 @@ class SupervisorController extends Controller
             'umur' => 'required',
             'itemStock' => 'required|integer|min:1',
             'unit' => 'required',
-            'itemPrice' => 'required|min:1|integer',
             'golongan' => 'required',
-            'serialNo' => 'nullable',
+            'serialNo' => 'nullable|numeric',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
             'description' => 'nullable'
         ]);
@@ -317,7 +284,6 @@ class SupervisorController extends Controller
             'itemAge' => $new_itemAge,
             'itemStock' => $request->itemStock,
             'unit' => $request -> unit,
-            'itemPrice' => $request -> itemPrice,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,

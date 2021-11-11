@@ -50,8 +50,8 @@ class AdminPurchasingController extends Controller
 
     public function formApPage(){
         // Show the form AP page
-        $documents = ApList::where('cabang', Auth::user()->cabang)->latest()->get();
-
+        $documents = ApList::where('cabang', Auth::user()->cabang)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->get();
+        
         return view('adminPurchasing.adminPurchasingFormAp', compact('documents'));
     }
 

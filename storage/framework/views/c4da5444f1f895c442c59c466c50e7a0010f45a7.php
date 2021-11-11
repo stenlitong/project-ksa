@@ -22,9 +22,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Nama Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Barang Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -35,9 +35,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Umur Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Umur Barang Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -48,22 +48,22 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Stok Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Stok Barang Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <?php $__errorArgs = ['itemPrice'];
+            <?php $__errorArgs = ['serialNo'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Harga Barang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Serial Number Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -74,9 +74,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Satuan Unit Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Satuan Unit Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -87,9 +87,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Code Master Item Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Code Master Item Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -100,9 +100,9 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                Cabang Invalid
-            </div>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Cabang Invalid
+                </div>
             <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -222,15 +222,6 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="noTelp">Harga Barang</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp.</div>
-                                            </div>
-                                            <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
-                                        </div>
-                                    </div>
-                                    <div class="col">
                                         <div class="form-group">
                                             <label for="golongan">Golongan</label>
                                             <select class="form-control" id="golongan" name="golongan">
@@ -243,7 +234,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="serialNo">Serial Number / Part Number (optional)</label>
-                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
+                                    <input type="number" class="form-control" id="serialNo" name="serialNo"
                                         placeholder="Input Serial Number">
                                 </div>
                                 <div class="form-group">
@@ -284,7 +275,6 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
-                        <th scope="col" style="color: white">Harga Barang</th>
                         <th scope="col" style="color: white">Golongan</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
@@ -301,7 +291,6 @@ unset($__errorArgs, $__bag); ?>
                         <td><strong><?php echo e($i -> itemName); ?></strong></td>
                         <td><?php echo e($i -> itemAge); ?></td>
                         <td><strong><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></strong></td>
-                        <td>Rp. <?php echo e($i -> itemPrice); ?></td>
                         <td><?php echo e($i -> golongan); ?></td>
                         <td><?php echo e($i -> serialNo); ?></td>
                         <td><strong><?php echo e($i -> codeMasterItem); ?></strong></td>
@@ -421,21 +410,12 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <label for="noTelp">Harga Barang</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
-                                                </div>
-                                                <input type="number" min="1" class="form-control" id="itemPrice" name="itemPrice" placeholder="Input harga barang dalam angka...">
-                                            </div>
-                                        </div>
-                                        <div class="col">
                                             <div class="form-group">
                                                 <label for="golongan">Golongan</label>
                                                 <select class="form-control" id="golongan" name="golongan">
-                                                    <option value="None">None</option>
-                                                    <option value="Floating">Floating</option>
-                                                    <option value="Dock">Dock</option>
+                                                    <option value="None" <?php if($i -> golongan == 'None'): ?> selected="selected" <?php endif; ?>>None</option>
+                                                    <option value="Floating" <?php if($i -> golongan == 'Floating'): ?> selected="selected" <?php endif; ?>>Floating</option>
+                                                    <option value="Dock" <?php if($i -> golongan == 'Dock'): ?> selected="selected" <?php endif; ?>>Dock</option>
                                                 </select>
                                             </div>
                                         </div>

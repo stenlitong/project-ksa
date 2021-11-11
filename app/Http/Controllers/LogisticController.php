@@ -323,18 +323,17 @@ class LogisticController extends Controller
             }
         }
 
+        // Check the order tracker, if it already been processed then return
         if($orderHeads -> order_tracker == 2){
             return redirect('/dashboard')->with('error', 'Order Already Been Processed');
         }
 
+        // Determine the status
         if($request->expedition == 'onsite'){
             $status = 'Items Ready';
         }else{
             $status = 'On Delivery';
         }
-
-        // Calculate the price for the PR report
-        $sumPrice = 0;
 
         // If the stock checker passed, then decrement each item for the following order
         foreach($orderDetails as $od){
@@ -343,12 +342,7 @@ class LogisticController extends Controller
             ]);
             Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> acceptedQuantity);
             // $sumPrice += $od -> acceptedQuantity * filter_var($od -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
-            $sumPrice += $od -> acceptedQuantity * $od -> item -> itemPrice;
         }
-
-        // Calculate the PPN * 10% of the item price, then adding it into the total price
-        $ppn = 10 * $sumPrice / 100;
-        $totalPrice = $sumPrice + $ppn;
 
         // Update the status of the following order
         OrderHead::where('id', $orderHeads -> id)->update([
@@ -369,7 +363,6 @@ class LogisticController extends Controller
             'cabang' => Auth::user()->cabang,
             'boatName' => $request->boatName,
             'created_by' => Auth::user()->name,
-            'totalPrice' => $totalPrice,
             'order_tracker' => 2,
             'status' => 'Order In Progress By Supervisor'
         ]);
@@ -420,41 +413,21 @@ class LogisticController extends Controller
     }
 
     public function historyOutPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from crew role/goods out
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Request Completed' . '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_details.created_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Request Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_details.created_at', 'desc')->get();
 
         return view('logistic.logisticHistory', compact('orderHeads'));
     }
 
     public function historyInPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from logistic role/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticHistoryIn', compact('orderHeads'));
     }
@@ -583,30 +556,19 @@ class LogisticController extends Controller
             'prDate' => date("d/m/Y")
         ]);
 
-        // Calculate the price for the PR report
-        $sumPrice = 0;
-
         // Then fill the Order Detail with the cart items
         foreach($carts as $c){
             OrderDetail::create([
                 'orders_id' => $orderHead -> id,
                 'item_id' => $c -> item_id,
                 'quantity' => $c -> quantity,
+                'acceptedQuantity' => $c -> quantity,
                 'unit' => $c -> item -> unit,
                 'serialNo' => $c -> item->serialNo,
                 'department' => $c -> department,
                 'note' => $c -> note
             ]);
-            $sumPrice += $c -> quantity * filter_var($c -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
         }
-
-        // Calculate the PPN * 10% of the item price, then adding it into the total price
-        $ppn = 10 * $sumPrice / 100;
-        $totalPrice = $sumPrice + $ppn;
-
-        OrderHead::find($orderHead->id)->update([
-            'totalPrice' => $totalPrice
-        ]);
 
         // Emptying the cart items
         Cart::where('user_id', Auth::user()->id)->delete();
@@ -644,21 +606,11 @@ class LogisticController extends Controller
     }
 
     public function reportPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticReport', compact('orderHeads'));
     }

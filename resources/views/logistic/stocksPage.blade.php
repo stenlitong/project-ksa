@@ -10,14 +10,6 @@
             <div class="wrapper">
             <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
                 
-<?php
-// Program to display complete URL
-  
-$link = $_SERVER['PHP_SELF'];
-  
-// Display the complete URL
-echo $link;
-?>
             <br>
             
             @if(session('itemInvalid'))
@@ -81,7 +73,7 @@ echo $link;
                         <option value="/logistic/stocks?search=Bunati">Bunati</option>
                         <option value="/logistic/stocks?search=Babelan">Babelan</option>
                         <option value="/logistic/stocks?search=Berau">Berau</option>
-                       </select>
+                    </select>
                 </div>
             </div>
             
@@ -106,7 +98,10 @@ echo $link;
                     <tbody>
                         @foreach($items as $i)
                             <tr>
-                                <td class="bg-white">{{ $i -> itemName }}</td>
+                                @php
+                                    $str = 'itemNam' . 'e'   
+                                @endphp
+                                <td class="bg-white">{{ $i -> $str }}</td>
                                 <td class="bg-white">{{ $i -> itemAge }}</td>
                                 <td class="bg-white">{{ $i -> itemStock }} {{ $i -> unit }}</td>
                                 <td class="bg-white">{{ $i -> serialNo }}</td>
@@ -198,7 +193,7 @@ echo $link;
                 margin: 15px;
                 border-radius: 10px;
                 background-color: antiquewhite;
-                height: 1000px;
+                height: 900px;
                 /* height: 100%; */
             }
             

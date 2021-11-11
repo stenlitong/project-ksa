@@ -23,7 +23,7 @@ class DashboardController extends Controller
             }
 
             // Get all the order within the logged in user within 6 month
-            $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
+            $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(1);
 
             // Get the orderDetail from orders_id within the orderHead table 
             // $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
@@ -131,6 +131,7 @@ class DashboardController extends Controller
         }elseif(Auth::user()->hasRole('purchasing')){
             // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
             $month_now = (int)(date('m'));
+            
             if($month_now <= 6){
                 $start_date = date('Y-01-01');
                 $end_date = date('Y-06-30');
@@ -139,8 +140,11 @@ class DashboardController extends Controller
                 $end_date = date('Y-12-31');
             }
 
+            $default_branch = 'Jakarta';
+
             // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
             $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
             
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -172,7 +176,7 @@ class DashboardController extends Controller
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
 
         }elseif(Auth::user()->hasRole('adminPurchasing')){
             $suppliers = Supplier::latest()->get();

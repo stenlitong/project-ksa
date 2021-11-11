@@ -10,14 +10,6 @@
             <div class="wrapper">
             <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
                 
-<?php
-// Program to display complete URL
-  
-$link = $_SERVER['PHP_SELF'];
-  
-// Display the complete URL
-echo $link;
-?>
             <br>
             
             <?php if(session('itemInvalid')): ?>
@@ -118,7 +110,7 @@ unset($__errorArgs, $__bag); ?>
                         <option value="/logistic/stocks?search=Bunati">Bunati</option>
                         <option value="/logistic/stocks?search=Babelan">Babelan</option>
                         <option value="/logistic/stocks?search=Berau">Berau</option>
-                       </select>
+                    </select>
                 </div>
             </div>
             
@@ -144,7 +136,10 @@ unset($__errorArgs, $__bag); ?>
                     <tbody>
                         <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td class="bg-white"><?php echo e($i -> itemName); ?></td>
+                                <?php
+                                    $str = 'itemNam' . 'e'   
+                                ?>
+                                <td class="bg-white"><?php echo e($i -> $str); ?></td>
                                 <td class="bg-white"><?php echo e($i -> itemAge); ?></td>
                                 <td class="bg-white"><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
                                 <td class="bg-white"><?php echo e($i -> serialNo); ?></td>
@@ -236,7 +231,7 @@ unset($__errorArgs, $__bag); ?>
                 margin: 15px;
                 border-radius: 10px;
                 background-color: antiquewhite;
-                height: 1000px;
+                height: 900px;
                 /* height: 100%; */
             }
             

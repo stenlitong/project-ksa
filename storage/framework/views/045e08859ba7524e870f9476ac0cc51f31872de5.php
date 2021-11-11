@@ -7,33 +7,10 @@
     <div class="row">
         <?php echo $__env->make('crew.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-        
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex">
-                <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                <div class="ml-auto mr-5 mt-5">
-                    <h5 class="">Cabang: <?php echo e(Auth::user()->cabang); ?></h5>
-                    <form action="<?php echo e(Route('crew.changeBranch')); ?>" method="POST">
-                        <?php echo csrf_field(); ?>
-                        <select class="form-select mt-3" aria-label="Default select example" name="cabang" id="cabang">
-                            <option selected disabled>Pilih Cabang</option>
-                            <option value="Jakarta" id="Jakarta">Jakarta</option>
-                            <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                            <option value="Samarinda" id="Samarinda">Samarinda</option>
-                            <option value="Bunati" id="Bunati">Bunati</option>
-                            <option value="Babelan" id="Babelan">Babelan</option>
-                            <option value="Berau" id="Berau">Berau</option>
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-primary mt-3">Submit</button>
-                    </form>
-                </div>
-            </div>
-            
-            <h2 class="mt-3 mb-3" style="text-align: center"><strong>Order List</strong></h2>
-            <div class="d-flex justify-content-end">
-                <?php echo e($orderHeads->links()); ?>
+            <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>            
 
-            </div>
+            <h2 class="mt-3 mb-3" style="text-align: center"><strong>Order List</strong></h2>
 
             <?php if(session('status')): ?>
                 <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -49,9 +26,64 @@
                 </div>
             <?php endif; ?>
 
-            <div class="d-flex justify-content-end mb-3">
-                <a href="<?php echo e(Route('crew.completed-order')); ?>" class="btn btn-success mr-3">Completed (<?php echo e($completed); ?>)</a>
-                <a href="<?php echo e(Route('crew.in-progress-order')); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
+            <div class="d-flex">
+                <div class="p-2 mr-auto">
+                    <h5>Cabang: <?php echo e(Auth::user()->cabang); ?></h5>
+                    <form action="<?php echo e(Route('crew.changeBranch')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <div class="d-flex">
+                            <select class="form-select mr-3" aria-label="Default select example" name="cabang" id="cabang">
+                                <option value="Jakarta" id="Jakarta" 
+                                    <?php if(Auth::user()->cabang == 'Jakarta') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Jakarta</option>
+                                <option value="Banjarmasin" id="Banjarmasin"
+                                    <?php if(Auth::user()->cabang == 'Banjarmasin') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Banjarmasin</option>
+                                <option value="Samarinda" id="Samarinda"
+                                    <?php if(Auth::user()->cabang == 'Samarinda') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Samarinda</option>
+                                <option value="Bunati" id="Bunati"
+                                    <?php if(Auth::user()->cabang == 'Bunati') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Bunati</option>
+                                <option value="Babelan" id="Babelan"
+                                    <?php if(Auth::user()->cabang == 'Babelan') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Babelan</option>
+                                <option value="Berau" id="Berau"
+                                    <?php if(Auth::user()->cabang == 'Berau') {
+                                        echo('selected');
+                                    } 
+                                    ?>
+                                >Berau</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="p-2 mt-auto">
+                    <a href="<?php echo e(Route('crew.completed-order')); ?>" class="btn btn-success mr-3">Completed (<?php echo e($completed); ?>)</a>
+                    <a href="<?php echo e(Route('crew.in-progress-order')); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
+                </div>
+
+                <div class="p-2 mt-auto">
+                    <?php echo e($orderHeads->links()); ?>
+
+                </div>
             </div>
 
             <div id="content" style="overflow-x:auto;">

@@ -8,13 +8,63 @@
         <?php echo $__env->make('purchasing.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 150px">
-            <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <div class="d-flex">
+                <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+                <div class="p-2 ml-auto mt-5">
+                    <h5>Cabang</h5>
+                        <?php echo csrf_field(); ?>
+                    <select name="cabang" class="form-select" onchange="window.location = this.value;">
+                        <option selected disabled>Pilih Cabang</option>
+                        <option value="/purchasing/dashboard/Jakarta" 
+                            <?php
+                                if($default_branch == 'Jakarta'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Jakarta</option>
+                        <option value="/purchasing/dashboard/Banjarmasin"
+                            <?php
+                                if($default_branch == 'Banjarmasin'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Banjarmasin</option>
+                        <option value="/purchasing/dashboard/Samarinda"
+                            <?php
+                                if($default_branch == 'Samarinda'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Samarinda</option>
+                        <option value="/purchasing/dashboard/Bunati"
+                            <?php
+                                if($default_branch == 'Bunati'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Bunati</option>
+                        <option value="/purchasing/dashboard/Babelan"
+                            <?php
+                                if($default_branch == 'Babelan'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Babelan</option>
+                        <option value="/purchasing/dashboard/Berau"
+                            <?php
+                                if($default_branch == 'Berau'){
+                                    echo('selected');
+                                }
+                            ?>
+                        >Berau</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col" style="max-width: 850px">
                     <h2 class="mt-3 mb-4" style="text-align: center">Supplier</h2>
-                    <?php echo e($_SERVER['REQUEST_URI']); ?>
-
                     <?php if(session('statusA')): ?>
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
                             <?php echo e(session('statusA')); ?>
@@ -163,7 +213,7 @@
                 </div>
 
                 <div class="col">
-                    <h2 class="mt-3 mb-4" style="text-align: center;">Order List</h2>
+                    <h2 class="mt-3 mb-4" style="text-align: center;">Order List Cabang <?php echo e($default_branch); ?></h2>
                     
                     <?php if(session('statusB')): ?>
                         <div class="alert alert-success" style="width: 40%; margin-left: 30%">
@@ -200,8 +250,8 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </form>
                         <div>
-                            <a href="<?php echo e(Route('purchasing.completed-order')); ?>" class="btn btn-success mr-3">Completed (<?php echo e($completed); ?>)</a>
-                            <a href="<?php echo e(Route('purchasing.in-progress-order')); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
+                            <a href="/purchasing/completed-order/<?php echo e($default_branch); ?>" class="btn btn-success mr-3">Completed (<?php echo e($completed); ?>)</a>
+                            <a href="/purchasing/in-progress-order/<?php echo e($default_branch); ?>" class="btn btn-danger mr-3">In Progress (<?php echo e($in_progress); ?>)</a>
                         </div>
                     </div>
 
@@ -211,6 +261,7 @@ unset($__errorArgs, $__bag); ?>
                             <tr>
                                 <th scope="col">Order ID</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Approved By</th>
                                 <th scope="col">Detail</th>
                             </tr>
                             </thead>
@@ -227,6 +278,7 @@ unset($__errorArgs, $__bag); ?>
                                     <?php else: ?>
                                         <td><?php echo e($oh -> status); ?></td>
                                     <?php endif; ?>
+                                    <td></td>
                                     <td>
                                         
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
@@ -247,7 +299,6 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
-
             
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
@@ -255,7 +306,10 @@ unset($__errorArgs, $__bag); ?>
                         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title" id="detailTitle"><span style="color: white">Order <?php echo e($o->order_id); ?></span></h5>
+                                    <div class="d-flex justify-content-around">
+                                        <h5><span style="color: white">Order : <?php echo e($o->order_id); ?></span></h5>
+                                        <h5 class="ml-5"><span style="color: white">Processed By : </span></h5>
+                                    </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

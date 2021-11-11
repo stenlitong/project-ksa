@@ -19,6 +19,8 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedBigInteger('item_id');
             $table->integer('quantity');
             $table->integer('acceptedQuantity')->nullable();
+            $table->unsignedBigInteger('itemPrice')->default(0);
+            $table->unsignedBigInteger('totalItemPrice')->default(0);
             $table->string('department')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();

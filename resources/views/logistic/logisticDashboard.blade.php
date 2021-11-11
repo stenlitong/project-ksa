@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="d-flex-column ml-5">
                                             <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->created_by }}</h5>
+                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->user->name }}</h5>
                                         </div>
                                     </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -249,7 +249,7 @@
             margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 850px;
+            height: 800px;
             /* height: 100%; */
         }
         th{

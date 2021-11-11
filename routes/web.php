@@ -98,9 +98,11 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
     });
 
     Route::prefix('purchasing')->name('purchasing.')->group(function(){
-        Route::get('/completed-order', [PurchasingController::class, 'completedOrder'])->name('completed-order');
-        Route::get('/in-progress-order', [PurchasingController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-order/{branch}', [PurchasingController::class, 'completedOrder']);
+        Route::get('/in-progress-order/{branch}', [PurchasingController::class, 'inProgressOrder']);
+        Route::get('/dashboard/{branch}', [PurchasingController::class, 'branchDashboard']);
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
+        Route::patch('/order/{orderHeads}/{orderDetails}/edit', [PurchasingController::class, 'editPriceOrderDetail']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
         Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);

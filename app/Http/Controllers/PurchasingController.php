@@ -17,7 +17,59 @@ use Storage;
 
 class PurchasingController extends Controller
 {
-    public function completedOrder(){
+
+    public function branchDashboard($branch){
+        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
+        $month_now = (int)(date('m'));
+        
+        if($month_now <= 6){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-06-30');
+        }else{
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-12-31');
+        }
+
+        $default_branch = $branch;
+
+        // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+        
+        if(request('search')){
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere('order_id', 'like', '%'. request('search') .'%');
+            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
+        }else{
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6)->withQueryString();
+        }
+
+        // Then find all the order details from the orderHeads
+        // $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
+        $order_id = $orderHeads->pluck('id');
+        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
+        // Count the completed & in progress order
+        $completed = OrderHead::where(function($query){
+            $query->where('status', 'like', 'Order Completed (Logistic)')
+            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
+        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+
+        $in_progress = OrderHead::where(function($query){
+            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+
+        // Get all the suppliers
+        $suppliers = Supplier::latest()->get();
+
+        return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
+    }
+
+    public function completedOrder($branch){
         // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
         $month_now = (int)(date('m'));
         if($month_now <= 6){
@@ -28,8 +80,10 @@ class PurchasingController extends Controller
             $end_date = date('Y-12-31');
         }
 
+        $default_branch = $branch;
+
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
@@ -39,7 +93,7 @@ class PurchasingController extends Controller
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -52,29 +106,29 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
             
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
         }else{
             $orderHeads = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $completed = $orderHeads->count();
     
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers', 'default_branch'));
         }
     }
 
-    public function inProgressOrder(){
+    public function inProgressOrder($branch){
         // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
         $month_now = (int)(date('m'));
         if($month_now <= 6){
@@ -85,8 +139,10 @@ class PurchasingController extends Controller
             $end_date = date('Y-12-31');
         }
 
+        $default_branch = $branch;
+
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
@@ -97,7 +153,7 @@ class PurchasingController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -109,25 +165,25 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
         }else{
             $orderHeads =  OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
-            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers', 'default_branch'));
         }
     }
 
@@ -163,6 +219,27 @@ class PurchasingController extends Controller
         return view('purchasing.purchasingApprovedPage', compact('orderHeads', 'orderDetails', 'poNumber', 'suppliers'));
     }
 
+    public function editPriceOrderDetail(Request $request, OrderHead $orderHeads, OrderDetail $orderDetails){
+        $request->validate([
+            'itemPrice' => 'required|integer|min:1'
+        ]);
+
+        $subTotal = $orderDetails -> acceptedQuantity * $request -> itemPrice;
+
+        OrderDetail::where('id', $orderDetails->id)->update([
+            'itemPrice' => $request->itemPrice,
+            'totalItemPrice' => $subTotal
+        ]);
+        
+        $totalPrice = OrderDetail::where('orders_id', $orderHeads -> id)->sum('totalItemPrice');
+
+        OrderHead::find($orderHeads -> id)->update([
+            'totalPrice' => $totalPrice
+        ]);
+
+        return redirect('/purchasing/order/' . $orderHeads->id . '/approve')->with('status', 'Price Updated Successfully');
+    }
+    
     public function approveOrder(Request $request, OrderHead $orderHeads){
         // Validate the request form
         $request -> validate([
@@ -172,10 +249,17 @@ class PurchasingController extends Controller
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
             'supplier_id' => 'required|exists:suppliers,id',
-            // 'kurs' => 'required|in:Rp.,$',
-            // 'price' => 'required|integer|min:1',
+            'ppn' => 'required|integer|in:0,10',
+            'discount' => 'required|integer|min:0|max:100',
+            'totalPrice' => 'required',
             'descriptions' => 'nullable'
         ]);
+
+        // calculate ppn first, then discount
+        $updatedPriceAfterPPN = $orderHeads -> totalPrice + ($orderHeads -> totalPrice * $request -> ppn/100);
+
+        // calculate discount
+        $updatedPriceAfterDiscount = $updatedPriceAfterPPN - ($updatedPriceAfterPPN * $request -> discount/100);
 
         // Check if already been processed or not
         if($orderHeads -> order_tracker == 4){
@@ -184,11 +268,15 @@ class PurchasingController extends Controller
 
         // Then update the following order
         OrderHead::find($orderHeads -> id)->update([
+            'approvedBy' => Auth::user()->name,
             'status' => 'Item Delivered By Supplier',
             'noPo' => $request->noPo,
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
             'supplier_id' => $request->supplier_id,
+            'ppn' => $request->ppn,
+            'discount' => $request->discount,
+            'totalPrice' => $updatedPriceAfterDiscount,
             'order_tracker' => 4,
             'descriptions' => $request->descriptions
         ]);
@@ -233,16 +321,6 @@ class PurchasingController extends Controller
     }
 
     public function reportPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
             $query->where('role_user.role_id' , '=', '3')
@@ -250,7 +328,7 @@ class PurchasingController extends Controller
         })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orderHeads'));
     }
@@ -261,7 +339,7 @@ class PurchasingController extends Controller
 
     public function formApPage(){
         // Find all of the documents for their respective branches
-        $documents = ApList::where('cabang', Auth::user()->cabang)->latest()->get();
+        $documents = ApList::where('cabang', Auth::user()->cabang)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->get();
 
         return view('purchasing.purchasingFormAP', compact('documents'));
     }

@@ -129,7 +129,7 @@ unset($__errorArgs, $__bag); ?>
                                     style="height: 50px">
                             </div>
                             <div class="form-group p-2">
-                                <label for="department" class="mb-3">Department (optional)</label>
+                                <label for="department" class="mb-3">Department</label>
                                 <br>
                                 <select class="form-control" name="department" id="department" style="height:50px;">
                                     <option value="None">None</option>
@@ -175,7 +175,7 @@ unset($__errorArgs, $__bag); ?>
                                         <td class="bg-white"><?php echo e($c -> item -> itemName); ?></td>
                                         <td class="bg-white"><?php echo e($c -> quantity); ?> <?php echo e($c -> item -> unit); ?></td>
                                         <td class="bg-white"><?php echo e($c -> department); ?></td>
-                                        <td class="bg-white"><?php echo e($c -> golongan); ?></td>
+                                        <td class="bg-white"><?php echo e($c -> item -> golongan); ?></td>
                                         <td class="bg-white"><?php echo e($c -> note); ?></td>
                                         
                                         <form method="POST" action="/logistic/<?php echo e($c -> id); ?>/delete">

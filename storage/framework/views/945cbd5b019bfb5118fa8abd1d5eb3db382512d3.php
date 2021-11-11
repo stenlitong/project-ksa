@@ -84,7 +84,7 @@
                 padding: 10px;
                 border-radius: 10px;
                 background-color: antiquewhite;
-                /* height: 800px; */
+                height: 1000px;
                 /* height: 100%; */
             }
             .tableFixHead          { overflow: auto; height: 250px; }
@@ -92,7 +92,7 @@
 
             .my-custom-scrollbar {
                 position: relative;
-                height: 700px;
+                height: 800px;
                 overflow: auto;
             }
             .table-wrapper-scroll-y {
