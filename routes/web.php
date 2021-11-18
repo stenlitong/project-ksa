@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
 use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\PurchasingManagerController;
 use App\Http\Controllers\SupervisorController;
 use App\Models\Barge;
 use App\Models\Tug;
@@ -108,11 +109,20 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
-        Route::get('/report/download', [PurchasingController::class, 'downloadReport'])->name('downloadReport');
+        Route::get('/report/{cabang}', [PurchasingController::class, 'reportPageBranch']);
+        Route::get('/report/download/{cabang}', [PurchasingController::class, 'downloadReport']);
         Route::get('/form-ap', [PurchasingController::class, 'formApPage'])->name('form-ap');
         Route::get('/form-ap/{apList}/download', [PurchasingController::class, 'downloadFile']);
         Route::get('/form-ap/{apList}/approve', [PurchasingController::class, 'approveAp']);
         Route::post('/form-ap/{apList}/reject', [PurchasingController::class, 'rejectAp']);
+    });
+    
+    Route::prefix('purchasing-manager')->name('purchasingManager.')->group(function(){
+        Route::get('/dashboard/{branch}', [PurchasingManagerController::class, 'branchDashboard']);
+        Route::post('/{suppliers}/edit', [PurchasingManagerController::class, 'editSupplier']);
+        Route::get('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrderPage']);
+        Route::post('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrder']);
+        Route::patch('/order/{orderHeads}/reject', [PurchasingManagerController::class, 'rejectOrder']);
     });
 
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
@@ -124,20 +134,6 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
     });
 
-    // Route::prefix('admin-logistic')->name('adminLogistic.')->group(function(){
-    //     Route::post('/add-item', [AdminLogisticController::class, 'addItem'])->name('addItem');
-    //     Route::put('/{item}/edit', [AdminLogisticController::class, 'editItem']);
-    //     Route::get('/create-order', [AdminLogisticController::class, 'preMakeOrderPage'])->name('preMakeOrderPage');
-    //     Route::post('/create-order', [AdminLogisticController::class, 'submittedCabangPage'])->name('submittedCabangPage');
-    //     Route::get('/create-order/{cabang}', [AdminLogisticController::class, 'createOrderFormPage']);
-    //     Route::post('/create-order/{cabang}/add-cart', [AdminLogisticController::class, 'addItemToCart']);
-    //     Route::delete('/create-order/{cabang}/{cart}/delete-cart', [AdminLogisticController::class, 'deleteItemFromCart']);
-    //     Route::post('/create-order/{cabang}/{user}/submit-order', [AdminLogisticController::class, 'submitOrder']);
-    //     Route::get('/history-out', [AdminLogisticController::class, 'historyOutPage'])->name('historyOut');
-    //     Route::get('/history-in', [AdminLogisticController::class, 'historyInPage'])->name('historyIn');
-    //     Route::get('/download-out', [AdminLogisticController::class, 'downloadOut'])->name('downloadOut');
-    //     Route::get('/download-in', [AdminLogisticController::class, 'downloadIn'])->name('downloadIn');
-    // });
 });
 
 Route::get('/add-boat', function(){

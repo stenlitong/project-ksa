@@ -13,7 +13,7 @@ class Supplier extends Model
         'id'
     ];
 
-    public function orderHeads(){
-        return $this->hasMany(OrderHead::class);
+    public function orderDetails(){
+        return $this->hasMany(OrderDetail::class);
     }
 }

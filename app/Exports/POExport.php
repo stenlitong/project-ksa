@@ -23,20 +23,22 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
         $this->invoiceAddress = OrderHead::where('order_id', $order_id)->pluck('invoiceAddress')[0];
         $this->itemAddress = OrderHead::where('order_id', $order_id)->pluck('itemAddress')[0];
         $this->cabang = OrderHead::where('order_id', $order_id)->pluck('cabang')[0];
-        $this->supplierName = OrderHead::where('order_id', $order_id)->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->pluck('supplierName')[0];
         $this->ppn = OrderHead::where('order_id', $order_id)->pluck('ppn')[0];
         $this->discount = OrderHead::where('order_id', $order_id)->pluck('discount')[0];
+        $this->noPr = OrderHead::where('order_id', $order_id)->pluck('noPr')[0];
+        $this->noPo = OrderHead::where('order_id', $order_id)->pluck('noPo')[0];
+        $this->boatName = OrderHead::where('order_id', $order_id)->pluck('boatName')[0];
     }
 
     public function query()
     {
-        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPo', 'boatName', 'noPr', 'itemName', 'quantity', 'items.unit', 'codeMasterItem', 'note');
+        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->join('suppliers', 'suppliers.id', '=', 'order_details.supplier_id')->where('order_heads.order_id', $this->order_id)->select('itemName', 'quantity', 'items.unit', 'supplierName', 'codeMasterItem', 'itemPrice', 'totalItemPrice', 'note')->orderBy('itemName');
 
         return $orderDetail;
     }
 
     public function headings(): array{
-        return ['Nomor PO', 'Nama Kapal', 'Nomor PR', 'Nama Barang', 'Quantity', 'Satuan', 'Code Master Item', 'Note'];
+        return ['Nama Barang', 'Quantity', 'Satuan', 'Nama Supplier', 'Code Master Item', 'Harga Per Satuan Barang', 'Total Harga Barang', 'Note'];
     }
 
     public function registerEvents(): array
@@ -56,7 +58,9 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
 
                 $event->sheet->appendRows(array(
                     array(' '),
-                    array('Supplier', $this->supplierName),
+                    array('Nomor PR', $this->noPr),
+                    array('Nomor PO', $this->noPo),
+                    array('Nama Kapal', $this->boatName),
                     array('Tipe PPN', $this->ppn . ' %'),
                     array('Diskon', $this->discount . ' %'),
                     array('Total Harga', 'Rp. ' . number_format($this->price, 2, ",", ".")),
@@ -64,6 +68,10 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
                     array('Alamat Pengiriman Barang', $this->itemAddress),
                     array('Cabang', $this->cabang),
                 ), $event);
+
+                $event->sheet->getDelegate()->getStyle('A:G')
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT); 
             }
         ];
     }

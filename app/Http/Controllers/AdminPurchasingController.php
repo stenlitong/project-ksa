@@ -17,7 +17,8 @@ class AdminPurchasingController extends Controller
             'noTelp' => 'required|numeric|digits_between:8,11',
             'supplierEmail' => 'required|email|unique:suppliers',
             'supplierAddress' => 'required',
-            'supplierNPWP' => 'required'
+            'supplierNPWP' => 'required',
+            'supplierNoRek' => 'nullable'
         ]);
         
         Supplier::create($validated);

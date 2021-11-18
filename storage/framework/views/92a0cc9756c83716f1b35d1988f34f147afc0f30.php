@@ -194,7 +194,7 @@
                     <option value="insurance" id="insurance" disabled <?php if(old('role_id') == 'insurance'): ?> selected="selected" <?php endif; ?>>Asuransi</option>
                     <option value="purchasing"  <?php if(old('role_id') == 'purchasing'): ?> selected="selected" <?php endif; ?>>Purchasing</option>
                     <option value="logistic"  <?php if(old('role_id') == 'logistic'): ?> selected="selected" <?php endif; ?>>Logistic</option>
-                    <option value="supervisor"  <?php if(old('role_id') == 'supervisor'): ?> selected="selected" <?php endif; ?>>Supervisor</option>
+                    <option value="supervisorLogistic"  <?php if(old('role_id') == 'supervisorLogistic'): ?> selected="selected" <?php endif; ?>>Supervisor Logistic</option>
                     <option value="crew"  <?php if(old('role_id') == 'crew'): ?> selected="selected" <?php endif; ?>>Crew</option>
                 </select>
             </div>
@@ -341,14 +341,16 @@
                         document.getElementById("Jakarta").disabled = true;
                         document.getElementById("Berau").disabled = true;
                         selectopt('samarinda');
-                    } else if(dropdown.value == "purchasing"){
+                    }else {
+                        document.getElementById("Jakarta").disabled = false;
+                    }
+                    
+                    if(dropdown.value == "purchasing"){
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;
                         document.getElementById("Bunati").disabled = true;
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
-                    }else {
-                        document.getElementById("Jakarta").disabled = false;
                     }
                 }
             </script>

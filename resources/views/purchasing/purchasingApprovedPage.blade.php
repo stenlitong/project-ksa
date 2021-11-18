@@ -15,6 +15,12 @@
                     {{ session('status') }}
                 </div>
             @endif
+            
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             @error('boatName')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -55,6 +61,18 @@
             @error('discount')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Diskon Invalid
+                </div>
+            @enderror
+
+            @error('itemPrice')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Harga Item Invalid
+                </div>
+            @enderror
+
+            @error('supplier_id')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Supplier Invalid
                 </div>
             @enderror
 
@@ -113,15 +131,6 @@
                                 <div id="div2"></div>
                             </div>
                             <div class="form-group">
-                                <label for="supplier_id">Supplier</label>
-                                <select class="form-control" id="supplier_id" name="supplier_id">
-                                    <option value="" disabled>Choose Supplier...</option>
-                                    @foreach($suppliers as $s)
-                                        <option value="{{ $s -> id }}">{{ $s -> supplierName }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn">
                                     <option value="10">PPN</option>
@@ -134,7 +143,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" placeholder="Input Diskon Dalam Angka">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -146,13 +155,7 @@
                                     <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".") }}" readonly>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="descriptions">Deskripsi (optional)</label>
-                                <textarea class="form-control" name="descriptions" id="descriptions" rows="3"
-                                    placeholder="Input Keterangan"></textarea>
-                            </div>
-                            
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center mt-5">
                                 <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
@@ -162,34 +165,31 @@
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                     <th scope="col">Item Barang</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">Quantity</th>
+                                    <th scope="col" class="center">Quantity</th>
                                     <th scope="col">Harga per Barang</th>
                                     <th scope="col">Harga</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Supplier</th>
+                                    <th scope="col" class="center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($orderDetails as $od)
                                     <tr>
                                         <td>
-                                            <h5>{{ $od -> item -> itemName }}</h5>
-                                        </td>
-                                        
-                                        <td>
-                                            <h5>{{ $od -> department }}</h5>
+                                            <h5>{{ $od -> item -> itemName }} - ({{ $od -> department }})</h5>
                                         </td>
 
-                                        <td>
+                                        <td class="center">
                                             <h5>{{ $od -> quantity }} {{ $od -> item -> unit }}</h5>
                                         </td>
+
                                         <form action="/purchasing/order/{{ $orderHeads -> id }}/{{ $od -> id }}/edit" method="POST">
                                             @csrf
                                             @method('patch')
                                             <td>
-                                                <div class="d-flex">
+                                                <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="0">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1">
                                                 </div>
                                             </td>
                                             
@@ -198,6 +198,17 @@
                                             </td>
                                             
                                             <td>
+                                                <div class="form-group">
+                                                    <select class="form-control" id="supplier_id" name="supplier_id">
+                                                        <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
+                                                        @foreach($suppliers as $s)
+                                                            <option class="h-25 w-50" value="{{ $s -> id }}">{{ $s -> supplierName }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td class="center">
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
                                             </td>
                                         </form>
@@ -234,6 +245,9 @@
     </script>
 
     <style>
+        h5{
+            font-size: 16px;
+        }
         label{
             font-weight: bold;
         }
@@ -242,8 +256,12 @@
         }
         td, th{
             word-wrap: break-word;
-            min-width: 160px;
-            max-width: 160px;
+            min-width: 120px;
+            max-width: 120px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .center{
             text-align: center;
         }
         .alert{

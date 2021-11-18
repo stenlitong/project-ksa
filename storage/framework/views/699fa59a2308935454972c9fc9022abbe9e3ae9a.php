@@ -1,4 +1,4 @@
-<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster')): ?>
+<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
     
 
     <?php $__env->startSection('title', 'Supervisor Dashboard'); ?>
@@ -139,7 +139,7 @@ unset($__errorArgs, $__bag); ?>
                                             <?php endif; ?>
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
-                                            <th scope="col">Golongan</th>
+                                            <th scope="col">Terakhir Diberikan</th>
                                             <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                 <th scope="col">Stok Barang</th>
                                             <?php endif; ?>
@@ -154,7 +154,7 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
-                                                    <td><?php echo e($od -> item -> golongan); ?></td>
+                                                    <td><?php echo e($od -> item -> lastGiven); ?></td>
                                                     <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                         <td><strong><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <?php endif; ?>

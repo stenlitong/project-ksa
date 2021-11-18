@@ -1,4 +1,4 @@
-<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster')): ?>
+<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
     
 
     <?php $__env->startSection('title', 'Supervisor Stocks'); ?>
@@ -95,6 +95,19 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+            <?php $__errorArgs = ['itemState'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Status Barang Invalid
+                </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
             <?php $__errorArgs = ['cabang'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -108,7 +121,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
+            <?php if(Auth::user()->hasRole('supervisorLogisticMaster')): ?>
                 <!-- Button trigger modal #1 -->
                 <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
                     Add Item +
@@ -279,8 +292,9 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
                         <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Status Barang</th>
                         <th scope="col" style="color: white">Deskripsi</th>
-                        <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
+                        <?php if(Auth::user()->hasRole('supervisorLogisticMaster')): ?>
                             <th scope="col" style="color: white">Action</th>
                         <?php endif; ?>
                     </tr>
@@ -295,8 +309,15 @@ unset($__errorArgs, $__bag); ?>
                         <td><?php echo e($i -> serialNo); ?></td>
                         <td><strong><?php echo e($i -> codeMasterItem); ?></strong></td>
                         <td><?php echo e($i -> cabang); ?></td>
+
+                        <?php if($i -> itemState == 'Available'): ?>
+                            <td><span style="color: green; font-weight: bold"><?php echo e($i -> itemState); ?></span></td>
+                        <?php else: ?>
+                            <td><span style="color: red; font-weight: bold"><?php echo e($i -> itemState); ?></span></td>
+                        <?php endif; ?>
+                        
                         <td><?php echo e($i -> description); ?></td>
-                        <?php if(Auth::user()->hasRole('supervisorMaster')): ?>
+                        <?php if(Auth::user()->hasRole('supervisorLogisticMaster')): ?>
                         <td>
                             <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-<?php echo e($i->id); ?>">
@@ -408,17 +429,13 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="golongan">Golongan</label>
-                                                <select class="form-control" id="golongan" name="golongan">
-                                                    <option value="None" <?php if($i -> golongan == 'None'): ?> selected="selected" <?php endif; ?>>None</option>
-                                                    <option value="Floating" <?php if($i -> golongan == 'Floating'): ?> selected="selected" <?php endif; ?>>Floating</option>
-                                                    <option value="Dock" <?php if($i -> golongan == 'Dock'): ?> selected="selected" <?php endif; ?>>Dock</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="golongan">Golongan</label>
+                                        <select class="form-control" id="golongan" name="golongan">
+                                            <option value="None" <?php if($i -> golongan == 'None'): ?> selected="selected" <?php endif; ?>>None</option>
+                                            <option value="Floating" <?php if($i -> golongan == 'Floating'): ?> selected="selected" <?php endif; ?>>Floating</option>
+                                            <option value="Dock" <?php if($i -> golongan == 'Dock'): ?> selected="selected" <?php endif; ?>>Dock</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="serialNo">Serial Number / Part Number (optional)</label>
@@ -429,6 +446,13 @@ unset($__errorArgs, $__bag); ?>
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
                                             placeholder="Input Code Master Item (xx-xxxx-)" value="<?php echo e($i -> codeMasterItem); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="itemState">Status Barang</label>
+                                        <select class="form-control" id="itemState" name="itemState">
+                                            <option value="Available" <?php if($i -> itemState == 'Available'): ?> selected="selected" <?php endif; ?>>Available</option>
+                                            <option value="Hold" <?php if($i -> itemState == 'Hold'): ?> selected="selected" <?php endif; ?>>Hold</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Deskripsi (optional)</label>

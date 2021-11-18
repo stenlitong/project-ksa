@@ -13,7 +13,6 @@
 
                 <div class="p-2 ml-auto mt-5">
                     <h5>Cabang</h5>
-                        <?php echo csrf_field(); ?>
                     <select name="cabang" class="form-select" onchange="window.location = this.value;">
                         <option selected disabled>Pilih Cabang</option>
                         <option value="/purchasing/dashboard/Jakarta" 
@@ -261,7 +260,7 @@ unset($__errorArgs, $__bag); ?>
                             <tr>
                                 <th scope="col">Order ID</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Approved By</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Detail</th>
                             </tr>
                             </thead>
@@ -278,11 +277,19 @@ unset($__errorArgs, $__bag); ?>
                                     <?php else: ?>
                                         <td><?php echo e($oh -> status); ?></td>
                                     <?php endif; ?>
-                                    <td></td>
+                                    <td>
+                                        <?php if(strpos($oh -> status, 'Rejected By Purchasing') !== false): ?>
+                                            <?php echo e($oh -> reason); ?>
+
+                                        <?php else: ?>
+                                            <?php echo e($oh -> descriptions); ?>
+
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                        <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
+                                        <?php if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
                                             <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         <?php endif; ?>
                                     </td>
@@ -303,12 +310,12 @@ unset($__errorArgs, $__bag); ?>
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
                                     <div class="d-flex justify-content-around">
                                         <h5><span style="color: white">Order : <?php echo e($o->order_id); ?></span></h5>
-                                        <h5 class="ml-5"><span style="color: white">Processed By : </span></h5>
+                                        <h5 class="ml-5"><span style="color: white">Processed By : <?php echo e($o->approvedBy); ?></span></h5>
                                     </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -324,8 +331,8 @@ unset($__errorArgs, $__bag); ?>
                                             <tr>
                                                 <th scope="col">Item Barang</th>
                                                 <th scope="col">Quantity</th>
+                                                <th scope="col">Accepted Quantity</th>
                                                 <th scope="col">Department</th>
-                                                <th scope="col">Golongan</th>
                                                 <th scope="col">Note</th>
                                             </tr>
                                         </thead>
@@ -334,9 +341,9 @@ unset($__errorArgs, $__bag); ?>
                                                 <?php if($od -> orders_id == $o -> id): ?>
                                                     <tr>
                                                         <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
-                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                                        <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                         <td><?php echo e($od -> department); ?></td>
-                                                        <td><?php echo e($od -> item -> golongan); ?></td>
                                                         <td><?php echo e($od -> note); ?></td>
                                                     </tr>
                                                 <?php endif; ?>
@@ -346,7 +353,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div> 
                                 <div class="modal-footer">
                                     
-                                    <?php if(strpos($o -> status, 'In Progress By Purchasing') !== false): ?>
+                                    <?php if($o -> status == 'Order In Progress By Purchasing'): ?>
                                         
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
                                         <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
@@ -362,7 +369,7 @@ unset($__errorArgs, $__bag); ?>
                 <div class="modal fade" id="edit-rating-<?php echo e($s -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header bg-danger" style="color: white">
                         <h5 class="modal-title" id="exampleModalLabel"><?php echo e($s -> supplierName); ?></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

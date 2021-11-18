@@ -20,6 +20,7 @@ class CreateSuppliersTable extends Migration
             $table->string('supplierEmail')->unique();
             $table->string('supplierAddress');
             $table->string('supplierNPWP');
+            $table->string('supplierNoRek')->nullable();
             $table->integer('quality')->default(1);
             $table->integer('top')->default(1);
             $table->integer('price')->default(1);

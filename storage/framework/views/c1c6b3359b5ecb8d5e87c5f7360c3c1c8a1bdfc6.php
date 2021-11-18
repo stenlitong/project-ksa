@@ -183,7 +183,8 @@
                         <option value="picAdmin" id="picAdmin" disabled <?php if(old('role_id') == 'picAdmin'): ?> selected="selected" <?php endif; ?>>PIC Admin</option>
                         <option value="adminOperational" disabled <?php if(old('role_id') == 'adminOperational'): ?> selected="selected" <?php endif; ?>>Admin Operational</option>
                         <option value="adminPurchasing" <?php if(old('role_id') == 'adminPurchasing'): ?> selected="selected" <?php endif; ?>>Admin Purchasing</option>
-                        <option value="supervisorMaster" <?php if(old('role_id') == 'supervisorMaster'): ?> selected="selected" <?php endif; ?>>Supervisor Master</option>
+                        <option value="purchasingManager" <?php if(old('role_id') == 'purchasingManager'): ?> selected="selected" <?php endif; ?>>Purchasing Manager</option>
+                        <option value="supervisorLogisticMaster" <?php if(old('role_id') == 'supervisorLogisticMaster'): ?> selected="selected" <?php endif; ?>>Supervisor Logistic Master</option>
                     </select>
                 </div>
                 <br>
@@ -345,6 +346,14 @@
                             
                         } else {
                             document.getElementById("Jakarta").disabled = false;
+                        }
+
+                        if(dropdown.value == "adminPurchasing" || dropdown.value == "purchasingManager"){
+                            document.getElementById("Banjarmasin").disabled = true;
+                            document.getElementById("Samarinda").disabled = true;
+                            document.getElementById("Bunati").disabled = true;
+                            document.getElementById("Babelan").disabled = true;
+                            document.getElementById("Berau").disabled = true;
                         }
                     }
                     </script>

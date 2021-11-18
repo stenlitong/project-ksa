@@ -162,17 +162,39 @@ class SupervisorController extends Controller
     }
 
     public function reportsPage(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 6 month
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('supervisor.supervisorReport', compact('orderHeads'));
     }
 
     public function downloadReport(Excel $excel){
-        return $excel -> download(new PurchasingReportExport, 'Reports_'. date("d-m-Y") . '.xlsx');
+        return $excel -> download(new PurchasingReportExport(Auth::user()->cabang), 'Reports_'. date("d-m-Y") . '.xlsx');
     }
 
     public function historyOut(){
@@ -272,6 +294,7 @@ class SupervisorController extends Controller
             'golongan' => 'required',
             'serialNo' => 'nullable|numeric',
             'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            'itemState' => 'required|in:Available,Hold',
             'description' => 'nullable'
         ]);
 
@@ -287,6 +310,7 @@ class SupervisorController extends Controller
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
             'codeMasterItem' => $request -> codeMasterItem,
+            'itemState' => $request -> itemState,
             'description' => $request -> description
         ]);
 

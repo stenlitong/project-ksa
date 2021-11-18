@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster'))
+@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster'))
     @extends('../layouts.base')
 
     @section('title', 'Supervisor Dashboard')
@@ -129,7 +129,7 @@
                                             @endif
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
-                                            <th scope="col">Golongan</th>
+                                            <th scope="col">Terakhir Diberikan</th>
                                             @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                 <th scope="col">Stok Barang</th>
                                             @endif
@@ -144,7 +144,7 @@
                                                     <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
-                                                    <td>{{ $od -> item -> golongan }}</td>
+                                                    <td>{{ $od -> item -> lastGiven }}</td>
                                                     @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                         <td><strong>{{ $od -> item -> itemStock }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif

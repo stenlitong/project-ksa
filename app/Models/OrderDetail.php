@@ -16,4 +16,9 @@ class OrderDetail extends Model
     public function item(){
         return $this->belongsTo(Item::class);
     }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 }

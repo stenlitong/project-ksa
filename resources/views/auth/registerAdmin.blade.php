@@ -63,7 +63,8 @@
                         <option value="picAdmin" id="picAdmin" disabled @if (old('role_id') == 'picAdmin') selected="selected" @endif>PIC Admin</option>
                         <option value="adminOperational" disabled @if (old('role_id') == 'adminOperational') selected="selected" @endif>Admin Operational</option>
                         <option value="adminPurchasing" @if (old('role_id') == 'adminPurchasing') selected="selected" @endif>Admin Purchasing</option>
-                        <option value="supervisorMaster" @if (old('role_id') == 'supervisorMaster') selected="selected" @endif>Supervisor Master</option>
+                        <option value="purchasingManager" @if (old('role_id') == 'purchasingManager') selected="selected" @endif>Purchasing Manager</option>
+                        <option value="supervisorLogisticMaster" @if (old('role_id') == 'supervisorLogisticMaster') selected="selected" @endif>Supervisor Logistic Master</option>
                     </select>
                 </div>
                 <br>
@@ -163,6 +164,14 @@
                             
                         } else {
                             document.getElementById("Jakarta").disabled = false;
+                        }
+
+                        if(dropdown.value == "adminPurchasing" || dropdown.value == "purchasingManager"){
+                            document.getElementById("Banjarmasin").disabled = true;
+                            document.getElementById("Samarinda").disabled = true;
+                            document.getElementById("Bunati").disabled = true;
+                            document.getElementById("Babelan").disabled = true;
+                            document.getElementById("Berau").disabled = true;
                         }
                     }
                     </script>

@@ -9,13 +9,62 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO</h1>
-
-                <?php if(count($orderHeads) > 0): ?>
-                    <div class="d-flex justify-content-end mr-3">
-                        <a href="<?php echo e(Route('purchasing.downloadReport')); ?>" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO Cabang <?php echo e($default_branch); ?> (<?php echo e($str_month); ?>)</h1>
+                
+                <div class="d-flex justify-content-between mr-3">
+                    <div class="p-2">
+                        <select name="cabang" class="form-select" onchange="window.location = this.value;">
+                            <option selected disabled>Pilih Cabang</option>
+                            <option value="/purchasing/report/Jakarta" 
+                                <?php
+                                    if($default_branch == 'Jakarta'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Jakarta</option>
+                            <option value="/purchasing/report/Banjarmasin"
+                                <?php
+                                    if($default_branch == 'Banjarmasin'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Banjarmasin</option>
+                            <option value="/purchasing/report/Samarinda"
+                                <?php
+                                    if($default_branch == 'Samarinda'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Samarinda</option>
+                            <option value="/purchasing/report/Bunati"
+                                <?php
+                                    if($default_branch == 'Bunati'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Bunati</option>
+                            <option value="/purchasing/report/Babelan"
+                                <?php
+                                    if($default_branch == 'Babelan'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Babelan</option>
+                            <option value="/purchasing/report/Berau"
+                                <?php
+                                    if($default_branch == 'Berau'){
+                                        echo('selected');
+                                    }
+                                ?>
+                            >Berau</option>
+                        </select>
                     </div>
-                <?php endif; ?>
+                        <?php if(count($orderHeads) > 0): ?>
+                            <div class="p-2">
+                                <a href="/purchasing/report/download/<?php echo e($default_branch); ?>" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                            </div>
+                        <?php endif; ?>
+                </div>
 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                     <table class="table table-bordered sortable">

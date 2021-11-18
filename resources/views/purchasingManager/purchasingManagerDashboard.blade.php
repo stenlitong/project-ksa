@@ -1,11 +1,11 @@
-@if(Auth::user()->hasRole('purchasing'))
+@if(Auth::user()->hasRole('purchasingManager'))
     @extends('../layouts.base')
 
-    @section('title', 'Purchasing Dashboard')
+    @section('title', 'Purchasing Manager Dashboard')
 
     @section('container')
     <div class="row">
-        @include('purchasing.sidebar')
+        @include('purchasingManager.sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 150px">
             <div class="d-flex">
@@ -15,42 +15,42 @@
                     <h5>Cabang</h5>
                     <select name="cabang" class="form-select" onchange="window.location = this.value;">
                         <option selected disabled>Pilih Cabang</option>
-                        <option value="/purchasing/dashboard/Jakarta" 
+                        <option value="" 
                             @php
                                 if($default_branch == 'Jakarta'){
                                     echo('selected');
                                 }
                             @endphp
                         >Jakarta</option>
-                        <option value="/purchasing/dashboard/Banjarmasin"
+                        <option value=""
                             @php
                                 if($default_branch == 'Banjarmasin'){
                                     echo('selected');
                                 }
                             @endphp
                         >Banjarmasin</option>
-                        <option value="/purchasing/dashboard/Samarinda"
+                        <option value=""
                             @php
                                 if($default_branch == 'Samarinda'){
                                     echo('selected');
                                 }
                             @endphp
                         >Samarinda</option>
-                        <option value="/purchasing/dashboard/Bunati"
+                        <option value=""
                             @php
                                 if($default_branch == 'Bunati'){
                                     echo('selected');
                                 }
                             @endphp
                         >Bunati</option>
-                        <option value="/purchasing/dashboard/Babelan"
+                        <option value=""
                             @php
                                 if($default_branch == 'Babelan'){
                                     echo('selected');
                                 }
                             @endphp
                         >Babelan</option>
-                        <option value="/purchasing/dashboard/Berau"
+                        <option value=""
                             @php
                                 if($default_branch == 'Berau'){
                                     echo('selected');
@@ -224,12 +224,6 @@
                         </div>
                     @endif
 
-                    @error('reason')
-                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                            Alasan Wajib Diisi
-                        </div>
-                    @enderror
-
                     <div class="d-flex mb-3">
                         <form class="mr-auto w-50" action="">
                             <div class="input-group">
@@ -276,7 +270,7 @@
                                     <td>
                                         {{-- Modal button for order details --}}
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                        @if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
+                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
                                             <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         @endif
                                     </td>
@@ -296,7 +290,7 @@
             @foreach($orderHeads as $o)
                     <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
                                     <div class="d-flex justify-content-around">
@@ -338,11 +332,9 @@
                                     </table>
                                 </div> 
                                 <div class="modal-footer">
-                                    {{-- Check if the order is already progressed to the next stage/rejected, then do not show the approve & reject button --}}
-                                    @if($o -> status == 'Order In Progress By Purchasing')
-                                        {{-- Button to trigger modal 2 --}}
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
-                                        <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
+                                    {{-- Check if the order is rejected, then do not show the approve & reject button --}}
+                                    @if(strpos($o -> status, 'In Progress By Purchasing Manager') !== false)
+                                        <a href="/purchasing-manager/order/{{ $o -> id }}/approve" class="btn btn-primary">Review Order</a>
                                     @endif
                                 </div>
                             </div>
@@ -361,7 +353,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
-                        <form method="POST" action="/purchasing/{{ $s -> id }}/edit">
+                        <form method="POST" action="/purchasing-manager/{{ $s -> id }}/edit">
                             @csrf
                             <div class="modal-body">
                                 <div class="form-group d-flex justify-content-between ratings">
@@ -455,7 +447,7 @@
         </main>
 
         {{-- Modal 2 --}}
-        @foreach($orderHeads as $oh)
+        {{-- @foreach($orderHeads as $oh)
             <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -478,7 +470,7 @@
                 </div>
                 </div>
             </div>
-        @endforeach
+        @endforeach --}}
     </div>
 
     <style>

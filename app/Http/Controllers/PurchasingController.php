@@ -54,13 +54,15 @@ class PurchasingController extends Controller
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
         })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            $query->where('status', 'like', 'Order In Progress By Supervisor')
+            ->orWhere('status', 'like', 'Order In Progress By Purchasing')
+            ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+            ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         // Get all the suppliers
@@ -90,9 +92,10 @@ class PurchasingController extends Controller
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
-            $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-            ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+            $query->where('status', 'like', 'Order In Progress By Supervisor')
+            ->orWhere('status', 'like', 'Order In Progress By Purchasing')
+            ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+            ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
         if(request('search')){
@@ -105,6 +108,7 @@ class PurchasingController extends Controller
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
             
@@ -116,6 +120,7 @@ class PurchasingController extends Controller
             $orderHeads = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+                ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
@@ -152,6 +157,7 @@ class PurchasingController extends Controller
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
         })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -162,9 +168,10 @@ class PurchasingController extends Controller
             })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
 
             $in_progress = OrderHead::where(function($query){
-                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                $query->where('status', 'like', 'Order In Progress By Supervisor')
+                ->orWhere('status', 'like', 'Order In Progress By Purchasing')
+                ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+                ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             // Get all the suppliers
@@ -173,9 +180,10 @@ class PurchasingController extends Controller
             return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
         }else{
             $orderHeads =  OrderHead::where(function($query){
-                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
-                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                $query->where('status', 'like', 'Order In Progress By Supervisor')
+                ->orWhere('status', 'like', 'Order In Progress By Purchasing')
+                ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+                ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
@@ -221,14 +229,16 @@ class PurchasingController extends Controller
 
     public function editPriceOrderDetail(Request $request, OrderHead $orderHeads, OrderDetail $orderDetails){
         $request->validate([
-            'itemPrice' => 'required|integer|min:1'
+            'itemPrice' => 'required|integer|min:1',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
         $subTotal = $orderDetails -> acceptedQuantity * $request -> itemPrice;
 
         OrderDetail::where('id', $orderDetails->id)->update([
             'itemPrice' => $request->itemPrice,
-            'totalItemPrice' => $subTotal
+            'totalItemPrice' => $subTotal,
+            'supplier_id' => $request->supplier_id,
         ]);
         
         $totalPrice = OrderDetail::where('orders_id', $orderHeads -> id)->sum('totalItemPrice');
@@ -240,7 +250,11 @@ class PurchasingController extends Controller
         return redirect('/purchasing/order/' . $orderHeads->id . '/approve')->with('status', 'Price Updated Successfully');
     }
     
+    // ============================================ Fix this section ===========================================================
     public function approveOrder(Request $request, OrderHead $orderHeads){
+        // Set default branch
+        $default_branch = $orderHeads -> cabang;
+
         // Validate the request form
         $request -> validate([
             'boatName' => 'required',
@@ -248,39 +262,52 @@ class PurchasingController extends Controller
             'noPo' => 'required',
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
-            'supplier_id' => 'required|exists:suppliers,id',
-            'ppn' => 'required|integer|in:0,10',
-            'discount' => 'required|integer|min:0|max:100',
+            'ppn' => 'required|numeric|in:0,10',
+            'discount' => 'nullable|numeric|min:0|max:100',
             'totalPrice' => 'required',
-            'descriptions' => 'nullable'
         ]);
 
-        // calculate ppn first, then discount
-        $updatedPriceAfterPPN = $orderHeads -> totalPrice + ($orderHeads -> totalPrice * $request -> ppn/100);
+        // calculate discount first, then PPN
+        $updatedPriceAfterDiscount = $orderHeads -> totalPrice - ($orderHeads -> totalPrice * $request -> discount / 100);
 
-        // calculate discount
-        $updatedPriceAfterDiscount = $updatedPriceAfterPPN - ($updatedPriceAfterPPN * $request -> discount/100);
+        // calculate PPN
+        $updatedPriceAfterPPN = $updatedPriceAfterDiscount + ($updatedPriceAfterDiscount * $request -> ppn / 100);
 
         // Check if already been processed or not
         if($orderHeads -> order_tracker == 4){
-            return redirect('/dashboard')->with('errorB', 'Order Already Been Processed');
+            return redirect('/purchasing/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
+        }
+
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads -> id)->get();
+
+        foreach($orderDetails as $od){
+            if($od -> totalItemPrice == 0){
+                return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Harga ' . $od -> item -> itemName . ' Invalid');
+            }
+            if(!$od -> supplier_id){
+                return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Supplier Invalid');
+            }
+        }
+        
+        if(!$request->discount){
+            $updatedDiscount = 0;
+        }else{
+            $updatedDiscount = $request -> discount;
         }
 
         // Then update the following order
         OrderHead::find($orderHeads -> id)->update([
             'approvedBy' => Auth::user()->name,
-            'status' => 'Item Delivered By Supplier',
+            'status' => 'Order In Progress By Purchasing Manager',
             'noPo' => $request->noPo,
             'invoiceAddress' => $request->invoiceAddress,
             'itemAddress' => $request->itemAddress,
-            'supplier_id' => $request->supplier_id,
             'ppn' => $request->ppn,
-            'discount' => $request->discount,
-            'totalPrice' => $updatedPriceAfterDiscount,
+            'discount' => $updatedDiscount,
+            'totalPrice' => $updatedPriceAfterPPN,
             'order_tracker' => 4,
-            'descriptions' => $request->descriptions
         ]);
-        return redirect('/dashboard')->with('statusB', 'Order Approved By Purchasing');
+        return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -297,6 +324,7 @@ class PurchasingController extends Controller
         // Then update the status + reason
         OrderHead::where('id', $orderHeads->id)->update([
             'order_tracker' => 4,
+            'approvedBy' => Auth::user()->name,
             'status' => 'Order Rejected By Purchasing',
             'reason' => $request->reason
         ]);
@@ -321,20 +349,83 @@ class PurchasingController extends Controller
     }
 
     public function reportPage(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Default branch is Jakarta
+        $default_branch = 'Jakarta';
+
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
             $query->where('role_user.role_id' , '=', '3')
             ->orWhere('role_user.role_id' , '=', '4');
-        })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
                 
-        // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find all the items that has been approved from the logistic | Per 3 months
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('purchasing.purchasingReport', compact('orderHeads'));
+        return view('purchasing.purchasingReport', compact('orderHeads', 'default_branch', 'str_month'));
     }
 
-    public function downloadReport(Excel $excel){
-        return $excel -> download(new PurchasingReportExport, 'Reports_'. date("d-m-Y") . '.xlsx');
+    public function reportPageBranch($cabang){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        $default_branch = $cabang;
+
+        // Find order from user that created the order
+        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
+            $query->where('role_user.role_id' , '=', '3')
+            ->orWhere('role_user.role_id' , '=', '4');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
+                
+        // Find all the items that has been approved from the logistic | Per 3 months
+        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_heads.updated_at', 'desc')->get();
+
+        return view('purchasing.purchasingReport', compact('orderHeads', 'default_branch', 'str_month'));
+    }
+
+    public function downloadReport(Excel $excel, $cabang){
+        $default_branch = $cabang;
+        return $excel -> download(new PurchasingReportExport($default_branch), 'Reports_'. date("d-m-Y") . '.xlsx');
     }
 
     public function formApPage(){

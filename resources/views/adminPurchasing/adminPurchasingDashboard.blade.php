@@ -16,33 +16,33 @@
         @endif
 
         @error('supplierName')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Nama Supplier Invalid
-        </div>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Nama Supplier Invalid
+            </div>
         @enderror
 
         @error('noTelp')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Nomor Telepon Invalid
-        </div>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Nomor Telepon Invalid
+            </div>
         @enderror
 
         @error('supplierEmail')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Email Supplier Invalid
-        </div>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Email Supplier Invalid
+            </div>
         @enderror
 
         @error('supplierAddress')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            Alamat Supplier Invalid
-        </div>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Alamat Supplier Invalid
+            </div>
         @enderror
 
         @error('supplierNPWP')
-        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-            NPWP Supplier Invalid
-        </div>
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                NPWP Supplier Invalid
+            </div>
         @enderror
 
         <div class="row">
@@ -61,13 +61,13 @@
                                             <h5 class="smaller-screen-size"><span data-feather="phone"></span> (+62) {{ $s -> noTelp }}</h5>
                                             <h5 class="smaller-screen-size"><span data-feather="mail"></span> {{ $s -> supplierEmail }}</h5>
                                             <h5 class="smaller-screen-size"><span data-feather="home"></span> {{ $s -> supplierAddress }}</h5>
-                                            <h5 class="smaller-screen-size"><span data-feather="credit-card"></span> {{ $s -> supplierNPWP }}</h5>
+                                            <h5 class="smaller-screen-size"><span data-feather="credit-card"></span> {{ $s -> supplierNoRek }}</h5>
+                                            <h5 class="smaller-screen-size"><span data-feather="check-square"></span> {{ $s -> supplierNPWP }}</h5>
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-sm btn-success mt-2 mr-3" data-toggle="modal" id="detail" data-target="#editItem-{{ $s->id }}">Edit</button>
-                                            {{-- <button class="btn btn-danger mt-2">Delete</button> --}}
-                                            <button class="btn btn-sm btn-danger mt-2" data-toggle="modal" id="delete" data-target="#deleteSupplier-{{ $s -> id }}">
+                                            <button class="btn btn-sm btn-danger mt-2 mr-3" data-toggle="modal" id="delete" data-target="#deleteSupplier-{{ $s -> id }}">
                                                 Delete
                                             </button>
+                                            <button class="btn btn-sm btn-success mt-2" data-toggle="modal" id="detail" data-target="#editItem-{{ $s->id }}">Edit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,42 +78,49 @@
             </div>
             <div class="col">
                 <h2 class="mb-4" style="text-align: center">Add Suppliers</h2>
-                <form method="POST" action="{{ Route('adminPurchasing.add-supplier') }}">
-                    @csrf
-                        <div class="form-group p-2">
-                            <label for="supplierName">Nama Supplier</label>
-                            <input name="supplierName" type="text" class="form-control" id="supplierName" placeholder="Input nama supplier..."
-                                style="height: 50px" value={{ old('supplierName') }}>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="noTelp">No. Telp Supplier</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">(+62)</div>
-                                </div>
-                                <input type="text" class="form-control" id="noTelp" name="noTelp" style="height: 50px" placeholder="Input nomor telepon dalam angka..." value={{ old('noTelp') }}>
+                <div class="">
+                    <form method="POST" action="{{ Route('adminPurchasing.add-supplier') }}">
+                        @csrf
+                            <div class="form-group p-2">
+                                <label for="supplierName">Nama Supplier</label>
+                                <input name="supplierName" type="text" class="form-control" id="supplierName" placeholder="Input nama supplier..."
+                                    style="height: 50px" value={{ old('supplierName') }}>
                             </div>
+                            <div class="form-group p-2">
+                                <label for="noTelp">No. Telp Supplier</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">(+62)</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="noTelp" name="noTelp" style="height: 50px" placeholder="Input nomor telepon dalam angka..." value={{ old('noTelp') }}>
+                                </div>
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="supplierEmail" class="">Email Supplier</label>
+                                <input name="supplierEmail" type="text" class="form-control" id="supplierEmail" placeholder="Input email supplier..."
+                                    style="height: 50px" value={{ old('supplierEmail') }}>
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="supplierAddress" class="">Alamat Supplier</label>
+                                <input name="supplierAddress" type="text" class="form-control" id="supplierAddress" placeholder="Input alamat supplier..."
+                                    style="height: 50px" value={{ old('supplierAddress') }}>
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="supplierNoRek" class="">Nomor Rekening Supplier</label>
+                                <input name="supplierNoRek" type="text" class="form-control" id="supplierNoRek" placeholder="Input nomor rekening supplier..."
+                                    style="height: 50px" value={{ old('supplierNoRek') }}>
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="supplierNPWP" class="mb-2">NPWP Supplier</label>
+                                <input name="supplierNPWP" type="text" class="form-control" id="supplierNPWP" placeholder="Input NPWP supplier..."
+                                    style="height: 50px" value={{ old('supplierNPWP') }}>
+                            </div>
+                        <br>
+                        <div class="d-flex ml-3 justify-content-center pb-3">
+                            <button type="submit" class="btn btn-primary">Add Supplier</button>
                         </div>
-                        <div class="form-group p-2">
-                            <label for="supplierEmail" class="mb-2">Email Supplier</label>
-                            <input name="supplierEmail" type="text" class="form-control" id="supplierEmail" placeholder="Input email supplier..."
-                                style="height: 50px" value={{ old('supplierEmail') }}>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="supplierAddress" class="mb-2">Alamat Supplier</label>
-                            <input name="supplierAddress" type="text" class="form-control" id="supplierAddress" placeholder="Input alamat supplier..."
-                                style="height: 50px" value={{ old('supplierAddress') }}>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="supplierNPWP" class="mb-2">NPWP Supplier</label>
-                            <input name="supplierNPWP" type="text" class="form-control" id="supplierNPWP" placeholder="Input NPWP supplier..."
-                                style="height: 50px" value={{ old('supplierNPWP') }}>
-                        </div>
-                    <br>
-                    <div class="d-flex ml-3 justify-content-center pb-3">
-                        <button type="submit" class="btn btn-primary">Add Supplier</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
@@ -157,6 +164,11 @@
                                 <label for="supplierAddress" class="mb-2">Alamat Supplier</label>
                                 <input name="supplierAddress" type="text" class="form-control" id="supplierAddress" placeholder="Input alamat supplier..."
                                     style="height: 50px" value="{{ $s -> supplierAddress }}">
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="supplierNoRek" class="mb-2">Nomor Rekening Supplier</label>
+                                <input name="supplierNoRek" type="text" class="form-control" id="supplierNoRek" placeholder="Input alamat supplier..."
+                                    style="height: 50px" value="{{ $s -> supplierNoRek }}">
                             </div>
                             <div class="form-group p-2">
                                 <label for="supplierNPWP" class="mb-2">NPWP Supplier</label>

@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->string('codeMasterItem');
             $table->string('itemAge');
             $table->string('cabang');
+            $table->string('itemState')->default('Available');
             $table->string('description')->nullable();
             $table->string('lastGiven')->nullable();
             $table->timestamps();

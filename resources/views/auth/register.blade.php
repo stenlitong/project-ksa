@@ -77,7 +77,7 @@
                     <option value="insurance" id="insurance" disabled @if (old('role_id') == 'insurance') selected="selected" @endif>Asuransi</option>
                     <option value="purchasing"  @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
                     <option value="logistic"  @if (old('role_id') == 'logistic') selected="selected" @endif>Logistic</option>
-                    <option value="supervisor"  @if (old('role_id') == 'supervisor') selected="selected" @endif>Supervisor</option>
+                    <option value="supervisorLogistic"  @if (old('role_id') == 'supervisorLogistic') selected="selected" @endif>Supervisor Logistic</option>
                     <option value="crew"  @if (old('role_id') == 'crew') selected="selected" @endif>Crew</option>
                 </select>
             </div>
@@ -159,14 +159,16 @@
                         document.getElementById("Jakarta").disabled = true;
                         document.getElementById("Berau").disabled = true;
                         selectopt('samarinda');
-                    } else if(dropdown.value == "purchasing"){
+                    }else {
+                        document.getElementById("Jakarta").disabled = false;
+                    }
+                    
+                    if(dropdown.value == "purchasing"){
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;
                         document.getElementById("Bunati").disabled = true;
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
-                    }else {
-                        document.getElementById("Jakarta").disabled = false;
                     }
                 }
             </script>

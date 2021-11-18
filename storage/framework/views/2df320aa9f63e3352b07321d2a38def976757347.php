@@ -22,9 +22,18 @@
 </head>
 
 <body onload="startTime();">
-
+    <?php
+        $cabang_arr = [
+            'Jakarta' => 'JKT',
+            'Banjarmasin' => 'BNJ',
+            'Samarinda' => 'SMD',
+            'Bunati' => 'BNT',
+            'Babelan' => 'BBL',
+            'Berau' => 'BER'
+        ];
+    ?>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/dashboard" style="font-weight: bold; word-break: ">PT. KSA - <?php echo e(Auth::user()->roles->first()->display_name); ?> - <?php echo e(Auth::user()->cabang); ?></a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/dashboard" style="font-weight: bold; word-break: ">PT. KSA - <?php echo e(Auth::user()->roles->first()->display_name); ?> - <?php echo e($cabang_arr[Auth::user()->cabang]); ?></a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -43,7 +52,7 @@
 
     <div class="container-fluid" id="testing">
         <script>
-            document.body.style.zoom = "80%";
+            document.body.style.zoom = "70%";
             // document.body.style.zoom = screen.logicalXDPI;
         </script>
         <?php echo $__env->yieldContent('container'); ?>

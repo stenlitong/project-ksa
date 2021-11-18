@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorMaster'))
+@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster'))
     @extends('../layouts.base')
 
     @section('title', 'Supervisor Stocks')
@@ -52,13 +52,19 @@
                 </div>
             @enderror
 
+            @error('itemState')
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Status Barang Invalid
+                </div>
+            @enderror
+
             @error('cabang')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Cabang Invalid
                 </div>
             @enderror
 
-            @if(Auth::user()->hasRole('supervisorMaster'))
+            @if(Auth::user()->hasRole('supervisorLogisticMaster'))
                 <!-- Button trigger modal #1 -->
                 <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
                     Add Item +
@@ -228,8 +234,9 @@
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
                         <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Status Barang</th>
                         <th scope="col" style="color: white">Deskripsi</th>
-                        @if(Auth::user()->hasRole('supervisorMaster'))
+                        @if(Auth::user()->hasRole('supervisorLogisticMaster'))
                             <th scope="col" style="color: white">Action</th>
                         @endif
                     </tr>
@@ -244,8 +251,15 @@
                         <td>{{ $i -> serialNo }}</td>
                         <td><strong>{{ $i -> codeMasterItem }}</strong></td>
                         <td>{{ $i -> cabang }}</td>
+
+                        @if($i -> itemState == 'Available')
+                            <td><span style="color: green; font-weight: bold">{{ $i -> itemState }}</span></td>
+                        @else
+                            <td><span style="color: red; font-weight: bold">{{ $i -> itemState }}</span></td>
+                        @endif
+                        
                         <td>{{ $i -> description }}</td>
-                        @if(Auth::user()->hasRole('supervisorMaster'))
+                        @if(Auth::user()->hasRole('supervisorLogisticMaster'))
                         <td>
                             <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-primary mr-2" data-toggle="modal" id="detail" data-target="#editItem-{{ $i->id }}">
@@ -359,17 +373,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="golongan">Golongan</label>
-                                                <select class="form-control" id="golongan" name="golongan">
-                                                    <option value="None" @if ($i -> golongan == 'None') selected="selected" @endif>None</option>
-                                                    <option value="Floating" @if ($i -> golongan == 'Floating') selected="selected" @endif>Floating</option>
-                                                    <option value="Dock" @if ($i -> golongan == 'Dock') selected="selected" @endif>Dock</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="golongan">Golongan</label>
+                                        <select class="form-control" id="golongan" name="golongan">
+                                            <option value="None" @if ($i -> golongan == 'None') selected="selected" @endif>None</option>
+                                            <option value="Floating" @if ($i -> golongan == 'Floating') selected="selected" @endif>Floating</option>
+                                            <option value="Dock" @if ($i -> golongan == 'Dock') selected="selected" @endif>Dock</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="serialNo">Serial Number / Part Number (optional)</label>
@@ -380,6 +390,13 @@
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
                                             placeholder="Input Code Master Item (xx-xxxx-)" value="{{ $i -> codeMasterItem }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="itemState">Status Barang</label>
+                                        <select class="form-control" id="itemState" name="itemState">
+                                            <option value="Available" @if ($i -> itemState == 'Available') selected="selected" @endif>Available</option>
+                                            <option value="Hold" @if ($i -> itemState == 'Hold') selected="selected" @endif>Hold</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Deskripsi (optional)</label>

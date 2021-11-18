@@ -16,12 +16,15 @@ class CreateApListsTable extends Migration
         Schema::create('ap_lists', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
             $table->string('cabang');
             $table->string('filename');
             $table->string('submissionTime');
             $table->string('status');
             $table->integer('tracker');
             $table->string('description')->nullable();
+
+            $table->foreign('order_id')->references('id')->on('order_heads')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

@@ -9,13 +9,62 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO</h1>
-
-                @if(count($orderHeads) > 0)
-                    <div class="d-flex justify-content-end mr-3">
-                        <a href="{{ Route('purchasing.downloadReport') }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO Cabang {{ $default_branch }} ({{ $str_month }})</h1>
+                
+                <div class="d-flex justify-content-between mr-3">
+                    <div class="p-2">
+                        <select name="cabang" class="form-select" onchange="window.location = this.value;">
+                            <option selected disabled>Pilih Cabang</option>
+                            <option value="/purchasing/report/Jakarta" 
+                                @php
+                                    if($default_branch == 'Jakarta'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Jakarta</option>
+                            <option value="/purchasing/report/Banjarmasin"
+                                @php
+                                    if($default_branch == 'Banjarmasin'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Banjarmasin</option>
+                            <option value="/purchasing/report/Samarinda"
+                                @php
+                                    if($default_branch == 'Samarinda'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Samarinda</option>
+                            <option value="/purchasing/report/Bunati"
+                                @php
+                                    if($default_branch == 'Bunati'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Bunati</option>
+                            <option value="/purchasing/report/Babelan"
+                                @php
+                                    if($default_branch == 'Babelan'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Babelan</option>
+                            <option value="/purchasing/report/Berau"
+                                @php
+                                    if($default_branch == 'Berau'){
+                                        echo('selected');
+                                    }
+                                @endphp
+                            >Berau</option>
+                        </select>
                     </div>
-                @endif
+                        @if(count($orderHeads) > 0)
+                            <div class="p-2">
+                                <a href="/purchasing/report/download/{{ $default_branch }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                            </div>
+                        @endif
+                </div>
 
                 <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                     <table class="table table-bordered sortable">

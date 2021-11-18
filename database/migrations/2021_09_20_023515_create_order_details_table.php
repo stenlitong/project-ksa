@@ -21,12 +21,15 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('acceptedQuantity')->nullable();
             $table->unsignedBigInteger('itemPrice')->default(0);
             $table->unsignedBigInteger('totalItemPrice')->default(0);
+            $table->string('itemStatus')->default('Accepted');
             $table->string('department')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
 
             $table->foreign('orders_id')->references('id')->on('order_heads')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade');
         });
     }
 

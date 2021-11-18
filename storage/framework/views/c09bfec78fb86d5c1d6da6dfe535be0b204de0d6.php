@@ -16,6 +16,13 @@
 
                 </div>
             <?php endif; ?>
+            
+            <?php if(session('error')): ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <?php echo e(session('error')); ?>
+
+                </div>
+            <?php endif; ?>
 
             <?php $__errorArgs = ['boatName'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -108,6 +115,32 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+            <?php $__errorArgs = ['itemPrice'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Harga Item Invalid
+                </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
+            <?php $__errorArgs = ['supplier_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Nama Supplier Invalid
+                </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
             <?php $__errorArgs = ['ppn'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -170,15 +203,6 @@ unset($__errorArgs, $__bag); ?>
                                 <div id="div2"></div>
                             </div>
                             <div class="form-group">
-                                <label for="supplier_id">Supplier</label>
-                                <select class="form-control" id="supplier_id" name="supplier_id">
-                                    <option value="" disabled>Choose Supplier...</option>
-                                    <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($s -> id); ?>"><?php echo e($s -> supplierName); ?></option>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn">
                                     <option value="10">PPN</option>
@@ -191,7 +215,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" placeholder="Input Diskon Dalam Angka">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -203,13 +227,7 @@ unset($__errorArgs, $__bag); ?>
                                     <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e(number_format($orderHeads -> totalPrice, 2, ",", ".")); ?>" readonly>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="descriptions">Deskripsi (optional)</label>
-                                <textarea class="form-control" name="descriptions" id="descriptions" rows="3"
-                                    placeholder="Input Keterangan"></textarea>
-                            </div>
-                            
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center mt-5">
                                 <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
@@ -219,34 +237,31 @@ unset($__errorArgs, $__bag); ?>
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                     <th scope="col">Item Barang</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">Quantity</th>
+                                    <th scope="col" class="center">Quantity</th>
                                     <th scope="col">Harga per Barang</th>
                                     <th scope="col">Harga</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Supplier</th>
+                                    <th scope="col" class="center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <td>
-                                            <h5><?php echo e($od -> item -> itemName); ?></h5>
-                                        </td>
-                                        
-                                        <td>
-                                            <h5><?php echo e($od -> department); ?></h5>
+                                            <h5><?php echo e($od -> item -> itemName); ?> - (<?php echo e($od -> department); ?>)</h5>
                                         </td>
 
-                                        <td>
+                                        <td class="center">
                                             <h5><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></h5>
                                         </td>
+
                                         <form action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/<?php echo e($od -> id); ?>/edit" method="POST">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('patch'); ?>
                                             <td>
-                                                <div class="d-flex">
+                                                <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="0">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="1">
                                                 </div>
                                             </td>
                                             
@@ -255,6 +270,17 @@ unset($__errorArgs, $__bag); ?>
                                             </td>
                                             
                                             <td>
+                                                <div class="form-group">
+                                                    <select class="form-control" id="supplier_id" name="supplier_id">
+                                                        <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
+                                                        <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option class="h-25 w-50" value="<?php echo e($s -> id); ?>"><?php echo e($s -> supplierName); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td class="center">
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
                                             </td>
                                         </form>
@@ -291,6 +317,9 @@ unset($__errorArgs, $__bag); ?>
     </script>
 
     <style>
+        h5{
+            font-size: 16px;
+        }
         label{
             font-weight: bold;
         }
@@ -299,8 +328,12 @@ unset($__errorArgs, $__bag); ?>
         }
         td, th{
             word-wrap: break-word;
-            min-width: 160px;
-            max-width: 160px;
+            min-width: 120px;
+            max-width: 120px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .center{
             text-align: center;
         }
         .alert{

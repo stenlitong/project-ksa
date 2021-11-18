@@ -23,10 +23,9 @@ class CreateOrderHeadsTable extends Migration
             $table->string('noPo')->nullable();
             $table->string('company')->nullable();
             $table->unsignedBigInteger('totalPrice')->default(0);
-            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->string('approvedBy')->nullable();
             $table->integer('ppn')->nullable();
-            $table->integer('discount')->nullable();
+            $table->integer('discount')->default(0);
             $table->string('sender')->nullable();
             $table->string('receiver')->nullable();
             $table->string('expedition')->nullable();
@@ -40,7 +39,6 @@ class CreateOrderHeadsTable extends Migration
             $table->string('approved_at')->nullable();
             $table->integer('order_tracker');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade');
             $table->timestamps();
         });
     }

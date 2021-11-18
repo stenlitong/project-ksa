@@ -25,11 +25,11 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'supervisorMaster' => [
+        'supervisorLogisticMaster' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'supervisor' => [
+        'supervisorLogistic' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
@@ -38,6 +38,10 @@ return [
             'profile' => 'r,u'
         ],
         'adminPurchasing' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'purchasingManager' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
