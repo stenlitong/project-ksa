@@ -46,6 +46,7 @@
         </table>
     </main>
     @foreach($orderHeads as $o)
+    <div ></div>
             <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">

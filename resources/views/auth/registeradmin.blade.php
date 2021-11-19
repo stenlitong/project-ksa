@@ -1,5 +1,5 @@
 <head>
-    <title>Register</title>
+    <title>Register admin</title>
 </head>
 <x-guest-layout>
     <x-auth-card>
@@ -45,15 +45,12 @@
 
                 <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                     <option selected disabled value="">Choose...</option>
-                    <option value="picSite" id="picSite">PIC Site</option>
-                    {{-- <option value="picAdmin" id="picAdmin">PIC Admin</option> --}}
-                    {{-- <option value="picIncident" id="picIncident">PIC Incident</option> --}}
-                    {{-- <option value="insurance" id="insurance">Asuransi</option> --}}
-                    {{-- <option value="adminOperational">Admin operational</option>
-                    <option value="adminPurchase">Admin Purchasing</option> --}}
-                    <option value="purchasing">Purchasing</option>
-                    <option value="logistic">Logistic</option>
-                    <option value="crew">Crew</option>
+                    <option value="picAdmin" id="picAdmin">PIC Admin</option>
+                    <option value="picIncident" id="picIncident">PIC Incident</option>
+                    <option value="insurance" id="insurance">Asuransi</option>
+                    <option value="adminOperational">Admin operational</option>
+                    <option value="adminPurchase">Admin Purchasing</option>
+                    <option value="logistic admin">Logistic Admin</option>
                 </select>
             </div>
             <br>
@@ -63,14 +60,14 @@
 
                 <select name="cabang" id="cabang" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                     <option selected disabled="">Choose...</option>
-                    <option disabled value="Jakarta" id="Jakarta">Jakarta</option>
+                    <option value="jakarta" id="jakarta">Jakarta</option>
                     <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                    <option value="Samarinda" id="Samarinda">Samarinda</option>
-                    <option value="Babelan" id ="Babelan">Babelan</option>
-                    <option value="Berau" id ="Berau">Berau</option>
+                    <option value="samarinda" id="samarinda">Samarinda</option>
+                    <option value="bunati" id ="babelan">babelan</option>
+                    
                 </select>
             </div>
-            
+            {{-- validation script --}}
             <script>
                 function selectopt(id)
                 {
@@ -80,24 +77,16 @@
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function(event){
                     
-                    // if(dropdown.value=="picAdmin"){
-                    //     selectopt('jakarta');
-                    //     document.getElementById("samarinda").disabled = true;
-                    //     document.getElementById("Banjarmasin").disabled = true;
-                    //     document.getElementById("bunati").disabled = true; 
-                    // }else{
-                    //     document.getElementById("samarinda").disabled = false;
-                    //     document.getElementById("Banjarmasin").disabled = false;
-                    //     document.getElementById("bunati").disabled = false;   
-                    // }
-                    
-                    if (dropdown.value=="picSite") {
-                        document.getElementById("jakarta").disabled = true;
-                        selectopt('samarinda');
-    
-                    } else {
-                            document.getElementById("jakarta").disabled = false;
-                        }
+                    if(dropdown.value=="picAdmin"){
+                        selectopt('jakarta');
+                        document.getElementById("samarinda").disabled = true;
+                        document.getElementById("Banjarmasin").disabled = true;
+                        document.getElementById("babelan").disabled = true; 
+                    }else{
+                        document.getElementById("samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("babelan").disabled = false;   
+                    }
                 }
             </script>
 
@@ -127,11 +116,11 @@
                     {{ __('Already registered?') }}
                 </a>
 
-                <x-button class="ml-4" href="{{ route('login') }}">
-                    Register
+                <x-button class="ml-4">
+                    {{ __('Register') }}
                 </x-button>
             </div>
-            {{-- validation script --}}
+            
             
         </form>
     </x-auth-card>

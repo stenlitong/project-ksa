@@ -6,6 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Storage;
+use Response;
+use validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Gmail;
+use App\Models\documents;
+use App\Models\documentberau;
+use App\Models\documentbanjarmasin;
+use App\Models\documentrpk;
+use App\Models\documentsamarinda;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -27,6 +41,13 @@ class DashboardController extends Controller
             return view('logistic.logisticDashboard', compact('orders'));
         }elseif(Auth::user()->hasRole('purchasing')){
             return view('purchasing.purchasingDashboard');
+        }
+        elseif(Auth::user()->hasRole('picSite')){
+            return view('picsite.picDashboard');
+        }
+        elseif(Auth::user()->hasRole('picAdmin')){
+            $document = DB::table('documents')->latest()->get();
+            return view('picadmin.picAdminDashboard' , compact('document'));
         }
     }
 }

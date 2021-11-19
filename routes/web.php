@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
+use App\Http\Controllers\PicsiteController;
+use App\Http\Controllers\PicRpkController;
+use App\Http\Controllers\adminRegisController;
+use App\Http\Controllers\picAdminController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +25,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
@@ -35,6 +41,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/{user}/submit-order', [CrewController::class, 'submitOrder']);
     });
 
+
     Route::prefix('logistic')->name('logistic.')->group(function(){
         Route::get('/order/{order}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::post('/order/{order}/approve', [LogisticController::class, 'createTransaction']);
@@ -49,6 +56,26 @@ Route::group(['middleware' => ['auth']], function(){
 
         Route::post('/upload', [LogisticController::class, 'uploadItem']);
     });
-});
 
+    Route::prefix('picsite')->name('picsite.')->group(function(){
+        Route::get('/rpk', [PicRpkController::class , 'rpk']);
+        Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
+        Route::get('/downloadrpk' , [PicRpkController::class, 'downloadrpk'])->name('downloadrpk');
+
+        Route::get('/view', [PicsiteController::class , 'view']);
+
+        Route::get('/upload', [PicsiteController::class , 'uploadform']);
+        Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
+    });
+
+    Route::prefix('picadmin')->name('picadmin.')->group(function(){
+        Route::get('/dana', 'picAdminController@checkform');
+        Route::put('/dana/{document}/reject', [picAdminController::class, 'rejectFile'])->name('reject');
+        Route::get('/rpk', [picAdminController::class , 'checkrpk']);
+        Route::get('/download' , [picAdminController::class , 'download'])->name('download');
+    });
+});
 require __DIR__.'/auth.php';
+
+Route::get('/registeradmin' , [RegisteredUserController::class , 'view']);
+

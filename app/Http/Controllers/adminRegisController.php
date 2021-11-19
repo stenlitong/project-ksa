@@ -7,29 +7,21 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-class RegisteredUserController extends Controller
+class adminRegisController extends Controller
 {
+    public function view()
+    {
+        return view('registeradmin');
+    }
     /**
      * Display the registration view.
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
-        Redirect::setIntendedUrl(url()->previous());
-        return view('auth.register');
-    }
-
-    public function view()
-    {
-        Redirect::setIntendedUrl(url()->previous());
-        return view('auth.registeradmin');
-    }
 
     /**
      * Handle an incoming registration request.
@@ -59,7 +51,6 @@ class RegisteredUserController extends Controller
         $user->attachRole($request->role_id);
         event(new Registered($user));
 
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        Auth::login($user);
     }
 }

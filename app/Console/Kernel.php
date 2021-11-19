@@ -4,6 +4,12 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\SendEmailJob;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Mail\Gmail;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +31,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $now = Carbon::now();
+        // $month = $now->format('F');
+        // $year = $now->format('yy');
+
+        // $fourthFridayMonthly = new Carbon('fourth friday of ' . $month . ' ' . $year);
+        
+        // $schedule->job(new SendEmailJob)->everyMinute();
+        $details = [
+            'title' => 'Thank you for subscribing to my newsletter',
+            'body' => 'You will receive a newsletter every Fourth Friday of the month'
+
+        ];
+        Mail::to('mask.dvl9@gmail.com')->send(new Gmail($details))->monthlyOn(28, '15:00');
     }
 
     /**
