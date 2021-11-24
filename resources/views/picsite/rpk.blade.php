@@ -50,7 +50,11 @@
                                         <td id="">{{$doc->$reason}}</td>
                                         <td id="">{{$doc->due_time}}</td>
                                         @endforeach
-                                        <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
+                                        @if (empty($a->$time_upload))
+                                            <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
+                                        @else
+                                            <td> </td>
+                                        @endif
                                     </tr>
                                 @endfor
                                 @endif
@@ -74,7 +78,11 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
+                                    @if (empty($a->$time_upload))
                                     <td><input name="{{$brfile}}" id="rfile" type="file"/></td>
+                                    @else
+                                        <td> </td>
+                                    @endif
                                 </tr>
                                 @endfor
                                 @endif
@@ -97,7 +105,11 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
-                                    <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td>
+                                    @if (empty($a->$time_upload))
+                                        <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td>
+                                    @else
+                                        <td> </td>
+                                    @endif
                                 </tr>
                                 @endfor
                                 @endif
@@ -121,11 +133,14 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
-                                    <td><input name="{{$smrfile}}" id="rfile" type="file"/></td>
+                                    @if ($s->$time_upload)
+                                        <td><input name="{{$smrfile}}" id="rfile" type="file"/></td>
+                                    @else
+                                        <td> </td>
+                                    @endif
                                 </tr>
                                 @endfor
                                 @endif
-                                
                             </tbody>
                         </table>
                         @if(date("d") < 28)
@@ -144,7 +159,7 @@
                             @endif
                             
                             @if($errors->any())
-                            {!! implode('', $errors->all('<div>:message</div>')) !!}
+                            {!! implode('', $errors->all('<div class="alert alert-danger">file type/size is Invalid</div>')) !!}
                             @endif
                             {{-- @error()
                             <div class="alert alert-danger" style="width: 40%; margin-left: 30%">

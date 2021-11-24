@@ -126,7 +126,6 @@
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle">
                                     Reject File
                                   </button>
-                                  
                                   <!-- Modal -->
                                   <div class="modal fade" id="rejectTitle" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
