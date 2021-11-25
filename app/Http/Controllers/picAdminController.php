@@ -22,14 +22,38 @@ use App\Models\User;
 class picAdminController extends Controller
 {
     public function checkform(){
-        $document = DB::table('documents')->latest()->get();
-        $documentberau = DB::table('documents')->latest()->get();
-        $documentbanjarmasin = DB::table('documents')->latest()->get();
-        $documentsamarinda = DB::table('documents')->latest()->get();
-        return view('picadmin.picAdminDoc' , compact('document')); 
+        if (request('search') == 'All') {
+            $document = DB::table('documents')->latest()->get();
+            $documentberau = DB::table('beraudb')->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->latest()->get();
+        }
+        elseif (request('search')) {
+            $document = DB::table('documents')->where('cabang', request('search'))->latest()->get();
+            $documentberau = DB::table('beraudb')->where('cabang', request('search'))->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search'))->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search'))->latest()->get();
+        }
+        else{
+            $document = DB::table('documents')->latest()->get();
+            $documentberau = DB::table('beraudb')->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->latest()->get();
+        }
+
+        return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda')); 
     }
     public function checkrpk(){
-        $docrpk = DB::table('rpkdocuments')->latest()->get();
+        if (request('search') == 'All') {
+            $docrpk = DB::table('rpkdocuments')->latest()->get();
+        }
+        elseif (request('search')) {
+            $docrpk = DB::table('rpkdocuments')->where('cabang', request('search'))->latest()->get();
+        }
+        else{
+            $docrpk = DB::table('rpkdocuments')->latest()->get();
+        }
+
         return view('picadmin.picAdminRpk' , compact('docrpk'));
     }
 

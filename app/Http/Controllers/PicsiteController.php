@@ -1178,7 +1178,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/perjalanan';
                 $request->file('banjarmasinfile1')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin1 = Storage::path('banjarmasin/perjalanan/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );  
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status1' => 'on review',
                         'time_upload1' => date("Y-m-d"),
@@ -1201,7 +1201,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sertifikat_keselamatan';
                 $request->file('banjarmasinfile2')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin2 = Storage::path('banjarmasin/sertifikat_keselamatan/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status2' => 'on review',
                         'time_upload2' => date("Y-m-d"),
@@ -1224,7 +1224,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sertifikat_anti_fauling';
                 $request->file('banjarmasinfile3')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin3 = Storage::path('banjarmasin/sertifikat_anti_fauling/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status3' => 'on review',
                         'time_upload3' => date("Y-m-d"),
@@ -1247,7 +1247,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surveyor';
                 $request->file('banjarmasinfile4')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin4 = Storage::path('banjarmasin/surveyor/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status4' => 'on review',
                         'time_upload4' => date("Y-m-d"),      
@@ -1270,7 +1270,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/drawing&stability';
                 $request->file('banjarmasinfile5')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin5 = Storage::path('banjarmasin/drawing&stability/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status5' => 'on review',
                         'time_upload5' => date("Y-m-d"),        
@@ -1293,7 +1293,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pengeringan';
                 $request->file('banjarmasinfile6')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin6 = Storage::path('banjarmasin/laporan_pengeringan/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d"),       
@@ -1316,7 +1316,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_nautis';
                 $request->file('banjarmasinfile7')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin7 = Storage::path('banjarmasin/laporan_pemeriksaan_nautis/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),   
@@ -1339,7 +1339,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_anti_faulin';
                 $request->file('banjarmasinfile8')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin8 = Storage::path('banjarmasin/laporan_pemeriksaan_anti_faulin/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d"),      
@@ -1362,7 +1362,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_radio';
                 $request->file('banjarmasinfile9')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin9 = Storage::path('banjarmasin/laporan_pemeriksaan_radio/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-               if (documents::where('cabang', 'Banjarmasin')->exists()){
+               if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status9' => 'on review',
                         'time_upload9' => date("Y-m-d"),       
@@ -1385,7 +1385,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/berita_acara_lambung';
                 $request->file('banjarmasinfile10')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin10 = Storage::path('banjarmasin/berita_acara_lambung/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status10' => 'on review',
                         'time_upload10' => date("Y-m-d"),
@@ -1408,7 +1408,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_snpp';
                 $request->file('banjarmasinfile11')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin11 = Storage::path('banjarmasin/laporan_pemeriksaan_snpp/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status11' => 'on review',
                         'time_upload11' => date("Y-m-d"),
@@ -1431,7 +1431,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/bki';
                 $request->file('banjarmasinfile12')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin12 = Storage::path('banjarmasin/bki/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status12' => 'on review',
                         'time_upload12' => date("Y-m-d"),
@@ -1454,7 +1454,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/snpp_permanen';
                 $request->file('banjarmasinfile13')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin13 = Storage::path('banjarmasin/snpp_permanen/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status13' => 'on review',
                         'time_upload13' => date("Y-m-d"),
@@ -1477,7 +1477,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/snpp_endorse';
                 $request->file('banjarmasinfile14')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin14 = Storage::path('banjarmasin/snpp_endorse/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status14' => 'on review',
                         'time_upload14' => date("Y-m-d"),
@@ -1500,7 +1500,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surat_laut_endorse';
                 $request->file('banjarmasinfile15')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin15 = Storage::path('banjarmasin/surat_laut_endorse/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status15' => 'on review',
                         'time_upload15' => date("Y-m-d"),
@@ -1523,7 +1523,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surat_laut_permanen';
                 $request->file('banjarmasinfile16')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin16 = Storage::path('banjarmasin/surat_laut_permanen/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
@@ -1546,7 +1546,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/compas_seren';
                 $request->file('banjarmasinfile17')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin17 = Storage::path('banjarmasin/compas_seren/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status17' => 'on review',
                         'time_upload17' => date("Y-m-d"),
@@ -1569,7 +1569,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(tahunan)';
                 $request->file('banjarmasinfile18')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin18 = Storage::path('banjarmasin/keselamatan_(tahunan)/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status18' => 'on review',
                         'time_upload18' => date("Y-m-d"),
@@ -1592,7 +1592,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(pengaturan_dok)';
                 $request->file('banjarmasinfile19')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin19 = Storage::path('banjarmasin/keselamatan_(pengaturan_dok)/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status19' => 'on review',
                         'time_upload19' => date("Y-m-d"),
@@ -1615,7 +1615,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(dok)';
                 $request->file('banjarmasinfile20')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin20 = Storage::path('banjarmasin/keselamatan_(dok)/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status20' => 'on review',
                         'time_upload20' => date("Y-m-d"),
@@ -1638,7 +1638,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/garis_muat';
                 $request->file('banjarmasinfile21')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin21 = Storage::path('banjarmasin/garis_muat/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status21' => 'on review',
                         'time_upload21' => date("Y-m-d"),
@@ -1661,7 +1661,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/dispensasi_isr';
                 $request->file('banjarmasinfile22')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin22 = Storage::path('banjarmasin/dispensasi_isr/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status22' => 'on review',
                         'time_upload22' => date("Y-m-d"),
@@ -1684,7 +1684,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/life_raft_1_2_pemadam';
                 $request->file('banjarmasinfile23')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin23 = Storage::path('banjarmasin/life_raft_1_2_pemadam/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status23' => 'on review',
                         'time_upload23' => date("Y-m-d"),
@@ -1707,7 +1707,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sscec';
                 $request->file('banjarmasinfile24')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin24 = Storage::path('banjarmasin/sscec/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status24' => 'on review',
                         'time_upload24' => date("Y-m-d"),
@@ -1730,7 +1730,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/seatrail';
                 $request->file('banjarmasinfile25')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin25 = Storage::path('banjarmasin/seatrail/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status25' => 'on review',
                         'time_upload25' => date("Y-m-d"),
@@ -1753,7 +1753,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_umum';
                 $request->file('banjarmasinfile26')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin26 = Storage::path('banjarmasin/laporan_pemeriksaan_umum/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status26' => 'on review',
                         'time_upload26' => date("Y-m-d"),
@@ -1776,7 +1776,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_mesin';
                 $request->file('banjarmasinfile27')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin27 = Storage::path('banjarmasin/laporan_pemeriksaan_mesin/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status27' => 'on review',
                         'time_upload27' => date("Y-m-d"),
@@ -1799,7 +1799,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/nota_dinas_perubahan_kawasan';
                 $request->file('banjarmasinfile28')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin28 = Storage::path('banjarmasin/nota_dinas_perubahan_kawasan/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status28' => 'on review',
                         'time_upload28' => date("Y-m-d"),
@@ -1822,7 +1822,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/PAS';
                 $request->file('banjarmasinfile29')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin29 = Storage::path('banjarmasin/PAS/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status29' => 'on review',
                         'time_upload29' => date("Y-m-d"),
@@ -1845,7 +1845,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/invoice_bki';
                 $request->file('banjarmasinfile30')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin30 = Storage::path('banjarmasin/invoice_bki/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status30' => 'on review',
                         'time_upload30' => date("Y-m-d"),
@@ -1868,7 +1868,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/safe_manning';
                 $request->file('banjarmasinfile31')->storeAs($tujuan_upload, $name1).'.pdf';   
                 $pathbanjarmasin31 = Storage::path('banjarmasin/safe_manning/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
-                if (documents::where('cabang', 'Banjarmasin')->exists()){
+                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->exists()){
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status31' => 'on review',
                         'time_upload31' => date("Y-m-d"),
@@ -1931,12 +1931,12 @@ class PicsiteController extends Controller
                     'samarindafile38'=> 'mimes:pdf|max:1024' ,
                 ]);
                 if ($request->hasFile('samarindafile1')) {
+                    $file1 = $request->file('samarindafile1');
+                    $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
+                    $tujuan_upload = 'samarinda/sertifikat_keselamatan(perpanjangan)';
+                    $request->file('samarindafile1')->storeAs($tujuan_upload, $name1).'.pdf';   
+                    $pathsamarinda1 = Storage::path('samarinda/sertifikat_keselamatan(perpanjangan)/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
                     if(documentsamarinda::where('cabang', 'Samarinda')->exists()) {
-                        $file1 = $request->file('samarindafile1');
-                        $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
-                        $tujuan_upload = 'samarinda/sertifikat_keselamatan(perpanjangan)';
-                        $request->file('samarindafile1')->storeAs($tujuan_upload, $name1).'.pdf';   
-                        $pathsamarinda1 = Storage::path('samarinda/sertifikat_keselamatan(perpanjangan)/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
                         documentsamarinda::where('cabang', 'Samarinda')->update([
                                 'status1' => 'on review',
                                 'time_upload1' => date("Y-m-d"),
