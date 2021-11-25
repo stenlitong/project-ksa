@@ -427,7 +427,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_barang';
                 $pathrpk1 = Storage::path('RPK/surat_barang/'.$file->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 $request->file('bjrfile1')->storeAs($tujuan_upload, $name.'.pdf');             
-                if(documentrpk::where('cabang', 'Berau')->exists()){
+                if(documentrpk::where('cabang', 'Banjarmasin')->exists()){
                     DB::table('rpkdocuments')->insert([
                         'status1' => 'on review',
                         'surat_barang' => $pathrpk1,
@@ -451,7 +451,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $pathrpk2 = Storage::path('RPK/cargo_manifest/'.$file->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );   
                 $request->file('bjrfile2')->storeAs($tujuan_upload, $name.'.pdf');
-                if(documentrpk::where('cabang', 'Berau')->exists()){
+                if(documentrpk::where('cabang', 'Banjarmasin')->exists()){
                     DB::table('rpkdocuments')->where('cabang', 'Banjarmasin' )->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> $pathrpk2 ,

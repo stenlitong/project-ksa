@@ -762,7 +762,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/pnbp_master_cable';
                 $request->file('beraufile11')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau5 = Storage::path('berau/pnbp_master_cable/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau11 = Storage::path('berau/pnbp_master_cable/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_master_cable' => $pathberau11,
@@ -786,7 +786,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/cover_deck_logbook';
                 $request->file('beraufile12')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau6 = Storage::path('berau/cover_deck_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau12 = Storage::path('berau/cover_deck_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'cover_deck_logbook' => $pathberau12,
@@ -810,7 +810,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/cover_engine_logbook';
                 $request->file('beraufile13')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau7 = Storage::path('berau/cover_engine_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau13 = Storage::path('berau/cover_engine_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'cover_engine_logbook' => $pathberau13,
@@ -834,7 +834,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/exibitum_dect_logbook';
                 $request->file('beraufile14')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau8 = Storage::path('berau/exibitum_dect_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau14 = Storage::path('berau/exibitum_dect_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'exibitum_dect_logbook' => $pathberau14,
@@ -858,7 +858,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/exibitum_engine_logbook';
                 $request->file('beraufile15')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau9 = Storage::path('berau/exibitum_engine_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau15 = Storage::path('berau/exibitum_engine_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'exibitum_engine_logbook' => $pathberau9,
@@ -882,7 +882,7 @@ class PicsiteController extends Controller
                 $name1 =  $file1->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'berau/pnbp_deck_logbook';
                 $request->file('beraufile16')->storeAs($tujuan_upload, $name1).'.pdf';
-                $pathberau10 = Storage::path('berau/pnbp_deck_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
+                $pathberau16 = Storage::path('berau/pnbp_deck_logbook/'.$file1->getClientOriginalName() . '-picsite-' . Auth::user()->cabang );
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_deck_logbook' => $pathberau16,

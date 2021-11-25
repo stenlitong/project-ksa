@@ -54,10 +54,10 @@
                                             <td scope="col" id="reason1">{{$doc->$reason}}</td>
                                             <td scope="col" id="duetime1">{{$doc->due_time}}</td> 
                                             @endforeach
-                                            @if (empty($document->$time_upload))
+                                            @if (empty($document->$stats))
                                                 <td scope="col">
                                                     <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
-                                                    <a href="/picsite/view" target="_blank">view</a>
+                                                    {{-- <a href="/picsite/view" target="_blank">view</a> --}}
                                                 </td>  
                                             @else
                                                 <td>  </td>
@@ -86,18 +86,18 @@
                                             <tr>   
                                                 <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                                 @foreach ($documentberau as $d )                           
-                                                <td scope="col" id="time">{{$d ->$time_upload}}</td>                                        
-                                                <td scope="col" id="status">{{$d->$stats}}</td>                                      
-                                                <td scope="col" id="reason">{{$d->$reason}}</td>                                        
-                                                <td scope="col" id="duetime1">{{$d->due_time}}</td> 
+                                                    <td scope="col" id="time">{{$d->$time_upload}}</td>                                        
+                                                    <td scope="col" id="status">{{$d->$stats}}</td>                                      
+                                                    <td scope="col" id="reason">{{$d->$reason}}</td>                                        
+                                                    <td scope="col" id="duetime1">{{$d->due_time}}</td> 
                                                 @endforeach
-                                                @if ($documentberau->$time_upload)
-                                                    <td scope="col">
-                                                        <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
-                                                        <a href="/picsite/view" target="_blank">view</a>
-                                                    </td>  
+                                                @if (empty($d->$stats))
+                                                <td scope="col">
+                                                    <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
+                                                    {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                                </td>  
                                                 @else
-                                                    <td> </td>
+                                                <td> </td>
                                                 @endif
                                             </tr>
                                         @endfor
@@ -131,10 +131,10 @@
                                         <td scope="col" id="reason">{{$b->$reason}}</td>                                        
                                         <td scope="col" id="duetime1">{{$b->due_time}}</td> 
                                         @endforeach
-                                        @if (empty($documentbanjarmasin->$time_upload))
+                                        @if (empty($documentbanjarmasin->$stats))
                                             <td scope="col">
                                                 <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
-                                                <a href="/picsite/view" target="_blank">view</a>
+                                                {{-- <a href="/picsite/view" target="_blank">view</a> --}}
                                             </td>  
                                         @else
                                             <td> </td>
@@ -146,33 +146,33 @@
                                     @if (Auth::user()->cabang == 'Samarinda')
                                     @for ($a = 1 ; $a <= 38 ; $a++)
                                     @php
-                                    $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
-                                                    "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
-                                                    "Sertifikat Garis Muat","Laporan Pemeriksaan Garis Muat","Sertifikat Anti Fauling",
-                                                    'Surat Laut Permanen','Surat Laut Endorse','Call Sign',
-                                                    'Perubahan Sertifikat Keselamatan','Perubahan Kawasan Tanpa NotaDin',
-                                                    'SNPP Permanen','SNPP Endorse','Laporan Pemeriksaan SNPP',
-                                                    'Laporan Pemeriksaan Keselamatan','Buku Kesehatan','Sertifikat Sanitasi Water & P3K',
-                                                    'Pengaturan Non ke Klas BKI','Pengaturan Klas BKI (Dok SS)','Surveyor Endorse Tahunan BKI',
-                                                    'PR Supplier bki','Balik Nama Grosse','Kapal Baru Body (Set Dokumen)',
-                                                    'Halaman Tambahan Grosse','PNBP & PUP','Laporan Pemeriksaan Anti Teriti',
-                                                    'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
-                                                    'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
-                                                    'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta');
-                                    $samarindafile = 'samarindafile'.$a;
-                                    $time_upload ="time_upload".$a;
-                                    $stats ="status".$a;
-                                    $reason ="reason".$a;
+                                        $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
+                                                        "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
+                                                        "Sertifikat Garis Muat","Laporan Pemeriksaan Garis Muat","Sertifikat Anti Fauling",
+                                                        'Surat Laut Permanen','Surat Laut Endorse','Call Sign',
+                                                        'Perubahan Sertifikat Keselamatan','Perubahan Kawasan Tanpa NotaDin',
+                                                        'SNPP Permanen','SNPP Endorse','Laporan Pemeriksaan SNPP',
+                                                        'Laporan Pemeriksaan Keselamatan','Buku Kesehatan','Sertifikat Sanitasi Water & P3K',
+                                                        'Pengaturan Non ke Klas BKI','Pengaturan Klas BKI (Dok SS)','Surveyor Endorse Tahunan BKI',
+                                                        'PR Supplier bki','Balik Nama Grosse','Kapal Baru Body (Set Dokumen)',
+                                                        'Halaman Tambahan Grosse','PNBP & PUP','Laporan Pemeriksaan Anti Teriti',
+                                                        'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
+                                                        'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
+                                                        'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta');
+                                        $samarindafile = 'samarindafile'.$a;
+                                        $time_upload ="time_upload".$a;
+                                        $stats ="status".$a;
+                                        $reason ="reason".$a;
                                     @endphp
                                         <tr>   
                                             <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                             @foreach ($documentsamarinda as $s )                           
-                                            <td scope="col" id="time">{{$s->$time_upload}}</td>                                        
-                                            <td scope="col" id="status">{{$s->$stats}}</td>                                      
-                                            <td scope="col" id="reason">{{$s->$reason}}</td>                                        
-                                            <td scope="col" id="duetime1">{{$s->due_time}}</td> 
+                                                <td scope="col" id="time">{{$s->$time_upload}}</td>                                        
+                                                <td scope="col" id="status">{{$s->$stats}}</td>                                      
+                                                <td scope="col" id="reason">{{$s->$reason}}</td>                                        
+                                                <td scope="col" id="duetime1">{{$s->due_time}}</td> 
                                             @endforeach
-                                            @if (empty($documentsamarinda->$time_upload))
+                                            @if (empty($documentsamarinda->$stats))
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
                                                 </td>  

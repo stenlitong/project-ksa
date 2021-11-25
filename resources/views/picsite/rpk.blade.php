@@ -31,6 +31,7 @@
                             <tbody>
                                 <form action="/picsite/uploadrpk" method="POST" enctype="multipart/form-data" name="formUploadrpk" id="formUploadrpk">
                                     @csrf
+{{-- Babelan --}}
                                 @if (Auth::user()->cabang == 'Babelan')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                     @php
@@ -50,7 +51,7 @@
                                         <td id="">{{$doc->$reason}}</td>
                                         <td id="">{{$doc->due_time}}</td>
                                         @endforeach
-                                        @if (empty($a->$time_upload))
+                                        @if (empty($doc->$stats))
                                             <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
                                         @else
                                             <td> </td>
@@ -58,7 +59,7 @@
                                     </tr>
                                 @endfor
                                 @endif
-
+{{-- Berau --}}
                                 @if (Auth::user()->cabang == 'Berau')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -78,14 +79,15 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
-                                    @if (empty($a->$time_upload))
-                                    <td><input name="{{$brfile}}" id="rfile" type="file"/></td>
+                                    @if (empty($doc->$stats))
+                                        <td><input name="{{$brfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>
                                     @endif
                                 </tr>
                                 @endfor
                                 @endif
+{{-- Banjarmasin --}}
                                 @if (Auth::user()->cabang == 'Banjarmasin')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -105,7 +107,7 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
-                                    @if (empty($a->$time_upload))
+                                    @if (empty($doc->$stats))
                                         <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>
@@ -113,7 +115,7 @@
                                 </tr>
                                 @endfor
                                 @endif
-
+{{-- Samarinda --}}
                                 @if (Auth::user()->cabang == 'Samarinda')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -133,7 +135,7 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     <td id="">{{$doc->due_time}}</td>
                                     @endforeach
-                                    @if ($s->$time_upload)
+                                    @if (empty($doc->$stats))
                                         <td><input name="{{$smrfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>
