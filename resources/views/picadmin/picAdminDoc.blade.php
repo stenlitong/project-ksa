@@ -96,8 +96,8 @@
                         <td>Data not found</td>
                     </tr>
                     @endforelse
-
-                    @forelse($documentberau as $doc )
+{{-- Berau----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
+                    @forelse($documentberau as $d )
                        @for ( $a = 1 ; $a <= 16 ; $a++)
                        @php
                             $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,

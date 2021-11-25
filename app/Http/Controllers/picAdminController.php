@@ -23,6 +23,9 @@ class picAdminController extends Controller
 {
     public function checkform(){
         $document = DB::table('documents')->latest()->get();
+        $documentberau = DB::table('documents')->latest()->get();
+        $documentbanjarmasin = DB::table('documents')->latest()->get();
+        $documentsamarinda = DB::table('documents')->latest()->get();
         return view('picadmin.picAdminDoc' , compact('document')); 
     }
     public function checkrpk(){
@@ -33,19 +36,6 @@ class picAdminController extends Controller
     public function rejectFile(Request $request){
         // dd($request->reason);
         if($doc->cabang == 'Babelan'){       
-              
-            if ($doc->status1 != null) {
-                // does exist
-                $doc = Document::where($doc->status1)->first();
-                $request->validate([
-                    'reason1' => 'required' ,
-                ]);
-                documents::where('cabang', "Babelan")->where('sertifikat_keselamatan')->update([
-                    'status1' => 'Rejected' ,
-                    'reason1' => $request->reason ,
-                 ]);
-            }
-
             $request->validate([
                 'reason2' => 'required' ,
                 'reason3' => 'required' ,
@@ -63,6 +53,19 @@ class picAdminController extends Controller
                 'reason15' => 'required' ,
                 'reason16' => 'required' ,
             ]);
+            
+            if ($doc->status1 != null) {
+                // does exist
+                $doc = Document::where($doc->status1)->first();
+                $request->validate([
+                    'reason1' => 'required' ,
+                ]);
+                documents::where('cabang', "Babelan")->where('sertifikat_keselamatan')->update([
+                    'status1' => 'Rejected' ,
+                    'reason1' => $request->reason ,
+                 ]);
+            }
+
             documents::where('cabang', "Babelan")->where('sertifikat_keselamatan')->update([
 
                 'status2' => 'Rejected' ,

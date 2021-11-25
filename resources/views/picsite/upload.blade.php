@@ -172,7 +172,7 @@
                                             <td scope="col" id="reason">{{$s->$reason}}</td>                                        
                                             <td scope="col" id="duetime1">{{$s->due_time}}</td> 
                                             @endforeach
-                                            @if (empty($s->$time_upload))
+                                            @if (empty($documentsamarinda->$time_upload))
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
                                                 </td>  
