@@ -11,7 +11,7 @@
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
                 <h1 class="d-flex justify-content-center mb-4">Reports PR/PO</h1>
 
-                @if(count($orderHeads) > 0)
+                @if(count($orders) > 0)
                     <div class="d-flex justify-content-end mr-3">
                         <a href="{{ Route('logistic.downloadReport') }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
                     </div>
@@ -25,21 +25,35 @@
                             <th scope="col">Tanggal PR</th>
                             <th scope="col">Nomor PR</th>
                             <th scope="col">Supplier</th>
+                            <th scope="col">Tanggal PO</th>
                             <th scope="col">Nomor PO</th>
+                            <th scope="col">Golongan</th>
                             <th scope="col">Nama Kapal</th>
+                            <th scope="col">Serial Number</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Harga</th>
                             <th scope="col">Keterangan</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach($orderHeads as $key=>$oh)
+                            @foreach($orders as $key=>$o)
                                 <tr>
-                                    <td class="bg-white">{{ $key + 1  }}</td>
-                                    <td class="bg-white">{{ $oh -> prDate }}</td>
-                                    <td class="bg-white">{{ $oh -> noPr }}</td>
-                                    <td class="bg-white">{{ $oh -> supplier -> supplierName}}</td>
-                                    <td class="bg-white">{{ $oh -> noPo}}</td>
-                                    <td class="bg-white">{{ $oh -> boatName}}</td>
-                                    <td class="bg-white">{{ $oh -> descriptions}}</td>
+                                    <td>{{ $key + 1  }}</td>
+                                    <td>{{ $o -> prDate }}</td>
+                                    <td>{{ $o -> noPr }}</td>
+                                    @if(isset($o -> supplier -> supplierName))
+                                        <td>{{ $o -> supplier -> supplierName }}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                    <td>{{ $o -> poDate}}</td>
+                                    <td>{{ $o -> noPo}}</td>
+                                    <td>{{ $o -> item['golongan']}}</td>
+                                    <td>{{ $o -> boatName}}</td>
+                                    <td>{{ $o -> item -> codeMasterItem}}</td>
+                                    <td>{{ $o -> quantity}} {{ $o -> item -> unit }}</td>
+                                    <td>Rp. {{ number_format($o -> totalItemPrice, 2, ",", ".") }}</td>
+                                    <td>{{ $o -> descriptions}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -58,7 +72,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 900px;
+            height: 1000px;
             /* height: 100%; */
         }
         .tableFixHead          { overflow: auto; height: 250px; }
@@ -66,7 +80,7 @@
 
         .my-custom-scrollbar {
             position: relative;
-            height: 700px;
+            height: 800px;
             overflow: auto;
         }
         .table-wrapper-scroll-y {

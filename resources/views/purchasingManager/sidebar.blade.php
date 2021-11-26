@@ -29,7 +29,7 @@
                     if(basename($_SERVER['REQUEST_URI']) == 'report'){
                         echo('active');
                     }
-                @endphp" href="">
+                @endphp" href="{{ Route('purchasingManager.report') }}">
                     <span data-feather="archive"></span>
                     Report PR/PO
                 </a>

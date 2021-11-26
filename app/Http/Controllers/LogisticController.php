@@ -56,6 +56,7 @@ class LogisticController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -66,6 +67,7 @@ class LogisticController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7);
 
@@ -118,6 +120,7 @@ class LogisticController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -137,6 +140,7 @@ class LogisticController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
     
@@ -427,7 +431,7 @@ class LogisticController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_details.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('logistic.logisticHistoryIn', compact('orderHeads'));
     }
@@ -446,7 +450,7 @@ class LogisticController extends Controller
 
     public function makeOrderPage(){
         // logistic role can only select the items that are only available to their branches & carts according to the login user
-        $items = Item::where('cabang', Auth::user()->cabang)->get();
+        $items = Item::where('cabang', Auth::user()->cabang)->where('itemState', 'like', 'Available')->get();
 
         // Get all the tugs, barges, and cart of the following user
         $barges = Barge::all();
@@ -465,12 +469,18 @@ class LogisticController extends Controller
             'note' => 'nullable'
         ]);
 
+        // Check if the item state is on hold, then return error
+        $check_item_state = Item::where('id', $request -> item_id)->pluck('itemState')[0];
+        if($check_item_state == 'Hold'){
+            return redirect('/crew/order')->with('error', 'Item is Unavailable');
+        }
+
         // Check if the cart within the user is already > 12 items, then cart is full & return with message
         $counts = Cart::where('user_id', Auth::user()->id)->count();
         if($counts ==  12){
             return redirect('/logistic/make-order')->with('error', 'Cart is Full');
         }
-        
+
         // Find if the same configuration of item is already exist in cart or no
         $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->where('golongan', $request->golongan)->first();
 
@@ -502,11 +512,19 @@ class LogisticController extends Controller
             'tugName' => 'required',
             'bargeName' => 'nullable',
             'company' => 'required',
+            'orderType' => 'required|in:Susulan,Real Time',
             'descriptions' => 'nullable'
         ]);
 
         // Find the cart of the following user
         $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+        // Double check the item state, if there are items that is on 'Hold' status, then return error
+        foreach($carts as $c){
+            if($c -> item -> itemState == 'Hold'){
+                return redirect('/crew/order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
+            }
+        }
 
         // Validate cart size
         if(count($carts) == 0){
@@ -522,6 +540,7 @@ class LogisticController extends Controller
             'user_id' => Auth::user()->id,
             'cabang' => Auth::user()->cabang,
             'boatName' => $boatName,
+            'orderType' => $request -> orderType,
             'order_tracker' => 2,
             'status' => 'Order In Progress By Supervisor',
             'descriptions' => $request -> descriptions
@@ -631,10 +650,12 @@ class LogisticController extends Controller
         // Find order from user/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
-        // Find all the items that has been approved from the logistic | last 30 days only
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        // Find all the items that has been approved from the logistic | last 6 month
+        // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('logistic.logisticReport', compact('orderHeads'));
+        $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+
+        return view('logistic.logisticReport', compact('orders'));
     }
 
     public function downloadReport(Excel $excel){

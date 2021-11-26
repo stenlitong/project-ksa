@@ -63,6 +63,12 @@
                         Golongan Invalid
                     </div>
                 @enderror
+
+                @error('orderType')
+                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                        Tipe Order Invalid
+                    </div>
+                @enderror
                 
                 <div class="row">
                     {{-- <div> --}}
@@ -161,55 +167,41 @@
                     @csrf
                     <div class="modal-body"> 
                         <div class="form-group p-2">
-                            <div class="col">
-                                <label for="tugs">Pilih Tug:</label>
-                            </div>
-                            <div class="col">
-                                <select class="form-control" name="tugName" id="tugName">
-                                    @foreach($tugs as $t)
-                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                    @endforeach
-                                </select>
-                                {{-- <datalist id="tugName">
-                                    @foreach($tugs as $t)
-                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                    @endforeach
-                                </datalist> --}}
-                            </div>
-                        </div>
-                        <div class="form-group p-2">
-                            <div class="col">
-                                <label for="bargeName">Pilih Barge (optional):</label>
-                            </div>
-                            <div class="col">
-                                <select class="form-control" name="bargeName" id="bargeName">
-                                    <option value="">None</option>
-                                    @foreach($barges as $b)
-                                        <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                    @endforeach
+                            <label for="tugs">Pilih Tug:</label>
+                            <select class="form-control" name="tugName" id="tugName">
+                                @foreach($tugs as $t)
+                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                @endforeach
                             </select>
-                            </div>
                         </div>
                         <div class="form-group p-2">
-                            <div class="col">
-                                <label for="company" class="mb-3">Perusahaan</label>
-                            </div>
-                            <div class="col">
-                                <select class="form-control" name="company" id="company">
-                                    <option value="KSA">KSA</option>
-                                    <option value="ISA">ISA</option>
-                                    <option value="KSAO">KSA OFFSHORE</option>
-                                    <option value="KSAM">KSA MARITIME</option>
-                                </select>
-                            </div>
+                            <label for="bargeName">Pilih Barge (optional):</label>
+                            <select class="form-control" name="bargeName" id="bargeName">
+                                <option value="">None</option>
+                                @foreach($barges as $b)
+                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group p-2">
-                            <div class="col">
-                                <label for="descriptions" class="mb-3">Deskripsi (optional)</label>
-                            </div>
-                            <div class="col">
-                                <textarea class="form-control" name="descriptions" id="descriptions" placeholder="Input Deskripsi..." rows="5"></textarea>
-                            </div>
+                            <label for="company" class="mb-3">Perusahaan</label>
+                            <select class="form-control" name="company" id="company">
+                                <option value="KSA">KSA</option>
+                                <option value="ISA">ISA</option>
+                                <option value="KSAO">KSA OFFSHORE</option>
+                                <option value="KSAM">KSA MARITIME</option>
+                            </select>
+                        </div>
+                        <div class="form-group p-2">
+                            <label for="orderType">Tipe Order</label>
+                            <select class="form-control" name="orderType" id="orderType">
+                                <option value="Real Time">Real Time</option>
+                                <option value="Susulan">Susulan</option>
+                            </select>
+                        </div>
+                        <div class="form-group p-2">
+                            <label for="descriptions" class="mb-3">Deskripsi (optional)</label>
+                            <textarea class="form-control" name="descriptions" id="descriptions" placeholder="Input Deskripsi..." rows="5"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

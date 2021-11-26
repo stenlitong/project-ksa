@@ -127,7 +127,10 @@ unset($__errorArgs, $__bag); ?>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                <div class="d-flex justify-content-around">
+                                    <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                    <h5>Tipe Order : <?php echo e($o -> orderType); ?></h5>
+                                </div>
                                 <table class="table">
                                     <thead class="thead-dark">
                                         <tr>

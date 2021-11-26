@@ -9,6 +9,7 @@ use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\PurchasingManagerController;
 use App\Http\Controllers\SupervisorController;
 use App\Models\Barge;
+use App\Models\OrderHead;
 use App\Models\Tug;
 
 /*
@@ -111,18 +112,24 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
         Route::get('/report/{cabang}', [PurchasingController::class, 'reportPageBranch']);
         Route::get('/report/download/{cabang}', [PurchasingController::class, 'downloadReport']);
-        Route::get('/form-ap', [PurchasingController::class, 'formApPage'])->name('form-ap');
-        Route::get('/form-ap/{apList}/download', [PurchasingController::class, 'downloadFile']);
-        Route::get('/form-ap/{apList}/approve', [PurchasingController::class, 'approveAp']);
-        Route::post('/form-ap/{apList}/reject', [PurchasingController::class, 'rejectAp']);
+        // Route::get('/form-ap', [PurchasingController::class, 'formApPage'])->name('form-ap');
+        // Route::get('/form-ap/{apList}/download', [PurchasingController::class, 'downloadFile']);
+        // Route::get('/form-ap/{apList}/approve', [PurchasingController::class, 'approveAp']);
+        // Route::post('/form-ap/{apList}/reject', [PurchasingController::class, 'rejectAp']);
     });
     
     Route::prefix('purchasing-manager')->name('purchasingManager.')->group(function(){
+        Route::get('/{orderHeads}/download-po', [PurchasingManagerController::class, 'downloadPo']);
         Route::get('/dashboard/{branch}', [PurchasingManagerController::class, 'branchDashboard']);
         Route::post('/{suppliers}/edit', [PurchasingManagerController::class, 'editSupplier']);
+        Route::get('/completed-order/{branch}', [PurchasingManagerController::class, 'completedOrder']);
+        Route::get('/in-progress-order/{branch}', [PurchasingManagerController::class, 'inProgressOrder']);
         Route::get('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrder']);
         Route::patch('/order/{orderHeads}/reject', [PurchasingManagerController::class, 'rejectOrder']);
+        Route::get('/report', [PurchasingManagerController::class, 'reportPage'])->name('report');
+        Route::get('/report/{cabang}', [PurchasingManagerController::class, 'reportPageBranch']);
+        Route::get('/report/download/{cabang}', [PurchasingManagerController::class, 'downloadReport']);
     });
 
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
@@ -130,12 +137,15 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
         Route::delete('/{suppliers}/delete', [AdminPurchasingController::class, 'deleteSupplier']);
         Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
-        Route::post('/form-ap/upload', [AdminPurchasingController::class, 'uploadFile']);
+        Route::get('/form-ap/{branch}', [AdminPurchasingController::class, 'formApPageBranch']);
+
+        Route::put('{cabang}/form-ap/upload', [AdminPurchasingController::class, 'uploadFile']);
         Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
     });
 
 });
 
+// ================================================= Dev Route =======================================================
 Route::get('/add-boat', function(){
     Tug::create([
         'tugName' => 'Tug A',

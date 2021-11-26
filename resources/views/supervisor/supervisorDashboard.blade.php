@@ -99,7 +99,7 @@
             @foreach($orderHeads as $o)
                 <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-between">
@@ -117,7 +117,10 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                <div class="d-flex justify-content-around">
+                                    <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                    <h5>Tipe Order : {{ $o -> orderType }}</h5>
+                                </div>
                                 <table class="table">
                                     <thead class="thead-dark">
                                         <tr>

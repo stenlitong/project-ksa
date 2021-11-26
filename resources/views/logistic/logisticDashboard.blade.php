@@ -97,7 +97,7 @@
                             {{-- @endif --}}
 
                             <td class="bg-white">
-                                @if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false)
+                                @if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false || strpos($oh -> status, 'Rechecked') !== false)
                                     <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 @endif
                                 @if(strpos($oh -> status, 'Delivered') !== false)
@@ -140,7 +140,10 @@
                                 </div>
                                 <div class="modal-body">
                                     @if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false)
-                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                        <div class="d-flex justify-content-around">
+                                            <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                            <h5>Tipe Order : {{ $o -> orderType }}</h5>
+                                        </div>
                                     @endif
                                     <table class="table">
                                         <thead class="thead-dark">
@@ -249,7 +252,7 @@
             margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 800px;
+            height: 900px;
             /* height: 100%; */
         }
         th{

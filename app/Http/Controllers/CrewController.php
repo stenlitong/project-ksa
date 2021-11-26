@@ -98,7 +98,7 @@ class CrewController extends Controller
     public function orderPage()
     {
         // Select items to choose in the order page & carts according to the login user
-        $items = Item::where('cabang', Auth::user()->cabang)->get();
+        $items = Item::where('cabang', Auth::user()->cabang)->where('itemState', 'like', 'Available')->get();
         $barges = Barge::all();
         $tugs = Tug::all();
         $carts = Cart::with('item')->where('cabang', Auth::user()->cabang)->where('user_id', Auth::user()->id)->get();
@@ -113,6 +113,12 @@ class CrewController extends Controller
             'department' => 'required',
             'quantity' => 'required|numeric|min:1',
         ]);
+
+        // Check if the item state is on hold, then return error
+        $check_item_state = Item::where('id', $request -> item_id)->pluck('itemState')[0];
+        if($check_item_state == 'Hold'){
+            return redirect('/crew/order')->with('error', 'Item is Unavailable');
+        }
 
         // Check if the cart within the user is already > 12 items, then return with message
         $counts = Cart::where('user_id', Auth::user()->id)->count();
@@ -160,6 +166,13 @@ class CrewController extends Controller
             return redirect('/crew/order')->with('errorCart', 'Cart is Empty');
         }
 
+        // Double check the item state, if there are items that is on 'Hold' status, then return error
+        foreach($carts as $c){
+            if($c -> item -> itemState == 'Hold'){
+                return redirect('/crew/order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
+            }
+        }
+
         // String formatting for boatName with tugName + bargeName
         $boatName = $request->tugName . '/' . $request->bargeName;
 
@@ -172,8 +185,20 @@ class CrewController extends Controller
             'status' => 'Request In Progress By Logistic'
         ]);
 
+        // Formatted branch for SBK
+        $cabang_arr = [
+            'Jakarta' => 'JKT',
+            'Banjarmasin' => 'BNJ',
+            'Samarinda' => 'SMD',
+            'Bunati' => 'BNT',
+            'Babelan' => 'BBL',
+            'Berau' => 'BER'
+        ];
+
+        // Update the order id and SBK
         OrderHead::find($o_id->id)->update([
             'order_id' => 'COID#' . $o_id->id,
+            'noSbk' => 'SBK/' . $o_id->id . '/' . $cabang_arr[Auth::user()->cabang]
         ]);
 
         // Then fill the Order Detail with the cart items of the following Order Head

@@ -12,7 +12,7 @@
                     Dashboard
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link 
                 @php
                     if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
@@ -22,7 +22,7 @@
                     <span data-feather="file"></span>
                     Checklist AP
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link 
                 @php

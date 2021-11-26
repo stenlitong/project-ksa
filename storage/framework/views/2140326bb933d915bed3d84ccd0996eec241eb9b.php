@@ -102,7 +102,7 @@ unset($__errorArgs, $__bag); ?>
                             
 
                             <td class="bg-white">
-                                <?php if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false): ?>
+                                <?php if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
                                     <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 <?php endif; ?>
                                 <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
@@ -145,7 +145,10 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="modal-body">
                                     <?php if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false): ?>
-                                        <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                        <div class="d-flex justify-content-around">
+                                            <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                            <h5>Tipe Order : <?php echo e($o -> orderType); ?></h5>
+                                        </div>
                                     <?php endif; ?>
                                     <table class="table">
                                         <thead class="thead-dark">
@@ -254,7 +257,7 @@ unset($__errorArgs, $__bag); ?>
             margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 800px;
+            height: 900px;
             /* height: 100%; */
         }
         th{

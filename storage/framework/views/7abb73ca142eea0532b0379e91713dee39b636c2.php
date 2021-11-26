@@ -9,8 +9,8 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                 <div class="wrapper flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                    <h2 class="mt-3 mb-2" style="text-align: center">Order <?php echo e($orderHeads -> order_id); ?></h2>
                     <h1 class="mt-3 mb-2" style="text-align: center">Mail Of Goods Out</h1>
+                    <h2 class="mt-3 mb-2" style="text-align: center"><?php echo e($orderHeads -> noSbk); ?></h2>
                     <?php if(session('error')): ?>
                         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                             <?php echo e(session('error')); ?>
@@ -87,12 +87,19 @@ unset($__errorArgs, $__bag); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="orderType">Tipe Order</label>
+                                    <select class="form-control" name="orderType" id="orderType">
+                                        <option value="Real Time">Real Time</option>
+                                        <option value="Susulan">Susulan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="description">Deskripsi (optional)</label>
                                     <textarea class="form-control" name="description" id="description" rows="3"
                                         placeholder="Input Keterangan"></textarea>
                                 </div>
                                 
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center mt-5">
                                     <a href="/dashboard" class="btn btn-danger">Cancel</a>
                                     <button type="submit" class="btn btn-primary ml-2">Submit</button>
                                 </div>
@@ -162,7 +169,7 @@ unset($__errorArgs, $__bag); ?>
             margin: 15px;
             border-radius: 10px;
             background-color: antiquewhite;
-            height: 850px;
+            height: 1280px;
             /* height: 100%; */
         }
         .tableFixHead          { overflow: auto; height: 250px; }

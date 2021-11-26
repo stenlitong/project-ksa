@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderHead extends Model
+class ApListDetail extends Model
 {
     use HasFactory;
 
@@ -13,12 +13,7 @@ class OrderHead extends Model
         'id'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-    
     public function apList(){
-        return $this->hasOne(ApList::class, 'order_id');
+        return $this->belongsTo(ApList::class);
     }
 }

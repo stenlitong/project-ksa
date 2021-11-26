@@ -21,7 +21,7 @@ class DashboardController extends Controller
             }
 
             // Get all the order within the logged in user within 6 month
-            $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(1);
+            $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7);
 
             // Get the orderDetail from orders_id within the orderHead table 
             // $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('order_id');
@@ -78,6 +78,7 @@ class DashboardController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -119,8 +120,9 @@ class DashboardController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             $in_progress = OrderHead::where(function($query){
-                $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
+                $query->where('status', 'like', 'In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -162,14 +164,14 @@ class DashboardController extends Controller
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
-                ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
-                ->orWhere('status', 'like', 'Order In Progress By Purchasing')
-                ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+                // ->orWhere('status', 'like', 'Order In Progress By Purchasing')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -217,14 +219,13 @@ class DashboardController extends Controller
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
-                ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
-                ->orWhere('status', 'like', 'Order In Progress By Purchasing')
-                ->orWhere('status', 'like', 'Order In Progress By Purchasing Manager')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
 

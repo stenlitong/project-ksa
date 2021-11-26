@@ -1,11 +1,11 @@
-@if(Auth::user()->hasRole('purchasing'))
+@if(Auth::user()->hasRole('purchasingManager'))
     @extends('../layouts.base')
 
-    @section('title', 'Purchasing Reports')
+    @section('title', 'Purchasing Manager Reports')
 
     @section('container')
     <div class="row">
-        @include('purchasing.sidebar')
+        @include('purchasingManager.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
@@ -15,42 +15,42 @@
                     <div class="p-2">
                         <select name="cabang" class="form-select" onchange="window.location = this.value;">
                             <option selected disabled>Pilih Cabang</option>
-                            <option value="/purchasing/report/Jakarta" 
+                            <option value="/purchasing-manager/report/Jakarta" 
                                 @php
                                     if($default_branch == 'Jakarta'){
                                         echo('selected');
                                     }
                                 @endphp
                             >Jakarta</option>
-                            <option value="/purchasing/report/Banjarmasin"
+                            <option value="/purchasing-manager/report/Banjarmasin"
                                 @php
                                     if($default_branch == 'Banjarmasin'){
                                         echo('selected');
                                     }
                                 @endphp
                             >Banjarmasin</option>
-                            <option value="/purchasing/report/Samarinda"
+                            <option value="/purchasing-manager/report/Samarinda"
                                 @php
                                     if($default_branch == 'Samarinda'){
                                         echo('selected');
                                     }
                                 @endphp
                             >Samarinda</option>
-                            <option value="/purchasing/report/Bunati"
+                            <option value="/purchasing-manager/report/Bunati"
                                 @php
                                     if($default_branch == 'Bunati'){
                                         echo('selected');
                                     }
                                 @endphp
                             >Bunati</option>
-                            <option value="/purchasing/report/Babelan"
+                            <option value="/purchasing-manager/report/Babelan"
                                 @php
                                     if($default_branch == 'Babelan'){
                                         echo('selected');
                                     }
                                 @endphp
                             >Babelan</option>
-                            <option value="/purchasing/report/Berau"
+                            <option value="/purchasing-manager/report/Berau"
                                 @php
                                     if($default_branch == 'Berau'){
                                         echo('selected');
@@ -61,7 +61,7 @@
                     </div>
                         @if(count($orders) > 0)
                             <div class="p-2">
-                                <a href="/purchasing/report/download/{{ $default_branch }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
+                                <a href="/purchasing-manager/report/download/{{ $default_branch }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
                             </div>
                         @endif
                 </div>

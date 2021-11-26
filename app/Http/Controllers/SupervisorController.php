@@ -40,6 +40,7 @@ class SupervisorController extends Controller
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+            ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
         })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -104,6 +105,7 @@ class SupervisorController extends Controller
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
 
@@ -112,6 +114,7 @@ class SupervisorController extends Controller
             $orderHeads =  OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
     
@@ -188,9 +191,14 @@ class SupervisorController extends Controller
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 6 month
-        $orderHeads = OrderHead::with('supplier')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+        $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
+            $query->where('status', 'like', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', 'Item Delivered By Supplier');
+        })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('supervisor.supervisorReport', compact('orderHeads'));
+        return view('supervisor.supervisorReport', compact('orders'));
     }
 
     public function downloadReport(Excel $excel){

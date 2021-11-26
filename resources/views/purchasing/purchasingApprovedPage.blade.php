@@ -133,8 +133,16 @@
                             <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn">
-                                    <option value="10">PPN</option>
-                                    <option value="0">Non - PPN</option>
+                                    <option value="10" 
+                                        @if($orderHeads->ppn == 10)
+                                            {{ 'selected' }}
+                                        @endif
+                                    >PPN</option>
+                                    <option value="0"
+                                        @if($orderHeads->ppn == 0)
+                                            {{ 'selected' }}
+                                        @endif
+                                    >Non - PPN</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -143,7 +151,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="{{ $orderHeads -> discount }}">
                                 </div>
                             </div>
                             <div class="form-group">

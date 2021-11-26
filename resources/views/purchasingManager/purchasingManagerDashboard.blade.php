@@ -15,42 +15,42 @@
                     <h5>Cabang</h5>
                     <select name="cabang" class="form-select" onchange="window.location = this.value;">
                         <option selected disabled>Pilih Cabang</option>
-                        <option value="" 
+                        <option value="/purchasing-manager/dashboard/Jakarta" 
                             @php
                                 if($default_branch == 'Jakarta'){
                                     echo('selected');
                                 }
                             @endphp
                         >Jakarta</option>
-                        <option value=""
+                        <option value="/purchasing-manager/dashboard/Banjarmasin"
                             @php
                                 if($default_branch == 'Banjarmasin'){
                                     echo('selected');
                                 }
                             @endphp
                         >Banjarmasin</option>
-                        <option value=""
+                        <option value="/purchasing-manager/dashboard/Samarinda"
                             @php
                                 if($default_branch == 'Samarinda'){
                                     echo('selected');
                                 }
                             @endphp
                         >Samarinda</option>
-                        <option value=""
+                        <option value="/purchasing-manager/dashboard/Bunati"
                             @php
                                 if($default_branch == 'Bunati'){
                                     echo('selected');
                                 }
                             @endphp
                         >Bunati</option>
-                        <option value=""
+                        <option value="/purchasing-manager/dashboard/Babelan"
                             @php
                                 if($default_branch == 'Babelan'){
                                     echo('selected');
                                 }
                             @endphp
                         >Babelan</option>
-                        <option value=""
+                        <option value="/purchasing-manager/dashboard/Berau"
                             @php
                                 if($default_branch == 'Berau'){
                                     echo('selected');
@@ -232,8 +232,8 @@
                             </div>
                         </form>
                         <div>
-                            <a href="/purchasing/completed-order/{{ $default_branch }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
-                            <a href="/purchasing/in-progress-order/{{ $default_branch }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                            <a href="/purchasing-manager/completed-order/{{ $default_branch }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
+                            <a href="/purchasing-manager/in-progress-order/{{ $default_branch }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
                         </div>
                     </div>
 
@@ -261,7 +261,7 @@
                                         <td>{{ $oh -> status }}</td>
                                     @endif
                                     <td>
-                                        @if(strpos($oh -> status, 'Rejected By Purchasing') !== false)
+                                        @if(strpos($oh -> status, 'Rejected By Purchasing') !== false || strpos($oh -> status, 'Rechecked') !== false)
                                             {{ $oh -> reason }}
                                         @else
                                             {{ $oh -> descriptions }}
@@ -270,8 +270,8 @@
                                     <td>
                                         {{-- Modal button for order details --}}
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
-                                            <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
+                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Purchasing Manager') !== false || strpos($oh -> status, 'Rechecked') !== false)
+                                            <a href="/purchasing-manager/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -288,58 +288,58 @@
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
-                    <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-danger">
-                                    <div class="d-flex justify-content-around">
-                                        <h5><span style="color: white">Order : {{ $o->order_id }}</span></h5>
-                                        <h5 class="ml-5"><span style="color: white">Processed By : {{ $o->approvedBy }}</span></h5>
-                                    </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <div class="d-flex justify-content-around">
+                                    <h5><span style="color: white">Order : {{ $o->order_id }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $o->approvedBy }}</span></h5>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="d-flex justify-content-around">
-                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
-                                        <h5>Nomor PO : {{ $o -> noPo }}</h5>
-                                    </div>
-                                    <table class="table">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Item Barang</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Accepted Quantity</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Note</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($orderDetails as $od)
-                                                @if($od -> orders_id == $o -> id)
-                                                    <tr>
-                                                        <td><strong>{{ $od -> item -> itemName }}</strong></td>
-                                                        <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                        <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
-                                                        <td>{{ $od -> department }}</td>
-                                                        <td>{{ $od -> note }}</td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div> 
-                                <div class="modal-footer">
-                                    {{-- Check if the order is rejected, then do not show the approve & reject button --}}
-                                    @if(strpos($o -> status, 'In Progress By Purchasing Manager') !== false)
-                                        <a href="/purchasing-manager/order/{{ $o -> id }}/approve" class="btn btn-primary">Review Order</a>
-                                    @endif
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex justify-content-around">
+                                    <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                    <h5>Nomor PO : {{ $o -> noPo }}</h5>
                                 </div>
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Item Barang</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Accepted Quantity</th>
+                                            <th scope="col">Department</th>
+                                            <th scope="col">Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($orderDetails as $od)
+                                            @if($od -> orders_id == $o -> id)
+                                                <tr>
+                                                    <td><strong>{{ $od -> item -> itemName }}</strong></td>
+                                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                    <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
+                                                    <td>{{ $od -> department }}</td>
+                                                    <td>{{ $od -> note }}</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div> 
+                            <div class="modal-footer">
+                                {{-- Check if the order is rejected, then do not show the approve & reject button --}}
+                                @if(strpos($o -> status, 'In Progress By Purchasing Manager') !== false)
+                                    <a href="/purchasing-manager/order/{{ $o -> id }}/approve" class="btn btn-primary">Review Order</a>
+                                @endif
                             </div>
                         </div>
                     </div>
+                </div>
             @endforeach
             
             {{-- Modal for edit supplier ratings --}}

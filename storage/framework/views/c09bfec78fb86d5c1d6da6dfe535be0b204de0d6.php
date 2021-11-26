@@ -205,8 +205,18 @@ unset($__errorArgs, $__bag); ?>
                             <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn">
-                                    <option value="10">PPN</option>
-                                    <option value="0">Non - PPN</option>
+                                    <option value="10" 
+                                        <?php if($orderHeads->ppn == 10): ?>
+                                            <?php echo e('selected'); ?>
+
+                                        <?php endif; ?>
+                                    >PPN</option>
+                                    <option value="0"
+                                        <?php if($orderHeads->ppn == 0): ?>
+                                            <?php echo e('selected'); ?>
+
+                                        <?php endif; ?>
+                                    >Non - PPN</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -215,7 +225,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="<?php echo e($orderHeads -> discount); ?>">
                                 </div>
                             </div>
                             <div class="form-group">

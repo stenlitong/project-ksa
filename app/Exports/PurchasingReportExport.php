@@ -43,8 +43,31 @@ class PurchasingReportExport implements FromQuery, WithHeadings, ShouldAutoSize,
         // Find order from logistic role but with different setup with the goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', $this->default_branch)->pluck('users.id');
         
-        // Find all the items that has been approved from the user | last 30 days only
-        return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', $this->default_branch)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+        // Report for each role is different, adjust the report based on the auth role
+        if(Auth::user()->hasRole('logistic')){
+
+            // Find all the items that has been approved from the user | last 30 days only
+            return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', $this->default_branch)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+
+        }elseif(Auth::user()->hasRole('supervisor') or Auth::user()->hasRole('supervisorLogisticMaster')){
+
+            // Find all the items that has been approved from the user | last 30 days only
+            return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', $this->default_branch)->where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                    ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
+                    ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                    ->orWhere('status', 'like', 'Item Delivered By Supplier');
+            })->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+
+        }elseif(Auth::user()->hasRole('purchasing') or Auth::user()->hasRole('purchasingManager')){
+
+            // Find all the items that has been approved from the user | last 30 days only
+            return OrderHead::join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', $this->default_branch)->where(function($query){
+                $query->where('status', 'like', 'Order Completed (Logistic)')
+                    ->orWhere('status', 'like', 'Item Delivered By Supplier');
+            })->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'suppliers.supplierName', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+
+        }
     }
 
     public function headings(): array{

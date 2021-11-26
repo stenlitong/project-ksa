@@ -268,7 +268,7 @@ unset($__errorArgs, $__bag); ?>
                                 <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><strong><?php echo e($oh -> order_id); ?></strong></td>
-                                    <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
+                                    <?php if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
                                         <td style="color: red; font-weight: bold"><?php echo e($oh -> status); ?></td>
                                     <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
                                         <td style="color: green; font-weight: bold"><?php echo e($oh -> status); ?></td>
@@ -278,7 +278,7 @@ unset($__errorArgs, $__bag); ?>
                                         <td><?php echo e($oh -> status); ?></td>
                                     <?php endif; ?>
                                     <td>
-                                        <?php if(strpos($oh -> status, 'Rejected By Purchasing') !== false): ?>
+                                        <?php if(strpos($oh -> status, 'Rejected By Purchasing') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
                                             <?php echo e($oh -> reason); ?>
 
                                         <?php else: ?>
@@ -289,7 +289,7 @@ unset($__errorArgs, $__bag); ?>
                                     <td>
                                         
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                        <?php if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
+                                        <?php if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
                                             <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         <?php endif; ?>
                                     </td>
@@ -357,6 +357,8 @@ unset($__errorArgs, $__bag); ?>
                                         
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
                                         <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
+                                    <?php elseif(strpos($o -> status, 'Rechecked') !== false): ?>
+                                        <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Review Order</a>
                                     <?php endif; ?>
                                 </div>
                             </div>

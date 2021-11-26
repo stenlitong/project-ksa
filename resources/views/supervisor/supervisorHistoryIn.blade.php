@@ -31,7 +31,6 @@
                                 <th scope="col">Qty</th>
                                 <th scope="col">Satuan</th>
                                 <th scope="col">Golongan</th>
-                                <th scope="col">Nama Supplier</th>
                                 <th scope="col">Note</th>
                             </tr>
                             </thead>
@@ -45,7 +44,6 @@
                                         <td>{{ $oh -> quantity}}</td>
                                         <td>{{ $oh -> item -> unit}}</td>
                                         <td>{{ $oh -> golongan}}</td>
-                                        <td>{{ $oh -> supplierName}}</td>
                                         <td>{{ $oh -> note}}</td>
                                     </tr>
                                 @endforeach

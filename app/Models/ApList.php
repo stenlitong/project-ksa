@@ -17,6 +17,10 @@ class ApList extends Model
     }
 
     public function orderHead(){
-        return $this->belongsTo(OrderHead::class);
+        return $this->belongsTo(OrderHead::class, 'order_id');
+    }
+
+    public function apListDetail(){
+        return $this->hasMany(ApListDetail::class);
     }
 }

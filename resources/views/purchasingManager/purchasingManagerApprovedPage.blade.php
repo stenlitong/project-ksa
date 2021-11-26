@@ -10,17 +10,11 @@
 
                 <h2 class="mt-3" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
                 
-                @if(session('status'))
-                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                        {{ session('status') }}
-                    </div>
-                @endif
-                
-                @if(session('error'))
+                @error('reason')
                     <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        {{ session('error') }}
+                        Alasan Invalid
                     </div>
-                @endif
+                @enderror
                 
                 <div class="row mt-4">
                     <div class="col">
@@ -52,7 +46,7 @@
                             if($orderHeads -> ppn == 10){
                                 $ppn_val = 'PPN (10%)';
                             }else{
-                                $ppb_val = 'NON PPN';
+                                $ppn_val = 'NON PPN';
                             }
                         @endphp
                         <div class="form-group">
@@ -73,12 +67,12 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-5">
-                            <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/reject">
+                            {{-- <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/reject">
                                 @method('patch')
                                 @csrf
                                 <button type="submit" class="btn btn-danger mr-3">Reject</button>
-                            </form>
-                                {{-- <a href="/purchasing-manager/order/1/approve" class="btn btn-danger mr-3">Reject</a> --}}
+                            </form> --}}
+                            <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#reject-order-{{ $orderHeads->id }}">Reject</button>
                             <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/approve">
                                 @csrf
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -129,6 +123,32 @@
                     </div>
                 </div>
             </main>
+
+            {{-- Modal Reject Order --}}
+            <div class="modal fade" id="reject-order-{{ $orderHeads -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $orderHeads -> order_id }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/reject">
+                        @csrf
+                        @method('patch')
+                        <div class="modal-body"> 
+                            <label for="reason">Alasan</label>
+                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            
     </div>
 
     <script type="text/javascript">
@@ -158,8 +178,12 @@
             text-align: center;
         }
         .alert{
-                text-align: center;
-            }
+            text-align: center;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     @endsection

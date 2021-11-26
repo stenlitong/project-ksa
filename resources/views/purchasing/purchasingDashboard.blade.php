@@ -257,7 +257,7 @@
                                 @foreach($orderHeads as $oh)
                                 <tr>
                                     <td><strong>{{ $oh -> order_id }}</strong></td>
-                                    @if(strpos($oh -> status, 'Rejected') !== false)
+                                    @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false)
                                         <td style="color: red; font-weight: bold">{{ $oh -> status}}</td>
                                     @elseif(strpos($oh -> status, 'Completed') !== false)
                                         <td style="color: green; font-weight: bold">{{ $oh -> status}}</td>
@@ -267,7 +267,7 @@
                                         <td>{{ $oh -> status }}</td>
                                     @endif
                                     <td>
-                                        @if(strpos($oh -> status, 'Rejected By Purchasing') !== false)
+                                        @if(strpos($oh -> status, 'Rejected By Purchasing') !== false || strpos($oh -> status, 'Rechecked') !== false)
                                             {{ $oh -> reason }}
                                         @else
                                             {{ $oh -> descriptions }}
@@ -276,7 +276,7 @@
                                     <td>
                                         {{-- Modal button for order details --}}
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                        @if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
+                                        @if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Rechecked') !== false)
                                             <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         @endif
                                     </td>
@@ -343,6 +343,8 @@
                                         {{-- Button to trigger modal 2 --}}
                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
                                         <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
+                                    @elseif(strpos($o -> status, 'Rechecked') !== false)
+                                        <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary">Review Order</a>
                                     @endif
                                 </div>
                             </div>

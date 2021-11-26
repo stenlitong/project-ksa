@@ -12,17 +12,7 @@
                     Dashboard
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link 
-                <?php
-                    if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
-                        echo('active');
-                    }
-                ?>" href="<?php echo e(Route('purchasing.form-ap')); ?>">
-                    <span data-feather="file"></span>
-                    Checklist AP
-                </a>
-            </li>
+            
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
