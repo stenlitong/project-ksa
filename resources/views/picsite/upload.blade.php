@@ -62,23 +62,14 @@
                                             $date = date('Y-m-28');
                                         @endphp
                                         <tr>
+                                            <td scope="col">{{ $a }}</td>
+                                            <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                             @foreach ($document as $doc )
-                                            @if (empty($doc->$time_upload))
-                                                <td scope="col">{{ $a }}</td>
-                                                <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                                <td> </td>
-                                                <td> </td>
-                                                <td> </td>
-                                            <td scope="col" id="duetime1">{{$date}}</td> 
-                                            @else
-                                                <td scope="col">{{ $a }}</td>
-                                                <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                                 <td scope="col" id="time1">{{$doc->$time_upload}}</td> 
                                                 <td scope="col" id="status1">{{$doc->$stats}}</td>
                                                 <td scope="col" id="reason1">{{$doc->$reason}}</td>
-                                                <td scope="col" id="duetime1">{{$date}}</td> 
-                                                @endif
-                                            @endforeach
+                                                @endforeach
+                                            <td scope="col" id="duetime1">{{$date}}</td> 
                                             @if (empty($doc->$stats))
                                                 <td scope="col">
                                                     <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
@@ -117,10 +108,7 @@
                                                     <td scope="col" id="status">{{$d->$stats}}</td>                                      
                                                     <td scope="col" id="reason">{{$d->$reason}}</td>                                        
                                                 @endforeach
-                                                @if (empty($documentberau->$time_upload))
-                                        
-                                                @endif
-                                                    <td scope="col" id="duetime1">{{$date}}</td> 
+                                                <td scope="col" id="duetime1">{{$date}}</td> 
                                                 @if (empty($d->$stats))
                                                 <td scope="col">
                                                     <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
@@ -162,9 +150,6 @@
                                         <td scope="col" id="status">{{$b->$stats}}</td>                                      
                                         <td scope="col" id="reason">{{$b->$reason}}</td>                                        
                                         @endforeach
-                                        @if (empty($documentbanjarmasin->$time_upload))
-                                        
-                                        @endif
                                         <td scope="col" id="duetime1">{{$date}}</td> 
                                         @if (empty($b->$stats))
                                             <td scope="col">
@@ -208,10 +193,7 @@
                                                 <td scope="col" id="status">{{$s->$stats}}</td>                                      
                                                 <td scope="col" id="reason">{{$s->$reason}}</td>                                        
                                             @endforeach
-                                            @if (empty($documentsamarinda->$time_upload))
-                                        
-                                            @endif
-                                                <td scope="col" id="duetime1">{{$date}}</td> 
+                                            <td scope="col" id="duetime1">{{$date}}</td> 
                                             @if (empty($s->$stats))
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 

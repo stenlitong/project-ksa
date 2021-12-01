@@ -131,6 +131,7 @@
                         </tr>
                         @else
                         <tr>
+                            <td scope="col">{{ $d }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$d->cabang}}</td>                                        
                             <td scope="col" id="time">{{$d ->$time_upload}}</td>                                        
@@ -196,6 +197,7 @@
                                       'Invoice BKI','Safe Manning',);
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
+                            $date = date('Y-m-28');
                        @endphp
                         @if(empty($b->$stats))
                         <tr>
@@ -203,11 +205,12 @@
                         </tr>
                         @else
                         <tr>
+                            <td scope="col">{{ $b }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$b->cabang}}</td>                                        
                             <td scope="col" id="time">{{$b ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$b->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$b->due_time}}</td> 
+                            <td scope="col" id="duetime1">{{$date}}</td> 
                             <td scope="col">
                                 <a class="btn btn-primary bg-success" href="#" role="button">approve</a>
                                 {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="reject-{{ $doc->id }}">
@@ -277,11 +280,12 @@
                         </tr>
                         @else
                         <tr>
+                            <td scope="col">{{ $s }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$s->cabang}}</td>                                        
                             <td scope="col" id="time">{{$s ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$s->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$s->due_time}}</td> 
+                            <td scope="col" id="duetime1">{{$date}}</td> 
                             <td scope="col">
                                 <a class="btn btn-primary bg-success" href="#" role="button">approve</a>
                                 {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="reject-{{ $doc->id }}">
