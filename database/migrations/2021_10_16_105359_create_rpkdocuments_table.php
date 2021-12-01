@@ -54,8 +54,6 @@ class CreateRpkdocumentsTable extends Migration
             $table->string('reason7')->nullable();
             $table->string('surat_kapal')->nullable();
             
-            
-            $table->string('due_time' , 25)->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

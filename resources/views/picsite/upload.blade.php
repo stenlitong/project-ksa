@@ -11,15 +11,29 @@
                 <div class="jumbotron jumbotron-fluid" >
                     <div class="container">
                       <h1 class="display-4">Upload your Fund Request Form</h1>
-                        <p class="lead">please only upload file with .zip format only .
+                        <p class="lead">please only upload file with .PDF format only .
                           <br>
                             Please upload your document request & fund request form  !
                         </p>
                         <br>
                         <button class="btn btn-danger" id="topsubmit" style="margin-left: 80%; width: 20%;" onClick="">Submit</button>
+                        @if($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div class="alert error alert-danger" id="error">{{ $error }}
+                                    <strong>    Please check the file is a PDF and Size 3MB.</strong>
+                                </div>
+                            @endforeach
+                        @endif
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block" id="success">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
+
                         <table class="table"style="margin-top: 1%">
                             <thead class="thead-dark" >
                                 <tr>
+                                    <th scope="col">No.</th>
                                     <th scope="col">Nama File</th>
                                     <th scope="col">Upload Time</th>
                                     <th scope="col">status</th>
@@ -45,16 +59,27 @@
                                             $time_upload ="time_upload".$a;
                                             $stats ="status".$a;
                                             $reason ="reason".$a;
+                                            $date = date('Y-m-28');
                                         @endphp
                                         <tr>
-                                            <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                             @foreach ($document as $doc )
-                                            <td scope="col" id="time1">{{$doc->$time_upload}}</td> 
-                                            <td scope="col" id="status1">{{$doc->$stats}}</td>
-                                            <td scope="col" id="reason1">{{$doc->$reason}}</td>
-                                            <td scope="col" id="duetime1">{{$doc->due_time}}</td> 
+                                            @if (empty($doc->$time_upload))
+                                                <td scope="col">{{ $a }}</td>
+                                                <td scope="col" id="nama">{{$name[$a-1]}}</td>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> </td>
+                                            <td scope="col" id="duetime1">{{$date}}</td> 
+                                            @else
+                                                <td scope="col">{{ $a }}</td>
+                                                <td scope="col" id="nama">{{$name[$a-1]}}</td>
+                                                <td scope="col" id="time1">{{$doc->$time_upload}}</td> 
+                                                <td scope="col" id="status1">{{$doc->$stats}}</td>
+                                                <td scope="col" id="reason1">{{$doc->$reason}}</td>
+                                                <td scope="col" id="duetime1">{{$date}}</td> 
+                                                @endif
                                             @endforeach
-                                            @if (empty($document->$stats))
+                                            @if (empty($doc->$stats))
                                                 <td scope="col">
                                                     <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
                                                     {{-- <a href="/picsite/view" target="_blank">view</a> --}}
@@ -82,15 +107,20 @@
                                         $time_upload ="time_upload".$a;
                                         $stats ="status".$a;
                                         $reason ="reason".$a;
+                                        $date = date('Y-m-28');
                                     @endphp
-                                            <tr>   
+                                            <tr>
+                                                <td scope="col">{{$a}}</td>   
                                                 <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                                 @foreach ($documentberau as $d )                           
                                                     <td scope="col" id="time">{{$d->$time_upload}}</td>                                        
                                                     <td scope="col" id="status">{{$d->$stats}}</td>                                      
                                                     <td scope="col" id="reason">{{$d->$reason}}</td>                                        
-                                                    <td scope="col" id="duetime1">{{$d->due_time}}</td> 
                                                 @endforeach
+                                                @if (empty($documentberau->$time_upload))
+                                        
+                                                @endif
+                                                    <td scope="col" id="duetime1">{{$date}}</td> 
                                                 @if (empty($d->$stats))
                                                 <td scope="col">
                                                     <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
@@ -121,17 +151,22 @@
                                         $time_upload ="time_upload".$a;
                                         $stats ="status".$a;
                                         $reason ="reason".$a;
+                                        $date = date('Y-m-28');
                                     @endphp
                                     <tr>   
+                                        <td scope="col">{{ $a }}</td>
                                         <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                         @foreach ($documentbanjarmasin as $b )
                                         {{-- <td>PNBP Sertifikat Konstruksi</td> --}}                                
                                         <td scope="col" id="time">{{$b->$time_upload}}</td>                                        
                                         <td scope="col" id="status">{{$b->$stats}}</td>                                      
                                         <td scope="col" id="reason">{{$b->$reason}}</td>                                        
-                                        <td scope="col" id="duetime1">{{$b->due_time}}</td> 
                                         @endforeach
-                                        @if (empty($documentbanjarmasin->$stats))
+                                        @if (empty($documentbanjarmasin->$time_upload))
+                                        
+                                        @endif
+                                        <td scope="col" id="duetime1">{{$date}}</td> 
+                                        @if (empty($b->$stats))
                                             <td scope="col">
                                                 <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
                                                 {{-- <a href="/picsite/view" target="_blank">view</a> --}}
@@ -163,16 +198,21 @@
                                         $time_upload ="time_upload".$a;
                                         $stats ="status".$a;
                                         $reason ="reason".$a;
+                                        $date = date('Y-m-28');
                                     @endphp
-                                        <tr>   
+                                        <tr>
+                                            <td scope="col">{{ $a }}</td>   
                                             <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                             @foreach ($documentsamarinda as $s )                           
                                                 <td scope="col" id="time">{{$s->$time_upload}}</td>                                        
                                                 <td scope="col" id="status">{{$s->$stats}}</td>                                      
                                                 <td scope="col" id="reason">{{$s->$reason}}</td>                                        
-                                                <td scope="col" id="duetime1">{{$s->due_time}}</td> 
                                             @endforeach
-                                            @if (empty($documentsamarinda->$stats))
+                                            @if (empty($documentsamarinda->$time_upload))
+                                        
+                                            @endif
+                                                <td scope="col" id="duetime1">{{$date}}</td> 
+                                            @if (empty($s->$stats))
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
                                                 </td>  
@@ -184,9 +224,9 @@
                                     @endif
                                 </tbody>   
                         </table>
-                        @if(date("d") < 28)
+                        {{-- @if(date("d") < 28) --}}
                             <button class="btn btn-danger" id="realsubmit" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
-                         @endif
+                         {{-- @endif --}}
 
                         <script>
                             document.getElementById('topsubmit').addEventListener('click', openDialog);
@@ -194,12 +234,12 @@
                                 document.getElementById('realsubmit').click();
                             }
                         </script>
-
-                        @if($errors->any())
-                        @foreach ($errors->all() as $error)
-                            <p class="alert error">{{ $error }}</p>
-                        @endforeach
-                        @endif
+                        <script>
+                                setTimeout(function(){
+                                $("div.alert").remove();
+                                }, 5000 ); // 5 secs
+                        </script>
+                        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
                     </form>
                     </div>
                 </div>

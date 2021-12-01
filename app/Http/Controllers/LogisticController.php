@@ -162,7 +162,7 @@ class LogisticController extends Controller
         $file = $request->file('fileInput');
 
         $url = Storage::disk('s3')->url($path."/".$filename);
-        dd($url);
+        //dd($url);
 
         Storage::disk('s3')->delete($path."/".$filename);
 

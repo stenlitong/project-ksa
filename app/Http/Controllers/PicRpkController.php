@@ -60,7 +60,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
                         
                         'status1' => 'on review',
                         'surat_barang' => $pathrpk1,
@@ -86,7 +86,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status2' => 'on review',
                         'cargo_manifest'=> $pathrpk2 ,
@@ -112,7 +112,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status3' => 'on review',
                         'voyage' => $pathrpk3,
@@ -136,7 +136,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status4' => 'on review',
                         'bill_lading' => $pathrpk4,
@@ -161,7 +161,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([                   
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status5' => 'on review',
                         'gerak_kapal'=> $pathrpk5 ,
@@ -185,7 +185,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([      
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status6' => 'on review',
                         'docking' => $pathrpk6,
@@ -210,7 +210,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"), 
+                         
 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -249,7 +249,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
                         
                         'status1' => 'on review',
                         'surat_barang' => $pathrpk1,
@@ -274,7 +274,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status2' => 'on review',
                         'cargo_manifest'=> $pathrpk2 ,
@@ -299,7 +299,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status3' => 'on review',
                         'voyage' => $pathrpk3,
@@ -324,7 +324,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
                         
                         'status4' => 'on review',
                         'bill_lading' => $pathrpk4,
@@ -349,7 +349,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status5' => 'on review',
                         'gerak_kapal'=> $pathrpk5 ,
@@ -374,7 +374,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
             
                         'status6' => 'on review',
                         'docking' => $pathrpk6,
@@ -399,7 +399,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -437,7 +437,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
                         
                         'status1' => 'on review',
                         'surat_barang' => $pathrpk1,
@@ -461,7 +461,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status2' => 'on review',
                         'cargo_manifest'=> $pathrpk2 ,
@@ -485,7 +485,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status3' => 'on review',
                         'voyage' => $pathrpk3,
@@ -510,7 +510,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status4' => 'on review',
                         'bill_lading' => $pathrpk4,
@@ -536,7 +536,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([       
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status5' => 'on review',
                         'gerak_kapal'=> $pathrpk5 ,
@@ -561,7 +561,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([         
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status6' => 'on review',
                         'docking' => $pathrpk6,
@@ -586,7 +586,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([       
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -624,7 +624,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
                         
                         'status1' => 'on review',
                         'surat_barang' => $pathrpk1,
@@ -649,7 +649,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status2' => 'on review',
                         'cargo_manifest'=> $pathrpk2 ,
@@ -675,7 +675,7 @@ class PicRpkController extends Controller
                         'status3' => 'on review',
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'voyage' => $pathrpk3,
                         'time_upload3' => date("Y-m-d"),
@@ -699,7 +699,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status4' => 'on review',
                         'bill_lading' => $pathrpk4,
@@ -724,7 +724,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status5' => 'on review',
                         'gerak_kapal'=> $pathrpk5 ,
@@ -749,7 +749,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([     
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status6' => 'on review',
                         'docking' => $pathrpk6,
@@ -773,7 +773,7 @@ class PicRpkController extends Controller
                     DB::table('rpkdocuments')->insert([     
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                        'Due_time' => "28-" . date("m-Y"),
+                        
 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),

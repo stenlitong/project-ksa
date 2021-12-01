@@ -22,6 +22,7 @@
                 <table class="table" style="margin-top: 2%">
                   <thead class="thead-dark">
                       <tr>
+                          <th scope="col">No.</th>
                           <th scope="col">Nama File</th>
                           <th scope="col">Cabang</th>
                           <th scope="col">Upload Time</th>
@@ -40,6 +41,10 @@
                                     'Surat Keterangan Persiapan Kapal');
                     $time_upload ="time_upload".$r;
                     $stats ="status".$r;
+                    $reason = "reason".$r;
+                    $date = date('Y-m-28');
+                    $approve = "approve".$r;
+                    $decline ="decline".$r;
                     @endphp
                     @if(empty($d->$stats))
                         <tr>
@@ -47,19 +52,26 @@
                         </tr>
                     @else
                     <tr>
+                        <td scope="col">{{ $r }}</td>
                         <td scope="col" id="nama">{{$nama[$r-1]}}</td>                                        
                         <td scope="col" id="cabang">{{$d->cabang}}</td>                                        
                         <td scope="col" id="time">{{$d->$time_upload}}</td>                                        
                         <td scope="col" id="status">{{$d->$stats}}</td>                                      
-                        <td scope="col" id="duetime1">{{$d->due_time}}</td> 
+                        <td scope="col" id="duetime1">{{$date}}</td> 
                         <td scope="col">
-                                <a class="btn btn-primary bg-success" href="#" role="button">approve</a>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle">
+                            <form method="POST" action="/picadmin/rpk/update-status">
+                                @csrf
+                                <input type="hidden" name='status' value={{$stats}}>
+                                <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                    <button type="submit" class="btn btn-success">approve</button>
+                            </form>
+                                
+                                <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                     Reject File
                                 </button>
-                                
+
                                 <!-- Modal -->
-                                <div class="modal fade" id="rejectTitle" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
+                                <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -69,17 +81,20 @@
                                         </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form method="POST" action="/picadmin/rpk/{{ $d ->id }}/reject">
+                                            <form method="POST" action="/picadmin/rpk/reject">
                                                 @csrf
-                                                @method('put')
+                                                <input type="hidden" name='reason' value={{$reason}}>
+                                                <input type="hidden" name='status' value={{$stats}}>
+                                                <input type="hidden" name = 'cabang' value={{$d->cabang}}>
                                                 <div class="form-group">
                                                     <label for="reason">Reason</label>
-                                                    <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
+                                                    <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
                                                 </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="submit" class="btn btn-danger">Reject File</button>
-                                        </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Reject File</button>
+                                            </div>
+                                        </form>
                                     </div>
                                     </div>
                                 </div>

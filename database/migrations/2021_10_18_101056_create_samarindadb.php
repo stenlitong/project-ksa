@@ -209,7 +209,6 @@ class CreateSamarindadb extends Migration
             $table->string('grosse_akta', 180)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('due_time', 16)->nullable();
             $table->timestamps();
         });
     }

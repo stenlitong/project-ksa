@@ -101,7 +101,6 @@ class CreateDocumentsTable extends Migration
             $table->string('status16')->nullable();
             $table->string('pnpb_sscec')->nullable();
 
-            $table->string('due_time', 25 )->nullable();
             $table->timestamps();
         });
     }

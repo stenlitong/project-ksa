@@ -40,22 +40,22 @@ class PicsiteController extends Controller
         //dd($document->created_at);
         if (Auth::user()->cabang == 'Babelan') {
             $request->validate([
-                'ufile1' => 'mimes:pdf|max:1024' ,
-                'ufile2' => 'mimes:pdf|max:1024' ,
-                'ufile3' => 'mimes:pdf|max:1024' ,
-                'ufile4' => 'mimes:pdf|max:1024' ,
-                'ufile5' => 'mimes:pdf|max:1024' , 
-                'ufile6' => 'mimes:pdf|max:1024' ,
-                'ufile7' => 'mimes:pdf|max:1024' ,
-                'ufile8' => 'mimes:pdf|max:1024' ,
-                'ufile9' => 'mimes:pdf|max:1024' ,
-                'ufile10' => 'mimes:pdf|max:1024' ,
-                'ufile11' => 'mimes:pdf|max:1024' ,
-                'ufile12' => 'mimes:pdf|max:1024' ,
-                'ufile13' => 'mimes:pdf|max:1024' ,
-                'ufile14' => 'mimes:pdf|max:1024' ,
-                'ufile15' => 'mimes:pdf|max:1024' ,
-                'ufile16' => 'mimes:pdf|max:1024' ,
+                'ufile1' => 'mimes:pdf|max:3072' ,
+                'ufile2' => 'mimes:pdf|max:3072' ,
+                'ufile3' => 'mimes:pdf|max:3072' ,
+                'ufile4' => 'mimes:pdf|max:3072' ,
+                'ufile5' => 'mimes:pdf|max:3072' , 
+                'ufile6' => 'mimes:pdf|max:3072' ,
+                'ufile7' => 'mimes:pdf|max:3072' ,
+                'ufile8' => 'mimes:pdf|max:3072' ,
+                'ufile9' => 'mimes:pdf|max:3072' ,
+                'ufile10' => 'mimes:pdf|max:3072' ,
+                'ufile11' => 'mimes:pdf|max:3072' ,
+                'ufile12' => 'mimes:pdf|max:3072' ,
+                'ufile13' => 'mimes:pdf|max:3072' ,
+                'ufile14' => 'mimes:pdf|max:3072' ,
+                'ufile15' => 'mimes:pdf|max:3072' ,
+                'ufile16' => 'mimes:pdf|max:3072' ,
             ]);
 
             if ($request->hasFile('ufile1')) {
@@ -75,7 +75,6 @@ class PicsiteController extends Controller
                     documents::create([
                         //babelan
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         'status1' => 'on review',
                         'time_upload1' => date("Y-m-d"),
@@ -100,7 +99,6 @@ class PicsiteController extends Controller
                 }else{
                     documents::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'sertifikat_garis_muat' => $pathbabelan2,
@@ -127,7 +125,6 @@ class PicsiteController extends Controller
                 }else {
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'penerbitan_sekali_jalan' => $pathbabelan3,
@@ -154,7 +151,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         
                         'sertifikat_safe_manning'=> $pathbabelan4,
@@ -180,7 +176,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'endorse_surat_laut'=> $pathbabelan5,
@@ -206,7 +201,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'perpanjangan_sertifikat_sscec'=> $pathbabelan6,
@@ -232,7 +226,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'perpanjangan_sertifikat_p3k'=> $pathbabelan7,
@@ -259,7 +252,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'biaya_laporan_dok'=> $pathbabelan8,
@@ -285,7 +277,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'pnpb_sertifikat_keselamatan'=> $pathbabelan9,
@@ -312,7 +303,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'pnpb_sertifikat_garis_muat'=> $pathbabelan10,
@@ -339,7 +329,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'pnpb_surat_laut'=> $pathbabelan11,
@@ -366,7 +355,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'sertifikat_snpp'=> $pathbabelan12,
@@ -393,7 +381,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'sertifikat_anti_teritip'=> $pathbabelan13,
@@ -422,7 +409,6 @@ class PicsiteController extends Controller
                 }else {
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'pnbp_snpp&snat'=> $pathbabelan14,
@@ -448,7 +434,6 @@ class PicsiteController extends Controller
                 }else{
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         //babelan
                         'biaya_survey'=> $pathbabelan15,
@@ -465,7 +450,7 @@ class PicsiteController extends Controller
                 $request->file('ufile16')->storeAs($tujuan_upload, $name16.'.pdf');
                 $pathbabelan16 = Storage::path('babelan/pnpb_sscec/'.$file16->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
 
-                if (documents::where('cabang', 'Babelan')->exists()){
+                if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
                     DB::table('documents')->where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sscec'=> $pathbabelan16,
@@ -475,7 +460,6 @@ class PicsiteController extends Controller
                 }else {
                     DB::table('documents')->insert([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'pnpb_sscec'=> $pathbabelan16,
@@ -485,38 +469,38 @@ class PicsiteController extends Controller
                 }
             }
             
-            return redirect('/picsite/upload')->with('message', 'Upload Success!');
+            return redirect('/picsite/upload')->with('success', 'Upload Success!');
         }
 
         if (Auth::user()->cabang == 'Berau') {
             // dd($request);
             $request->validate([
-                'beraufile1'=> 'mimes:pdf|max:1024' ,
-                'beraufile2'=> 'mimes:pdf|max:1024' ,
-                'beraufile3'=> 'mimes:pdf|max:1024' ,
-                'beraufile4'=> 'mimes:pdf|max:1024' ,
-                'beraufile5'=> 'mimes:pdf|max:1024' ,
-                'beraufile6'=> 'mimes:pdf|max:1024' ,
-                'beraufile7'=> 'mimes:pdf|max:1024' ,
-                'beraufile8'=> 'mimes:pdf|max:1024' ,
-                'beraufile9'=> 'mimes:pdf|max:1024' ,
-                'beraufile10'=> 'mimes:pdf|max:1024' ,
-                'beraufile11'=> 'mimes:pdf|max:1024' ,
-                'beraufile12'=> 'mimes:pdf|max:1024' ,
-                'beraufile13'=> 'mimes:pdf|max:1024' ,
-                'beraufile14'=> 'mimes:pdf|max:1024' ,
-                'beraufile15'=> 'mimes:pdf|max:1024' ,
-                'beraufile16'=> 'mimes:pdf|max:1024' ,
-                'beraufile17'=> 'mimes:pdf|max:1024' ,
-                'beraufile18'=> 'mimes:pdf|max:1024' ,
-                'beraufile19'=> 'mimes:pdf|max:1024' ,
-                'beraufile20'=> 'mimes:pdf|max:1024' , 
-                'beraufile21'=> 'mimes:pdf|max:1024' ,
-                'beraufile22'=> 'mimes:pdf|max:1024' ,
-                'beraufile23'=> 'mimes:pdf|max:1024' ,
-                'beraufile24'=> 'mimes:pdf|max:1024' , 
-                'beraufile25'=> 'mimes:pdf|max:1024' ,
-                'beraufile26'=> 'mimes:pdf|max:1024' ,
+                'beraufile1'=> 'mimes:pdf|max:3072' ,
+                'beraufile2'=> 'mimes:pdf|max:3072' ,
+                'beraufile3'=> 'mimes:pdf|max:3072' ,
+                'beraufile4'=> 'mimes:pdf|max:3072' ,
+                'beraufile5'=> 'mimes:pdf|max:3072' ,
+                'beraufile6'=> 'mimes:pdf|max:3072' ,
+                'beraufile7'=> 'mimes:pdf|max:3072' ,
+                'beraufile8'=> 'mimes:pdf|max:3072' ,
+                'beraufile9'=> 'mimes:pdf|max:3072' ,
+                'beraufile10'=> 'mimes:pdf|max:3072' ,
+                'beraufile11'=> 'mimes:pdf|max:3072' ,
+                'beraufile12'=> 'mimes:pdf|max:3072' ,
+                'beraufile13'=> 'mimes:pdf|max:3072' ,
+                'beraufile14'=> 'mimes:pdf|max:3072' ,
+                'beraufile15'=> 'mimes:pdf|max:3072' ,
+                'beraufile16'=> 'mimes:pdf|max:3072' ,
+                'beraufile17'=> 'mimes:pdf|max:3072' ,
+                'beraufile18'=> 'mimes:pdf|max:3072' ,
+                'beraufile19'=> 'mimes:pdf|max:3072' ,
+                'beraufile20'=> 'mimes:pdf|max:3072' , 
+                'beraufile21'=> 'mimes:pdf|max:3072' ,
+                'beraufile22'=> 'mimes:pdf|max:3072' ,
+                'beraufile23'=> 'mimes:pdf|max:3072' ,
+                'beraufile24'=> 'mimes:pdf|max:3072' , 
+                'beraufile25'=> 'mimes:pdf|max:3072' ,
+                'beraufile26'=> 'mimes:pdf|max:3072' ,
             ]);
             if ($request->hasFile('beraufile1')) {
                 $file1 = $request->file('beraufile1');
@@ -527,14 +511,12 @@ class PicsiteController extends Controller
                 if (documentberau::where('cabang', 'Berau')->exists()){
                     documentberau::where('cabang', 'Berau' )->update([
                     'cabang' => Auth::user()->cabang ,
-                    'status1' => 'on review',
-                    'due_time' => "28-" . date("m-Y") ,]);
+                    'status1' => 'on review',]);
 
                 }else{
                     documentberau::create([
                     'cabang' => Auth::user()->cabang ,
                     'user_id' => Auth::user()->id,
-                    'due_time' => "28-" . date("m-Y") ,
                     
                     'status1' => 'on review',
                     'time_upload1' => date("Y-m-d"),
@@ -557,7 +539,6 @@ class PicsiteController extends Controller
                     documentberau::create([       
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'jasa_urus_sertifikat' => $pathberau2,
                         'status2' => 'on review',
@@ -581,7 +562,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_sertifikat_perlengkapan' => $pathberau3,
                         'status3' => 'on review',
@@ -605,7 +585,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_sertifikat_radio' => $pathberau4,
                         'status4' => 'on review',
@@ -629,7 +608,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_sertifikat_ows' => $pathberau5,
                         'status5' => 'on review',
@@ -653,7 +631,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_garis_muat' => $pathberau6,
                         'status6' => 'on review',
@@ -677,7 +654,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_pemeriksaan_endorse_sl' => $pathberau7,
                         'status7' => 'on review',
@@ -701,7 +677,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pemeriksaan_sertifikat' => $pathberau8,
                         'status8' => 'on review',
@@ -725,7 +700,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'marine_inspektor' => $pathberau9,
                         'status9' => 'on review',
@@ -749,7 +723,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'biaya_clearance' => $pathberau10,
                         'status10' => 'on review',
@@ -773,7 +746,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_master_cable' => $pathberau11,
                         'status11' => 'on review',
@@ -797,7 +769,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'cover_deck_logbook' => $pathberau12,
                         'status12' => 'on review',
@@ -821,7 +792,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'cover_engine_logbook' => $pathberau13,
                         'status13' => 'on review',
@@ -845,7 +815,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'exibitum_dect_logbook' => $pathberau14,
                         'status14' => 'on review',
@@ -869,7 +838,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'exibitum_engine_logbook' => $pathberau9,
                         'status15' => 'on review',
@@ -893,7 +861,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'pnbp_deck_logbook' => $pathberau16,
                         'status16' => 'on review',
@@ -917,7 +884,7 @@ class PicsiteController extends Controller
                     documentberau::create([
                     'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,     
+    
                         'status17' => 'on review',
 
                         'time_upload17' => date("Y-m-d"),
@@ -941,7 +908,6 @@ class PicsiteController extends Controller
                     documentberau::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'biaya_docking' => $pathberau18,
                         'status18' => 'on review',
@@ -964,7 +930,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,   
+
 
                         'lain-lain' => $pathberau19,
                         'status19' => 'on review',
@@ -987,7 +953,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,             
+            
                         'biaya_labuh_tambat' => $pathberau20,
    
                         'status20' => 'on review',
@@ -1010,7 +976,6 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'biaya_rambu' => $pathberau21,
                         'status21' => 'on review',
@@ -1033,7 +998,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,   
+
 
                         'pnbp_pemeriksaan' => $pathberau22,
                         'status22' => 'on review',
@@ -1056,7 +1021,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,   
+
 
                         'sertifikat_bebas_sanitasi&p3k' => $pathberau23,
                         'status23' => 'on review',
@@ -1079,7 +1044,6 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,
 
                         'sertifikat_garis_muat' => $pathberau24,
                         'status24' => 'on review',
@@ -1102,7 +1066,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,      
+    
 
                         'ijin_sekali_jalan' => $pathberau25,
                         'status25' => 'on review',
@@ -1125,7 +1089,7 @@ class PicsiteController extends Controller
                     documentberau::create([                   
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
-                        'due_time' => "28-" . date("m-Y") ,        
+    
 
                         'pnpb_sscec' => $pathberau26,
                         'status26' => 'on review',
@@ -1134,43 +1098,43 @@ class PicsiteController extends Controller
                 }
             }
  
-            return redirect('/picsite/upload')->with('message', 'Upload success!');
+            return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
             
         if (Auth::user()->cabang == 'Banjarmasin') {
             $request->validate([
                 //Banjarmasin
-                'banjarmasinfile1'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile2'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile3'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile4'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile5'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile6'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile7'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile8'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile9'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile10'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile11'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile12'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile13'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile14'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile15'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile16'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile17'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile18'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile19'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile20'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile21'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile22'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile23'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile24'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile25'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile26'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile27'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile28'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile29'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile30'=> 'mimes:pdf|max:1024' ,
-                'banjarmasinfile31'=> 'mimes:pdf|max:1024' ,
+                'banjarmasinfile1'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile2'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile3'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile4'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile5'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile6'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile7'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile8'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile9'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile10'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile11'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile12'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile13'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile14'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile15'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile16'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile17'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile18'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile19'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile20'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile21'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile22'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile23'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile24'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile25'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile26'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile27'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile28'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile29'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile30'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile31'=> 'mimes:pdf|max:3072' ,
             ]);
             if ($request->hasFile('banjarmasinfile1')) {
                 $file1 = $request->file('banjarmasinfile1');
@@ -1186,7 +1150,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status1' => 'on review',
@@ -1209,7 +1172,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status2' => 'on review',
@@ -1232,7 +1194,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status3' => 'on review',
@@ -1255,7 +1216,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status4' => 'on review',
@@ -1278,7 +1238,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status5' => 'on review',
@@ -1301,7 +1260,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status6' => 'on review',
@@ -1324,7 +1282,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status7' => 'on review',
@@ -1347,7 +1304,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status8' => 'on review',
@@ -1370,7 +1326,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                        'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status9' => 'on review',
@@ -1393,7 +1348,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status10' => 'on review',
@@ -1416,7 +1370,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status11' => 'on review',
@@ -1439,7 +1392,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status12' => 'on review',
@@ -1462,7 +1414,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status13' => 'on review',
@@ -1485,7 +1436,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status14' => 'on review',
@@ -1508,7 +1458,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status15' => 'on review',
@@ -1531,7 +1480,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status16' => 'on review',
@@ -1554,7 +1502,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status17' => 'on review',
@@ -1577,7 +1524,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status18' => 'on review',
@@ -1600,7 +1546,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status19' => 'on review',
@@ -1623,7 +1568,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status20' => 'on review',
@@ -1646,7 +1590,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status21' => 'on review',
@@ -1669,7 +1612,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status22' => 'on review',
@@ -1692,7 +1634,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status23' => 'on review',
@@ -1715,7 +1656,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status24' => 'on review',
@@ -1738,7 +1678,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status25' => 'on review',
@@ -1761,7 +1700,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status26' => 'on review',
@@ -1784,7 +1722,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status27' => 'on review',
@@ -1807,7 +1744,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status28' => 'on review',
@@ -1830,7 +1766,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status29' => 'on review',
@@ -1853,7 +1788,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status30' => 'on review',
@@ -1876,7 +1810,6 @@ class PicsiteController extends Controller
                     }else{
                         documentbanjarmasin::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status31' => 'on review',
@@ -1885,50 +1818,50 @@ class PicsiteController extends Controller
                     ]);
                 }
             }
-            return redirect('/picsite/upload')->with('message', 'Upload success!');
+            return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
             
         if (Auth::user()->cabang == 'Samarinda') {
                 //Samarinda
                 $request->validate([
-                    'samarindafile1' => 'mimes:pdf|max:1024' , 
-                    'samarindafile2' => 'mimes:pdf|max:1024' ,
-                    'samarindafile3' => 'mimes:pdf|max:1024' ,
-                    'samarindafile4' => 'mimes:pdf|max:1024' ,
-                    'samarindafile5' => 'mimes:pdf|max:1024' ,
-                    'samarindafile6' => 'mimes:pdf|max:1024' ,
-                    'samarindafile7' => 'mimes:pdf|max:1024' ,
-                    'samarindafile8' => 'mimes:pdf|max:1024' ,
-                    'samarindafile9' => 'mimes:pdf|max:1024' ,
-                    'samarindafile10'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile11'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile12'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile13'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile14'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile15'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile16'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile17'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile18'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile19'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile20'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile21'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile22'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile23'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile24'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile25'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile26'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile27'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile28'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile29'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile30'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile31'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile32'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile33'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile34'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile35'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile36'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile37'=> 'mimes:pdf|max:1024' ,
-                    'samarindafile38'=> 'mimes:pdf|max:1024' ,
+                    'samarindafile1' => 'mimes:pdf|max:3072' , 
+                    'samarindafile2' => 'mimes:pdf|max:3072' ,
+                    'samarindafile3' => 'mimes:pdf|max:3072' ,
+                    'samarindafile4' => 'mimes:pdf|max:3072' ,
+                    'samarindafile5' => 'mimes:pdf|max:3072' ,
+                    'samarindafile6' => 'mimes:pdf|max:3072' ,
+                    'samarindafile7' => 'mimes:pdf|max:3072' ,
+                    'samarindafile8' => 'mimes:pdf|max:3072' ,
+                    'samarindafile9' => 'mimes:pdf|max:3072' ,
+                    'samarindafile10'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile11'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile12'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile13'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile14'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile15'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile16'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile17'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile18'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile19'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile20'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile21'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile22'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile23'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile24'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile25'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile26'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile27'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile28'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile29'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile30'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile31'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile32'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile33'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile34'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile35'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile36'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile37'=> 'mimes:pdf|max:3072' ,
+                    'samarindafile38'=> 'mimes:pdf|max:3072' ,
                 ]);
                 if ($request->hasFile('samarindafile1')) {
                     $file1 = $request->file('samarindafile1');
@@ -1944,7 +1877,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status1' => 'on review',
@@ -1966,7 +1899,6 @@ class PicsiteController extends Controller
                 }else{
                     documentsamarinda::create([
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                                 
                         'status2' => 'on review',
@@ -1989,7 +1921,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status3' => 'on review',
@@ -2012,7 +1944,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status4' => 'on review',
@@ -2035,7 +1967,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status5' => 'on review',
@@ -2058,7 +1990,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status6' => 'on review',
@@ -2081,7 +2013,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status7' => 'on review',
@@ -2104,7 +2036,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
                                 
                             'status8' => 'on review',
@@ -2127,7 +2059,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
                                 
                                 'status9' => 'on review',
@@ -2150,7 +2082,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status10' => 'on review',
@@ -2173,7 +2105,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status11' => 'on review',
@@ -2196,7 +2128,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
                                 'status12' => 'on review',
 
@@ -2219,7 +2151,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status13' => 'on review',
@@ -2242,7 +2174,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status14' => 'on review',
@@ -2265,7 +2197,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status15' => 'on review',
@@ -2288,7 +2220,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status16' => 'on review',
@@ -2311,7 +2243,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status17' => 'on review',
@@ -2334,7 +2266,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status18' => 'on review',
@@ -2357,7 +2289,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status19' => 'on review',
@@ -2380,7 +2312,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status20' => 'on review',
@@ -2403,7 +2335,6 @@ class PicsiteController extends Controller
                 }else{
                     documentsamarinda::create([  
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
 
                         'status21' => 'on review',
@@ -2426,7 +2357,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status22' => 'on review',
@@ -2449,7 +2380,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status23' => 'on review',
@@ -2472,7 +2403,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status24' => 'on review',
@@ -2495,7 +2426,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status25' => 'on review',
@@ -2518,7 +2449,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status26' => 'on review',
@@ -2541,7 +2472,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status27' => 'on review',
@@ -2564,7 +2495,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status28' => 'on review',
@@ -2587,7 +2518,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status29' => 'on review',
@@ -2610,7 +2541,6 @@ class PicsiteController extends Controller
                 }else{
                     documentsamarinda::create([  
                         'cabang' => Auth::user()->cabang ,
-                        'due_time' => "28-" . date("m-Y") ,
                         'user_id' => Auth::user()->id,
                         
                         'status30' => 'on review',
@@ -2632,7 +2562,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status31' => 'on review',
@@ -2654,7 +2584,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status32' => 'on review',
@@ -2676,7 +2606,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status33' => 'on review',
@@ -2698,7 +2628,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status34' => 'on review',
@@ -2720,7 +2650,7 @@ class PicsiteController extends Controller
                         }else{
                             documentsamarinda::create([  
                                 'cabang' => Auth::user()->cabang ,
-                                'due_time' => "28-" . date("m-Y") ,
+    
                                 'user_id' => Auth::user()->id,
 
                                 'status35' => 'on review',
@@ -2742,7 +2672,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status36' => 'on review',
@@ -2764,7 +2694,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status37' => 'on review',
@@ -2786,7 +2716,7 @@ class PicsiteController extends Controller
                     }else{
                         documentsamarinda::create([  
                             'cabang' => Auth::user()->cabang ,
-                            'due_time' => "28-" . date("m-Y") ,
+
                             'user_id' => Auth::user()->id,
 
                             'status38' => 'on review',
@@ -2794,7 +2724,7 @@ class PicsiteController extends Controller
                             'grosse_akta' => $pathsamarinda38,]);
                         }
                 }
-            return redirect('/picsite/upload')->with('message', 'Upload success!');
+            return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
         
 //email to user
@@ -2806,7 +2736,7 @@ class PicsiteController extends Controller
     // Mail::to(Auth::user()->email)->send(new Gmail($details));
 
         return view('picsite.upload',compact('document', 'documentberau' , 'documentsamarinda' , 'documentbanjarmasin'));
-        // return redirect('picsite/upload')->with('message', 'Upload success!');
+        // return redirect('picsite/upload')->with('success', 'Upload success!');
     }
     
     public function view(){

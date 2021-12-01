@@ -173,7 +173,6 @@ class CreateBanjarmasindb extends Migration
             $table->string('reason31', 200)->nullable();
             $table->string('safe_manning')->nullable();
 
-            $table->string('due_time' , 20)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

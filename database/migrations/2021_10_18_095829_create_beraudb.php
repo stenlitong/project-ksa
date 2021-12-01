@@ -149,7 +149,6 @@ class CreateBeraudb extends Migration
             $table->string('reason26')->nullable();
             $table->string('ijin_sekali_jalan')->nullable();
             
-            $table->string('due_time' , 25)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

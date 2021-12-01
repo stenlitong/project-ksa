@@ -57,92 +57,56 @@ class picAdminController extends Controller
         return view('picadmin.picAdminRpk' , compact('docrpk'));
     }
 
-    public function rejectFile(Request $request){
-        // dd($request->reason);
-        if($doc->cabang == 'Babelan'){       
-            $request->validate([
-                'reason2' => 'required' ,
-                'reason3' => 'required' ,
-                'reason4' => 'required' ,
-                'reason5' => 'required' , 
-                'reason6' => 'required' ,
-                'reason7' => 'required' ,
-                'reason8' => 'required' ,
-                'reason9' => 'required' ,
-                'reason10' => 'required' ,
-                'reason11' => 'required' ,
-                'reason12' => 'required' ,
-                'reason13' => 'required' ,
-                'reason14' => 'required' ,
-                'reason15' => 'required' ,
-                'reason16' => 'required' ,
+    public function reject(Request $request){
+        //  dd($request);
+        $request->validate([
+            $request->reasonbox => 'required|max:180',
+        ]);
+
+            documents::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
             ]);
-            
-            if ($doc->status1 != null) {
-                // does exist
-                $doc = Document::where($doc->status1)->first();
-                $request->validate([
-                    'reason1' => 'required' ,
-                ]);
-                documents::where('cabang', "Babelan")->where('sertifikat_keselamatan')->update([
-                    'status1' => 'Rejected' ,
-                    'reason1' => $request->reason ,
-                 ]);
-            }
-
-            documents::where('cabang', "Babelan")->where('sertifikat_keselamatan')->update([
-
-                'status2' => 'Rejected' ,
-                'reason2' => $request->reason ,
-
-                'status3' => 'Rejected' ,
-                'reason3' => $request->reason ,
-
-                'status4' => 'Rejected' ,
-                'reason4' => $request->reason ,
-
-                'status5' => 'Rejected' , 
-                'reason5' => $request->reason ,
-
-                'status6' => 'Rejected' ,
-                'reason6' => $request->reason ,
-
-                'status7' => 'Rejected' ,
-                'reason7' => $request->reason ,
-
-                'status8' => 'Rejected' ,
-                'reason8' => $request->reason ,
-
-                'status9' => 'Rejected' ,
-                'reason9' => $request->reason ,
-
-                'status10' => 'Rejected' ,
-                'reason10' => $request->reason ,
-
-                'status11' => 'Rejected' ,
-                'reason11' => $request->reason ,
-
-                'status12' => 'Rejected' ,
-                'reason12' => $request->reason ,
-
-                'status13' => 'Rejected' ,
-                'reason13' => $request->reason ,
-
-                'status14' => 'Rejected' ,
-                'reason14' => $request->reason ,
-
-                'status15' => 'Rejected' ,
-                'reason15' => $request->reason ,
-
-                'status16' => 'Rejected' ,
-                'reason16' => $request->reason ,
+            documentberau::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
             ]);
-        }
+            documentbanjarmasin::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+            documentsamarinda::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+            documentrpk::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+    
+    
         return redirect('/picadmin/dana');
     }
 
-    public function approvefile(documents $doc){
-        return view('logistic.logisticApproveOrder', compact('doc'));
+    public function approve(Request $request){
+        // dd($request);
+        documents::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        documentberau::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        documentbanjarmasin::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        documentsamarinda::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        documentrpk::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        
+        return redirect('/picadmin/dana');
     }
 
     public function download(){
@@ -151,13 +115,25 @@ class picAdminController extends Controller
     }
     
     public function view(){
-        $content = Storage::disk('s3')->get($path);
+        // $content = Storage::disk('s3')->get($path);
+        // $header = [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="'.$file->name.'"'
+        // ];
+        // return Response::make($content, 200, $header);
+        $path = "storage/files";
+        $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
+        $file = $request->file('fileInput');
 
-        $header = [
-        'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'inline; filename="'.$file->name.'"'
-        ];
-        return Response::make($content, 200, $header);
+        $url = Storage::disk('s3')->url($path."/".$filename);
+        //dd($url);
 
+        Storage::disk('s3')->delete($path."/".$filename);
+
+        $file->storeAs(
+            $path,
+            $filename,
+            's3'
+        );
     }
 }
