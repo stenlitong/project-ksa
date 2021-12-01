@@ -62,52 +62,87 @@ class picAdminController extends Controller
         $request->validate([
             $request->reasonbox => 'required|max:180',
         ]);
+            if ($request->cabang == 'Babelan'){
+                documents::where('cabang',$request->cabang)->update([
+                    $request->status => 'rejected',
+                    $request->reason => $request->reasonbox ,
+                ]);
+            }
 
-            documents::where('cabang',$request->cabang)->update([
-                $request->status => 'rejected',
-                $request->reason => $request->reasonbox ,
-            ]);
-            documentberau::where('cabang',$request->cabang)->update([
-                $request->status => 'rejected',
-                $request->reason => $request->reasonbox ,
-            ]);
-            documentbanjarmasin::where('cabang',$request->cabang)->update([
-                $request->status => 'rejected',
-                $request->reason => $request->reasonbox ,
-            ]);
-            documentsamarinda::where('cabang',$request->cabang)->update([
-                $request->status => 'rejected',
-                $request->reason => $request->reasonbox ,
-            ]);
-            documentrpk::where('cabang',$request->cabang)->update([
-                $request->status => 'rejected',
-                $request->reason => $request->reasonbox ,
-            ]);
-    
-    
+            if ($request->cabang == 'Berau'){
+                documentberau::where('cabang',$request->cabang)->update([
+                    $request->status => 'rejected',
+                    $request->reason => $request->reasonbox ,
+                ]);
+            }
+
+            if ($request->cabang == 'Banjarmasin'){
+                documentbanjarmasin::where('cabang',$request->cabang)->update([
+                    $request->status => 'rejected',
+                    $request->reason => $request->reasonbox ,
+                ]);
+            }
+            
+            if ($request->cabang == 'Samarinda'){
+                documentsamarinda::where('cabang',$request->cabang)->update([
+                    $request->status => 'rejected',
+                    $request->reason => $request->reasonbox ,
+                ]);
+            }
+           
         return redirect('/picadmin/dana');
     }
-
+    
     public function approve(Request $request){
         // dd($request);
-        documents::where('cabang', $request->cabang)->update([
-            $request->status => 'approved'
-        ]);
-        documentberau::where('cabang', $request->cabang)->update([
-            $request->status => 'approved'
-        ]);
-        documentbanjarmasin::where('cabang', $request->cabang)->update([
-            $request->status => 'approved'
-        ]);
-        documentsamarinda::where('cabang', $request->cabang)->update([
-            $request->status => 'approved'
-        ]);
-        documentrpk::where('cabang', $request->cabang)->update([
-            $request->status => 'approved'
-        ]);
+
+        if ($request->cabang == 'Babelan'){
+            documents::where('cabang', $request->cabang)->update([
+                $request->status => 'approved'
+            ]);
+        }
+
+        if ($request->cabang == 'Berau'){
+            documentberau::where('cabang', $request->cabang)->update([
+                $request->status => 'approved'
+            ]);
+        }
+
+        if ($request->cabang == 'Banjarmasin'){
+            documentbanjarmasin::where('cabang', $request->cabang)->update([
+                $request->status => 'approved'
+            ]);
+        }
+
+        if ($request->cabang == 'Samarinda'){
+            documentsamarinda::where('cabang', $request->cabang)->update([
+                $request->status => 'approved'
+            ]);
+        }
         
         return redirect('/picadmin/dana');
     }
+    
+    public function approverpk(Request $request){
+        documentrpk::where('cabang', $request->cabang)->update([
+            $request->status => 'approved'
+        ]);
+        return redirect('/picadmin/rpk');
+    }
+
+    public function rejectrpk(Request $request){
+        $request->validate([
+            $request->reasonbox => 'required|max:255',
+        ]);
+
+        documentrpk::where('cabang',$request->cabang)->update([
+            $request->status => 'rejected',
+            $request->reason => $request->reasonbox ,
+        ]);
+
+        return redirect('/picadmin/rpk');
+    }
+   
 
     public function download(){
         $path = Storage::path('assets/stenli-picsite-3' );

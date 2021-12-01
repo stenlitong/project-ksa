@@ -70,12 +70,12 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
         Route::get('/dana', 'picAdminController@checkform');
-        Route::post('/dana/reject',[picAdminController::class, 'reject']);
-        Route::post('/dana/update-status',[picAdminController::class, 'approve']);
+        Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
+        Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
 
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
-        Route::post('/rpk/update-status',[picAdminController::class, 'approve']);
-        Route::post('/rpk/reject',[picAdminController::class, 'reject']);
+        Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
+        Route::post('/rpk/rejectrpk',[picAdminController::class, 'reject']);
         Route::get('/download' , [picAdminController::class , 'download'])->name('download');
     });
 });

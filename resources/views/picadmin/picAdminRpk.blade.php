@@ -81,7 +81,7 @@
                                         </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form method="POST" action="/picadmin/rpk/reject">
+                                            <form method="POST" action="/picadmin/rpk/rejectrpk">
                                                 @csrf
                                                 <input type="hidden" name='reason' value={{$reason}}>
                                                 <input type="hidden" name='status' value={{$stats}}>
