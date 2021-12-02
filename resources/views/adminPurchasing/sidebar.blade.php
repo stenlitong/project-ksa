@@ -23,6 +23,17 @@
                     Form AP
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('adminPurchasing.reportAp') }}">
+                    <span data-feather="bookmark"></span>
+                    Report AP
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

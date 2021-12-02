@@ -14,6 +14,6 @@ class ApListDetail extends Model
     ];
 
     public function apList(){
-        return $this->belongsTo(ApList::class);
+        return $this->belongsTo(ApList::class, 'aplist_id');
     }
 }

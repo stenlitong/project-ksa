@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Exports\PurchasingReportExport;
+use App\Exports\ReportAPExport;
 use App\Exports\POExport;
 use Illuminate\Http\Request;
 use App\Models\OrderHead;
@@ -9,6 +10,7 @@ use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Models\ApList;
+use App\Models\ApListDetail;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Auth;
 use Storage;
@@ -36,9 +38,9 @@ class PurchasingManagerController extends Controller
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
         }else{
-            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6)->withQueryString();
+            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
         }
 
         // Then find all the order details from the orderHeads
@@ -51,14 +53,14 @@ class PurchasingManagerController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
             ->orWhere('status', 'like', 'Order Delivered By Supplier');
-        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
         // Get all the suppliers
         $suppliers = Supplier::latest()->get();
@@ -67,23 +69,13 @@ class PurchasingManagerController extends Controller
     }
 
     public function completedOrder($branch){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
@@ -91,20 +83,20 @@ class PurchasingManagerController extends Controller
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
             ->orWhere('status', 'like', 'Item Delivered By Supplier');
-        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
             
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
             
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
@@ -115,7 +107,7 @@ class PurchasingManagerController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $completed = $orderHeads->count();
     
@@ -127,23 +119,13 @@ class PurchasingManagerController extends Controller
     }
 
     public function inProgressOrder($branch){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('order_id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
@@ -152,20 +134,20 @@ class PurchasingManagerController extends Controller
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing Manager')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(6);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
@@ -177,7 +159,7 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->where('cabang', 'like', $default_branch)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
@@ -297,7 +279,7 @@ class PurchasingManagerController extends Controller
         return view('purchasingManager.purchasingManagerReport', compact('orders', 'default_branch', 'str_month'));
     }
 
-    public function reportPageBranch($cabang){
+    public function reportPageBranch($branch){
         // Basically the report is created per 3 months, so we divide it into 4 reports
         // Base on current month, then we classified what period is the report
         $month_now = (int)(date('m'));
@@ -320,7 +302,7 @@ class PurchasingManagerController extends Controller
             $str_month = 'Okt - Des';
         }
 
-        $default_branch = $cabang;
+        $default_branch = $branch;
 
         // Find order from user that created the order
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
@@ -341,8 +323,220 @@ class PurchasingManagerController extends Controller
         return (new POExport($orderHeads -> order_id))->download('PO-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.xlsx');
     }
 
-    public function downloadReport(Excel $excel, $cabang){
-        $default_branch = $cabang;
+    public function downloadReport(Excel $excel, $branch){
+        $default_branch = $branch;
         return $excel -> download(new PurchasingReportExport($default_branch), 'Reports_'. date("d-m-Y") . '.xlsx');
+    }
+
+    public function formApPage(){
+        // Show the form AP page
+        $apList = ApList::with('orderHead')->where('cabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
+        
+        // Get the AP List Detail from the selected AP List
+        $apListId = $apList -> pluck('id');
+        $apListDetail = ApListDetail::with('apList')->whereIn('aplist_id', $apListId)->latest()->get()->unique('aplist_id');
+
+        // Get all the supplier
+        $suppliers = Supplier::latest()->get();
+
+        // Default branch is Jakarta
+        $default_branch = 'Jakarta';
+
+        return view('purchasingManager.purchasingManagerFormAp', compact('apList', 'default_branch', 'suppliers', 'apListDetail'));
+    }
+
+    public function formApPageBranch($branch){
+        // Show the form AP page
+        $apList = ApList::with('orderHead')->where('cabang', $branch)->whereYear('created_at', date('Y'))->latest()->paginate(7);
+        
+        // Get the AP List Detail from the selected AP List
+        $apListId = $apList -> pluck('id');
+        $apListDetail = ApListDetail::with('apList')->whereIn('aplist_id', $apListId)->latest()->get()->unique('aplist_id');
+
+
+        // Get all the supplier
+        $suppliers = Supplier::latest()->get();
+
+        // Get the branch from the parameter
+        $default_branch = $branch;
+
+        return view('purchasingManager.purchasingManagerFormAp', compact('apList', 'default_branch', 'suppliers', 'apListDetail'));
+    }
+
+    public function downloadFile(Request $request){
+        // ($request -> apListId) will be the AP ID => 1 || ($request -> filename) will be the column => ex : doc_partial1, doc_partial2, and goes on
+        // Get the filename of the following AP ID
+        $filename = ApList::where('id', $request -> apListId)->pluck($request -> filename)[0];
+
+        // Then, find the file to download it
+        return Storage::download('/APList' . '/' . $filename);
+    }
+
+    public function approveDocument(Request $request){
+        
+        // Find the document (ex : doc_partial1), then update the status
+        ApList::find($request -> apListId)->update([
+            $request -> statusColumn => 'Approved'
+        ]);
+
+        // Redirect
+        return redirect('/purchasing-manager/form-ap/' . $request -> default_branch)->with('openApListModalWithId', $request -> apListId);
+    }
+
+    public function rejectDocument(Request $request){
+
+        $request -> validate([
+            'reason' => 'string|required'
+        ]);
+
+        // Find the document (ex : doc_partial1), then update the status
+        ApList::find($request -> apListId)->update([
+            $request -> statusColumn => 'Rejected',
+            $request -> description => $request -> reason
+        ]);
+
+        return redirect('/purchasing-manager/form-ap/' . $request -> default_branch)->with('openApListModalWithId', $request -> apListId);
+    }
+
+    public function reportApPage(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper var
+        $default_branch = 'Jakarta';
+
+        // Find all the AP within the 3 months period
+        $apList = ApList::with('orderHead')->where('cabang', 'like', $default_branch)->join('ap_list_details', 'ap_list_details.aplist_id', '=', 'ap_lists.id')->whereBetween('ap_lists.created_at', [$start_date, $end_date])->orderBy('ap_lists.created_at', 'desc')->get();
+
+        return view('purchasingManager.purchasingManagerReportApPage', compact('default_branch', 'str_month', 'apList'));
+    }
+
+    public function reportApPageBranch($branch){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper Var
+        $default_branch = $branch;
+
+        // Find all the AP within the 3 months period
+        $apList = ApList::with('orderHead')->where('cabang', 'like', $default_branch)->join('ap_list_details', 'ap_list_details.aplist_id', '=', 'ap_lists.id')->whereBetween('ap_lists.created_at', [$start_date, $end_date])->orderBy('ap_lists.created_at', 'desc')->get();
+
+        return view('purchasingManager.purchasingManagerReportApPage', compact('default_branch', 'str_month', 'apList'));
+    }
+
+    public function exportReportAp(Excel $excel, $branch){
+
+        // Export into excel
+        return $excel -> download(new ReportAPExport($branch), 'Reports_AP('. $branch . ')_'. date("d-m-Y") . '.xlsx');
+    }
+
+    public function checklistPrPage(){
+         // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper var
+        $default_branch = 'Jakarta';
+
+        // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
+        // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
+        $orderDetails = OrderDetail::with('supplier')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+            $query->where('status', 'like', 'Item Delivered By Supplier')
+                ->orWhere('status', 'like', 'Order Completed (Logistic)');
+        })->get();
+
+        return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
+    }
+    
+    public function checklistPrPageBranch($branch){
+         // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper var
+        $default_branch = $branch;
+
+        // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
+        // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
+        $orderDetails = OrderDetail::with('supplier')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+            $query->where('status', 'like', 'Item Delivered By Supplier')
+                ->orWhere('status', 'like', 'Order Completed (Logistic)');
+        })->get();
+
+        return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
     }
 }

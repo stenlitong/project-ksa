@@ -9,7 +9,7 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO</h1>
+                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO (<?php echo e($str_month); ?>)</h1>
 
                 <?php if(count($orders) > 0): ?>
                     <div class="d-flex justify-content-end mr-3">
@@ -41,7 +41,6 @@
                                     <td><?php echo e($key + 1); ?></td>
                                     <td><?php echo e($o -> prDate); ?></td>
                                     <td><?php echo e($o -> noPr); ?></td>
-                                    
                                     <?php if(isset($o -> supplier -> supplierName)): ?>
                                         <td><?php echo e($o -> supplier -> supplierName); ?></td>
                                     <?php else: ?>

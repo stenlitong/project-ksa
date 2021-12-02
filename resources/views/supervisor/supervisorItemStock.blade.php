@@ -116,7 +116,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="umur">Bulan/Tahun</label>
-                                            <select class="form-control" id="umur" name="umur">
+                                            <select class="form-control" id="umur" name="umur" required>
                                                 <option value="Bulan">Bulan</option>
                                                 <option value="Tahun">Tahun</option>
                                             </select>
@@ -134,7 +134,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="unit">Unit</label>
-                                            <select class="form-control" name="unit" id="unit">
+                                            <select class="form-control" name="unit" id="unit" required>
                                                 <option value="Bks">Bks</option>
                                                     <option value="Btg">Btg</option>
                                                     <option value="Btl">Btl</option>
@@ -179,7 +179,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="golongan">Golongan</label>
-                                            <select class="form-control" id="golongan" name="golongan">
+                                            <select class="form-control" id="golongan" name="golongan" required>
                                                 <option value="None">None</option>
                                                 <option value="Floating">Floating</option>
                                                 <option value="Dock">Dock</option>
@@ -188,18 +188,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="serialNo">Serial Number / Part Number (optional)</label>
+                                    <label for="serialNo">Serial Number / Part Number</label>
                                     <input type="number" class="form-control" id="serialNo" name="serialNo"
-                                        placeholder="Input Serial Number">
+                                        placeholder="Input Serial Number (xx-xxxx-)" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="codeMasterItem">Code Master Item</label>
+                                    <label for="codeMasterItem">Code Master Item (optional)</label>
                                     <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                        placeholder="Input Code Master Item (xx-xxxx-)" required>
+                                        placeholder="Input Code Master Item">
                                 </div>
                                 <div class="form-group">
                                     <label for="cabang">Cabang</label>
-                                    <select class="form-control" id="cabang" name="cabang">
+                                    <select class="form-control" id="cabang" name="cabang" required>
                                         <option selected disabled="">Choose...</option>
                                         <option value="Jakarta" id="Jakarta">Jakarta</option>
                                         <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
@@ -215,6 +215,7 @@
                                         placeholder="Input Deskripsi Barang"></textarea>
                                 </div>
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Add Item</button>
                                 </div>
                             </form>
@@ -314,7 +315,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="umur">Bulan/Tahun</label>
-                                                <select class="form-control" id="umur" name="umur">
+                                                <select class="form-control" id="umur" name="umur" required>
                                                     <option value="Bulan">Bulan</option>
                                                     <option value="Tahun">Tahun</option>
                                                 </select>
@@ -332,7 +333,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="unit">Unit</label>
-                                                <select class="form-control" name="unit" id="unit">
+                                                <select class="form-control" name="unit" id="unit" required>
                                                     <option value="Bks">Bks</option>
                                                     <option value="Btg">Btg</option>
                                                     <option value="Btl">Btl</option>
@@ -375,25 +376,25 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="golongan">Golongan</label>
-                                        <select class="form-control" id="golongan" name="golongan">
+                                        <select class="form-control" id="golongan" name="golongan" required>
                                             <option value="None" @if ($i -> golongan == 'None') selected="selected" @endif>None</option>
                                             <option value="Floating" @if ($i -> golongan == 'Floating') selected="selected" @endif>Floating</option>
                                             <option value="Dock" @if ($i -> golongan == 'Dock') selected="selected" @endif>Dock</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="serialNo">Serial Number / Part Number (optional)</label>
+                                        <label for="serialNo">Serial Number / Part Number</label>
                                         <input type="text" class="form-control" id="serialNo" name="serialNo"
-                                            placeholder="Input Serial Number" value="{{ $i -> serialNo }}">
+                                            placeholder="Input Serial Number (xx-xxxx-)" value="{{ $i -> serialNo }}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                            placeholder="Input Code Master Item (xx-xxxx-)" value="{{ $i -> codeMasterItem }}" required>
+                                            placeholder="Input Code Master Item" value="{{ $i -> codeMasterItem }}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="itemState">Status Barang</label>
-                                        <select class="form-control" id="itemState" name="itemState">
+                                        <select class="form-control" id="itemState" name="itemState" required>
                                             <option value="Available" @if ($i -> itemState == 'Available') selected="selected" @endif>Available</option>
                                             <option value="Hold" @if ($i -> itemState == 'Hold') selected="selected" @endif>Hold</option>
                                         </select>
@@ -427,9 +428,11 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <br>
                                 <h5 style="text-align: center">Are You Sure To Delete This Item ?</h5>
-                                <br>
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <span data-feather="alert-circle" style="width: 10vw; height: 10vh;stroke: red;
+                                    stroke-width: 2;"></span>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

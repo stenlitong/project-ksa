@@ -109,7 +109,7 @@ unset($__errorArgs, $__bag); ?>
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-between">

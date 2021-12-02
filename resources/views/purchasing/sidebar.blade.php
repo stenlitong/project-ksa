@@ -12,17 +12,6 @@
                     Dashboard
                 </a>
             </li>
-            {{-- <li class="nav-item">
-                <a class="nav-link 
-                @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
-                        echo('active');
-                    }
-                @endphp" href="{{ Route('purchasing.form-ap') }}">
-                    <span data-feather="file"></span>
-                    Checklist AP
-                </a>
-            </li> --}}
             <li class="nav-item">
                 <a class="nav-link 
                 @php
@@ -31,7 +20,18 @@
                     }
                 @endphp" href="{{ Route('purchasing.report') }}">
                     <span data-feather="archive"></span>
-                    Report PR/PO
+                    Report PO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('purchasing.reportAp') }}">
+                    <span data-feather="bookmark"></span>
+                    Report AP
                 </a>
             </li>
         </ul>

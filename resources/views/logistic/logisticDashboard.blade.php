@@ -115,101 +115,101 @@
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
-                    <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-danger">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex-column">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->order_id }}</h5>
-                                        </div>
-                                        <div class="d-flex-column ml-5">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
-                                        </div>
-                                        <div class="d-flex-column ml-5">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->user->name }}</h5>
-                                        </div>
+                <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex-column">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->order_id }}</h5>
                                     </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <div class="d-flex-column ml-5">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
+                                    </div>
+                                    <div class="d-flex-column ml-5">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->user->name }}</h5>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    @if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false)
-                                        <div class="d-flex justify-content-around">
-                                            <h5>Nomor PR : {{ $o -> noPr }}</h5>
-                                            <h5>Tipe Order : {{ $o -> orderType }}</h5>
-                                        </div>
-                                    @endif
-                                    <table class="table">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Item Barang</th>
-                                                <th scope="col">Request Quantity</th>
-                                                @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
-                                                    <th scope="col">Accepted Quantity</th>
-                                                @endif
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false)
+                                    <div class="d-flex justify-content-around">
+                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
+                                        <h5>Tipe Order : {{ $o -> orderType }}</h5>
+                                    </div>
+                                @endif
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Item Barang</th>
+                                            <th scope="col">Request Quantity</th>
+                                            @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                                <th scope="col">Accepted Quantity</th>
+                                            @endif
 
-                                                {{-- @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false) --}}
-                                                @if(strpos($o -> order_id, 'COID') !== false)
-                                                    <th scope="col">Terakhir Diberikan</th>
-                                                @endif
-                                                <th scope="col">Umur Barang</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Golongan</th>
-                                                
-                                                @if(strpos($o -> status, 'Request In Progress') !== false)
-                                                    <th scope="col">Stok Barang</th>
-                                                @endif
+                                            {{-- @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false) --}}
+                                            @if(strpos($o -> order_id, 'COID') !== false)
+                                                <th scope="col">Terakhir Diberikan</th>
+                                            @endif
+                                            <th scope="col">Umur Barang</th>
+                                            <th scope="col">Department</th>
+                                            <th scope="col">Golongan</th>
+                                            
+                                            @if(strpos($o -> status, 'Request In Progress') !== false)
+                                                <th scope="col">Stok Barang</th>
+                                            @endif
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($orderDetails as $od)
-                                                @if($od -> orders_id == $o -> id)
-                                                    <tr>
-                                                        <td><strong>{{ $od -> item -> itemName }}</strong></td>
-                                                        <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
-                                                        @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
-                                                            <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($orderDetails as $od)
+                                            @if($od -> orders_id == $o -> id)
+                                                <tr>
+                                                    <td><strong>{{ $od -> item -> itemName }}</strong></td>
+                                                    <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
+                                                    @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                                        <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
+                                                    @endif
+
+                                                    @if(strpos($o -> order_id, 'COID') !== false)
+                                                        <td>{{ $od -> item -> lastGiven }}</td>
+                                                    @endif
+
+                                                    <td>{{ $od -> item -> itemAge }}</td>
+                                                    <td>{{ $od -> department }}</td>
+                                                    <td>{{ $od -> item -> golongan }}</td>
+
+                                                    @if(strpos($o -> status, 'Request In Progress') !== false)
+                                                        @if($od -> quantity > $od -> item -> itemStock)
+                                                            <td style="color: red; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
+                                                        @else
+                                                            <td style="color: green; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
                                                         @endif
-
-                                                        @if(strpos($o -> order_id, 'COID') !== false)
-                                                            <td>{{ $od -> item -> lastGiven }}</td>
-                                                        @endif
-
-                                                        <td>{{ $od -> item -> itemAge }}</td>
-                                                        <td>{{ $od -> department }}</td>
-                                                        <td>{{ $od -> item -> golongan }}</td>
-
-                                                        @if(strpos($o -> status, 'Request In Progress') !== false)
-                                                            @if($od -> quantity > $od -> item -> itemStock)
-                                                                <td style="color: red; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
-                                                            @else
-                                                                <td style="color: green; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }}</td>
-                                                            @endif
-                                                        @endif
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div> 
-                                <div class="modal-footer">
-                                    {{-- Check if the order is rejected, then do not show the approve & reject button --}}
-                                    @if(strpos($o -> status, 'In Progress By Logistic') !== false)
-                                        {{-- Button to trigger modal 2 --}}
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
-                                        <a href="/logistic/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
-                                    @endif
-                                </div>
+                                                    @endif
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div> 
+                            <div class="modal-footer">
+                                {{-- Check if the order is rejected, then do not show the approve & reject button --}}
+                                @if(strpos($o -> status, 'In Progress By Logistic') !== false)
+                                    {{-- Button to trigger modal 2 --}}
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
+                                    <a href="/logistic/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
+                                @endif
                             </div>
                         </div>
                     </div>
+                </div>
             @endforeach
 
             {{-- Modal 2 --}}

@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\ApList;
+use App\Models\ApListDetail;
 use App\Models\OrderHead;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Excel;
+use App\Exports\ReportAPExport;
 use Storage;
 
 class AdminPurchasingController extends Controller
@@ -76,7 +79,7 @@ class AdminPurchasingController extends Controller
         return view('adminPurchasing.adminPurchasingFormAp', compact('apList', 'default_branch', 'suppliers'));
     }
 
-    public function uploadFile(Request $request, $cabang){
+    public function uploadFile(Request $request){
         // Validate the file extension
         $request->validate([
             'doc_partial1' => 'nullable|mimes:pdf,word,jpg,jpeg|max:5120',
@@ -115,6 +118,9 @@ class AdminPurchasingController extends Controller
                 $dynamic_file = $filename . $i;
                 $dynamic_status = 'status_partial' . $i;
                 $dynamic_uploadTime = 'uploadTime_partial' . $i;
+                $dynamic_description = 'description_partial' . $i;
+                $month = date('m');
+                $year = date('Y');
 
                 // Check if file already exists
                 $curr_file = ApList::find($request -> apListId)->pluck($dynamic_file)[0];
@@ -125,25 +131,131 @@ class AdminPurchasingController extends Controller
                 }
 
                 // Get the path for the file
-                $path = $request -> $dynamic_file -> getClientOriginalName();
+                $path = $year . '/' . $month . '/' . $request -> $dynamic_file -> getClientOriginalName();
 
                 // Save all additional information to the database
                 ApList::find($request -> apListId)->update([
                     $dynamic_file => $path,
                     $dynamic_status => 'On Review',
+                    $dynamic_description => NULL,
                     $dynamic_uploadTime => date("d/m/Y")
                 ]);
 
                 // Store the file into storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
-                $request -> file($dynamic_file) -> storeAs('APList', $request -> $dynamic_file -> getClientOriginalName());
+                $request -> file($dynamic_file) -> storeAs('APList', $path);
             }
         };
         
-        return redirect('/admin-purchasing/form-ap')->with('status', 'Uploaded Successfully');
+        return redirect()->back()->with('openApListModalWithId', $request -> apListId);
     }
 
-    public function downloadFile(ApList $apList){
-        // Find the file then download
-        return Storage::download('/APList' . '/' . $apList->filename);
+    public function saveApDetail(Request $request){
+        // Validate the request
+        $request -> validate([
+            'noInvoice' => 'required',
+            'nominalInvoice' => 'required|integer|min:1',
+            'noFaktur' => 'required',
+            'noDo' => 'required',
+            'additionalInformation' => 'nullable'
+        ]);
+
+        ApListDetail::create([
+            'aplist_id' => $request -> apListId,
+            'supplierName' => $request -> supplierName,
+            'noInvoice' => $request -> noInvoice,
+            'noFaktur' => $request -> noFaktur,
+            'noDo' => $request -> noDo,
+            'nominalInvoice' => $request -> nominalInvoice,
+            'additionalInformation' => $request -> additionalInformation
+        ]);
+
+        return redirect()->back()->with('openApListModalWithId', $request -> apListId);
+    }
+
+    public function closeAp(Request $request){
+        // Find the AP
+        $apList = ApList::find($request -> apListId);
+
+        // Check if the AP is already processed Then redirect
+        if($apList -> tracker == 6){
+            return redirect()->back()->with('errorClosePo', $request -> apListId);
+        }
+
+        ApList::where('id', $request -> apListId)->update([
+            'tracker' => 6,
+            'status' => 'CLOSED'
+        ]);
+
+        return redirect()->back()->with('openApListModalWithId', $request -> apListId);
+    }
+
+    public function reportApPage(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper var
+        $default_branch = 'Jakarta';
+
+        // Find all the AP within the 3 months period
+        $apList = ApList::with('orderHead')->where('cabang', 'like', $default_branch)->join('ap_list_details', 'ap_list_details.aplist_id', '=', 'ap_lists.id')->whereBetween('ap_lists.created_at', [$start_date, $end_date])->orderBy('ap_lists.created_at', 'desc')->get();
+
+        return view('adminPurchasing.adminPurchasingReportApPage', compact('default_branch', 'str_month', 'apList'));
+    }
+
+    public function reportApPageBranch($branch){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Helper Var
+        $default_branch = $branch;
+
+        // Find all the AP within the 3 months period
+        $apList = ApList::with('orderHead')->where('cabang', 'like', $default_branch)->join('ap_list_details', 'ap_list_details.aplist_id', '=', 'ap_lists.id')->whereBetween('ap_lists.created_at', [$start_date, $end_date])->orderBy('ap_lists.created_at', 'desc')->get();
+
+        return view('adminPurchasing.adminPurchasingReportApPage', compact('default_branch', 'str_month', 'apList'));
+    }
+
+    public function exportReportAp(Excel $excel, $branch){
+
+        // Export into excel
+        return $excel -> download(new ReportAPExport($branch), 'Reports_AP('. $branch . ')_'. date("d-m-Y") . '.xlsx');
     }
 }

@@ -12,7 +12,6 @@
                     Dashboard
                 </a>
             </li>
-            
             <li class="nav-item">
                 <a class="nav-link 
                 <?php
@@ -22,6 +21,17 @@
                 ?>" href="<?php echo e(Route('purchasing.report')); ?>">
                     <span data-feather="archive"></span>
                     Report PR/PO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                <?php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                        echo('active');
+                    }
+                ?>" href="<?php echo e(Route('purchasing.reportAp')); ?>">
+                    <span data-feather="bookmark"></span>
+                    Report AP
                 </a>
             </li>
         </ul>

@@ -25,21 +25,11 @@ class CrewController extends Controller
     }
 
     public function completedOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Get all the order within the logged in user within 6 month
         $orderHeads = OrderHead::with('user')->where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->latest()->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
@@ -49,7 +39,7 @@ class CrewController extends Controller
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
         
         $completed = $orderHeads->count();
 
@@ -57,22 +47,12 @@ class CrewController extends Controller
     }
 
     public function inProgressOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Get all the order within the logged in user within 6 month
         $orderHeads = OrderHead::with('user')->where(function($query){
             $query->where('status', 'like', 'Request In Progress By Logistic')
             ->orWhere('status', 'like', 'Items Ready')
             ->orWhere('status', 'like', 'On Delivery');
-        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->paginate(10);
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->paginate(10);
 
         // Get the orderDetail from orders_id within the orderHead table 
         $order_id = OrderHead::where('user_id', Auth::user()->id)->pluck('id');
@@ -81,7 +61,7 @@ class CrewController extends Controller
         $completed = OrderHead::where(function($query){
             $query->where('status', 'like', 'Request Completed (Crew)')
             ->orWhere('status', 'like', 'Request Rejected By Logistic');
-        })->where('user_id', 'like', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
         
         $in_progress = $orderHeads->count();
 

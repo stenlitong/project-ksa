@@ -5,6 +5,10 @@
     <?php $__env->startSection('title', 'Checklist AP'); ?>
 
     <?php $__env->startSection('container'); ?>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
         <div class="row">
             <?php echo $__env->make('adminPurchasing.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             
@@ -12,6 +16,16 @@
                 <?php echo $__env->make('../layouts/time', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                 <h1 class="text-center">Upload List AP</h1>
+                
+                <?php if(count($errors) > 0): ?>
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <?php echo e($message); ?>
+
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
+
                 
 
                 <div class="d-flex">
@@ -94,125 +108,208 @@
                     </table>
                 </div>
 
+                <div class="d-flex justify-content-end">
+                    <?php echo e($apList->links()); ?>
+
+                </div>
             </main>
         </div>
 
-        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="modal fade" id="detail-<?php echo e($ap -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-danger">
-                                <div class="d-flex justify-content-start">
-                                    <h3 style="color: white"><?php echo e($ap -> orderHead -> noPo); ?></h3>
-                                </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
 
-                            <div class="modal-body">
-                                <div class="d-flex justify-content-end mb-3 mr-3">
-                                    <div class="p-2 mr-auto">
-                                        <h5>Total Harga : Rp. <?php echo e(number_format($ap -> orderHead -> totalPrice, 2, ",", ".")); ?></h5>
-                                    </div>
-                                <form action="/admin-purchasing/<?php echo e($default_branch); ?>/form-ap/upload" method="POST" enctype="multipart/form-data">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('put'); ?>
-                                    <button type="submit" class="btn btn-info mr-3">Submit</button>
-                                    <button class="btn btn-success">Close PO</button>
+        
+        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php if(!empty(Session::get('openApListModalWithId')) && Session::get('openApListModalWithId') == $ap -> id): ?>
+                <script>
+                    let id = <?php echo json_encode($ap -> id); ?>;
+                    $(document).ready(function(){
+                        $("#detail-" + id).modal('show');
+                    });
+                </script>
+            <?php endif; ?>
+            
+            <div class="modal fade" id="detail-<?php echo e($ap -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <div class="d-flex justify-content-start">
+                                <h3 style="color: white"><?php echo e($ap -> orderHead -> noPo); ?></h3>
+                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <?php if(session('openApListModalWithId')): ?>
+                                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                                    Saved Successfully
                                 </div>
-                                    <div class="table-modal">
-                                        <table class="table">
-                                            <thead class="thead-dark">
+                            <?php endif; ?>
+                            
+                            <?php if(session('errorClosePo')): ?>
+                                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                                    PO Already Been Closed
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="d-flex justify-content-end mb-3 mr-3">
+                                <div class="p-2 mr-auto">
+                                    <h5>Total Harga : Rp. <?php echo e(number_format($ap -> orderHead -> totalPrice, 2, ",", ".")); ?></h5>
+                                </div>
+                            <form action="/admin-purchasing/form-ap/upload" method="POST" enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('put'); ?>
+
+                                <?php if($ap -> status == 'OPEN'): ?>
+                                    <button type="submit" class="btn btn-info mr-3">Submit</button>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-<?php echo e($ap -> id); ?>">Close PO</button>
+                                <?php endif; ?>
+                            </div>
+                                <div class="table-modal">
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="table-header">Date Uploaded</th>
+                                                <th class="table-header">Name</th>
+                                                <th class="table-header">Status</th>
+                                                <th class="table-header">Description</th>
+                                                <th class="table-header">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php for($i = 1 ; $i <= 20 ; $i++): ?>
+                                                <?php
+                                                    // Helper var
+                                                    $status = 'status_partial' . $i;
+                                                    $uploadTime = 'uploadTime_partial' . $i;
+                                                    $description = 'description_partial' . $i;
+                                                    $filename = 'doc_partial' . $i;
+                                                ?>
                                                 <tr>
-                                                    <th class="table-header">Date Uploaded</th>
-                                                    <th class="table-header">Name</th>
-                                                    <th class="table-header">Status</th>
-                                                    <th class="table-header">Description</th>
-                                                    <th class="table-header">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php for($i = 1 ; $i <= 20 ; $i++): ?>
-                                                    <?php
-                                                        $status = 'status_partial' . $i;
-                                                        $uploadTime = 'uploadTime_partial' . $i;
-                                                        $description = 'description_partial' . $i;
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo e($ap -> $uploadTime); ?></td>
-                                                        <td>Partial <?php echo e($i); ?></td>
-                                                        <td><?php echo e($ap -> $status); ?></td>
-                                                        <td><?php echo e($ap -> $description); ?></td>
-                                                        <td>
+                                                    <td><?php echo e($ap -> $uploadTime); ?></td>
+                                                    <td>Partial <?php echo e($i); ?></td>
+                                                    <td>
+                                                        <?php if($ap -> $status == 'On Review'): ?>
+                                                            <span style="color: gray; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php elseif($ap -> $status == 'Rejected'): ?>
+                                                            <span style="color: Red; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php else: ?>
+                                                            <span style="color: green; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td><?php echo e($ap -> $description); ?></td>
+                                                    <td>
+                                                        <?php if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED'): ?>
+                                                            <span><?php echo e($ap -> $filename); ?></span>
+                                                        <?php else: ?>
                                                             <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
+                                                            <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
                                                             <input type="file" name="doc_partial<?php echo e($i); ?>" class="form-control">
-                                                        </td>
-                                                    </tr>
-                                                <?php endfor; ?>
-                                            </tbody>
-                                        </table>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endfor; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                            <div class="mt-4">
+                                <form action="/admin-purchasing/form-ap/ap-detail" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
+                                    <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                        <label for="supplier_id">Nama Supplier</label>
+                                        <select class="form-control" id="supplier_id" name="supplier_id">
+                                            <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
+                                            <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                        <label for="noPr">Nomor PR</label>
+                                        <input type="text" class="form-control" name="noPr" id="noPr" value="<?php echo e($ap -> orderHead -> noPr); ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                        <label for="noInvoice">Nomor Invoice</label>
+                                        <input type="text" class="form-control" name="noInvoice" id="noInvoice" placeholder="Input Nomor Invoice" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                        <label for="nominalInvoice">Nominal Invoice</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp. </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                        <label for="noFaktur">Nomor Faktur Pajak</label>
+                                        <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak" name="noFaktur" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                        <label for="noDo">Nomor DO</label>
+                                        <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="additionalInformation">Keterangan (optional)</label>
+                                        <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">Save</button>
                                     </div>
                                 </form>
-                                <div class="mt-4">
-                                    <form action="" method="POST">
-                                        <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                            <label for="supplierName">Nama Supplier</label>
-                                            <select class="form-control" id="supplier_id" name="supplier_id">
-                                                <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
-                                                <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option class="h-25 w-50" value="<?php echo e($s -> id); ?>"><?php echo e($s -> supplierName); ?></option>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            </select>
-                                          </div>
-                                          <div class="form-group col-md-6">
-                                            <label for="noPr">Nomor PR</label>
-                                            <input type="text" class="form-control" id="noPr" value="<?php echo e($ap -> orderHead -> noPr); ?>" readonly>
-                                          </div>
-                                        </div>
-                                        <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                            <label for="noInvoice">Nomor Invoice</label>
-                                            <input type="text" class="form-control" id="noInvoice" placeholder="Input Nomor Invoice">
-                                          </div>
-                                          <div class="form-group col-md-6">
-                                            <label for="nominalInvoice">Nominal Invoice</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp. </div>
-                                                </div>
-                                                <input type="number" class="form-control" id="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice">
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                            <label for="noFaktur">Nomor Faktur Pajak</label>
-                                            <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak">
-                                          </div>
-                                          <div class="form-group col-md-6">
-                                            <label for="noDo">Nomor DO</label>
-                                            <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO">
-                                          </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="additionalInformation">Keterangan (optional)</label>
-                                            <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"></textarea>
-                                        </div>
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div> 
-                            <div class="modal-footer">
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="modal fade" id="close-<?php echo e($ap -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-md modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <div class="d-flex justify-content-start">
+                                <h5 class="text-white">Close PO</h5>
+                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <h5>Are you sure you want to close this PO?</h5>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center mt-2">
+                                <span data-feather="alert-circle" style="width: 10vw; height: 10vh;stroke: red;
+                                stroke-width: 2;"></span>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center mt-3">
+                                <button type="button" data-dismiss="modal" class="btn btn-danger">No</button>
+                                <form action="/admin-purchasing/form-ap/close" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('patch'); ?>
+                                    <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
+                                    <button type="submit" class="btn btn-primary ml-3">Yes</button>
+                                </form>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         <style>
             /* .tableFixHead          { overflow: auto; height: 250px; }
@@ -266,6 +363,9 @@
                 width: 100%;
             }
         </style>
+
+        
+
         <script>
             function refreshDiv(){
                 $('#content').load(location.href + ' #content')

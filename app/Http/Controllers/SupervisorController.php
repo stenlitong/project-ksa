@@ -20,21 +20,11 @@ use Illuminate\Support\Facades\Auth;
 class SupervisorController extends Controller
 {
     public function completedOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from logistic role, then they can approve and send it to the purchasing role
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         $in_progress = OrderHead::where(function($query){
@@ -42,20 +32,20 @@ class SupervisorController extends Controller
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(8);
 
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
@@ -63,7 +53,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(8);
     
             $completed = $orderHeads->count();
     
@@ -72,21 +62,11 @@ class SupervisorController extends Controller
     }
 
     public function inProgressOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find order from logistic role, then they can approve and send it to the purchasing role
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('id');
         $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
@@ -94,20 +74,20 @@ class SupervisorController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
             ->orWhere('status', 'like', 'Order Rejected By Supervisor')
             ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-        })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+        })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(8);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(8);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
@@ -116,7 +96,7 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
@@ -136,7 +116,8 @@ class SupervisorController extends Controller
             'status' => 'Order In Progress By Purchasing'
         ]);
 
-        return redirect('/dashboard')->with('status', 'Order Approved');
+        // return redirect('/dashboard')->with('status', 'Order Approved');
+        return redirect()->back()->with('status', 'Order Approved');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -156,7 +137,8 @@ class SupervisorController extends Controller
             'reason' => $request -> reason
         ]);
 
-        return redirect('/dashboard')->with('status', 'Order Rejected');
+        // return redirect('/dashboard')->with('status', 'Order Rejected');
+        return redirect()->back()->with('status', 'Order Rejected');
     }
 
     public function downloadPr(OrderHead $orderHeads){
@@ -198,7 +180,7 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('supervisor.supervisorReport', compact('orders'));
+        return view('supervisor.supervisorReport', compact('orders', 'str_month'));
     }
 
     public function downloadReport(Excel $excel){
@@ -260,8 +242,9 @@ class SupervisorController extends Controller
             'itemStock' => 'required|integer|min:1',
             'unit' => 'required',
             'golongan' => 'required',
-            'serialNo' => 'nullable|numeric',
-            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            // 'serialNo' => 'nullable|numeric',
+            'serialNo' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            'codeMasterItem' => 'required',
             'cabang' => 'required',
             'description' => 'nullable'
         ]);
@@ -326,21 +309,11 @@ class SupervisorController extends Controller
     }
 
     public function approvalDoPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Find all of the ongoing DO from the requested branch OR the destination branch
         $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where(function($query){
             $query->where('fromCabang', Auth::user()->cabang)
             ->orWhere('toCabang', Auth::user()->cabang);
-        })->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+        })->whereYear('created_at', date('Y'))->latest()->get();
 
         return view('supervisor.supervisorApprovalDO', compact('ongoingOrders'));
     }
@@ -348,11 +321,13 @@ class SupervisorController extends Controller
     public function forwardDo(OrderDo $orderDos){
         // Validate the stock first
         if($orderDos->quantity > $orderDos->item_requested_from -> itemStock){
-            return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
+            // return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
+            return redirect()->back()->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
         }else{
             // Then validate order_tracker
             if($orderDos -> order_tracker == 3){
-                return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+                // return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+                return redirect()->back()->with('error', 'Order Already Been Processed');
             }
 
             // Forward the DO to the requested branches, then update the order_tracker to validate
@@ -361,14 +336,16 @@ class SupervisorController extends Controller
                 'status' => 'Waiting Approval By Supervisor Cabang ' . $orderDos->toCabang
             ]);
     
-            return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+            // return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+            return redirect()->back()->with('status', 'Approved Successfully');
         }
     }
     
     public function denyDo(OrderDo $orderDos){
         // Validate if the order already been processed
         if($orderDos -> order_tracker == 3){
-            return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+            // return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+            return redirect()->back()->with('error', 'Order Already Been Processed');
         }
 
         // Else, update the status
@@ -377,17 +354,20 @@ class SupervisorController extends Controller
             'status' => 'Rejected By Supervisor Cabang ' . $orderDos->fromCabang
         ]);
 
-        return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+        // return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+        return redirect()->back()->with('status', 'Request Rejected');
     }
 
     public function approveDo(OrderDo $orderDos){
         // Re-validate quantity, even we already put the validation from previous supervisor just to be sure the data is valid
         if($orderDos->quantity > $orderDos->item_requested_from -> itemStock){
-            return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
+            // return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
+            return redirect()->back()->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
         }else{
             // Validate if the order already been processed
             if($orderDos -> order_tracker == 4){
-                return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+                // return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+                return redirect()->back()->with('error', 'Order Already Been Processed');
             }
             
             OrderDo::where('id', $orderDos -> id)->update([
@@ -398,14 +378,16 @@ class SupervisorController extends Controller
             // Decrement the stock for the requested branch
             Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
 
-            return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+            // return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
+            return redirect()->back()->with('status', 'Approved Successfully');
         }
     }
 
     public function rejectDo(OrderDo $orderDos){
         // Validate if the order already been processed
         if($orderDos -> order_tracker == 4){
-            return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+            // return redirect('/supervisor/approval-do')->with('error', 'Order Already Been Processed');
+            return redirect()->back()->with('error', 'Order Already Been Processed');
         }
 
         OrderDo::where('id', $orderDos -> id)->update([
@@ -413,7 +395,8 @@ class SupervisorController extends Controller
             'status' => 'Rejected By Supervisor Cabang ' . $orderDos->toCabang
         ]);
 
-        return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+        // return redirect('/supervisor/approval-do')->with('status', 'Request Rejected');
+        return redirect()->back()->with('status', 'Request Rejected');
     }
 
     public function downloadDo(OrderDo $orderDos){

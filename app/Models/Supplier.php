@@ -14,6 +14,6 @@ class Supplier extends Model
     ];
 
     public function orderDetails(){
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class, 'supplier_id');
     }
 }

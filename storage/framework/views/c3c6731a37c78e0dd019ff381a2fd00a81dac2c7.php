@@ -23,6 +23,17 @@
                     Form AP
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                <?php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                        echo('active');
+                    }
+                ?>" href="<?php echo e(Route('adminPurchasing.reportAp')); ?>">
+                    <span data-feather="bookmark"></span>
+                    Report AP
+                </a>
+            </li>
         </ul>
     </div>
 </nav><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/adminPurchasing/sidebar.blade.php ENDPATH**/ ?>

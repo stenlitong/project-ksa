@@ -18,7 +18,7 @@
                     if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
                         echo('active');
                     }
-                @endphp" href="">
+                @endphp" href="{{ Route('purchasingManager.formApPage') }}">
                     <span data-feather="file"></span>
                     Checklist AP
                 </a>
@@ -26,12 +26,34 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'report'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'checklist-pr'){
                         echo('active');
                     }
-                @endphp" href="{{ Route('purchasingManager.report') }}">
-                    <span data-feather="archive"></span>
-                    Report PR/PO
+                @endphp" href="{{ Route('purchasingManager.checklistPrPage') }}">
+                    <span data-feather="folder-plus"></span>
+                    Checklist PR
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-po'){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('purchasingManager.reportPoPage') }}">
+                    <span data-feather="bookmark"></span>
+                    Report PO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                        echo('active');
+                    }
+                @endphp" href="/purchasing-manager/report-ap">
+                    <span data-feather="bookmark"></span>
+                    Report AP
                 </a>
             </li>
         </ul>

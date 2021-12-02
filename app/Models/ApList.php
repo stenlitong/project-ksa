@@ -21,6 +21,6 @@ class ApList extends Model
     }
 
     public function apListDetail(){
-        return $this->hasMany(ApListDetail::class);
+        return $this->hasMany(ApListDetail::class, 'aplist_id');
     }
 }

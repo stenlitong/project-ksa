@@ -17,10 +17,12 @@ class CreateApListDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('aplist_id');
 
+            $table->string('supplierName');
             $table->string('noInvoice');
             $table->string('noFaktur');
             $table->string('noDo');
             $table->unsignedBigInteger('nominalInvoice');
+            $table->integer('tracker')->default(6);
             $table->string('additionalInformation')->nullable();
 
             $table->foreign('aplist_id')->references('id')->on('ap_lists')->onDelete('cascade')->onUpdate('cascade');

@@ -25,32 +25,22 @@ use Storage;
 class LogisticController extends Controller
 {
     public function inProgressOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         if(request('search')){
              // Search functonality
              $orderHeads = OrderHead::with('user')->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7)->withQueryString();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
             
             // Get all the order detail
-            $order_id = OrderHead::whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+            $order_id = OrderHead::whereYear('created_at', date('Y'))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
                 ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
             
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
@@ -58,7 +48,7 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
@@ -69,10 +59,10 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
             // Then get all the order detail
-            $order_id = OrderHead::whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+            $order_id = OrderHead::whereYear('created_at', date('Y'))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Get the count number of the completed and in progress order to show it on the view
@@ -80,7 +70,7 @@ class LogisticController extends Controller
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
                 ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             $in_progress = $orderHeads->count();
 
@@ -89,32 +79,22 @@ class LogisticController extends Controller
     }
 
     public function completedOrder(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         if(request('search')){
             // Search functonality
             $orderHeads = OrderHead::with('user')->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7)->withQueryString();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
             
             // Get all the order detail
-            $order_id = OrderHead::whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+            $order_id = OrderHead::whereYear('created_at', date('Y'))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
                 ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
             
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress' . '%')
@@ -122,17 +102,17 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
         }else{
             $orderHeads = OrderHead::with('user')->where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
                 ->orWhere('status', 'like', '%' . 'Rejected' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(7);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
     
             // Get all the order detail
-            $order_id = OrderHead::whereBetween('created_at', [$start_date, $end_date])->pluck('id');
+            $order_id = OrderHead::whereYear('created_at', date('Y'))->pluck('id');
             $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
     
              // Count the completed & in progress order
@@ -142,7 +122,7 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->count();
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
     
             $completed = $orderHeads->count();
     
@@ -215,23 +195,14 @@ class LogisticController extends Controller
                 'description' => $request -> description
             ]); 
 
-            return redirect('/logistic/request-do')->with('success', 'Request Successfully');
+            // return redirect('/logistic/request-do')->with('success', 'Request Successfully');
+            return redirect()->back()->with('success', 'Request Successfully');
         }
     }
 
     public function requestDoPage(){
-        // Find the current month, display the transaction per 6 month => Jan - Jun || Jul - Dec
-        $month_now = (int)(date('m'));
-        if($month_now <= 6){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-06-30');
-        }else{
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-12-31');
-        }
-
         // Get all the DO from the last 6 month
-        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->get();
 
         return view('logistic.logisticOngoingDO', compact('ongoingOrders'));
     }
@@ -252,7 +223,8 @@ class LogisticController extends Controller
         ]);
 
         // Then redirect/refresh page
-        return redirect('/logistic/request-do')->with('success', 'Order Accepted Successfully');
+        // return redirect('/logistic/request-do')->with('success', 'Order Accepted Successfully');
+        return redirect()->back()->with('success', 'Order Accepted Successfully');
     }
 
     public function downloadDo(OrderDo $orderDos){
@@ -396,6 +368,7 @@ class LogisticController extends Controller
 
         OrderHead::find($orderHead->id)->update([
             'order_id' => 'ROID#' . $orderHeads->id,
+            'noSbk' => $orderHeads -> id . '/' . $location,
             'noPr' => $pr_number,
             'company' => $request->company,
             'prDate' => date("d/m/Y")
@@ -615,7 +588,8 @@ class LogisticController extends Controller
             'approved_at' => date("d/m/Y")
         ]);
 
-        return redirect('/dashboard')->with('status', 'Order Completed');
+        // return redirect('/dashboard')->with('status', 'Order Completed');
+        return redirect()->back()->with('status', 'Order Completed');
     }
 
     public function downloadPr(OrderHead $orderHeads){
@@ -655,7 +629,7 @@ class LogisticController extends Controller
 
         $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('logistic.logisticReport', compact('orders'));
+        return view('logistic.logisticReport', compact('orders', 'str_month'));
     }
 
     public function downloadReport(Excel $excel){

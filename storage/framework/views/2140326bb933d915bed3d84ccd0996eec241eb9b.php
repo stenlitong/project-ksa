@@ -120,101 +120,101 @@ unset($__errorArgs, $__bag); ?>
 
             
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-danger">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex-column">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->order_id); ?></h5>
-                                        </div>
-                                        <div class="d-flex-column ml-5">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->boatName); ?></h5>
-                                        </div>
-                                        <div class="d-flex-column ml-5">
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
-                                            <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->user->name); ?></h5>
-                                        </div>
+                <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex-column">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->order_id); ?></h5>
                                     </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <div class="d-flex-column ml-5">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->boatName); ?></h5>
+                                    </div>
+                                    <div class="d-flex-column ml-5">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><?php echo e($o->user->name); ?></h5>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <?php if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false): ?>
-                                        <div class="d-flex justify-content-around">
-                                            <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
-                                            <h5>Tipe Order : <?php echo e($o -> orderType); ?></h5>
-                                        </div>
-                                    <?php endif; ?>
-                                    <table class="table">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Item Barang</th>
-                                                <th scope="col">Request Quantity</th>
-                                                <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
-                                                    <th scope="col">Accepted Quantity</th>
-                                                <?php endif; ?>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <?php if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false): ?>
+                                    <div class="d-flex justify-content-around">
+                                        <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                        <h5>Tipe Order : <?php echo e($o -> orderType); ?></h5>
+                                    </div>
+                                <?php endif; ?>
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Item Barang</th>
+                                            <th scope="col">Request Quantity</th>
+                                            <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
+                                                <th scope="col">Accepted Quantity</th>
+                                            <?php endif; ?>
 
-                                                
-                                                <?php if(strpos($o -> order_id, 'COID') !== false): ?>
-                                                    <th scope="col">Terakhir Diberikan</th>
-                                                <?php endif; ?>
-                                                <th scope="col">Umur Barang</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Golongan</th>
-                                                
-                                                <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
-                                                    <th scope="col">Stok Barang</th>
-                                                <?php endif; ?>
+                                            
+                                            <?php if(strpos($o -> order_id, 'COID') !== false): ?>
+                                                <th scope="col">Terakhir Diberikan</th>
+                                            <?php endif; ?>
+                                            <th scope="col">Umur Barang</th>
+                                            <th scope="col">Department</th>
+                                            <th scope="col">Golongan</th>
+                                            
+                                            <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
+                                                <th scope="col">Stok Barang</th>
+                                            <?php endif; ?>
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($od -> orders_id == $o -> id): ?>
-                                                    <tr>
-                                                        <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
-                                                        <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
-                                                        <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
-                                                            <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($od -> orders_id == $o -> id): ?>
+                                                <tr>
+                                                    <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
+                                                    <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                    <?php if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false): ?>
+                                                        <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                    <?php endif; ?>
+
+                                                    <?php if(strpos($o -> order_id, 'COID') !== false): ?>
+                                                        <td><?php echo e($od -> item -> lastGiven); ?></td>
+                                                    <?php endif; ?>
+
+                                                    <td><?php echo e($od -> item -> itemAge); ?></td>
+                                                    <td><?php echo e($od -> department); ?></td>
+                                                    <td><?php echo e($od -> item -> golongan); ?></td>
+
+                                                    <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
+                                                        <?php if($od -> quantity > $od -> item -> itemStock): ?>
+                                                            <td style="color: red; font-weight: bold;"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>
+                                                        <?php else: ?>
+                                                            <td style="color: green; font-weight: bold;"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></td>
                                                         <?php endif; ?>
-
-                                                        <?php if(strpos($o -> order_id, 'COID') !== false): ?>
-                                                            <td><?php echo e($od -> item -> lastGiven); ?></td>
-                                                        <?php endif; ?>
-
-                                                        <td><?php echo e($od -> item -> itemAge); ?></td>
-                                                        <td><?php echo e($od -> department); ?></td>
-                                                        <td><?php echo e($od -> item -> golongan); ?></td>
-
-                                                        <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
-                                                            <?php if($od -> quantity > $od -> item -> itemStock): ?>
-                                                                <td style="color: red; font-weight: bold;"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>
-                                                            <?php else: ?>
-                                                                <td style="color: green; font-weight: bold;"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></td>
-                                                            <?php endif; ?>
-                                                        <?php endif; ?>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </tbody>
-                                    </table>
-                                </div> 
-                                <div class="modal-footer">
+                                                    <?php endif; ?>
+                                                </tr>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </tbody>
+                                </table>
+                            </div> 
+                            <div class="modal-footer">
+                                
+                                <?php if(strpos($o -> status, 'In Progress By Logistic') !== false): ?>
                                     
-                                    <?php if(strpos($o -> status, 'In Progress By Logistic') !== false): ?>
-                                        
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
-                                        <a href="/logistic/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
-                                    <?php endif; ?>
-                                </div>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
+                                    <a href="/logistic/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+                </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             

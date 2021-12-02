@@ -18,7 +18,7 @@ class OrderDetail extends Model
     }
 
     public function supplier(){
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
 }

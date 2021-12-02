@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('itemName');
-            $table->integer('itemStock');
+            $table->bigInteger('itemStock');
             $table->string('unit');
             $table->string('serialNo')->nullable();
             $table->string('golongan');
@@ -24,6 +24,7 @@ class CreateItemsTable extends Migration
             $table->string('itemAge');
             $table->string('cabang');
             $table->string('itemState')->default('Available');
+            $table->bigInteger('minStock');
             $table->string('description')->nullable();
             $table->string('lastGiven')->nullable();
             $table->timestamps();
