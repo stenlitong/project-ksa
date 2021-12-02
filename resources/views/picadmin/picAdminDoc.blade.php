@@ -19,6 +19,17 @@
                     <option value="/picadmin/dana?search=Banjarmasin">Banjarmasin</option>
                    </select>
                 <br>
+                  @error('reasonbox')
+                  <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                      Alasan Wajib Diisi
+                  </div>
+                  @enderror
+                  <script>
+                    setTimeout(function(){
+                    $("div.alert").remove();
+                    }, 5000 ); // 5 secs
+                  </script>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
                 <table class="table" style="margin-top: 2%">
                   <thead class="thead-dark">
                       <tr>
@@ -86,16 +97,16 @@
                                               @csrf
                                                 <input type="hidden" name='reason' value={{$reason}}>
                                                 <input type="hidden" name='status' value={{$stats}}>
-                                                <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
+                                                <input type="hidden" name ='cabang' value={{$doc->cabang}}>
                                                 <div class="form-group">
                                                     <label for="reason">Reason</label>
-                                                    <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
+                                                    <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                                 </div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" id="submitreject2"  class="btn btn-danger">Reject File</button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-danger">Reject File</button>
-                                        </div>
-                                        </form>
                                       </div>
                                     </div>
                                   </div>
@@ -167,13 +178,13 @@
                                               <input type="hidden" name ='cabang' value={{$d->cabang}}>
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
-                                              </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-danger">Reject File</button>
-                                        </div>
-                                      </form>
+                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                                </div>
+                                            </form>
+                                          </div>
                                       </div>
                                     </div>
                                   </div>
@@ -248,13 +259,14 @@
                                               <input type="hidden" name ='cabang' value={{$b->cabang}}>
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
+                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
                                               </div>
+                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                          </form>
                                         </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-danger">Reject File</button>
-                                        </div>
-                                      </form>
                                       </div>
                                     </div>
                                   </div>
@@ -301,7 +313,7 @@
                             <td scope="col" id="status">{{$s->$stats}}</td>                                      
                             <td scope="col" id="duetime1">{{$date}}</td> 
                             <td scope="col">
-                              <form method="POST" action="/picadmin/rpk/update-status">
+                              <form method="POST" action="/picadmin/dana/approvedana">
                                   @csrf
                                   <input type="hidden" name='status' value={{$stats}}>
                                   <input type="hidden" name = 'cabang' value={{$s->cabang}}>
@@ -321,7 +333,7 @@
                                           </button>
                                         </div>
                                         <div class="modal-body">
-                                          <form method="POST" action="/picadmin/rpk/rejectrpk">
+                                          <form method="POST" action="/picadmin/dana/rejectdana">
                                             @csrf
                                             <input type="hidden" name='reason' value={{$reason}}>
                                             <input type="hidden" name='status' value={{$stats}}>
@@ -329,12 +341,12 @@
                                             <div class="form-group">
                                                 <label for="reason">Reason</label>
                                                 <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                              </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-danger">Reject File</button>
-                                        </div>
-                                      </form>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                            </div>
+                                        </form>
                                       </div>
                                     </div>
                                   </div>

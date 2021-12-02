@@ -75,8 +75,18 @@ Route::group(['middleware' => ['auth']], function(){
 
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
-        Route::post('/rpk/rejectrpk',[picAdminController::class, 'reject']);
+        Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);
         Route::get('/download' , [picAdminController::class , 'download'])->name('download');
+    });
+
+    Route::prefix('picincident')->name('picincident.')->group(function(){
+        Route::get('/formclaim', 'picincident@formclaim');
+        Route::get('/spgr', 'picincident@spgr');
+       
+    });
+    Route::prefix('insurance')->name('insurance.')->group(function(){
+        Route::get('/', 'picAdminController@checkform');
+       
     });
 });
 require __DIR__.'/auth.php';

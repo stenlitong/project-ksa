@@ -11,7 +11,7 @@
                 <div class="jumbotron jumbotron-fluid" >
                     <div class="container">
                       <h1 class="display-4">Upload your Fund Request Form</h1>
-                        <p class="lead">please only upload file with .PDF format only .
+                        <p class="lead">please only upload file with .PDF format only and size is not more than 3 MB.
                           <br>
                             Please upload your document request & fund request form  !
                         </p>
@@ -20,7 +20,7 @@
                         @if($errors->any())
                             @foreach ($errors->all() as $error)
                                 <div class="alert error alert-danger" id="error">{{ $error }}
-                                    <strong>    Please check the file is a PDF and Size 3MB.</strong>
+                                    <strong>Please check the file is a PDF and Size 3MB.</strong>
                                 </div>
                             @endforeach
                         @endif
@@ -78,6 +78,12 @@
                                             @else
                                                 <td>  </td>
                                             @endif
+                                            {{-- @if ($doc->$stats == 'rejected')
+                                                <td scope="col">
+                                                    <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
+                                                    <a href="/picsite/view" target="_blank">view</a>
+                                                </td>
+                                            @endif --}}
                                         </tr>
                                     @endfor
                                     @endif
@@ -116,6 +122,12 @@
                                                 </td>  
                                                 @else
                                                 <td> </td>
+                                                @endif
+                                                @if ($d->$stats == 'rejected' ){
+                                                   <td scope="col">
+                                                       <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
+                                                        {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                                    </td>  
                                                 @endif
                                             </tr>
                                         @endfor
@@ -159,6 +171,12 @@
                                         @else
                                             <td> </td>
                                         @endif
+                                        @if ($b->$stats == 'rejected')
+                                            <td scope="col">
+                                                <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
+                                                {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                            </td>
+                                        @endif
                                     </tr>      
                                 @endfor
                             @endif
@@ -200,6 +218,11 @@
                                                 </td>  
                                             @else
                                                 <td> </td>
+                                            @endif
+                                            @if ($s->$stats == 'rejected')
+                                                <td scope="col">
+                                                    <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
+                                                </td>
                                             @endif
                                         </tr>     
                                         @endfor

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>kings</title>
+    <title>UPLOAD ALERT</title>
 </head>
 <body>
     <h1>{{ $details['title'] }}</h1>

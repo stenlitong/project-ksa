@@ -49,5 +49,12 @@ class DashboardController extends Controller
             $document = DB::table('documents')->latest()->get();
             return view('picadmin.picAdminDashboard' , compact('document'));
         }
+        elseif(Auth::user()->hasRole('picIncident')){
+            
+            return view('picincident.dashboardincident' );
+        }
+        elseif(Auth::user()->hasRole('insurance')){
+            return view('insurance.insuranceDashboard');
+        }
     }
 }

@@ -43,7 +43,8 @@ class Kernel extends ConsoleKernel
             'body' => 'You will receive a newsletter every Fourth Friday of the month'
 
         ];
-        Mail::to('mask.dvl9@gmail.com')->send(new Gmail($details))->monthlyOn(28, '15:00');
+        //ganti email ke email admin
+        Mail::to('mask.dvl9@gmail.com')->send(new Gmail($details))->monthlyOn(15, '15:00')->onOneServer()->runInBackground();
     }
 
     /**

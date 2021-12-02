@@ -90,9 +90,10 @@
                                                     <label for="reason">Reason</label>
                                                     <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
                                                 </div>
+                                                {{-- <button type="submit" id="submitreject" class="btn btn-danger" style="display: none">Reject File</button> --}}
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-danger">Reject File</button>
+                                                <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
                                             </div>
                                         </form>
                                     </div>

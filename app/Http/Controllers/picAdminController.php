@@ -60,36 +60,36 @@ class picAdminController extends Controller
     public function reject(Request $request){
         //  dd($request);
         $request->validate([
-            $request->reasonbox => 'required|max:180',
+            'reasonbox' => 'required|max:180',
         ]);
-            if ($request->cabang == 'Babelan'){
-                documents::where('cabang',$request->cabang)->update([
-                    $request->status => 'rejected',
-                    $request->reason => $request->reasonbox ,
-                ]);
-            }
+        if ($request->cabang == 'Babelan'){
+            documents::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+        }
 
-            if ($request->cabang == 'Berau'){
-                documentberau::where('cabang',$request->cabang)->update([
-                    $request->status => 'rejected',
-                    $request->reason => $request->reasonbox ,
-                ]);
-            }
+        if ($request->cabang == 'Berau'){
+            documentberau::where('cabang',$request->cabang)->update([
+               $request->status => 'rejected',
+               $request->reason => $request->reasonbox ,
+           ]);
+        }
 
-            if ($request->cabang == 'Banjarmasin'){
-                documentbanjarmasin::where('cabang',$request->cabang)->update([
-                    $request->status => 'rejected',
-                    $request->reason => $request->reasonbox ,
-                ]);
-            }
-            
-            if ($request->cabang == 'Samarinda'){
-                documentsamarinda::where('cabang',$request->cabang)->update([
-                    $request->status => 'rejected',
-                    $request->reason => $request->reasonbox ,
-                ]);
-            }
-           
+        if ($request->cabang == 'Banjarmasin'){
+            documentbanjarmasin::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+        }
+
+        if ($request->cabang == 'Samarinda'){
+            documentsamarinda::where('cabang',$request->cabang)->update([
+                $request->status => 'rejected',
+                $request->reason => $request->reasonbox ,
+            ]);
+        }
+        
         return redirect('/picadmin/dana');
     }
     
@@ -131,8 +131,9 @@ class picAdminController extends Controller
     }
 
     public function rejectrpk(Request $request){
+        // dd($request);
         $request->validate([
-            $request->reasonbox => 'required|max:255',
+            'reasonbox' => 'required|max:255',
         ]);
 
         documentrpk::where('cabang',$request->cabang)->update([

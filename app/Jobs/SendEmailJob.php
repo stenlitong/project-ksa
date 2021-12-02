@@ -35,6 +35,6 @@ class SendEmailJob implements ShouldQueue
             'body' => 'You will receive a newsletter every Fourth Friday of the month'
 
         ];
-        Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
+        Mail::to(Auth::user()->mail)->send(new Gmail($details));
     }
 }

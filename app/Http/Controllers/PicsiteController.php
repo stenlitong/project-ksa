@@ -445,15 +445,19 @@ class PicsiteController extends Controller
             
             if ($request->hasFile('ufile16')) {
                 $file16 = $request->file('ufile16');
+                $year = date('Y');
+                $month = date('m');
                 $name16 =  $file16->getClientOriginalName() . '-picsite-'. Auth::user()->cabang;
                 $tujuan_upload = 'babelan/pnpb_sscec';
-                $request->file('ufile16')->storeAs($tujuan_upload, $name16.'.pdf');
-                $pathbabelan16 = Storage::path('babelan/pnpb_sscec/'.$file16->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
+                //$request->file('ufile16')->storeAs($tujuan_upload, $name16.'.pdf');
+                // $pathbabelan16 = Storage::path('babelan/pnpb_sscec/'.$file16->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
+
+                $path = $request->file('ufile16')->storeas('babelan/'. $year . "/". $month , 's3');
 
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
                     DB::table('documents')->where('cabang', 'Babelan')->update([
                         //babelan
-                        'pnpb_sscec'=> $pathbabelan16,
+                        'pnpb_sscec'=> $name16,
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
                     ]);
@@ -462,10 +466,11 @@ class PicsiteController extends Controller
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
-                        'pnpb_sscec'=> $pathbabelan16,
+                        'pnpb_sscec'=> basename($path),
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
                     ]);
+                   
                 }
             }
             
