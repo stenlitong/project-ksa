@@ -240,6 +240,7 @@ class SupervisorController extends Controller
             'itemAge' => 'required|integer|min:1',
             'umur' => 'required',
             'itemStock' => 'required|integer|min:1',
+            'minStock' => 'required|integer|min:1',
             'unit' => 'required',
             'golongan' => 'required',
             // 'serialNo' => 'nullable|numeric',
@@ -281,10 +282,11 @@ class SupervisorController extends Controller
             'itemAge' => 'required|integer|min:1',
             'umur' => 'required',
             'itemStock' => 'required|integer|min:1',
+            'minStock' => 'required|integer|min:1',
             'unit' => 'required',
             'golongan' => 'required',
-            'serialNo' => 'nullable|numeric',
-            'codeMasterItem' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            'serialNo' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
+            'codeMasterItem' => 'required',
             'itemState' => 'required|in:Available,Hold',
             'description' => 'nullable'
         ]);

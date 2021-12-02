@@ -233,21 +233,22 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="golongan">Golongan</label>
-                                            <select class="form-control" id="golongan" name="golongan" required>
-                                                <option value="None">None</option>
-                                                <option value="Floating">Floating</option>
-                                                <option value="Dock">Dock</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="minStock">Minimum Stok</label>
+                                    <input type="number" class="form-control" id="minStock" name="minStock"
+                                        placeholder="Input Minimum Stock" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="golongan">Golongan</label>
+                                    <select class="form-control" id="golongan" name="golongan" required>
+                                        <option value="None">None</option>
+                                        <option value="Floating">Floating</option>
+                                        <option value="Dock">Dock</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="serialNo">Serial Number / Part Number</label>
-                                    <input type="number" class="form-control" id="serialNo" name="serialNo"
+                                    <input type="text" class="form-control" id="serialNo" name="serialNo"
                                         placeholder="Input Serial Number (xx-xxxx-)" required>
                                 </div>
                                 <div class="form-group">
@@ -429,6 +430,11 @@ unset($__errorArgs, $__bag); ?>
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="minStock">Minimum Stok</label>
+                                        <input type="number" class="form-control" id="minStock" name="minStock"
+                                            placeholder="Input Minimum Stock" value="<?php echo e($i -> minStock); ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="golongan">Golongan</label>
