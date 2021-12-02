@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\User;
+use App\Models\ItemBelowStock;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
 use App\Exports\PRExport;
@@ -15,7 +16,7 @@ use App\Exports\PurchasingReportExport;
 use App\Models\OrderDo;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Auth;
-// Use \Carbon\Carbon;
+use App\Jobs\SendItemBelowStockReportJob;
 
 class SupervisorController extends Controller
 {
@@ -245,7 +246,7 @@ class SupervisorController extends Controller
             'golongan' => 'required',
             // 'serialNo' => 'nullable|numeric',
             'serialNo' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
-            'codeMasterItem' => 'required',
+            'codeMasterItem' => 'nullable',
             'cabang' => 'required',
             'description' => 'nullable'
         ]);
@@ -254,10 +255,11 @@ class SupervisorController extends Controller
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
         
         // Create the item
-        Item::create([
+        $item = Item::create([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request -> itemStock,
+            'minStock' => $request -> minStock,
             'unit' => $request -> unit,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
@@ -265,6 +267,23 @@ class SupervisorController extends Controller
             'cabang' => $request->cabang,
             'description' => $request -> description
         ]);
+
+        // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+        if($item -> itemStock < $item -> minStock){
+            if(ItemBelowStock::where('id', $item -> id)->exists()){
+                ItemBelowStock::find($item -> id)->update([
+                    'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                ]);
+            }else{
+                ItemBelowStock::create([
+                    'item_id' => $item -> id,
+                    'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                ]);
+                SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
+            }
+        }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+            ItemBelowStock::find($item -> id)->destroy();
+        }
 
         return redirect('/supervisor/item-stocks')->with('status', 'Added Successfully');
     }
@@ -286,7 +305,7 @@ class SupervisorController extends Controller
             'unit' => 'required',
             'golongan' => 'required',
             'serialNo' => 'required|regex:/^[0-9]{2}-[0-9]{4}-[0-9]/',
-            'codeMasterItem' => 'required',
+            'codeMasterItem' => 'nullable',
             'itemState' => 'required|in:Available,Hold',
             'description' => 'nullable'
         ]);
@@ -295,10 +314,11 @@ class SupervisorController extends Controller
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
         // Update the item
-        Item::where('id', $item->id)->update([
+        $edited_item = Item::where('id', $item->id)->update([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request->itemStock,
+            'minStock' => $request -> minStock,
             'unit' => $request -> unit,
             'golongan' => $request -> golongan,
             'serialNo' => $request -> serialNo,
@@ -306,6 +326,23 @@ class SupervisorController extends Controller
             'itemState' => $request -> itemState,
             'description' => $request -> description
         ]);
+
+        // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+        if($edited_item -> itemStock < $edited_item -> minStock){
+            if(ItemBelowStock::where('id', $edited_item -> id)->exists()){
+                ItemBelowStock::find($edited_item -> id)->update([
+                    'stock_defficiency' => ($edited_item -> minStock) - ($edited_item -> itemStock)
+                ]);
+            }else{
+                ItemBelowStock::create([
+                    'item_id' => $edited_item -> id,
+                    'stock_defficiency' => ($edited_item -> minStock) - ($edited_item -> itemStock)
+                ]);
+                SendItemBelowStockReportJob::dispatch($edited_item->id, $edited_item->cabang);
+            }
+        }elseif(ItemBelowStock::where('id', $edited_item -> id)->exists()){
+            ItemBelowStock::find($edited_item -> id)->destroy();
+        }
 
         return redirect('/supervisor/item-stocks')->with('status', 'Edit Successfully');
     }
@@ -378,7 +415,27 @@ class SupervisorController extends Controller
             ]);
             
             // Decrement the stock for the requested branch
-            Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
+            $item = Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
+
+            // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+            if($item -> itemStock < $item -> minStock){
+                if(ItemBelowStock::where('id', $item -> id)->exists()){
+                    ItemBelowStock::find($item -> id)->update([
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                }else{
+                    ItemBelowStock::create([
+                        'item_id' => $item -> id,
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                    SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
+                }
+            }
+            // This elseif can be deleted after testing, Just to make sure the item is not exist even though the only scenario where this gonna happen is only when someone
+            // changing the stock directly from the database 
+            elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+                ItemBelowStock::find($item -> id)->destroy();
+            }
 
             // return redirect('/supervisor/approval-do')->with('status', 'Approved Successfully');
             return redirect()->back()->with('status', 'Approved Successfully');

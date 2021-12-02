@@ -42,7 +42,6 @@
         <?php if(Session::has('message')): ?>
             <p class="alert <?php echo e(Session::get('alert-class', 'alert-info')); ?>"><?php echo e(Session::get('message')); ?></p>
         <?php endif; ?>
-        
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <form method="POST" action="<?php echo e(route('logout')); ?>">

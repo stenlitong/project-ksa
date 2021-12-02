@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\SendItemBelowStockReportJob;
 
 class Kernel extends ConsoleKernel
 {
@@ -23,8 +24,13 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
+    {   
+        // $schedule->job(new SendItemBelowStockReportJob('Jakarta'))->fridays()->at('10:00')->onOneServer()->runInBackground();
+        // $schedule->job(new SendItemBelowStockReportJob('Banjarmasin'))->fridays()->at('10:00')->onOneServer()->runInBackground();
+        // $schedule->job(new SendItemBelowStockReportJob('Samarinda'))->fridays()->at('10:00')->onOneServer()->runInBackground();
+        // $schedule->job(new SendItemBelowStockReportJob('Bunati'))->fridays()->at('10:00')->onOneServer()->runInBackground();
+        // $schedule->job(new SendItemBelowStockReportJob('Babelan'))->fridays()->at('10:00')->onOneServer()->runInBackground();
+        // $schedule->job(new SendItemBelowStockReportJob('Berau'))->fridays()->at('10:00')->onOneServer()->runInBackground();
     }
 
     /**

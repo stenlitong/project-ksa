@@ -42,11 +42,6 @@
         @if(Session::has('message'))
             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
         @endif
-        {{-- <div class="navbar-nav ml-auto">
-            <div class="nav-item text-nowrap">
-                aaa
-            </div>
-        </div> --}}
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <form method="POST" action="{{ route('logout') }}">

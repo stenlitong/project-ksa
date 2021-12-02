@@ -10,11 +10,13 @@ use App\Models\User;
 use App\Models\Tug;
 use App\Models\Barge;
 use App\Models\OrderDo;
+use App\Models\ItemBelowStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Str;
 use App\Exports\OrderOutExport;
 use App\Exports\OrderInExport;
+use App\Jobs\SendItemBelowStockReportJob;
 use App\Exports\PRExport;
 use App\Exports\DOExport;
 use App\Exports\PurchasingReportExport;
@@ -214,13 +216,30 @@ class LogisticController extends Controller
         }
 
         // Increment the stock for the requester branch
-        Item::where('id', $orderDos -> item_requested_id)->increment('itemStock', $orderDos -> quantity);
-
+        $item = Item::where('id', $orderDos -> item_requested_id)->increment('itemStock', $orderDos -> quantity);
+        
         // Update the status of the DO
         OrderDo::where('id', $orderDos -> id)->update([
             'order_tracker' => 2,
             'status' => 'Accepted'
         ]);
+
+        // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+        if($item -> itemStock < $item -> minStock){
+            if(ItemBelowStock::where('id', $item -> id)->exists()){
+                ItemBelowStock::find($item -> id)->update([
+                    'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                ]);
+            }else{
+                ItemBelowStock::create([
+                    'item_id' => $item -> id,
+                    'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                ]);
+                SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
+            }
+        }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+            ItemBelowStock::find($item -> id)->destroy();
+        }
 
         // Then redirect/refresh page
         // return redirect('/logistic/request-do')->with('success', 'Order Accepted Successfully');
@@ -311,13 +330,33 @@ class LogisticController extends Controller
             $status = 'On Delivery';
         }
 
+        // ===================================== Under Testing || Add More Explanation ==================================================
         // If the stock checker passed, then decrement each item for the following order
         foreach($orderDetails as $od){
             Item::where('id', $od -> item -> id)->update([
                 'lastGiven' => date("d/m/Y")
             ]);
-            Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> acceptedQuantity);
-            // $sumPrice += $od -> acceptedQuantity * filter_var($od -> item -> itemPrice, FILTER_SANITIZE_NUMBER_INT);
+            $item = Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> acceptedQuantity);
+
+            // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+            if($item -> itemStock < $item -> minStock){
+                if(ItemBelowStock::where('id', $item -> id)->exists()){
+                    ItemBelowStock::find($item -> id)->update([
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                }else{
+                    ItemBelowStock::create([
+                        'item_id' => $item -> id,
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                    SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
+                }
+            }
+            // This elseif can be deleted after testing, Just to make sure the item is not exist even though the only scenario where this gonna happen is only when someone
+            // changing the stock directly from the database 
+            elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+                ItemBelowStock::find($item -> id)->destroy();
+            }
         }
 
         // Update the status of the following order
@@ -579,7 +618,24 @@ class LogisticController extends Controller
         
         // Update the stock by adding the amount of the ordered items
         foreach($orderDetails as $od){
-            Item::where('id', $od -> item -> id)->increment('itemStock', $od -> quantity);
+            $item = Item::where('id', $od -> item -> id)->increment('itemStock', $od -> quantity);
+
+            // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
+            if($item -> itemStock < $item -> minStock){
+                if(ItemBelowStock::where('id', $item -> id)->exists()){
+                    ItemBelowStock::find($item -> id)->update([
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                }else{
+                    ItemBelowStock::create([
+                        'item_id' => $item -> id,
+                        'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
+                    ]);
+                    SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
+                }
+            }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+                ItemBelowStock::find($item -> id)->destroy();
+            }
         }
 
         OrderHead::find($orderHeads->id)->update([
@@ -587,7 +643,7 @@ class LogisticController extends Controller
             'order_tracker' => 2,
             'approved_at' => date("d/m/Y")
         ]);
-
+        
         // return redirect('/dashboard')->with('status', 'Order Completed');
         return redirect()->back()->with('status', 'Order Completed');
     }

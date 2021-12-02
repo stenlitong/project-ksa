@@ -20,6 +20,10 @@ class Item extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function itemBelowStocks(){
+        return $this->hasOne(ItemBelowStock::class);
+    }
+
     // public function orderDo(){
     //     return $this->hasMany(OrderDo::class);
     // }

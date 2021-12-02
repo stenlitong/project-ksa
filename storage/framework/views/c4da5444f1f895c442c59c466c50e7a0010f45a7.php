@@ -247,9 +247,9 @@ unset($__errorArgs, $__bag); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="serialNo">Serial Number / Part Number</label>
+                                    <label for="serialNo">Serial Number / Part Number (XX-XXXX-)</label>
                                     <input type="text" class="form-control" id="serialNo" name="serialNo"
-                                        placeholder="Input Serial Number (xx-xxxx-)" required>
+                                        placeholder="Input Serial Number (XX-XXXX-)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="codeMasterItem">Code Master Item (optional)</label>
@@ -445,9 +445,9 @@ unset($__errorArgs, $__bag); ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="serialNo">Serial Number / Part Number</label>
+                                        <label for="serialNo">Serial Number / Part Number (XX-XXXX-)</label>
                                         <input type="text" class="form-control" id="serialNo" name="serialNo"
-                                            placeholder="Input Serial Number (xx-xxxx-)" value="<?php echo e($i -> serialNo); ?>" required>
+                                            placeholder="Input Serial Number (XX-XXXX-)" value="<?php echo e($i -> serialNo); ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="codeMasterItem">Code Master Item</label>

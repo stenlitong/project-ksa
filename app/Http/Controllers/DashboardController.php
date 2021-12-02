@@ -63,9 +63,6 @@ class DashboardController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            Session::flash('message', 'This is a message!');
-            Session::flash('alert-class', 'alert-danger'); 
-
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
 
         }elseif(Auth::user()->hasRole('supervisor') or Auth::user()->hasRole('supervisorLogisticMaster')){
