@@ -1,4 +1,4 @@
-<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
+<?php if(Auth::user()->hasRole('supervisorLogistic') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
     
 
     <?php $__env->startSection('title', 'Supervisor Stocks'); ?>

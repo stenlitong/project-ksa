@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster'))
+@if(Auth::user()->hasRole('supervisorLogistic') || Auth::user()->hasRole('supervisorLogisticMaster'))
     @extends('../layouts.base')
 
     @section('title', 'Supervisor Stocks')

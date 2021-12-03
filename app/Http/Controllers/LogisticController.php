@@ -223,7 +223,9 @@ class LogisticController extends Controller
         // Get all the DO from the last 6 month
         $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->get();
 
-        return view('logistic.logisticOngoingDO', compact('ongoingOrders'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticOngoingDO', compact('ongoingOrders', 'items_below_stock'));
     }
 
     public function acceptDo(OrderDo $orderDos){
@@ -233,7 +235,8 @@ class LogisticController extends Controller
         }
 
         // Increment the stock for the requester branch
-        $item = Item::where('id', $orderDos -> item_requested_id)->increment('itemStock', $orderDos -> quantity);
+        $item = Item::where('id', $orderDos -> item_requested_id)->first();
+        $item -> increment('itemStock', $orderDos -> quantity);
         
         // Update the status of the DO
         OrderDo::where('id', $orderDos -> id)->update([
@@ -355,8 +358,10 @@ class LogisticController extends Controller
             Item::where('id', $od -> item -> id)->update([
                 'lastGiven' => date("d/m/Y")
             ]);
-            $item = Item::where('id', $od -> item -> id)->decrement('itemStock', $od -> acceptedQuantity);
 
+            $item = Item::where('id', $od -> item ->id)->first();
+            $item -> decrement('itemStock', $od -> acceptedQuantity);
+        
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){
                 if(ItemBelowStock::where('item_id', $item -> id)->exists()){
@@ -649,7 +654,8 @@ class LogisticController extends Controller
         
         // Update the stock by adding the amount of the ordered items
         foreach($orderDetails as $od){
-            $item = Item::where('id', $od -> item -> id)->increment('itemStock', $od -> quantity);
+            $item = Item::where('id', $od -> item -> id)->first();
+            $item -> increment('itemStock', $od -> quantity);
 
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){

@@ -445,7 +445,8 @@ class SupervisorController extends Controller
             ]);
             
             // Decrement the stock for the requested branch
-            $item = Item::where('id', $orderDos -> item_requested_from_id)->decrement('itemStock', $orderDos -> quantity);
+            $item = Item::where('id', $orderDos -> item_requested_from_id);
+            $item ->decrement('itemStock', $orderDos -> quantity);
 
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){
