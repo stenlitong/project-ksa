@@ -45,16 +45,16 @@
                                         <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')" required autofocus />
 
                                         <x-label for="TOW" :value="__('TOW : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="TOW" class="block mt-1 w-full" type="text" name="TOW" placeholder="Enter TOW" :value="old('TOW')" required autofocus />
+                                        <x-input id="TOW" class="block mt-1 w-full" type="number" name="TOW" placeholder="Enter TOW" :value="old('TOW')" required autofocus />
                                         
                                         <x-label for="TotalSumInsurade" :value="__('Total Sum Insurade : ')" style="margin-top: 2%; margin-left: 1%"  />
-                                        <x-input id="TotalSumInsurade" class="block mt-1 w-full" type="text" name="TotalSumInsurade" placeholder="Enter Total Sum Insurade" :value="old('TotalSumInsurade')" required autofocus />
+                                        <x-input id="TotalSumInsurade" class="block mt-1 w-full" type="number" name="TotalSumInsurade" placeholder="Enter Total Sum Insurade" :value="old('TotalSumInsurade')" required autofocus />
                                         
                                         <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Deductible" class="block mt-1 w-full" type="text" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" required autofocus />
+                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" required autofocus />
 
                                         <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Amount" class="block mt-1 w-full" type="text" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus />
+                                        <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus />
                                         
                                     </div>
                                     <div class="col-lg-3">
@@ -70,12 +70,14 @@
                                     </div>
                                 </div>
 
+                                
                                 <div>
-                                    <x-label for="Description" :value="__('Description : ')" style="margin-top: 2%; margin-left: 1%" />
+                                    <x-label for="Description" :value="__('Description : ')" style="margin-top: 2%; margin-left: 1%;"  />
                                     <textarea class="form-control" name="reasonbox" required id="Description" required autofocus rows="3"></textarea>
+                                    <button class="btn btn-dark" type="submit" id="addcart" style="margin-left: 80%; margin-top: 2%; width: 20%;">Add To List</button>
+                                    <button class="btn btn-outline-danger" id="createform" name="createform" style="margin-left: 80%; margin-top: 1%; width: 20%;">Create Form</button>
                                 </div>
 
-                                <button class="btn btn-danger" type="submit" id="top" style="margin-left: 80%; margin-top: 2%; width: 20%;">upload</button>
                             </form>
 
                             @error('reasonbox')
@@ -112,19 +114,25 @@
                                             <td scope="col">{{$claim->description}}</td>
                                             <td scope="col">{{$claim->amount}}</td>
                                             <td scope="col">
-                                                <form action="/formclaim/destroy/{{$claim->id}}" method="POST">
+                                                <form action="/picincident/formclaim/destroy/{{$claim->id}}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
                                         @empty
-                                            <tr> Data not found </tr>
+                                            <tr> forms request not yet added </tr>
                                         @endforelse
                                 </tbody>
                             </table>
-                                
+                                <script>
+                                    document.getElementById('createform').addEventListener('click', openDialog);
+                                    function openDialog() {
+                                        document.getElementById('realsub').click();
+                                    }
+                                </script>
                                 <script>
                                     setTimeout(function(){
                                     $("div.alert").remove();

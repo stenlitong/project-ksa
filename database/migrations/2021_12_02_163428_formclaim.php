@@ -24,10 +24,10 @@ class Formclaim extends Migration
             $table->string('item')->nullable();
             $table->string('jenis_incident', 2 )->nullable();
             $table->string('no_FormClaim')->nullable();
-            $table->string('TOW')->nullable();
-            $table->string('total_sum_insurade')->nullable();
-            $table->string('deductible')->nullable();
-            $table->string('amount')->nullable();
+            $table->integer('TOW')->nullable();
+            $table->integer('total_sum_insurade')->nullable();
+            $table->integer('deductible')->nullable();
+            $table->integer('amount')->nullable();
             $table->string('surveyor')->nullable();
             $table->string('tugBoat')->nullable();
             $table->string('incident')->nullable();

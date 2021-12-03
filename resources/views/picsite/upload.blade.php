@@ -123,12 +123,12 @@
                                                 @else
                                                 <td> </td>
                                                 @endif
-                                                @if ($d->$stats == 'rejected' ){
+                                                {{-- @if ($d->$stats == 'rejected' ){
                                                    <td scope="col">
                                                        <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
-                                                        {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                                        <a href="/picsite/view" target="_blank">view</a>
                                                     </td>  
-                                                @endif
+                                                {{-- @endif  --}}
                                             </tr>
                                         @endfor
                                     @endif
@@ -171,12 +171,12 @@
                                         @else
                                             <td> </td>
                                         @endif
-                                        @if ($b->$stats == 'rejected')
+                                        {{-- @if ($b->$stats == 'rejected')
                                             <td scope="col">
                                                 <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
-                                                {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                                <a href="/picsite/view" target="_blank">view</a>
                                             </td>
-                                        @endif
+                                        @endif --}}
                                     </tr>      
                                 @endfor
                             @endif
@@ -219,11 +219,11 @@
                                             @else
                                                 <td> </td>
                                             @endif
-                                            @if ($s->$stats == 'rejected')
+                                            {{-- @if ($s->$stats == 'rejected')
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
                                                 </td>
-                                            @endif
+                                            @endif --}}
                                         </tr>     
                                         @endfor
                                     @endif

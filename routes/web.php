@@ -83,8 +83,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('picincident')->name('picincident.')->group(function(){
         Route::get('/formclaim', 'picincidentController@formclaim');
         Route::get('/spgr', 'picincidentController@spgr');
+        Route::get('/history', 'picincidentController@formclaimhistory');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
-        // Route::post('/formclaim/destroy/{{$claim->slug}}', picincidentController::class , 'destroy');
+        Route::delete('/formclaim/destroy/{claim}', [picincidentController::class , 'destroy']);
        
     });
     Route::prefix('insurance')->name('insurance.')->group(function(){

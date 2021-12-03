@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'PicIncident-spgr')
+@section('title', 'PicIncident-history-FCI')
 
 @section('container')
 <x-guest-layout>

@@ -4,11 +4,15 @@
             <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/dashboard">
                     <span data-feather="home"></span>
-                    dashboard
+                    Dashboard
                 </a>
                 <a class="nav-link" aria-current="page" href="/picincident/formclaim">
                     <span data-feather="upload"></span>
                     Upload Claim Form
+                </a>
+                <a class="nav-link" aria-current="page" href="/picincident/history">
+                    <span data-feather="clock"></span>
+                    History FCI
                 </a>
                 <a class="nav-link" aria-current="page" href="/picincident/spgr">
                     <span data-feather="file-plus" style="color: black"></span>
