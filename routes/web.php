@@ -8,6 +8,7 @@ use App\Http\Controllers\PicsiteController;
 use App\Http\Controllers\PicRpkController;
 use App\Http\Controllers\adminRegisController;
 use App\Http\Controllers\picAdminController;
+use App\Http\Controllers\picincidentController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
@@ -80,8 +81,10 @@ Route::group(['middleware' => ['auth']], function(){
     });
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
-        Route::get('/formclaim', 'picincident@formclaim');
-        Route::get('/spgr', 'picincident@spgr');
+        Route::get('/formclaim', 'picincidentController@formclaim');
+        Route::get('/spgr', 'picincidentController@spgr');
+        Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
+        // Route::post('/formclaim/destroy/{{$claim->slug}}', picincidentController::class , 'destroy');
        
     });
     Route::prefix('insurance')->name('insurance.')->group(function(){
