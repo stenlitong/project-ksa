@@ -32,7 +32,10 @@ class PurchasingManagerController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
         
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -72,7 +75,10 @@ class PurchasingManagerController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
@@ -122,7 +128,10 @@ class PurchasingManagerController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
@@ -265,9 +274,12 @@ class PurchasingManagerController extends Controller
         $default_branch = 'Jakarta';
 
         // Find order from user/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
-            $query->where('role_user.role_id' , '=', '3')
-            ->orWhere('role_user.role_id' , '=', '4');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
+        //     $query->where('role_user.role_id' , '=', '3')
+        //     ->orWhere('role_user.role_id' , '=', '4');
+        // })->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | Per 3 months
@@ -305,9 +317,12 @@ class PurchasingManagerController extends Controller
         $default_branch = $branch;
 
         // Find order from user that created the order
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
-            $query->where('role_user.role_id' , '=', '3')
-            ->orWhere('role_user.role_id' , '=', '4');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
+        //     $query->where('role_user.role_id' , '=', '3')
+        //     ->orWhere('role_user.role_id' , '=', '4');
+        // })->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | Per 3 months

@@ -42,6 +42,13 @@
         @if(Session::has('message'))
             <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
         @endif
+        @if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster'))
+            <div class="navbar-nav ml-auto mr-3">
+                <div class="nav-item text-nowrap">
+                    <button class="text-white bell-button" type="button" data-toggle="modal" data-target="#itemBelowStockModal"><span data-feather='bell'></span></button>
+                </div>
+            </div>
+        @endif
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 <form method="POST" action="{{ route('logout') }}">
@@ -61,6 +68,38 @@
         @yield('container')
     </div>
 
+    @if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster'))
+            <div class="modal fade" id="itemBelowStockModal" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" style="color: white" id="rejectTitle">Notification on Stocks</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="refreshItemBelowStock">
+                            @forelse($items_below_stock as $i)
+                                <div class="card bg-light my-2 mx-2">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-around">
+                                            <span class="feather-icon" data-feather="file"></span>
+                                            <div class="mr-5">
+                                                <h5 class="card-title font-weight-bold text-center">{{ $i -> itemName }}</h5>
+                                                <p class="card-text mt-3"><span class="text-danger font-weight-bold">Warning !</span> stock is below {{ $i -> stock_defficiency }} ! please check immediately !</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <h5>No Items Found</h5>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+    @endif
+
 </body>
 
 <style>
@@ -68,6 +107,19 @@
         margin: 0;
         padding: 0;
         /* font-family: 'Inter', sans-serif; */
+    }
+    .bell-button{
+        background: none;
+        border: none;
+        height: 90%;
+        width: 90%;
+    }
+    .card-text{
+        font-size: 18px;
+    }
+    .feather-icon{
+        width: 10%;
+        height: 10%;
     }
     @media (min-width: 300px) and (max-width: 767px){
         body {
@@ -92,6 +144,13 @@
     }
 }
 </style>
+
+<script>
+    function refreshDiv(){
+        $('#refreshItemBelowStock').load(location.href + ' #refreshItemBelowStock')
+    }
+    setInterval(refreshDiv, 60000);
+</script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"

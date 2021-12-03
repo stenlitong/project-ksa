@@ -22,8 +22,11 @@ class PurchasingController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
-        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
+        
         
         if(request('search')){
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -63,7 +66,9 @@ class PurchasingController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
@@ -113,7 +118,9 @@ class PurchasingController extends Controller
         $default_branch = $branch;
 
         // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Then find all the order details from the orderHeads
         $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
@@ -345,9 +352,12 @@ class PurchasingController extends Controller
         $default_branch = 'Jakarta';
 
         // Find order from user/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
-            $query->where('role_user.role_id' , '=', '3')
-            ->orWhere('role_user.role_id' , '=', '4');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
+        //     $query->where('role_user.role_id' , '=', '3')
+        //     ->orWhere('role_user.role_id' , '=', '4');
+        // })->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | Per 3 months
@@ -360,7 +370,7 @@ class PurchasingController extends Controller
         $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-        })->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
+        })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orders', 'default_branch', 'str_month'));
     }
@@ -391,9 +401,12 @@ class PurchasingController extends Controller
         $default_branch = $cabang;
 
         // Find order from user that created the order
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
-            $query->where('role_user.role_id' , '=', '3')
-            ->orWhere('role_user.role_id' , '=', '4');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where(function($query){
+        //     $query->where('role_user.role_id' , '=', '3')
+        //     ->orWhere('role_user.role_id' , '=', '4');
+        // })->where('cabang', 'like', $default_branch)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
                 
         // Find all the items that has been approved from the logistic | Per 3 months
@@ -406,7 +419,7 @@ class PurchasingController extends Controller
         $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-        })->whereYear('order_heads.created_at', date('Y'))->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
+        })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasing.purchasingReport', compact('orders', 'default_branch', 'str_month'));
     }

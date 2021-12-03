@@ -27,7 +27,7 @@
 
     <h3>Cabang {{ $branch }}</h3>
     
-    <p>Berikut List Barang Yang Stoknya Kurang Dari Stok Minimum</p>
+    <p>Berikut Laporan Barang Yang Stoknya Kurang Dari Stok Minimum</p>
 
     <table>
         <tr>

@@ -21,7 +21,7 @@ class Item extends Model
     }
 
     public function itemBelowStocks(){
-        return $this->hasOne(ItemBelowStock::class);
+        return $this->hasOne(ItemBelowStock::class, 'item_id');
     }
 
     // public function orderDo(){

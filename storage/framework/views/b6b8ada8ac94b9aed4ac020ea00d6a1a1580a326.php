@@ -20,7 +20,7 @@
                     }
                 ?>" href="<?php echo e(Route('purchasing.report')); ?>">
                     <span data-feather="archive"></span>
-                    Report PR/PO
+                    Report PO
                 </a>
             </li>
             <li class="nav-item">

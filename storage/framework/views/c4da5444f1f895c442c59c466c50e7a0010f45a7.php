@@ -452,7 +452,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group">
                                         <label for="codeMasterItem">Code Master Item</label>
                                         <input type="text" class="form-control" id="codeMasterItem" name="codeMasterItem"
-                                            placeholder="Input Code Master Item" value="<?php echo e($i -> codeMasterItem); ?>" required>
+                                            placeholder="Input Code Master Item" value="<?php echo e($i -> codeMasterItem); ?>">
                                     </div>
                                     <div class="form-group">
                                         <label for="itemState">Status Barang</label>

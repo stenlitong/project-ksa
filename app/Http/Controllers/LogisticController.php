@@ -26,6 +26,12 @@ use Storage;
 
 class LogisticController extends Controller
 {
+    public function checkStock(){
+        $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+
+        return $items_below_stock;
+    }
+
     public function inProgressOrder(){
         if(request('search')){
              // Search functonality
@@ -52,7 +58,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+            
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }else{
             // Find all of the order that is "in progress" state
             $orderHeads = OrderHead::with('user')->where(function($query){
@@ -76,7 +84,9 @@ class LogisticController extends Controller
 
             $in_progress = $orderHeads->count();
 
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }
     }
 
@@ -127,8 +137,10 @@ class LogisticController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
     
             $completed = $orderHeads->count();
-    
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }
     }
 
@@ -144,7 +156,9 @@ class LogisticController extends Controller
                     ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
                 })->Paginate(7)->withQueryString();
             }
-            return view('logistic.stocksPage', compact('items'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.stocksPage', compact('items', 'items_below_stock'));
         }else{
             // $branch_items = Item::where('cabang', Auth::user()->cabang)->get();
 
@@ -155,7 +169,10 @@ class LogisticController extends Controller
             // $items = $items->merge($branch_items)->merge($other_branch_items)->paginate(7)->withQueryString();
 
             $items = Item::where('cabang', Auth::user()->cabang)->latest()->Paginate(7)->withQueryString();
-            return view('logistic.stocksPage', compact('items'));
+
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.stocksPage', compact('items', 'items_below_stock'));
         }
     }
 
@@ -226,8 +243,8 @@ class LogisticController extends Controller
 
         // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
         if($item -> itemStock < $item -> minStock){
-            if(ItemBelowStock::where('id', $item -> id)->exists()){
-                ItemBelowStock::find($item -> id)->update([
+            if(ItemBelowStock::where('item_id', $item -> id)->exists()){
+                ItemBelowStock::where('item_id', $item -> id)->update([
                     'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
                 ]);
             }else{
@@ -237,7 +254,7 @@ class LogisticController extends Controller
                 ]);
                 SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
             }
-        }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+        }elseif(ItemBelowStock::where('item_id', $item -> id)->exists()){
             ItemBelowStock::find($item -> id)->destroy();
         }
 
@@ -275,7 +292,9 @@ class LogisticController extends Controller
         // Get the order details join with the item
         $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->id)->get();
 
-        return view('logistic.logisticApprovedOrder', compact('orderDetails', 'orderHeads'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticApprovedOrder', compact('orderDetails', 'orderHeads', 'items_below_stock'));
     }
 
     public function editAcceptedQuantity(Request $request, OrderHead $orderHeads, OrderDetail $orderDetails){
@@ -340,8 +359,8 @@ class LogisticController extends Controller
 
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){
-                if(ItemBelowStock::where('id', $item -> id)->exists()){
-                    ItemBelowStock::find($item -> id)->update([
+                if(ItemBelowStock::where('item_id', $item -> id)->exists()){
+                    ItemBelowStock::where('item_id', $item -> id)->update([
                         'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
                     ]);
                 }else{
@@ -371,7 +390,7 @@ class LogisticController extends Controller
             'approved_at' => date("d/m/Y")
         ]);
 
-        //============ After approving, then automatically create new PR ======================
+        //==================== After approving, then automatically create new PR ======================
         // Create Order Head
         $orderHead = OrderHead::create([
             'user_id' => Auth::user()->id,
@@ -430,22 +449,32 @@ class LogisticController extends Controller
 
     public function historyOutPage(){
         // Find order from crew role/goods out
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '2')->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'crew');
+        })->pluck('users.id');
         
         // Find all the items that has been approved/completed from the user feedback | last 6 month
         $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Request Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_details.created_at', 'desc')->get();
 
-        return view('logistic.logisticHistory', compact('orderHeads'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticHistory', compact('orderHeads', 'items_below_stock'));
     }
 
     public function historyInPage(){
         // Find order from logistic role/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 6 month
         $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_details.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('logistic.logisticHistoryIn', compact('orderHeads'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticHistoryIn', compact('orderHeads', 'items_below_stock'));
     }
 
     public function downloadOut(Excel $excel){
@@ -469,7 +498,9 @@ class LogisticController extends Controller
         $tugs = Tug::all();
         $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
 
-        return view('logistic.logisticMakeOrder', compact('items', 'carts', 'tugs', 'barges'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticMakeOrder', compact('items', 'carts', 'tugs', 'barges', 'items_below_stock'));
     }
 
     public function addItemToCart(Request $request){
@@ -622,8 +653,8 @@ class LogisticController extends Controller
 
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){
-                if(ItemBelowStock::where('id', $item -> id)->exists()){
-                    ItemBelowStock::find($item -> id)->update([
+                if(ItemBelowStock::where('item_id', $item -> id)->exists()){
+                    ItemBelowStock::where('item_id', $item -> id)->update([
                         'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
                     ]);
                 }else{
@@ -633,7 +664,7 @@ class LogisticController extends Controller
                     ]);
                     SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
                 }
-            }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+            }elseif(ItemBelowStock::where('item_id', $item -> id)->exists()){
                 ItemBelowStock::find($item -> id)->destroy();
             }
         }
@@ -677,15 +708,20 @@ class LogisticController extends Controller
             $str_month = 'Okt - Des';
         }
 
-        // Find order from user/goods in
-        $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        // Find order from user/goods in => order created from logistic
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
         
         // Find all the items that has been approved from the logistic | last 6 month
         // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('logistic.logisticReport', compact('orders', 'str_month'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticReport', compact('orders', 'str_month', 'items_below_stock'));
     }
 
     public function downloadReport(Excel $excel){

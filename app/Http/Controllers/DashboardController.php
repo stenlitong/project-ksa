@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\ItemBelowStock;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\OrderHead;
@@ -63,11 +65,16 @@ class DashboardController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
+            $items_below_stock = $this -> checkStock();
+
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
 
         }elseif(Auth::user()->hasRole('supervisor') or Auth::user()->hasRole('supervisorLogisticMaster')){
             // Find order from logistic role, then they can approve and send it to the purchasing role
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            $users = User::whereHas('roles', function($query){
+                $query->where('name', 'logistic');
+            })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -97,14 +104,18 @@ class DashboardController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
 
         }elseif(Auth::user()->hasRole('purchasing')){
             $default_branch = 'Jakarta';
 
             // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
-            // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->pluck('users.id');
+            // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
+            $users = User::whereHas('roles', function($query){
+                $query->where('name', 'logistic');
+            })->where('cabang', 'like', $default_branch)->pluck('users.id');
             
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -149,7 +160,10 @@ class DashboardController extends Controller
             $default_branch = 'Jakarta';
 
             // Find order from the logistic role, because purchasing role can only see the order from "logistic/admin logistic" role NOT from "crew" roles
-            $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            $users = User::whereHas('roles', function($query){
+                $query->where('name', 'logistic');
+            })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -183,5 +197,11 @@ class DashboardController extends Controller
 
             return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'default_branch', 'completed', 'in_progress'));
         }
+    }
+
+    public function checkStock(){
+        $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+
+        return $items_below_stock;
     }
 }

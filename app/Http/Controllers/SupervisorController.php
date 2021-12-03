@@ -20,6 +20,12 @@ use App\Jobs\SendItemBelowStockReportJob;
 
 class SupervisorController extends Controller
 {
+    public function checkStock(){
+        $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+
+        return $items_below_stock;
+    }
+
     public function completedOrder(){
         // Find order from logistic role, then they can approve and send it to the purchasing role
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
@@ -48,7 +54,9 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }else{
             $orderHeads = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
@@ -57,8 +65,10 @@ class SupervisorController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(8);
     
             $completed = $orderHeads->count();
-    
-            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }
     }
 
@@ -90,7 +100,9 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }else{
             $orderHeads =  OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
@@ -100,8 +112,10 @@ class SupervisorController extends Controller
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
-    
-            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }
     }
 
@@ -181,7 +195,9 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('supervisor.supervisorReport', compact('orders', 'str_month'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('supervisor.supervisorReport', compact('orders', 'str_month', 'items_below_stock'));
     }
 
     public function downloadReport(Excel $excel){
@@ -195,7 +211,9 @@ class SupervisorController extends Controller
         // Find all the items that has been approved/completed from the user feedback | last 6 month
         $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_details.created_at', 'desc')->get();
 
-        return view('supervisor.supervisorHistoryOut', compact('orderHeads'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('supervisor.supervisorHistoryOut', compact('orderHeads', 'items_below_stock'));
     }
 
     public function historyIn(){
@@ -205,7 +223,9 @@ class SupervisorController extends Controller
         // Find all the items that has been approved from the user | last 6 month
         $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang,)->where('status', 'like', '%' . 'Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
-        return view('supervisor.supervisorHistoryIn', compact('orderHeads'));
+        $items_below_stock = $this -> checkStock();
+        
+        return view('supervisor.supervisorHistoryIn', compact('orderHeads', 'items_below_stock'));
     }
 
     public function downloadOut(Excel $excel){
@@ -226,11 +246,17 @@ class SupervisorController extends Controller
                 ->orWhere('cabang', 'like', '%' . request('search') . '%')
                 ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
             })->Paginate(10)->withQueryString();
-            return view('supervisor.supervisorItemStock', compact('items'));
+
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorItemStock', compact('items', 'items_below_stock'));
         }else{
             $items = Item::orderBy('cabang')->Paginate(7)->withQueryString();
             // $items = Item::latest()->Paginate(10)->withQueryString();
-            return view('supervisor.supervisorItemStock', compact('items'));
+
+            $items_below_stock = $this -> checkStock();
+
+            return view('supervisor.supervisorItemStock', compact('items', 'items_below_stock'));
         }
     }
 
@@ -270,8 +296,8 @@ class SupervisorController extends Controller
 
         // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
         if($item -> itemStock < $item -> minStock){
-            if(ItemBelowStock::where('id', $item -> id)->exists()){
-                ItemBelowStock::find($item -> id)->update([
+            if(ItemBelowStock::where('item_id', $item -> id)->exists()){
+                ItemBelowStock::where('item_id', $item -> id)->update([
                     'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
                 ]);
             }else{
@@ -281,7 +307,7 @@ class SupervisorController extends Controller
                 ]);
                 SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
             }
-        }elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+        }elseif(ItemBelowStock::where('item_id', $item -> id)->exists()){
             ItemBelowStock::find($item -> id)->destroy();
         }
 
@@ -314,7 +340,7 @@ class SupervisorController extends Controller
         $new_itemAge = $request->itemAge . ' ' . $request->umur;
 
         // Update the item
-        $edited_item = Item::where('id', $item->id)->update([
+        Item::where('id', $item->id)->update([
             'itemName' => $request -> itemName,
             'itemAge' => $new_itemAge,
             'itemStock' => $request->itemStock,
@@ -327,21 +353,23 @@ class SupervisorController extends Controller
             'description' => $request -> description
         ]);
 
+        $item_to_find = Item::where('id', $item->id)->first();
+
         // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
-        if($edited_item -> itemStock < $edited_item -> minStock){
-            if(ItemBelowStock::where('id', $edited_item -> id)->exists()){
-                ItemBelowStock::find($edited_item -> id)->update([
-                    'stock_defficiency' => ($edited_item -> minStock) - ($edited_item -> itemStock)
+        if($item_to_find -> itemStock < $item_to_find -> minStock){
+            if(ItemBelowStock::where('item_id', $item_to_find -> id)->exists()){
+                ItemBelowStock::where('item_id', $item_to_find -> id)->update([
+                    'stock_defficiency' => ($item_to_find -> minStock) - ($item_to_find -> itemStock)
                 ]);
             }else{
                 ItemBelowStock::create([
-                    'item_id' => $edited_item -> id,
-                    'stock_defficiency' => ($edited_item -> minStock) - ($edited_item -> itemStock)
+                    'item_id' => $item_to_find -> id,
+                    'stock_defficiency' => ($item_to_find -> minStock) - ($item_to_find -> itemStock)
                 ]);
-                SendItemBelowStockReportJob::dispatch($edited_item->id, $edited_item->cabang);
+                SendItemBelowStockReportJob::dispatch($item_to_find->id, $item_to_find->cabang);
             }
-        }elseif(ItemBelowStock::where('id', $edited_item -> id)->exists()){
-            ItemBelowStock::find($edited_item -> id)->destroy();
+        }elseif(ItemBelowStock::where('item_id', $item_to_find -> id)->exists()){
+            ItemBelowStock::where('item_id', $item_to_find -> id)->delete();
         }
 
         return redirect('/supervisor/item-stocks')->with('status', 'Edit Successfully');
@@ -354,7 +382,9 @@ class SupervisorController extends Controller
             ->orWhere('toCabang', Auth::user()->cabang);
         })->whereYear('created_at', date('Y'))->latest()->get();
 
-        return view('supervisor.supervisorApprovalDO', compact('ongoingOrders'));
+        $items_below_stock = $this -> checkStock();
+
+        return view('supervisor.supervisorApprovalDO', compact('ongoingOrders', 'items_below_stock'));
     }
 
     public function forwardDo(OrderDo $orderDos){
@@ -419,8 +449,8 @@ class SupervisorController extends Controller
 
             // Check if the item stock is below the minimum stock, if it is true then insert a new data to the ItemBelowStock table and dispatch a new email to user using job
             if($item -> itemStock < $item -> minStock){
-                if(ItemBelowStock::where('id', $item -> id)->exists()){
-                    ItemBelowStock::find($item -> id)->update([
+                if(ItemBelowStock::where('item_id', $item -> id)->exists()){
+                    ItemBelowStock::where('item_id', $item -> id)->update([
                         'stock_defficiency' => ($item -> minStock) - ($item -> itemStock)
                     ]);
                 }else{
@@ -430,10 +460,7 @@ class SupervisorController extends Controller
                     ]);
                     SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
                 }
-            }
-            // This elseif can be deleted after testing, Just to make sure the item is not exist even though the only scenario where this gonna happen is only when someone
-            // changing the stock directly from the database 
-            elseif(ItemBelowStock::where('id', $item -> id)->exists()){
+            }elseif(ItemBelowStock::where('item_id', $item -> id)->exists()){
                 ItemBelowStock::find($item -> id)->destroy();
             }
 
