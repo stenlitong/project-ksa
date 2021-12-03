@@ -118,8 +118,11 @@
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
-                                                    <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
                                                 </form>
+                                                {{-- <form>
+
+                                                </form> --}}
+                                                <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
                                         @empty

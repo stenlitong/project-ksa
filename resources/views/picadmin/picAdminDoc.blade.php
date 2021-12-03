@@ -54,8 +54,6 @@
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
                             $reason = "reason".$a;
-                            $approve = "approve".$a;
-                            $decline ="decline".$a;
                             $date = date('Y-m-28');
                        @endphp
                         @if(empty($doc->$stats))
@@ -135,6 +133,7 @@
                                         'PNBP SSCEC','Ijin Sekali Jalan');
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
+                            $reason = "reason".$a;
                             $date = date('Y-m-28');
                        @endphp
                         @if(empty($d->$stats))
@@ -143,7 +142,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $d }}</td>
+                            <td scope="col">{{ $a }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$d->cabang}}</td>                                        
                             <td scope="col" id="time">{{$d ->$time_upload}}</td>                                        
@@ -215,6 +214,7 @@
                                       'Invoice BKI','Safe Manning',);
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
+                            $reason = "reason".$a;
                             $date = date('Y-m-28');
                        @endphp
                         @if(empty($b->$stats))
@@ -223,7 +223,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $b }}</td>
+                            <td scope="col">{{ $a }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$b->cabang}}</td>                                        
                             <td scope="col" id="time">{{$b ->$time_upload}}</td>                                        
@@ -299,6 +299,8 @@
                                       'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta');
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
+                            $reason = "reason".$a;
+                            $date = date('Y-m-28');
                        @endphp
                         @if(empty($s->$stats))
                         <tr>
@@ -306,7 +308,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $s }}</td>
+                            <td scope="col">{{ $a }}</td>
                             <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
                             <td scope="col" id="cabang">{{$s->cabang}}</td>                                        
                             <td scope="col" id="time">{{$s ->$time_upload}}</td>                                        

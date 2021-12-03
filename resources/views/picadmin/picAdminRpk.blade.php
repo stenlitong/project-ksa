@@ -43,8 +43,6 @@
                     $stats ="status".$r;
                     $reason = "reason".$r;
                     $date = date('Y-m-28');
-                    $approve = "approve".$r;
-                    $decline ="decline".$r;
                     @endphp
                     @if(empty($d->$stats))
                         <tr>

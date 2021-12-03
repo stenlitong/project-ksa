@@ -2733,12 +2733,12 @@ class PicsiteController extends Controller
         }
         
 //email to user
-// $details = [
-    //     'title' => 'Thank you for receiving this email', 
-    //     'body' => 'you are a test subject for the project hehe'
-    // ];
-    
-    // Mail::to(Auth::user()->email)->send(new Gmail($details));
+    // $details = [
+    //         'title' => 'Thank you for receiving this email', 
+    //         'body' => 'you are a test subject for the project hehe'
+    //     ];
+        
+    //     Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
 
         return view('picsite.upload',compact('document', 'documentberau' , 'documentsamarinda' , 'documentbanjarmasin'));
         // return redirect('picsite/upload')->with('success', 'Upload success!');

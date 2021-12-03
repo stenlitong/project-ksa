@@ -149,7 +149,7 @@
                                     $date = date('Y-m-28');
                                 @endphp
                                 <tr>
-                                    <td scope="col" id="nama">{{ $a }}</td>
+                                    <td scope="col">{{ $a }}</td>
                                     <td scope="col" id="nama">{{$name[$a-1]}}</td>
                                     @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>

@@ -783,6 +783,15 @@ class PicRpkController extends Controller
             }
             return redirect('picsite/rpk')->with('message', 'Upload success!');
         }
+
+        //email to user
+    $details = [
+            'title' => 'Thank you for receiving this email', 
+            'body' => 'you are a test subject for the project hehe'
+        ];
+        
+        Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
+
         return redirect('picsite/rpk');
     }
 
