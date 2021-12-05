@@ -46,8 +46,29 @@ class DashboardController extends Controller
             return view('picsite.picDashboard');
         }
         elseif(Auth::user()->hasRole('picAdmin')){
-            $document = DB::table('documents')->latest()->get();
-            return view('picadmin.picAdminDashboard' , compact('document'));
+            
+            if (request('search') == 'All' || request('search') == 'rpkdana') {
+                $document = DB::table('documents')->latest()->get();
+                $documentberau = DB::table('beraudb')->latest()->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
+                $documentsamarinda = DB::table('samarindadb')->latest()->get();
+                $docrpk = DB::table('rpkdocuments')->latest()->get();
+            }
+            elseif (request('search')) {
+                $document = DB::table('documents')->where('cabang', request('search'))->latest()->get();
+                $documentberau = DB::table('beraudb')->where('cabang', request('search'))->latest()->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search'))->latest()->get();
+                $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search'))->latest()->get();
+                $docrpk = DB::table('rpkdocuments')->where('cabang', request('search'))->latest()->get();
+            }
+            else{
+                $document = DB::table('documents')->latest()->get();
+                $documentberau = DB::table('beraudb')->latest()->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
+                $documentsamarinda = DB::table('samarindadb')->latest()->get();
+                $docrpk = DB::table('rpkdocuments')->latest()->get();
+            }
+            return view('picadmin.picAdminDashboard' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda', 'docrpk'));
         }
         elseif(Auth::user()->hasRole('picIncident')){
             

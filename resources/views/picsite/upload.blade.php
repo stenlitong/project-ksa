@@ -70,7 +70,7 @@
                                                 <td scope="col" id="reason1">{{$doc->$reason}}</td>
                                                 @endforeach
                                             <td scope="col" id="duetime1">{{$date}}</td> 
-                                            @if (empty($doc->$stats))
+                                            @if (empty($doc->$stats) or $doc->$stats == 'rejected')
                                                 <td scope="col">
                                                     <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
                                                     {{-- <a href="/picsite/view" target="_blank">view</a> --}}
@@ -115,7 +115,7 @@
                                                     <td scope="col" id="reason">{{$d->$reason}}</td>                                        
                                                 @endforeach
                                                 <td scope="col" id="duetime1">{{$date}}</td> 
-                                                @if (empty($d->$stats))
+                                                @if (empty($d->$stats) or $d->$stats == 'rejected')
                                                 <td scope="col">
                                                     <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
                                                     {{-- <a href="/picsite/view" target="_blank">view</a> --}}
@@ -163,7 +163,7 @@
                                         <td scope="col" id="reason">{{$b->$reason}}</td>                                        
                                         @endforeach
                                         <td scope="col" id="duetime1">{{$date}}</td> 
-                                        @if (empty($b->$stats))
+                                        @if (empty($b->$stats)or $b->$stats == 'rejected')
                                             <td scope="col">
                                                 <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
                                                 {{-- <a href="/picsite/view" target="_blank">view</a> --}}
@@ -212,7 +212,7 @@
                                                 <td scope="col" id="reason">{{$s->$reason}}</td>                                        
                                             @endforeach
                                             <td scope="col" id="duetime1">{{$date}}</td> 
-                                            @if (empty($s->$stats))
+                                            @if (empty($s->$stats)or $s->$stats == 'rejected')
                                                 <td scope="col">
                                                     <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
                                                 </td>  
@@ -229,9 +229,9 @@
                                     @endif
                                 </tbody>   
                         </table>
-                        {{-- @if(date("d") < 28) --}}
+                        @if(date("d") < 28)
                             <button class="btn btn-danger" id="realsubmit" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
-                         {{-- @endif --}}
+                         @endif
 
                         <script>
                             document.getElementById('topsubmit').addEventListener('click', openDialog);

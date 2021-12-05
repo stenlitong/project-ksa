@@ -7,10 +7,10 @@
                     Dashboard
                 </a>
                 <a class="nav-link" aria-current="page" href="/picadmin/dana">
-                    <span data-feather="page"></span>
+                    <span data-feather="upload"></span>
                     Review Fund Request Form
                 </a>
-                <a class="nav-link" aria-current="" href="/picadmin/rpk">
+                <a class="nav-link" aria-current="page" href="/picadmin/rpk">
                     <span data-feather="file-plus" style="color: black"></span>
                     Review RPK Documents
                 </a>

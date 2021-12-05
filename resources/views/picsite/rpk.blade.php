@@ -67,7 +67,7 @@
                                         <td id="">{{$doc->$reason}}</td>
                                         @endforeach
                                         <td id="">{{$date}}</td>
-                                        @if (empty($doc->$stats))
+                                        @if (empty($doc->$stats) or $doc->$stats == 'rejected')
                                             <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
                                         @else
                                             <td> </td>
@@ -97,7 +97,7 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats))
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
                                         <td><input name="{{$brfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>
@@ -127,7 +127,7 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats))
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
                                         <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>
@@ -157,7 +157,7 @@
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats))
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
                                         <td><input name="{{$smrfile}}" id="rfile" type="file"/></td>
                                     @else
                                         <td> </td>

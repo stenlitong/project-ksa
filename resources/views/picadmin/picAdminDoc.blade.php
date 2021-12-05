@@ -68,6 +68,7 @@
                             <td scope="col" id="time">{{$doc ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$doc->$stats}}</td>                                      
                             <td scope="col" id="duetime1">{{$date}}</td> 
+                            @if ($doc->$stats == "on review")
                             <td scope="col">
                               <form method="POST" action="/picadmin/dana/approvedana">
                                 @csrf
@@ -78,7 +79,7 @@
                                 
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                     Reject File
-                                  </button>
+                                </button>
                                   
                                   <!-- Modal -->
                                   <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
@@ -91,33 +92,37 @@
                                           </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form method="POST" action="/picadmin/dana/rejectdana">
-                                              @csrf
-                                                <input type="hidden" name='reason' value={{$reason}}>
-                                                <input type="hidden" name='status' value={{$stats}}>
-                                                <input type="hidden" name ='cabang' value={{$doc->cabang}}>
-                                                <div class="form-group">
-                                                    <label for="reason">Reason</label>
-                                                    <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                  <button type="submit" id="submitreject2"  class="btn btn-danger">Reject File</button>
-                                                </div>
-                                            </form>
+                                          <form method="POST" action="/picadmin/dana/rejectdana">
+                                            @csrf
+                                              <input type="hidden" name='reason' value={{$reason}}>
+                                              <input type="hidden" name='status' value={{$stats}}>
+                                              <input type="hidden" name ='cabang' value={{$doc->cabang}}>
+                                              <div class="form-group">
+                                                  <label for="reason">Reason</label>
+                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                              </div>
+                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                          </form>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                            <a href="#" target="_blank">view</a>
-                        </td>
-                    </tr>
-                    @endif
-                    @endfor
-                    @empty
-                    <tr>
-                        
-                    </tr>
-                    @endforelse
+                                <a href="#" target="_blank">view</a>
+                              </td>
+                              @else
+                                <td></td>
+                              @endif
+                          </tr>
+                        @endif
+                        @endfor
+                        @empty
+                          <tr>
+                              
+                          </tr>
+                        @endforelse
 {{-- Berau----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($documentberau as $d )
                        @for ( $a = 1 ; $a <= 26 ; $a++)
@@ -148,19 +153,21 @@
                             <td scope="col" id="time">{{$d ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$d->$stats}}</td>                                      
                             <td scope="col" id="duetime1">{{$date}}</td> 
-                            <td scope="col">
-                              <form method="POST" action="/picadmin/dana/approvedana">
-                                @csrf
-                                <input type="hidden" name='status' value={{$stats}}>
-                                <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                    <button type="submit" class="btn btn-success">approve</button>
-                              </form>
+                            @if ($d->$stats == "on review")
+                              <td scope="col">
+                                <form method="POST" action="/picadmin/dana/approvedana">
+                                  @csrf
+                                  <input type="hidden" name='status' value={{$stats}}>
+                                  <input type="hidden" name ='cabang' value={{$d->cabang}}>
+                                      <button type="submit" class="btn btn-success">approve</button>
+                                </form>
 
-                               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                    Reject File
-                                  </button>
-                                  <!-- Modal -->
-                                  <div class="modal fade" id="rejectTitle" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                      Reject File
+                                </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                       <div class="modal-content">
                                         <div class="modal-header">
@@ -178,25 +185,29 @@
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
                                                   <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                  <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
-                                                </div>
-                                            </form>
-                                          </div>
+                                              </div>
+                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                          </form>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                            <a href="#" target="_blank">view</a>
-                        </td>
-                    </tr>
-                    @endif
-                    @endfor
-                    @empty
-                    <tr>
-                        
-                    </tr>
-                    @endforelse
+                                <a href="#" target="_blank">view</a>
+                              </td>
+                              @else
+                                <td></td>
+                              @endif
+                        </tr>
+                        @endif
+                        @endfor
+                        @empty
+                        <tr>
+                            
+                        </tr>
+                        @endforelse
 {{-- Banjarmasin---------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($documentbanjarmasin as $b )
                        @for ( $a = 1 ; $a <= 31 ; $a++)
@@ -229,6 +240,7 @@
                             <td scope="col" id="time">{{$b ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$b->$stats}}</td>                                      
                             <td scope="col" id="duetime1">{{$date}}</td> 
+                            @if ($b->$stats == "on review")
                             <td scope="col">
                               <form method="POST" action="/picadmin/dana/approvedana">
                                 @csrf
@@ -272,13 +284,16 @@
                                   </div>
                             <a href="#" target="_blank">view</a>
                         </td>
+                            @else
+                              <td> </td>
+                            @endif
                     </tr>
                     @endif
                     @endfor
                     @empty
-                    <tr>
-                        
-                    </tr>
+                      <tr>
+                          
+                      </tr>
                     @endforelse
 {{-- Samarinda-------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                       @forelse($documentsamarinda as $s )
@@ -314,6 +329,7 @@
                             <td scope="col" id="time">{{$s ->$time_upload}}</td>                                        
                             <td scope="col" id="status">{{$s->$stats}}</td>                                      
                             <td scope="col" id="duetime1">{{$date}}</td> 
+                            @if ($s->$stats == "on review")
                             <td scope="col">
                               <form method="POST" action="/picadmin/dana/approvedana">
                                   @csrf
@@ -347,20 +363,23 @@
                                             </div>
                                             <div class="modal-footer">
                                               <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                            </form>
                                             </div>
-                                        </form>
                                       </div>
                                     </div>
                                   </div>
                             <a href="#" target="_blank">view</a>
                         </td>
+                            @else
+                              <td> </td>
+                            @endif
                     </tr>
                     @endif
                     @endfor
                     @empty
-                    <tr>
-                        
-                    </tr>
+                      <tr> 
+
+                      </tr>
                     @endforelse
                   </tbody>
                 </table>

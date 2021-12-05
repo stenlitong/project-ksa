@@ -56,6 +56,7 @@
                         <td scope="col" id="time">{{$d->$time_upload}}</td>                                        
                         <td scope="col" id="status">{{$d->$stats}}</td>                                      
                         <td scope="col" id="duetime1">{{$date}}</td> 
+                        @if ($d->$stats == "on review")
                         <td scope="col">
                             <form method="POST" action="/picadmin/rpk/update-status">
                                 @csrf
@@ -92,14 +93,17 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                            </form>
                                             </div>
-                                        </form>
                                     </div>
                                     </div>
                                 </div>
                             <a href="#" target="_blank">view</a>
                         </td>
-                    </tr>
+                        @else
+                            <td> </td>
+                        @endif
+                        </tr>
                         @endif
                         @endfor
                         @empty

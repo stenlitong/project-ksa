@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/dashboard">
                     <span data-feather="home"></span>
-                    dashboard
+                    Dashboard
                 </a>
                 <a class="nav-link" aria-current="page" href="/picsite/upload">
                     <span data-feather="upload"></span>
