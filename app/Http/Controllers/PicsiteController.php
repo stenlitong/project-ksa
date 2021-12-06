@@ -473,7 +473,7 @@ class PicsiteController extends Controller
                    
                 }
             }
-            return Storage::disk('s3')->response('babelan/' . $image->filename);
+            // return Storage::disk('s3')->response('babelan/' . $image->filename);
             return redirect('/picsite/upload')->with('success', 'Upload Success!');
         }
 
