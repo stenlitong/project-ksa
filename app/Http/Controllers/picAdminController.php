@@ -88,6 +88,7 @@ class picAdminController extends Controller
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
+            // Storage::disk('s3')->delete('path/aaaaaaaa.webp');
         }
         
         return redirect('/picadmin/dana');

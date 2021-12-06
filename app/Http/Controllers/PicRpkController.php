@@ -785,15 +785,15 @@ class PicRpkController extends Controller
         }
 
         //email to user
-    $details = [
-            'title' => 'Thank you for receiving this email', 
-            'body' => 'you are a test subject for the project hehe'
-        ];
+    // $details = [
+    //         'title' => 'Thank you for receiving this email', 
+    //         'body' => 'you are a test subject for the project hehe'
+    //     ];
         
-        Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
+    //     Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
 
-        return redirect('picsite/rpk');
-    }
+    //     return redirect('picsite/rpk');
+    // }
 
     // public function viewrpk(){
     //     $filename = 'stenli-picsite-1.pdf';
@@ -802,6 +802,6 @@ class PicRpkController extends Controller
     //     return Response::make(file_get_contents($path), 200,
     //      [
     //         'Content-Type' => 'application/pdf',
-    //         'Content-Disposition' => 'inline; filename="'.$filename.'"']);
-    // }
+    //         'Content-Disposition' => 'inline; filename="'.$filename.'"']);}
+    }
 }

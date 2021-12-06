@@ -116,14 +116,14 @@ class PicsiteController extends Controller
                 $pathbabelan3 = Storage::path('babelan/penerbitan_sekali_jalan/'.$file3->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
 
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan') ->update([
+                    documents::where('cabang', 'Babelan') ->update([
                         //babelan                       
                             'penerbitan_sekali_jalan' => $pathbabelan3,
                             'status3' => 'on review',
                             'time_upload3' => date("Y-m-d"),
                     ]);
                 }else {
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -142,14 +142,14 @@ class PicsiteController extends Controller
                $pathbabelan4 = Storage::path('babelan/sertifikat_safe_manning/'.$file4->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
 
                if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                     //babelan
                     'sertifikat_safe_manning'=> $pathbabelan4,
                     'status4' => 'on review',
                     'time_upload4' => date("Y-m-d"),
                 ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         
@@ -168,13 +168,13 @@ class PicsiteController extends Controller
                 $request->file('ufile5')->storeAs($tujuan_upload, $name5.'.pdf');
                 $pathbabelan5 = Storage::path('babelan/endorse_surat_laut/'.$file5->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         'endorse_surat_laut'=> $pathbabelan5,
                         'status5' => 'on review',
                         'time_upload5' => date("Y-m-d"),
                     ]);   
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -193,13 +193,13 @@ class PicsiteController extends Controller
                 $request->file('ufile6')->storeAs($tujuan_upload, $name6.'.pdf');
                 $pathbabelan6 = Storage::path('babelan/perpanjangan_sertifikat_sscec/'.$file6->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         'perpanjangan_sertifikat_sscec'=> $pathbabelan6,
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -217,14 +217,14 @@ class PicsiteController extends Controller
                 $request->file('ufile7')->storeAs($tujuan_upload, $name7.'.pdf');
                 $pathbabelan7 = Storage::path('babelan/perpanjangan_sertifikat_p3k/'.$file7->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'perpanjangan_sertifikat_p3k'=> $pathbabelan7,
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -243,14 +243,14 @@ class PicsiteController extends Controller
                 $request->file('ufile8')->storeAs($tujuan_upload, $name8.'.pdf');
                 $pathbabelan8 = Storage::path('babelan/biaya_laporan_dok/'.$file8->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'biaya_laporan_dok'=> $pathbabelan8,
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d"),
                     ]);     
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -268,14 +268,14 @@ class PicsiteController extends Controller
                 $request->file('ufile9')->storeAs($tujuan_upload, $name9.'.pdf');
                 $pathbabelan9 = Storage::path('babelan/pnpb_sertifikat_keselamatan/'.$file9->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sertifikat_keselamatan'=> $pathbabelan9,
                         'status9' => 'on review',
                         'time_upload9' => date("Y-m-d"),
                     ]);                   
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -294,14 +294,14 @@ class PicsiteController extends Controller
                 $request->file('ufile10')->storeAs($tujuan_upload, $name10.'.pdf');
                 $pathbabelan10 = Storage::path('babelan/pnpb_sertifikat_garis_muat/'.$file10->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sertifikat_garis_muat'=> $pathbabelan10,
                         'status10' => 'on review',
                         'time_upload10' => date("Y-m-d"),
                     ]);          
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -320,14 +320,14 @@ class PicsiteController extends Controller
                 $request->file('ufile11')->storeAs($tujuan_upload, $name11.'.pdf');
                 $pathbabelan11 = Storage::path('babelan/pnpb_surat_laut/'.$file11->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_surat_laut'=> $pathbabelan11,
                         'status11' => 'on review',
                         'time_upload11' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -346,14 +346,14 @@ class PicsiteController extends Controller
                 $request->file('ufile12')->storeAs($tujuan_upload, $name12.'.pdf');
                 $pathbabelan12 = Storage::path('babelan/sertifikat_snpp/'.$file12->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'sertifikat_snpp'=> $pathbabelan12,
                         'status12' => 'on review',
                         'time_upload12' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -372,14 +372,14 @@ class PicsiteController extends Controller
                 $request->file('ufile13')->storeAs($tujuan_upload, $name13.'.pdf');
                 $pathbabelan13 = Storage::path('babelan/sertifikat_anti_teritip/'.$file13->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'sertifikat_anti_teritip'=> $pathbabelan13,
                         'status13' => 'on review',
                         'time_upload13' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -400,14 +400,14 @@ class PicsiteController extends Controller
                 $pathbabelan14 = Storage::path('babelan/pnbp_snpp&snat/'.$file14->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
 
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnbp_snpp&snat'=> $pathbabelan14,
                         'status14' => 'on review',
                         'time_upload14' => date("Y-m-d"),
                     ]);
                 }else {
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -425,14 +425,14 @@ class PicsiteController extends Controller
                 $pathbabelan15 = Storage::path('babelan/biaya_survey/'.$file15->getClientOriginalName() . '-picsite-' . Auth::user()->cabang);
                 
                 if (documents::where('cabang', 'Babelan')->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'biaya_survey'=> $pathbabelan15,
                         'status15' => 'on review',
                         'time_upload15' => date("Y-m-d"),
                     ]);
                 }else{
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
                         //babelan
@@ -455,14 +455,14 @@ class PicsiteController extends Controller
                 $path = $request->file('ufile16')->storeas('babelan/'. $year . "/". $month , 's3');
 
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    DB::table('documents')->where('cabang', 'Babelan')->update([
+                    documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sscec'=> $name16,
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
                     ]);
                 }else {
-                    DB::table('documents')->insert([
+                    documents::create([
                         'cabang' => Auth::user()->cabang ,
                         'user_id' => Auth::user()->id,
 
@@ -473,7 +473,7 @@ class PicsiteController extends Controller
                    
                 }
             }
-            
+            return Storage::disk('s3')->response('babelan/' . $image->filename);
             return redirect('/picsite/upload')->with('success', 'Upload Success!');
         }
 
@@ -2748,10 +2748,12 @@ class PicsiteController extends Controller
         $filename = Auth::user()->name .'-picsite-Babelan-1.pdf';
         $pathbabelan1 = storage::path('babelan/sertifikat_keselamatan/stenli-picsite-1.pdf');
 
-        return Response::make(file_get_contents($pathbabelan1), 200,
-         [
-            'Content-Type' => 'application//pdf',
-            'Content-Disposition' => 'inline; filename="'.$filename.'"']);
+        // return Storage::disk('s3')->response('images/' . $image->filename);
+
+        // return Response::make(file_get_contents($pathbabelan1), 200,
+        //  [
+        //     'Content-Type' => 'application//pdf',
+        //     'Content-Disposition' => 'inline; filename="'.$filename.'"']);
     }
     
 }
