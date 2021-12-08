@@ -450,9 +450,7 @@ unset($__errorArgs, $__bag); ?>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="/purchasing/supplier">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('put'); ?>
+                                <form method="POST" action="">
                                     <input type="hidden" name="supplier_id" value="<?php echo e($s -> id); ?>">
                                     <div class="form-row my-2">
                                         <div class="form-group col-md-6">
@@ -502,9 +500,6 @@ unset($__errorArgs, $__bag); ?>
                                             <label for="noTelpJkt">Jakarta</label>
                                             <input type="text" class="form-control" name="noTelpJkt" value="<?php echo e($s -> noTelpJkt); ?>" readonly>
                                         </div>
-                                    </div>
-                                    <div class="d-flex ml-3 justify-content-center pb-3">
-                                        <button type="submit" class="btn btn-primary">Save</button>
                                     </div>
                                 </form>
                             </div>

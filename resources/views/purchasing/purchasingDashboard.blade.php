@@ -436,9 +436,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="/purchasing/supplier">
-                                    @csrf
-                                    @method('put')
+                                <form method="POST" action="">
                                     <input type="hidden" name="supplier_id" value="{{ $s -> id }}">
                                     <div class="form-row my-2">
                                         <div class="form-group col-md-6">
@@ -488,9 +486,6 @@
                                             <label for="noTelpJkt">Jakarta</label>
                                             <input type="text" class="form-control" name="noTelpJkt" value="{{ $s -> noTelpJkt }}" readonly>
                                         </div>
-                                    </div>
-                                    <div class="d-flex ml-3 justify-content-center pb-3">
-                                        <button type="submit" class="btn btn-primary">Save</button>
                                     </div>
                                 </form>
                             </div>

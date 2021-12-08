@@ -510,7 +510,7 @@ class PurchasingController extends Controller
     public function addSupplier(Request $request){
         // Validate request
         $validated = $request -> validate([
-            'supplierName' => ['required', 'regex:/^[a-zA-Z\s-]*$/', 'unique:suppliers'],
+            'supplierName' => ['required', 'string', 'starts_with:CV,PT', 'unique:suppliers'],
             'supplierPic' => ['required', 'string'],
             'supplierEmail' => ['required', 'string', 'email:rfc,dns', 'unique:suppliers'],
             'supplierAddress' => ['required', 'string'],

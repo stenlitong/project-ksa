@@ -38,8 +38,8 @@
                                     </div>
                                     <div class="mt-3">
                                             <h5 class="supplier-name font-weight-bold">{{ $s -> supplierName }}</h5>
-                                            <h5 class="supplier-code font-weight-light">Kode Supplier</h5>
-                                            <h5 class="supplier-pic font-weight-light">PIC Supplier</h5>
+                                            <h5 class="supplier-code font-weight-light">{{ $s -> supplierCode }}</h5>
+                                            <h5 class="supplier-pic font-weight-light">{{ $s -> supplierPic }}</h5>
                                             {{-- <h5 class="smaller-screen-size "><span data-feather="phone"></span> (+62) {{ $s -> noTelp }}</h5>
                                             <h5 class="smaller-screen-size"><span data-feather="mail"></span> {{ $s -> supplierEmail }}</h5>
                                             <h5 class="smaller-screen-size"><span data-feather="home"></span> {{ $s -> supplierAddress }}</h5>
@@ -72,6 +72,16 @@
                                             <input type="hidden" name="supplier_id" value="{{ $s -> id }}">
                                             <div class="form-row my-2">
                                                 <div class="form-group col-md-6">
+                                                    <label for="supplierName">Nama Supplier</label>
+                                                    <input type="text" class="form-control" name="supplierName" id="supplierName" value="{{ $s -> supplierName }}" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="supplierPic">Alamat Supplier</label>
+                                                    <input type="text" class="form-control" name="supplierPic" id="supplierPic" value="{{ $s -> supplierPic}}" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-row my-2">
+                                                <div class="form-group col-md-6">
                                                     <label for="supplierEmail">Email Supplier</label>
                                                     <input type="email" class="form-control" name="supplierEmail" id="supplierEmail" value="{{ $s -> supplierEmail }}" required>
                                                 </div>
@@ -88,6 +98,12 @@
                                                 <div class="form-group col-md-6">
                                                     <label for="supplierNPWP">NPWP</label>
                                                     <input type="text" class="form-control" name="supplierNPWP" id="supplierNPWP" value="{{ $s -> supplierNPWP }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-row my-2">
+                                                <div class="form-group col-md-6">
+                                                    <label for="supplierCode">Kode Supplier</label>
+                                                    <input type="text" class="form-control" name="supplierCode" id="supplierCode" value="{{ $s -> supplierCode }}" required>
                                                 </div>
                                             </div>
                                             <h5><u>No. Telp</u></h5>
@@ -165,35 +181,35 @@
                         <div class="form-row my-2">
                             <div class="form-group col-md-6">
                                 <label for="supplierName">Nama Supplier</label>
-                                <input type="text" class="form-control" name="supplierName" id="supplierName" required placeholder="Input Nama Supplier">
+                                <input type="text" class="form-control" name="supplierName" id="supplierName" value="{{ old('supplierName') }}" required placeholder="CV/PT. ">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="supplierPic">PIC Supplier</label>
-                                <input type="text" class="form-control" name="supplierPic" id="supplierPic" required placeholder="Input PIC Supplier">
+                                <input type="text" class="form-control" name="supplierPic" id="supplierPic" value="{{ old('supplierPic') }}" required placeholder="Input PIC Supplier">
                             </div>
                         </div>
                         <div class="form-row my-3">
                             <div class="form-group col-md-6">
                                 <label for="supplierEmail">Email Supplier</label>
-                                <input type="email" class="form-control" name="supplierEmail" id="supplierEmail" required placeholder="Input Email Supplier">
+                                <input type="email" class="form-control" name="supplierEmail" id="supplierEmail" value="{{ old('supplierEmail') }}" required placeholder="Input Email Supplier">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="supplierAddress">Alamat Supplier</label>
-                                <input type="text" class="form-control" name="supplierAddress" id="supplierAddress" required placeholder="Input Alamat Supplier">
+                                <input type="text" class="form-control" name="supplierAddress" id="supplierAddress" value="{{ old('supplierAddress') }}" required placeholder="Input Alamat Supplier">
                             </div>
                           </div>
                         <div class="form-row my-3">
                             <div class="col-6">
                                 <label for="supplierNoRek">No. Rekening</label>
-                                <input type="text" name="supplierNoRek" class="form-control" required placeholder="Input Nomor Rekening Supplier">
+                                <input type="text" name="supplierNoRek" class="form-control" value="{{ old('supplierNoRek') }}" required placeholder="Input Nomor Rekening Supplier">
                             </div>
                             <div class="col">
                                 <label for="supplierNPWP">NPWP</label>
-                                <input type="text" class="form-control" name="supplierNPWP" required placeholder="Input Nomor NPWP">
+                                <input type="text" class="form-control" name="supplierNPWP" value="{{ old('supplierNPWP') }}" required placeholder="Input Nomor NPWP">
                             </div>
                             <div class="col">
                                 <label for="supplierCode">Kode Supplier</label>
-                                <input type="text" class="form-control" name="supplierCode" required placeholder="Input Kode Supplier">
+                                <input type="text" class="form-control" name="supplierCode" value="{{ old('supplierCode') }}" required placeholder="Input Kode Supplier">
                             </div>
                         </div>
                         <div class="d-flex justify-content-center font-weight-bold mt-4">
@@ -202,29 +218,29 @@
                         <div class="form-row my-3">
                             <div class="col">
                                 <label for="noTelpBks">Bekasi</label>
-                                <input type="text" class="form-control" name="noTelpBks" placeholder="Input No. Telp Cabang Bekasi">
+                                <input type="text" class="form-control" name="noTelpBks" value="{{ old('noTelpBks') }}" placeholder="Input No. Telp Cabang Bekasi">
                             </div>
                             <div class="col">
                                 <label for="noTelpSmd">Samarinda</label>
-                                <input type="text" class="form-control" name="noTelpSmd" placeholder="Input No. Telp Cabang Samarinda">
+                                <input type="text" class="form-control" name="noTelpSmd" value="{{ old('noTelpSmd') }}" placeholder="Input No. Telp Cabang Samarinda">
                             </div>
                             <div class="col">
                                 <label for="noTelpBer">Berau</label>
-                                <input type="text" class="form-control" name="noTelpBer" placeholder="Input No. Telp Cabang Berau">
+                                <input type="text" class="form-control" name="noTelpBer" value="{{ old('noTelpBer') }}" placeholder="Input No. Telp Cabang Berau">
                             </div>
                         </div>
                         <div class="form-row my-3">
                             <div class="col">
                                 <label for="noTelpBnt">Bunati</label>
-                                <input type="text" class="form-control" name="noTelpBnt" placeholder="Input No. Telp Cabang Bunati">
+                                <input type="text" class="form-control" name="noTelpBnt" value="{{ old('noTelpBnt') }}" placeholder="Input No. Telp Cabang Bunati">
                             </div>
                             <div class="col">
                                 <label for="noTelpBnj">Banjarmasin</label>
-                                <input type="text" class="form-control" name="noTelpBnj" placeholder="Input No. Telp Cabang Banjarmasin">
+                                <input type="text" class="form-control" name="noTelpBnj" value="{{ old('noTelpBnj') }}" placeholder="Input No. Telp Cabang Banjarmasin">
                             </div>
                             <div class="col">
                                 <label for="noTelpJkt">Jakarta</label>
-                                <input type="text" class="form-control" name="noTelpJkt" placeholder="Input No. Telp Cabang Jakarta">
+                                <input type="text" class="form-control" name="noTelpJkt" value="{{ old('noTelpJkt') }}" placeholder="Input No. Telp Cabang Jakarta">
                             </div>
                         </div>
                         <br>
