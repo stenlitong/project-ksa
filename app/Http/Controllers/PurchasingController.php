@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\ApList;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Storage;
 
 class PurchasingController extends Controller
@@ -282,8 +283,8 @@ class PurchasingController extends Controller
             'totalPrice' => $updatedPriceAfterPPN,
             'order_tracker' => 4,
         ]);
-        // return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
-        return redirect()->back()->with('statusB', 'Order Approved By Purchasing');
+        return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
+        // return redirect()->back()->with('statusB', 'Order Approved By Purchasing');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -497,5 +498,67 @@ class PurchasingController extends Controller
 
         // Export into excel
         return $excel -> download(new ReportAPExport($branch), 'Reports_AP('. $branch . ')_'. date("d-m-Y") . '.xlsx');
+    }
+
+    public function supplierPage(){
+        // Get all supplier
+        $suppliers = Supplier::latest()->get();
+
+        return view('purchasing.purchasingSupplierPage', compact('suppliers'));
+    }
+
+    public function addSupplier(Request $request){
+        // Validate request
+        $validated = $request -> validate([
+            'supplierName' => ['required', 'regex:/^[a-zA-Z\s-]*$/', 'unique:suppliers'],
+            'supplierPic' => ['required', 'string'],
+            'supplierEmail' => ['required', 'string', 'email:rfc,dns', 'unique:suppliers'],
+            'supplierAddress' => ['required', 'string'],
+            'supplierNoRek' => ['required', 'string'],
+            'supplierNPWP' => ['required', 'string'],
+            'supplierCode' => ['required', 'string'],
+            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpSms' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,11'],
+        ]);
+        
+        // Then create the supplier
+        Supplier::create($validated);
+
+        // Redirect
+        return redirect('/purchasing/supplier')->with('status', 'Added Successfully');
+    }
+
+    public function editSupplierDetail(Request $request){
+        // Validate Request
+        $validated = $request -> validate([
+            'supplierEmail' => ['required', 'string', 'email:rfc,dns', Rule::unique('suppliers')->ignore($request->supplier_id)],
+            'supplierAddress' => ['required', 'string'],
+            'supplierNoRek' => ['required', 'string'],
+            'supplierNPWP' => ['required', 'string'],
+            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpSms' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,11'],
+        ]);
+
+        // Then update the supplier
+        Supplier::where('id', $request -> supplier_id)->update($validated);
+
+        // Redirect
+        return redirect('/purchasing/supplier')->with('status', 'Edit Successfully');
+    }
+
+    public function deleteSupplier(Request $request){
+        // Find the supplier, then delete it
+        Supplier::where('id', $request -> supplier_id)->delete();
+
+        // Redirect
+        return redirect('/purchasing/supplier')->with('status', 'Delete Successfully');
     }
 }

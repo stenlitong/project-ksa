@@ -77,133 +77,83 @@
 
                         </div>
                     <?php endif; ?>
-
-                    <div class="row ml-3 flex-row flex-nowrap scrolling-wrapper">
+                    
+                    <input type="text" id="myFilter" class="form-control ml-3 my-3 w-50" onkeyup="myFunction()" placeholder="Search for supplier...">
+                    <div class="row ml-3 flex-column flex-nowrap scrolling-wrapper" id="mySupplier">
                         <?php if(count($suppliers) == 0): ?>
-                            <div class="card border-dark w-100 mr-3">
-                                <div class="card-body mr-3">
-                                <div class="row">
-                                    <div class="col ml-2">
-                                        <img src="/images/profile.png" style="height: 150px; width: 150px;">
-                                        <p style=" max-width: 270px"><strong>--</strong></p>
-                                        <p style="max-width: 270px"><strong>(+62)</strong> --</p>
-                                        <p style="max-width: 270px">--</p>
-                                    </div>
-                                    <div class="col" style="">
-                                        <div class="d-flex justify-content-between ratings">
-                                            <h5 class="smaller-screen-size">Quality</h5>
-                                            <div class="rating d-flex justify-content-end mt-2">
-                                                <?php for($j = 1 ; $j <= 5 ; $j++): ?>
-                                                    <i class = "fa fa-star"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between ratings">
-                                            <h5 class="smaller-screen-size">Top</h5>
-                                            <div class="rating d-flex justify-content-end mt-2">
-                                                <?php for($j = 1 ; $j <= 5 ; $j++): ?>
-                                                    <i class = "fa fa-star"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between ratings">
-                                            <h5 class="smaller-screen-size">Price</h5>
-                                            <div class="rating d-flex justify-content-end mt-2">
-                                                <?php for($j = 1 ; $j <= 5 ; $j++): ?>
-                                                    <i class = "fa fa-star"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between ratings">
-                                            <h5 class="smaller-screen-size">Delivery Time</h5>
-                                            <div class="rating d-flex justify-content-end mt-2">
-                                                <?php for($j = 1 ; $j <= 5 ; $j++): ?>
-                                                    <i class = "fa fa-star"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between ratings">
-                                            <h5 class="smaller-screen-size">Item<br>Availability</h5>
-                                            <div class="rating d-flex justify-content-end mt-3">
-                                                <?php for($j = 1 ; $j <= 5 ; $j++): ?>
-                                                    <i class = "fa fa-star"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                            <h5>No Data Found.</h5>
                         <?php else: ?>
                             <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <div class="card border-dark w-100 mr-3">
+                                <div class="card border-dark w-100 mb-3">
                                     <div class="card-body mr-3">
-                                    <div class="row">
-                                        <div class="col ml-2">
-                                            <img src="/images/profile.png" style="height: 150px; width: 150px;">
-                                            <p style="max-width: 270px"><strong><?php echo e($s -> supplierName); ?></strong></p>
-                                            <p style="max-width: 270px"><strong>(+62)</strong> <?php echo e($s -> noTelp); ?></p>
-                                            <p style="max-width: 270px"><?php echo e($s -> supplierEmail); ?></p>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="ml-2 d-flex flex-column align-items-center">
+                                                
+                                                <img src="/images/profile.png" class="w-75">
+                                                <h5 class="supplier-name mt-2 font-weight-bold"><?php echo e($s -> supplierName); ?></h5>
+                                                <h5 class="supplier-code mt-2"><?php echo e($s -> supplierCode); ?></h5>
+                                                <h5 class="supplier-pic mt-2"><?php echo e($s -> supplierPic); ?></h5>
+                                                <button class="btn btn-outline-primary mt-2" data-toggle="modal" data-target="#detail-supplier-<?php echo e($s -> id); ?>" >Info</button>
+                                            </div>
+                                            <div class="mr-5 my-3">
+                                                <div class="d-flex justify-content-between ratings">
+                                                    <h5 class="smaller-screen-size">Quality</h5>
+                                                    <div class="rating d-flex justify-content-end mt-2">
+                                                        <?php for($i = 1 ; $i <= $s->quality ; $i++): ?>
+                                                            <i class="fa fa-star checked"></i>
+                                                        <?php endfor; ?>
+                                                        <?php for($j = $s->quality + 1 ; $j <= 5 ; $j++): ?>
+                                                            <i class = "fa fa-star"></i>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between ratings">
+                                                    <h5 class="smaller-screen-size">Top</h5>
+                                                    <div class="rating d-flex justify-content-end mt-2">
+                                                        <?php for($i = 1 ; $i <= $s->top ; $i++): ?>
+                                                            <i class="fa fa-star checked"></i>
+                                                        <?php endfor; ?>
+                                                        <?php for($j = $s->top + 1 ; $j <= 5 ; $j++): ?>
+                                                            <i class = "fa fa-star"></i>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between ratings">
+                                                    <h5 class="smaller-screen-size">Price</h5>
+                                                    <div class="rating d-flex justify-content-end mt-2">
+                                                        <?php for($i = 1 ; $i <= $s->price ; $i++): ?>
+                                                            <i class="fa fa-star checked"></i>
+                                                        <?php endfor; ?>
+                                                        <?php for($j = $s->price + 1 ; $j <= 5 ; $j++): ?>
+                                                            <i class = "fa fa-star"></i>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between ratings">
+                                                    <h5 class="smaller-screen-size">Delivery Time</h5>
+                                                    <div class="rating d-flex justify-content-end mt-2">
+                                                        <?php for($i = 1 ; $i <= $s->deliveryTime ; $i++): ?>
+                                                            <i class="fa fa-star checked"></i>
+                                                        <?php endfor; ?>
+                                                        <?php for($j = $s->deliveryTime + 1 ; $j <= 5 ; $j++): ?>
+                                                            <i class = "fa fa-star"></i>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between ratings">
+                                                    <h5 class="smaller-screen-size">Item<br>Availability</h5>
+                                                    <div class="rating d-flex justify-content-end mt-3">
+                                                        <?php for($i = 1 ; $i <= $s->availability ; $i++): ?>
+                                                            <i class="fa fa-star checked"></i>
+                                                        <?php endfor; ?>
+                                                        <?php for($j = $s->availability + 1 ; $j <= 5 ; $j++): ?>
+                                                            <i class = "fa fa-star"></i>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-info mt-3" style="margin-left: 40%" data-toggle="modal" data-target="#edit-rating-<?php echo e($s -> id); ?>">Edit Rating</button>
+                                            </div>
                                         </div>
-                                        <div class="col" style="">
-                                            <div class="d-flex justify-content-between ratings">
-                                                <h5 class="smaller-screen-size">Quality</h5>
-                                                <div class="rating d-flex justify-content-end mt-2">
-                                                    <?php for($i = 1 ; $i <= $s->quality ; $i++): ?>
-                                                        <i class="fa fa-star checked"></i>
-                                                    <?php endfor; ?>
-                                                    <?php for($j = $s->quality + 1 ; $j <= 5 ; $j++): ?>
-                                                        <i class = "fa fa-star"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between ratings">
-                                                <h5 class="smaller-screen-size">Top</h5>
-                                                <div class="rating d-flex justify-content-end mt-2">
-                                                    <?php for($i = 1 ; $i <= $s->top ; $i++): ?>
-                                                        <i class="fa fa-star checked"></i>
-                                                    <?php endfor; ?>
-                                                    <?php for($j = $s->top + 1 ; $j <= 5 ; $j++): ?>
-                                                        <i class = "fa fa-star"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between ratings">
-                                                <h5 class="smaller-screen-size">Price</h5>
-                                                <div class="rating d-flex justify-content-end mt-2">
-                                                    <?php for($i = 1 ; $i <= $s->price ; $i++): ?>
-                                                        <i class="fa fa-star checked"></i>
-                                                    <?php endfor; ?>
-                                                    <?php for($j = $s->price + 1 ; $j <= 5 ; $j++): ?>
-                                                        <i class = "fa fa-star"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between ratings">
-                                                <h5 class="smaller-screen-size">Delivery Time</h5>
-                                                <div class="rating d-flex justify-content-end mt-2">
-                                                    <?php for($i = 1 ; $i <= $s->deliveryTime ; $i++): ?>
-                                                        <i class="fa fa-star checked"></i>
-                                                    <?php endfor; ?>
-                                                    <?php for($j = $s->deliveryTime + 1 ; $j <= 5 ; $j++): ?>
-                                                        <i class = "fa fa-star"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between ratings">
-                                                <h5 class="smaller-screen-size">Item<br>Availability</h5>
-                                                <div class="rating d-flex justify-content-end mt-3">
-                                                    <?php for($i = 1 ; $i <= $s->availability ; $i++): ?>
-                                                        <i class="fa fa-star checked"></i>
-                                                    <?php endfor; ?>
-                                                    <?php for($j = $s->availability + 1 ; $j <= 5 ; $j++): ?>
-                                                        <i class = "fa fa-star"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </div>
-                                            <button class="btn btn-info mt-3" style="margin-left: 40%" data-toggle="modal" data-target="#edit-rating-<?php echo e($s -> id); ?>">Edit Rating</button>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -289,7 +239,8 @@ unset($__errorArgs, $__bag); ?>
                                     <td>
                                         
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                        <?php if(strpos($oh -> status, 'Order In Progress By Purchasing Manager') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
+                                        
+                                        <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
                                             <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         <?php endif; ?>
                                     </td>
@@ -308,62 +259,84 @@ unset($__errorArgs, $__bag); ?>
 
             
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-danger">
-                                    <div class="d-flex justify-content-around">
-                                        <h5><span style="color: white">Order : <?php echo e($o->order_id); ?></span></h5>
-                                        <h5 class="ml-5"><span style="color: white">Processed By : <?php echo e($o->approvedBy); ?></span></h5>
-                                    </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <div class="d-flex justify-content-around">
+                                    <h5><span style="color: white">Order : <?php echo e($o->order_id); ?></span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : <?php echo e($o->approvedBy); ?></span></h5>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="d-flex justify-content-around">
-                                        <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
-                                        <h5>Nomor PO : <?php echo e($o -> noPo); ?></h5>
-                                    </div>
-                                    <table class="table">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Item Barang</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Accepted Quantity</th>
-                                                <th scope="col">Department</th>
-                                                <th scope="col">Note</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($od -> orders_id == $o -> id): ?>
-                                                    <tr>
-                                                        <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
-                                                        <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
-                                                        <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
-                                                        <td><?php echo e($od -> department); ?></td>
-                                                        <td><?php echo e($od -> note); ?></td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </tbody>
-                                    </table>
-                                </div> 
-                                <div class="modal-footer">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex justify-content-around">
+                                    <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
+                                    <h5>Nomor PO : <?php echo e($o -> noPo); ?></h5>
+                                </div>
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Item Barang</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Accepted Quantity</th>
+                                            <th scope="col">Department</th>
+                                            <th scope="col">Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($od -> orders_id == $o -> id): ?>
+                                                <tr>
+                                                    <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
+                                                    <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
+                                                    <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                    <td><?php echo e($od -> department); ?></td>
+                                                    <td><?php echo e($od -> note); ?></td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </tbody>
+                                </table>
+                            </div> 
+                            <div class="modal-footer">
+                                
+                                <?php if($o -> status == 'Order In Progress By Purchasing'): ?>
                                     
-                                    <?php if($o -> status == 'Order In Progress By Purchasing'): ?>
-                                        
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
-                                        <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
-                                    <?php elseif(strpos($o -> status, 'Rechecked') !== false): ?>
-                                        <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Review Order</a>
-                                    <?php endif; ?>
-                                </div>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
+                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
+                                <?php elseif(strpos($o -> status, 'Rechecked') !== false): ?>
+                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Review Order</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($oh -> order_id); ?></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="POST" action="/purchasing/order/<?php echo e($oh->id); ?>/reject">
+                            <?php echo csrf_field(); ?>
+                            <div class="modal-body"> 
+                                <label for="reason">Alasan</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             
             
@@ -466,35 +439,81 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                     </div>
                 </div>
+                <div class="modal fade" id="detail-supplier-<?php echo e($s->id); ?>" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger" style="color: white">
+                                <h5 class="modal-title" id="editItemTitle">Edit/Detail Supplier</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/purchasing/supplier">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('put'); ?>
+                                    <input type="hidden" name="supplier_id" value="<?php echo e($s -> id); ?>">
+                                    <div class="form-row my-2">
+                                        <div class="form-group col-md-6">
+                                            <label for="supplierEmail">Email Supplier</label>
+                                            <input type="email" class="form-control" name="supplierEmail" id="supplierEmail" value="<?php echo e($s -> supplierEmail); ?>" readonly>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="supplierAddress">Alamat Supplier</label>
+                                            <input type="text" class="form-control" name="supplierAddress" id="supplierAddress" value="<?php echo e($s -> supplierAddress); ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row my-2">
+                                        <div class="form-group col-md-6">
+                                            <label for="supplierNoRek">No. Rekening Supplier</label>
+                                            <input type="text" class="form-control" name="supplierNoRek" id="supplierNoRek" value="<?php echo e($s -> supplierNoRek); ?>" readonly>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="supplierNPWP">NPWP</label>
+                                            <input type="text" class="form-control" name="supplierNPWP" id="supplierNPWP" value="<?php echo e($s -> supplierNPWP); ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <h5><u>No. Telp</u></h5>
+                                    <div class="form-row my-3">
+                                        <div class="col">
+                                            <label for="noTelpBks">Bekasi</label>
+                                            <input type="text" class="form-control" name="noTelpBks" value="<?php echo e($s -> noTelpBks); ?>" readonly>
+                                        </div>
+                                        <div class="col">
+                                            <label for="noTelpSmd">Samarinda</label>
+                                            <input type="text" class="form-control" name="noTelpSmd" value="<?php echo e($s -> noTelpSmd); ?>" readonly>
+                                        </div>
+                                        <div class="col">
+                                            <label for="noTelpBer">Berau</label>
+                                            <input type="text" class="form-control" name="noTelpBer" value="<?php echo e($s -> noTelpBer); ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row my-3">
+                                        <div class="col">
+                                            <label for="noTelpBnt">Bunati</label>
+                                            <input type="text" class="form-control" name="noTelpBnt" value="<?php echo e($s -> noTelpBnt); ?>" readonly>
+                                        </div>
+                                        <div class="col">
+                                            <label for="noTelpBnj">Banjarmasin</label>
+                                            <input type="text" class="form-control" name="noTelpBnj" value="<?php echo e($s -> noTelpBnj); ?>" readonly>
+                                        </div>
+                                        <div class="col">
+                                            <label for="noTelpJkt">Jakarta</label>
+                                            <input type="text" class="form-control" name="noTelpJkt" value="<?php echo e($s -> noTelpJkt); ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex ml-3 justify-content-center pb-3">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </main>
-
-        
-        <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($oh -> order_id); ?></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" action="/purchasing/order/<?php echo e($oh->id); ?>/reject">
-                        <?php echo csrf_field(); ?>
-                        <div class="modal-body"> 
-                            <label for="reason">Alasan</label>
-                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                </div>
-            </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <style>
@@ -503,7 +522,7 @@ unset($__errorArgs, $__bag); ?>
         }
         th, td{
             word-wrap: break-word;
-            min-width: 100px;
+            min-width: 160px;
             max-width: 160px;
             text-align: center;
         }
@@ -537,12 +556,14 @@ unset($__errorArgs, $__bag); ?>
             transition: 0.3s ease;
         }
         .scrolling-wrapper{
-            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 800px;
         }
         .card-block{
             background-color: #fff;
             background-position: center;
             background-size: cover;
+            border-radius: 24px;
             transition: all 0.2s ease-in-out !important;
             &:hover{
                 transform: translateY(-5px);
@@ -578,6 +599,26 @@ unset($__errorArgs, $__bag); ?>
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000);
+
+        function myFunction() {
+            var input, filter, cards, cardContainer, title, i;
+            
+            input = document.getElementById("myFilter");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("mySupplier");
+            cards = cardContainer.getElementsByClassName("card");
+            
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".supplier-name");
+                code = cards[i].querySelector(".supplier-code");
+                pic = cards[i].querySelector(".supplier-pic");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1 || code.innerText.toUpperCase().indexOf(filter) > -1 || pic.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />

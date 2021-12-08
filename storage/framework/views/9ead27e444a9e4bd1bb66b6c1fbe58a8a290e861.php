@@ -126,6 +126,7 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Minimum Stok</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
                         <th scope="col" style="color: white">Cabang</th>
@@ -142,6 +143,11 @@ unset($__errorArgs, $__bag); ?>
                                 <td class="bg-white"><?php echo e($i -> $str); ?></td>
                                 <td class="bg-white"><?php echo e($i -> itemAge); ?></td>
                                 <td class="bg-white"><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></td>
+                                <?php if($i -> minStock > $i -> itemStock): ?>
+                                    <td class="bg-white" style="color: red"><strong><?php echo e($i -> minStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                                <?php else: ?>
+                                    <td class="bg-white" style="color: green"><strong><?php echo e($i -> minStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                                <?php endif; ?>
                                 <td class="bg-white"><?php echo e($i -> serialNo); ?></td>
                                 <td class="bg-white"><?php echo e($i -> codeMasterItem); ?></td>
                                 <td class="bg-white"><?php echo e($i -> cabang); ?></td>

@@ -100,7 +100,7 @@
                                     <td><?php echo e($o -> item['golongan']); ?></td>
                                     <td><?php echo e($o -> boatName); ?></td>
                                     <td><?php echo e($o -> item -> codeMasterItem); ?></td>
-                                    <td><?php echo e($o -> quantity); ?> <?php echo e($o -> item -> unit); ?></td>
+                                    <td><?php echo e($o -> acceptedQuantity); ?> <?php echo e($o -> item -> unit); ?></td>
                                     <td>Rp. <?php echo e(number_format($o -> totalItemPrice, 2, ",", ".")); ?></td>
                                     <td><?php echo e($o -> descriptions); ?></td>
                                 </tr>

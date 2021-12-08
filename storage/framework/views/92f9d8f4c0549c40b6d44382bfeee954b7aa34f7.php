@@ -17,6 +17,13 @@
 
                 <h1 class="text-center">Upload List AP</h1>
                 
+                <?php if(session('status')): ?>
+                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                        <?php echo e(session('status')); ?>
+
+                    </div>
+                <?php endif; ?>
+
                 <?php if(count($errors) > 0): ?>
                     <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -25,8 +32,6 @@
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php endif; ?>
-
-                
 
                 <div class="d-flex">
                     <div class="p-2 mr-auto">
@@ -79,7 +84,7 @@
                     </div>
                 </div>
                 
-                <div id="content" style="overflow-x:auto;">
+                <div class="content" style="overflow-x:auto;">
                     <table class="table">
                         <thead class="thead bg-danger">
                         <tr>
@@ -90,7 +95,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td><?php echo e($ap -> creationTime); ?></td>
                                 <?php if($ap -> status == 'OPEN'): ?>
@@ -117,7 +122,7 @@
 
 
         
-        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php if(!empty(Session::get('openApListModalWithId')) && Session::get('openApListModalWithId') == $ap -> id): ?>
                 <script>
                     let id = <?php echo json_encode($ap -> id); ?>;
@@ -126,22 +131,19 @@
                     });
                 </script>
             <?php endif; ?>
-            
+
             <div class="modal fade" id="detail-<?php echo e($ap -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                     <div class="modal-content">
+                        
                         <div class="modal-header bg-danger">
                             <div class="d-flex justify-content-start">
                                 <h3 style="color: white"><?php echo e($ap -> orderHead -> noPo); ?></h3>
                             </div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                         </div>
 
                         <div class="modal-body">
-
                             <?php if(session('openApListModalWithId')): ?>
                                 <div class="alert alert-success" style="width: 40%; margin-left: 30%">
                                     Saved Successfully
@@ -153,7 +155,7 @@
                                     PO Already Been Closed
                                 </div>
                             <?php endif; ?>
-
+                            
                             <div class="d-flex justify-content-end mb-3 mr-3">
                                 <div class="p-2 mr-auto">
                                     <h5>Total Harga : Rp. <?php echo e(number_format($ap -> orderHead -> totalPrice, 2, ",", ".")); ?></h5>
@@ -167,53 +169,53 @@
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-<?php echo e($ap -> id); ?>">Close PO</button>
                                 <?php endif; ?>
                             </div>
-                                <div class="table-modal">
-                                    <table class="table">
-                                        <thead class="thead-dark">
+                            <div class="table-modal">
+                                <table class="table myTable table-refresh<?php echo e($key); ?>">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th class="table-header">Date Uploaded</th>
+                                            <th class="table-header">Name</th>
+                                            <th class="table-header">Status</th>
+                                            <th class="table-header">Description</th>
+                                            <th class="table-header">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php for($i = 1 ; $i <= 20 ; $i++): ?>
+                                            <?php
+                                                // Helper var
+                                                $status = 'status_partial' . $i;
+                                                $uploadTime = 'uploadTime_partial' . $i;
+                                                $description = 'description_partial' . $i;
+                                                $filename = 'doc_partial' . $i;
+                                            ?>
                                             <tr>
-                                                <th class="table-header">Date Uploaded</th>
-                                                <th class="table-header">Name</th>
-                                                <th class="table-header">Status</th>
-                                                <th class="table-header">Description</th>
-                                                <th class="table-header">Action</th>
+                                                <td><?php echo e($ap -> $uploadTime); ?></td>
+                                                <td>Partial <?php echo e($i); ?></td>
+                                                <td>
+                                                    <?php if($ap -> $status == 'On Review'): ?>
+                                                        <span style="color: gray; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                    <?php elseif($ap -> $status == 'Rejected'): ?>
+                                                        <span style="color: Red; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                    <?php else: ?>
+                                                        <span style="color: green; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo e($ap -> $description); ?></td>
+                                                <td>
+                                                    <?php if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED'): ?>
+                                                        <span><?php echo e($ap -> $filename); ?></span>
+                                                    <?php else: ?>
+                                                        <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
+                                                        <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
+                                                        <input type="file" name="doc_partial<?php echo e($i); ?>" class="form-control">
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php for($i = 1 ; $i <= 20 ; $i++): ?>
-                                                <?php
-                                                    // Helper var
-                                                    $status = 'status_partial' . $i;
-                                                    $uploadTime = 'uploadTime_partial' . $i;
-                                                    $description = 'description_partial' . $i;
-                                                    $filename = 'doc_partial' . $i;
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo e($ap -> $uploadTime); ?></td>
-                                                    <td>Partial <?php echo e($i); ?></td>
-                                                    <td>
-                                                        <?php if($ap -> $status == 'On Review'): ?>
-                                                            <span style="color: gray; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                        <?php elseif($ap -> $status == 'Rejected'): ?>
-                                                            <span style="color: Red; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                        <?php else: ?>
-                                                            <span style="color: green; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td><?php echo e($ap -> $description); ?></td>
-                                                    <td>
-                                                        <?php if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED'): ?>
-                                                            <span><?php echo e($ap -> $filename); ?></span>
-                                                        <?php else: ?>
-                                                            <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
-                                                            <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
-                                                            <input type="file" name="doc_partial<?php echo e($i); ?>" class="form-control">
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endfor; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endfor; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                             </form>
                             <div class="mt-4">
                                 <form action="/admin-purchasing/form-ap/ap-detail" method="POST">
@@ -222,8 +224,8 @@
                                     <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="supplier_id">Nama Supplier</label>
-                                        <select class="form-control" id="supplier_id" name="supplier_id">
+                                        <label for="supplierName">Nama Supplier</label>
+                                        <select class="form-control" id="supplierName" name="supplierName">
                                             <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                             <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>
@@ -264,18 +266,18 @@
                                         <label for="additionalInformation">Keterangan (optional)</label>
                                         <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"></textarea>
                                     </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-primary">Save</button>
-                                    </div>
+                                    <?php if($ap -> status != 'CLOSED'): ?>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    <?php endif; ?>
                                 </form>
                             </div>
                         </div> 
                     </div>
                 </div>
             </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-        <?php $__currentLoopData = $apList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="modal fade" id="close-<?php echo e($ap -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-md modal-dialog-centered" role="document">
@@ -284,9 +286,6 @@
                             <div class="d-flex justify-content-start">
                                 <h5 class="text-white">Close PO</h5>
                             </div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                         </div>
                         <div class="modal-body">
                             <div class="d-flex justify-content-center align-items-center">
@@ -312,16 +311,6 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         <style>
-            /* .tableFixHead          { overflow: auto; height: 250px; }
-            .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
-            .my-custom-scrollbar {
-            position: relative;
-            height: 600px;
-            overflow: auto;
-            }
-            .table-wrapper-scroll-y {
-                display: block;
-            } */
             th{
                 color: white;
             }
@@ -337,6 +326,9 @@
                 max-width: 120px;
                 text-align: center;
             }
+            /* .myTable tr td:last-child{
+                width: 300px;
+            } */
             .table-modal{
                 height: 400px;
                 overflow-y: auto;
@@ -364,19 +356,25 @@
             }
         </style>
 
-        
-
-        <script>
+        <script type="text/javascript">
+            let id = <?php echo json_encode(count($apList)); ?>;
             function refreshDiv(){
-                $('#content').load(location.href + ' #content')
+                $('.content').load(location.href + ' .content')
             }
             setInterval(refreshDiv, 60000);
 
+            // setInterval(() => {
+            //     for(i = 0 ; i <= id - 1 ; i++){
+            //         $('.table-refresh' + i).empty()
+            //         $('.table-refresh' + i).load(location.href + ' .table-refresh' + i)
+            //     }
+            // }, 10000)
+
             setTimeout(function() {
                 $('.alert').fadeOut('fast');
+                // $('div .alert').remove();
             }, 3000);
         </script>
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     <?php $__env->stopSection(); ?>
 
 <?php else: ?>

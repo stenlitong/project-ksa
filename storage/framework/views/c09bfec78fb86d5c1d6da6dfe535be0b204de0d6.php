@@ -262,7 +262,7 @@ unset($__errorArgs, $__bag); ?>
                                         </td>
 
                                         <td class="center">
-                                            <h5><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></h5>
+                                            <h5><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></h5>
                                         </td>
 
                                         <form action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/<?php echo e($od -> id); ?>/edit" method="POST">
@@ -271,7 +271,7 @@ unset($__errorArgs, $__bag); ?>
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="1">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e(round($od -> itemPrice )); ?>" min="1" step="0.1">
                                                 </div>
                                             </td>
                                             

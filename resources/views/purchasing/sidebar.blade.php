@@ -34,6 +34,17 @@
                     Report AP
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'supplier'){
+                        echo('active');
+                    }
+                @endphp" href="/purchasing/supplier">
+                    <span data-feather="user-plus"></span>
+                    Add More Contact
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

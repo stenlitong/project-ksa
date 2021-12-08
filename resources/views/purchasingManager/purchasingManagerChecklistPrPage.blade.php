@@ -78,18 +78,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach($apList as $ap)
+                                @foreach($orderDetails as $od)
                                     <tr>
-                                        <td>{{ $ap -> supplierName }}</td>
-                                        <td>{{ $ap -> noInvoice }}</td>
-                                        <td>{{ $ap -> noFaktur }}</td>
-                                        <td>{{ $ap -> noDo }}</td>
-                                        <td>{{ $ap -> orderHead -> noPo }}</td>
-                                        <td>{{ $ap -> orderHead -> noPr }}</td>
-                                        <td>Rp. {{ number_format($ap -> nominalInvoice, 2, ",", ".") }}</td>
-                                        <td>{{ $ap -> additionalInformation}}</td>
+                                        <td>{{ $od -> prDate }}</td>
+                                        <td>{{ $od -> noPr }}</td>
+                                        <td>{{ $od -> supplier -> supplierName }}</td>
+                                        <td>{{ $od -> noSbk }}</td>
+                                        <td>{{ $od -> boatName }}</td>
+                                        <td>{{ $od -> item -> itemName }}</td>
+                                        <td>{{ $od -> serialNo }}</td>
+                                        <td>{{ $od -> acceptedQuantity }}</td>
+                                        <td>{{ $od -> note }}</td>
                                     </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

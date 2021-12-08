@@ -34,6 +34,17 @@
                     Report AP
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                <?php
+                    if(basename($_SERVER['REQUEST_URI']) == 'supplier'){
+                        echo('active');
+                    }
+                ?>" href="/purchasing/supplier">
+                    <span data-feather="user-plus"></span>
+                    Add More Contact
+                </a>
+            </li>
         </ul>
     </div>
 </nav><?php /**PATH D:\Kuliah\Magang\Project\app\app-ver1\resources\views/purchasing/sidebar.blade.php ENDPATH**/ ?>

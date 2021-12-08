@@ -144,7 +144,9 @@
                                             @if($od -> orders_id == $o -> id)
                                                 <tr>
                                                     <td><strong>{{ $od -> item -> itemName }}</strong></td>
-                                                    <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
+                                                    <td>
+                                                        <strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong>
+                                                    </td>
                                                     <td>{{ $od -> item -> itemAge }}</td>
                                                     <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> item -> lastGiven }}</td>
@@ -171,35 +173,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="reject-order-{{ $o -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order {{ $o -> order_id }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="POST" action="/supervisor/{{ $o -> id }}/reject-order">
+                            @method('put')
+                            @csrf
+                            <div class="modal-body"> 
+                                <label for="reason">Alasan</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
             @endforeach
         </div>
-
-        {{-- Modal 2 --}}
-        @foreach($orderHeads as $oh)
-            <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order {{ $oh -> order_id }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" action="/supervisor/{{ $oh -> id }}/reject-order">
-                        @method('put')
-                        @csrf
-                        <div class="modal-body"> 
-                            <label for="reason">Alasan</label>
-                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                </div>
-            </div>
-        @endforeach
 
         <style>
             th{

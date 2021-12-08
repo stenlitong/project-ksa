@@ -122,7 +122,8 @@ class SupervisorController extends Controller
     public function approveOrder(OrderHead $orderHeads){
         // Check if already been processed or not
         if($orderHeads -> order_tracker == 3){
-            return redirect('/dashboard')->with('error', 'Order Already Been Processed');
+            // return redirect('/dashboard')->with('error', 'Order Already Been Processed');
+            return redirect()->back()->with('error', 'Order Already Been Processed');
         }
 
         // If they approve the order, then change the status of the order into purchasing
@@ -389,7 +390,7 @@ class SupervisorController extends Controller
 
     public function forwardDo(OrderDo $orderDos){
         // Validate the stock first
-        if($orderDos->quantity > $orderDos->item_requested_from -> itemStock){
+        if($orderDos -> quantity > $orderDos -> item_requested_from -> itemStock){
             // return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
             return redirect()->back()->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
         }else{
@@ -429,7 +430,7 @@ class SupervisorController extends Controller
 
     public function approveDo(OrderDo $orderDos){
         // Re-validate quantity, even we already put the validation from previous supervisor just to be sure the data is valid
-        if($orderDos->quantity > $orderDos->item_requested_from -> itemStock){
+        if($orderDos -> quantity > $orderDos -> item_requested_from -> itemStock){
             // return redirect('/supervisor/approval-do')->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
             return redirect()->back()->with('error', 'Stocks Insufficient, Kindly Re-Check the Stocks');
         }else{

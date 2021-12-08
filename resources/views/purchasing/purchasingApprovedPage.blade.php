@@ -188,7 +188,7 @@
                                         </td>
 
                                         <td class="center">
-                                            <h5>{{ $od -> quantity }} {{ $od -> item -> unit }}</h5>
+                                            <h5>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</h5>
                                         </td>
 
                                         <form action="/purchasing/order/{{ $orderHeads -> id }}/{{ $od -> id }}/edit" method="POST">
@@ -197,7 +197,7 @@
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ round($od -> itemPrice )}}" min="1" step="0.1">
                                                 </div>
                                             </td>
                                             

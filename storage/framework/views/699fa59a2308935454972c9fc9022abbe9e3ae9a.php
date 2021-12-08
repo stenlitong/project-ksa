@@ -1,4 +1,4 @@
-<?php if(Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
+<?php if(Auth::user()->hasRole('supervisorLogistic') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
     
 
     <?php $__env->startSection('title', 'Supervisor Dashboard'); ?>
@@ -154,7 +154,9 @@ unset($__errorArgs, $__bag); ?>
                                             <?php if($od -> orders_id == $o -> id): ?>
                                                 <tr>
                                                     <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
-                                                    <td><strong><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
+                                                    <td>
+                                                        <strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong>
+                                                    </td>
                                                     <td><?php echo e($od -> item -> itemAge); ?></td>
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <td><?php echo e($od -> item -> lastGiven); ?></td>
@@ -181,35 +183,31 @@ unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="reject-order-<?php echo e($o -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order <?php echo e($o -> order_id); ?></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="POST" action="/supervisor/<?php echo e($o -> id); ?>/reject-order">
+                            <?php echo method_field('put'); ?>
+                            <?php echo csrf_field(); ?>
+                            <div class="modal-body"> 
+                                <label for="reason">Alasan</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-
-        
-        <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title" style="color: white" id="rejectTitle">Reject Order <?php echo e($oh -> order_id); ?></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" action="/supervisor/<?php echo e($oh -> id); ?>/reject-order">
-                        <?php echo method_field('put'); ?>
-                        <?php echo csrf_field(); ?>
-                        <div class="modal-body"> 
-                            <label for="reason">Alasan</label>
-                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                </div>
-            </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         <style>
             th{

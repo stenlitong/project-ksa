@@ -86,7 +86,7 @@
                                             <span class="feather-icon" data-feather="file"></span>
                                             <div class="mr-5">
                                                 <h5 class="card-title font-weight-bold text-center">{{ $i -> itemName }}</h5>
-                                                <p class="card-text mt-3"><span class="text-danger font-weight-bold">Warning !</span> stock is below {{ $i -> stock_defficiency }} ! please check immediately !</p>
+                                                <p class="card-text mt-3"><span class="text-danger font-weight-bold">Warning !</span> stock is below {{ $i -> stock_defficiency }} ! please check immediately ! <span class="font-weight-bold">({{ $i->created_at->format('d-m-Y') }})</span></p>
                                             </div>
                                         </div>
                                     </div>

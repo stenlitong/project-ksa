@@ -232,6 +232,7 @@
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Minimum Stok</th>
                         <th scope="col" style="color: white">Golongan</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
@@ -249,6 +250,11 @@
                         <td><strong>{{ $i -> itemName }}</strong></td>
                         <td>{{ $i -> itemAge }}</td>
                         <td><strong>{{ $i -> itemStock }} {{ $i -> unit }}</strong></td>
+                        @if($i -> minStock > $i -> itemStock)
+                            <td style="color: red"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                        @else
+                            <td style="color: green"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                        @endif
                         <td>{{ $i -> golongan }}</td>
                         <td>{{ $i -> serialNo }}</td>
                         <td><strong>{{ $i -> codeMasterItem }}</strong></td>
@@ -419,10 +425,6 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
-
-            <!-- Modal #3 -->
-            @foreach($items as $i)
                 <div class="modal fade" id="deleteItem-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteItemTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-md modal-dialog-centered" role="document">

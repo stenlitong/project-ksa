@@ -142,6 +142,12 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/report-ap', [PurchasingController::class, 'reportApPage'])->name('reportAp');
         Route::get('/report-ap/{branch}', [PurchasingController::class, 'reportApPageBranch']);
         Route::get('/report-ap/{branch}/export', [PurchasingController::class, 'exportReportAp']);
+
+        // Supplier Page
+        Route::get('/supplier', [PurchasingController::class, 'supplierPage']);
+        Route::post('/supplier', [PurchasingController::class, 'addSupplier']);
+        Route::put('/supplier', [PurchasingController::class, 'editSupplierDetail']);
+        Route::delete('/supplier', [PurchasingController::class, 'deleteSupplier']);
     });
     
     Route::prefix('purchasing-manager')->name('purchasingManager.')->group(function(){
@@ -180,13 +186,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
     });
 
     Route::prefix('admin-purchasing')->name('adminPurchasing.')->group(function(){
-        // Dashboard Page
-        Route::post('/add-supplier', [AdminPurchasingController::class, 'addSupplier'])->name('add-supplier');
-        Route::put('/{suppliers}/edit', [AdminPurchasingController::class, 'editSupplier']);
-        Route::delete('/{suppliers}/delete', [AdminPurchasingController::class, 'deleteSupplier']);
-        
         // AP Page
-        Route::get('/form-ap', [AdminPurchasingController::class, 'formApPage'])->name('formApPage');
         Route::get('/form-ap/{branch}', [AdminPurchasingController::class, 'formApPageBranch']);
         Route::put('/form-ap/upload', [AdminPurchasingController::class, 'uploadFile']);
         Route::post('/form-ap/ap-detail', [AdminPurchasingController::class, 'saveApDetail']);

@@ -88,6 +88,7 @@
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Minimum Stok</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
                         <th scope="col" style="color: white">Cabang</th>
@@ -104,6 +105,11 @@
                                 <td class="bg-white">{{ $i -> $str }}</td>
                                 <td class="bg-white">{{ $i -> itemAge }}</td>
                                 <td class="bg-white">{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                                @if($i -> minStock > $i -> itemStock)
+                                    <td class="bg-white" style="color: red"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                                @else
+                                    <td class="bg-white" style="color: green"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                                @endif
                                 <td class="bg-white">{{ $i -> serialNo }}</td>
                                 <td class="bg-white">{{ $i -> codeMasterItem }}</td>
                                 <td class="bg-white">{{ $i -> cabang }}</td>

@@ -14,44 +14,44 @@ use Storage;
 
 class AdminPurchasingController extends Controller
 {
-    public function addSupplier(Request $request){
-        // Add supplier
-        $validated = $request -> validate([
-            'supplierName' => 'required',
-            'noTelp' => 'required|numeric|digits_between:8,11',
-            'supplierEmail' => 'required|email|unique:suppliers',
-            'supplierAddress' => 'required',
-            'supplierNPWP' => 'required',
-            'supplierNoRek' => 'nullable'
-        ]);
+    // public function addSupplier(Request $request){
+    //     // Add supplier
+    //     $validated = $request -> validate([
+    //         'supplierName' => 'required',
+    //         'noTelp' => 'required|numeric|digits_between:8,11',
+    //         'supplierEmail' => 'required|email|unique:suppliers',
+    //         'supplierAddress' => 'required',
+    //         'supplierNPWP' => 'required',
+    //         'supplierNoRek' => 'nullable'
+    //     ]);
         
-        Supplier::create($validated);
+    //     Supplier::create($validated);
 
-        return redirect('/dashboard')->with('status', 'Added Successfully');
-    }
+    //     return redirect('/dashboard')->with('status', 'Added Successfully');
+    // }
 
-    public function editSupplier(Request $request, Supplier $suppliers){
-        // Edit supplier
-        $validated = $request -> validate([
-            'supplierName' => 'required',
-            'noTelp' => 'required|numeric|digits_between:8,11',
-            'supplierEmail' => 'required|email',
-            'supplierAddress' => 'required',
-            'supplierNPWP' => 'required'
-        ]);
+    // public function editSupplier(Request $request, Supplier $suppliers){
+    //     // Edit supplier
+    //     $validated = $request -> validate([
+    //         'supplierName' => 'required',
+    //         'noTelp' => 'required|numeric|digits_between:8,11',
+    //         'supplierEmail' => 'required|email',
+    //         'supplierAddress' => 'required',
+    //         'supplierNPWP' => 'required'
+    //     ]);
 
-        // Find the supplier's ID then update the value
-        Supplier::find($suppliers->id)->update($validated);
+    //     // Find the supplier's ID then update the value
+    //     Supplier::find($suppliers->id)->update($validated);
 
-        return redirect('/dashboard')->with('status', 'Edited Successfully');
-    }
+    //     return redirect('/dashboard')->with('status', 'Edited Successfully');
+    // }
 
-    public function deleteSupplier(Request $request, Supplier $suppliers){
-        // Find the supplier by the id in the request params
-        Supplier::destroy($suppliers->id);
+    // public function deleteSupplier(Request $request, Supplier $suppliers){
+    //     // Find the supplier by the id in the request params
+    //     Supplier::destroy($suppliers->id);
 
-        return redirect('/dashboard')->with('status', 'Deleted Successfully');
-    }
+    //     return redirect('/dashboard')->with('status', 'Deleted Successfully');
+    // }
 
     public function formApPage(){
         // Show the form AP page
@@ -122,13 +122,14 @@ class AdminPurchasingController extends Controller
                 $month = date('m');
                 $year = date('Y');
 
+                // ==================== Still in discussion if there will be 2 AP with the same file ===========================
                 // Check if file already exists
-                $curr_file = ApList::find($request -> apListId)->pluck($dynamic_file)[0];
+                // $curr_file = ApList::find($request -> apListId)->pluck($dynamic_file)[0];
 
                 // Then delete the file first, so it does not takes memory
-                if($curr_file && Storage::exists('APList/' . $curr_file)){
-                    unlink(storage_path('app/APList/' . $curr_file));
-                }
+                // if($curr_file && Storage::exists('APList/' . $curr_file)){
+                //     unlink(storage_path('app/APList/' . $curr_file));
+                // }
 
                 // Get the path for the file
                 $path = $year . '/' . $month . '/' . $request -> $dynamic_file -> getClientOriginalName();
@@ -147,6 +148,7 @@ class AdminPurchasingController extends Controller
         };
         
         return redirect()->back()->with('openApListModalWithId', $request -> apListId);
+        // return redirect()->back()->with('status', 'Saved Successfully');
     }
 
     public function saveApDetail(Request $request){
@@ -170,6 +172,7 @@ class AdminPurchasingController extends Controller
         ]);
 
         return redirect()->back()->with('openApListModalWithId', $request -> apListId);
+        // return redirect()->back()->with('status', 'Saved Successfully');
     }
 
     public function closeAp(Request $request){

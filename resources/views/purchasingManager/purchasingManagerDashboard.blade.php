@@ -270,7 +270,8 @@
                                     <td>
                                         {{-- Modal button for order details --}}
                                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Purchasing Manager') !== false || strpos($oh -> status, 'Rechecked') !== false)
+                                        {{-- @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Purchasing Manager') !== false || strpos($oh -> status, 'Rechecked') !== false) --}}
+                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false)
                                             <a href="/purchasing-manager/{{ $oh -> id }}/download-po" class="btn btn-warning" target="_blank">Download PO</a>
                                         @endif
                                     </td>

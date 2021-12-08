@@ -199,7 +199,8 @@ class LogisticController extends Controller
         // case #1 => item request from Jakarta -> Bahan Bakar, then the item from requested branch Banjarmasin -> Bahan Bakarr, return error cause it is not exist/not the same
         // case #2 => CASE SENSITIVE MATTER, Bahan Bakar !== BAHAN Bakar, they need to make sure their naming correct
         if($itemToFound === null || ($request -> quantity > $items -> itemStock)){
-            return redirect('/logistic/stocks')->with('itemInvalid', 'Invalid Item/Stock');
+            // return redirect('/logistic/stocks')->with('itemInvalid', 'Invalid Item/Stock');
+            return redirect()->back()->with('itemInvalid', 'Invalid Item/Stock');
         }else{
             // Else, create a DO request
             OrderDo::create([
@@ -288,7 +289,8 @@ class LogisticController extends Controller
             'order_tracker' => 2,
             'reason' => $request->reason
         ]);
-        return redirect('/dashboard')->with('status', 'Order Rejected Successfully');
+        // return redirect('/dashboard')->with('status', 'Order Rejected Successfully');
+        return redirect()->back()->with('status', 'Order Rejected Successfully');
     }
 
     public function approveOrderPage(OrderHead $orderHeads){
@@ -442,6 +444,7 @@ class LogisticController extends Controller
                 'orders_id' => $orderHead->id,
                 'item_id' => $od->item_id,
                 'quantity' => $od->acceptedQuantity,
+                'acceptedQuantity' => $od->acceptedQuantity,
                 'unit' => $od->item->unit,
                 'golongan' => $od->golongan,
                 'serialNo' => $od->item->serialNo,
@@ -520,7 +523,7 @@ class LogisticController extends Controller
         // Check if the item state is on hold, then return error
         $check_item_state = Item::where('id', $request -> item_id)->pluck('itemState')[0];
         if($check_item_state == 'Hold'){
-            return redirect('/crew/order')->with('error', 'Item is Unavailable');
+            return redirect('/logistic/make-order')->with('error', 'Item is Unavailable');
         }
 
         // Check if the cart within the user is already > 12 items, then cart is full & return with message
@@ -570,7 +573,7 @@ class LogisticController extends Controller
         // Double check the item state, if there are items that is on 'Hold' status, then return error
         foreach($carts as $c){
             if($c -> item -> itemState == 'Hold'){
-                return redirect('/crew/order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
+                return redirect('/logistic/make-order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
             }
         }
 

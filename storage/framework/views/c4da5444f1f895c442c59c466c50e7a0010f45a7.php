@@ -290,6 +290,7 @@ unset($__errorArgs, $__bag); ?>
                         <th scope="col" style="color: white">Item Barang</th>
                         <th scope="col" style="color: white">Umur Barang</th>
                         <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Minimum Stok</th>
                         <th scope="col" style="color: white">Golongan</th>
                         <th scope="col" style="color: white">Serial Number</th>
                         <th scope="col" style="color: white">Code Master Item</th>
@@ -307,6 +308,11 @@ unset($__errorArgs, $__bag); ?>
                         <td><strong><?php echo e($i -> itemName); ?></strong></td>
                         <td><?php echo e($i -> itemAge); ?></td>
                         <td><strong><?php echo e($i -> itemStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                        <?php if($i -> minStock > $i -> itemStock): ?>
+                            <td style="color: red"><strong><?php echo e($i -> minStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                        <?php else: ?>
+                            <td style="color: green"><strong><?php echo e($i -> minStock); ?> <?php echo e($i -> unit); ?></strong></td>
+                        <?php endif; ?>
                         <td><?php echo e($i -> golongan); ?></td>
                         <td><?php echo e($i -> serialNo); ?></td>
                         <td><strong><?php echo e($i -> codeMasterItem); ?></strong></td>
@@ -475,10 +481,6 @@ unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
                 </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-            <!-- Modal #3 -->
-            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="deleteItem-<?php echo e($i->id); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteItemTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-md modal-dialog-centered" role="document">

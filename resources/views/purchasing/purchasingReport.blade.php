@@ -100,7 +100,7 @@
                                     <td>{{ $o -> item['golongan']}}</td>
                                     <td>{{ $o -> boatName}}</td>
                                     <td>{{ $o -> item -> codeMasterItem}}</td>
-                                    <td>{{ $o -> quantity}} {{ $o -> item -> unit }}</td>
+                                    <td>{{ $o -> acceptedQuantity}} {{ $o -> item -> unit }}</td>
                                     <td>Rp. {{ number_format($o -> totalItemPrice, 2, ",", ".") }}</td>
                                     <td>{{ $o -> descriptions}}</td>
                                 </tr>

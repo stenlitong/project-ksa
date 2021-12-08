@@ -41,7 +41,7 @@
                                         <td>{{ $oh -> item -> lastGiven }}</td>
                                         <td>{{ $oh -> item -> itemName }}</td>
                                         <td>{{ $oh -> item -> serialNo}}</td>
-                                        <td>{{ $oh -> quantity}}</td>
+                                        <td>{{ $oh -> acceptedQuantity}}</td>
                                         <td>{{ $oh -> item -> unit}}</td>
                                         <td>{{ $oh -> noResi}}</td>
                                         <td>{{ $oh -> descriptions}}</td>

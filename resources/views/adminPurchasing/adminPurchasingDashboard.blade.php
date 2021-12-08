@@ -45,8 +45,8 @@
             </div>
         @enderror
 
-        <div class="row">
-            <div class="col" style="overflow-x: auto; max-width: 850px">
+        <div class="d-flex justify-content-between">
+            <div style="overflow-x: auto">
                 <h2 class="mb-4" style="text-align: center">Contact Suppliers</h2>
                 <div class="flex-column flex-nowrap scrolling-wrapper">
                     @foreach($suppliers as $s)
@@ -76,7 +76,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col">
+            <div style="">
                 <h2 class="mb-4" style="text-align: center">Add Suppliers</h2>
                 <div class="">
                     <form method="POST" action="{{ Route('adminPurchasing.add-supplier') }}">

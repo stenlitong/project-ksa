@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\Session;
+use App\Models\ApList;
 
 class DashboardController extends Controller
 {
@@ -152,9 +152,16 @@ class DashboardController extends Controller
             return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
 
         }elseif(Auth::user()->hasRole('adminPurchasing')){
+            // Show the form AP page
+            $apList = ApList::with('orderHead')->where('cabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
+            
+            // Get all the supplier
             $suppliers = Supplier::latest()->get();
 
-            return view('adminPurchasing.adminPurchasingDashboard', compact('suppliers'));
+            // Default branch is Jakarta
+            $default_branch = 'Jakarta';
+
+            return view('adminPurchasing.adminPurchasingFormAp', compact('apList', 'default_branch', 'suppliers'));
         }elseif(Auth::user()->hasRole('purchasingManager')){
             // Default branch is Jakarta, first time login
             $default_branch = 'Jakarta';

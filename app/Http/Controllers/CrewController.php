@@ -186,10 +186,10 @@ class CrewController extends Controller
             $serialNo = Item::where('id', $c->item_id)->pluck('serialNo');
             $unit = Item::where('id', $c->item_id)->pluck('unit');
             OrderDetail::create([
-                'orders_id' => $o_id->id,
-                'item_id' => $c->item_id,
-                'quantity' => $c->quantity,
-                'acceptedQuantity' => $c->quantity,
+                'orders_id' => $o_id -> id,
+                'item_id' => $c -> item_id,
+                'quantity' => $c -> quantity,
+                'acceptedQuantity' => $c -> quantity,
                 'unit' => $unit[0],
                 'serialNo' => $serialNo[0],
                 'department' => $c->department,

@@ -110,7 +110,7 @@
 
 
         {{-- Modal Detail --}}
-        @foreach($apList as $ap)
+        @foreach($apList as $key => $ap)
             @if(!empty(Session::get('openApListModalWithId')) && Session::get('openApListModalWithId') == $ap -> id)
                 <script>
                     let id = {!! json_encode($ap -> id) !!};
@@ -155,100 +155,102 @@
                                             <th class="table-header">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @for($i = 1 ; $i <= 20 ; $i++)
-                                            @php
-                                                // Helper var
-                                                $status = 'status_partial' . $i;
-                                                $uploadTime = 'uploadTime_partial' . $i;
-                                                $description = 'description_partial' . $i;
-                                                $filename = 'doc_partial' . $i;
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $ap -> $uploadTime }}</td>
-                                                <td>Partial {{ $i }}</td>
-                                                <td>
-                                                    @if($ap -> $status == 'On Review')
-                                                        <span style="color: gray; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @elseif($ap -> $status == 'Rejected')
-                                                        <span style="color: Red; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @else
-                                                        <span style="color: green; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $ap -> $description }}</td>
-                                                <td>
-                                                    @if($ap -> $status == 'On Review')
-                                                        <div class="d-flex justify-content-between">
-                                                            <form action="/purchasing-manager/form-ap/download" method="POST" target="_blank">
-                                                                @csrf
-                                                                <input type="hidden" name="filename" value="{{ $filename }}">
-                                                                <input type="hidden" name="apListId" value="{{ $ap -> id }}">
-                                                                <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
-                                                            </form>
-                                                            
-                                                            {{-- Modal to reject the file --}}
-                                                            {{-- <button class="btn btn-danger btn-sm text-white">Reject</button> --}}
-                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#reject-{{ $ap -> id }}-{{ $filename }}">Reject</button>
+                                    <div>
+                                        <tbody>
+                                            @for($i = 1 ; $i <= 20 ; $i++)
+                                                @php
+                                                    // Helper var
+                                                    $status = 'status_partial' . $i;
+                                                    $uploadTime = 'uploadTime_partial' . $i;
+                                                    $description = 'description_partial' . $i;
+                                                    $filename = 'doc_partial' . $i;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $ap -> $uploadTime }}</td>
+                                                    <td>Partial {{ $i }}</td>
+                                                    <td>
+                                                        @if($ap -> $status == 'On Review')
+                                                            <span style="color: gray; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @elseif($ap -> $status == 'Rejected')
+                                                            <span style="color: Red; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @else
+                                                            <span style="color: green; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $ap -> $description }}</td>
+                                                    <td>
+                                                        @if($ap -> $status == 'On Review')
+                                                            <div class="d-flex justify-content-between">
+                                                                <form action="/purchasing-manager/form-ap/download" method="POST" target="_blank">
+                                                                    @csrf
+                                                                    <input type="hidden" name="filename" value="{{ $filename }}">
+                                                                    <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                    <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
+                                                                </form>
+                                                                
+                                                                {{-- Modal to reject the file --}}
+                                                                {{-- <button class="btn btn-danger btn-sm text-white">Reject</button> --}}
+                                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#reject-{{ $ap -> id }}-{{ $filename }}">Reject</button>
 
-                                                            {{-- Reject Modal --}}
-                                                            <div class="modal fade" id="reject-{{ $ap -> id }}-{{ $filename }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header bg-danger">
-                                                                            <h5 class="modal-title text-white" id="rejectTitle">Reject Document</h5>
-                                                                        </div>
-                                                                        <form method="POST" action="/purchasing-manager/form-ap/reject">
-                                                                            @csrf
-                                                                            @method('patch')
+                                                                {{-- Reject Modal --}}
+                                                                <div class="modal fade" id="reject-{{ $ap -> id }}-{{ $filename }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header bg-danger">
+                                                                                <h5 class="modal-title text-white" id="rejectTitle">Reject Document</h5>
+                                                                            </div>
+                                                                            <form method="POST" action="/purchasing-manager/form-ap/reject">
+                                                                                @csrf
+                                                                                @method('patch')
 
-                                                                            <input type="hidden" name="apListId" value="{{ $ap -> id }}">
-                                                                            <input type="hidden" name="statusColumn" value="{{ $status }}">
-                                                                            <input type="hidden" name="description" value="{{ $description }}">
-                                                                            <input type="hidden" name="default_branch" value="{{ $default_branch }}">
+                                                                                <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                                <input type="hidden" name="statusColumn" value="{{ $status }}">
+                                                                                <input type="hidden" name="description" value="{{ $description }}">
+                                                                                <input type="hidden" name="default_branch" value="{{ $default_branch }}">
 
-                                                                            <div class="modal-body"> 
-                                                                                <div class="d-flex justify-content-start ml-2">
-                                                                                    <label class="text-left" for="reason">Alasan</label>
+                                                                                <div class="modal-body"> 
+                                                                                    <div class="d-flex justify-content-start ml-2">
+                                                                                        <label class="text-left" for="reason">Alasan</label>
+                                                                                    </div>
+                                                                                    <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan" required></textarea>
                                                                                 </div>
-                                                                                <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan" required></textarea>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                                                            </div>
-                                                                        </form>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <form action="/purchasing-manager/form-ap/approve" method="POST">
-                                                                @csrf
-                                                                @method('patch')
-                                                                <input type="hidden" name="statusColumn" value="{{ $status }}">
-                                                                <input type="hidden" name="apListId" value="{{ $ap -> id }}">
-                                                                <input type="hidden" name="default_branch" value="{{ $default_branch }}">
-                                                                <button class="btn btn-success btn-sm text-white">Approve</button>
-                                                            </form>
-                                                        </div>
-                                                    @elseif($ap -> $status == 'Approved' || $ap -> $status == 'Rejected')
-                                                        <div class="d-flex justify-content-center">
-                                                            <form action="/purchasing-manager/form-ap/download" method="POST" target="_blank">
-                                                                @csrf
-                                                                <input type="hidden" name="filename" value="{{ $filename }}">
-                                                                <input type="hidden" name="apListId" value="{{ $ap -> id }}">
-                                                                <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
-                                                            </form>
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endfor
-                                    </tbody>
+                                                                <form action="/purchasing-manager/form-ap/approve" method="POST">
+                                                                    @csrf
+                                                                    @method('patch')
+                                                                    <input type="hidden" name="statusColumn" value="{{ $status }}">
+                                                                    <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                    <input type="hidden" name="default_branch" value="{{ $default_branch }}">
+                                                                    <button class="btn btn-success btn-sm text-white">Approve</button>
+                                                                </form>
+                                                            </div>
+                                                        @elseif($ap -> $status == 'Approved')
+                                                            <div class="d-flex justify-content-center">
+                                                                <form action="/purchasing-manager/form-ap/download" method="POST" target="_blank">
+                                                                    @csrf
+                                                                    <input type="hidden" name="filename" value="{{ $filename }}">
+                                                                    <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                    <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endfor
+                                        </tbody>
+                                    </div>
                                 </table>
                             </div>
                                 
                             <div class="mt-4">
-                                @foreach($apListDetail as $apDetail)
+                                @forelse($apListDetail as $apDetail)
                                     @if($apDetail['aplist_id'] == $ap -> id)
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
@@ -287,7 +289,11 @@
                                             <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." value="{{ $apDetail['additionalInformation'] }}" rows="4" readonly></textarea>
                                         </div>
                                     @endif
-                                @endforeach
+                                @empty
+                                    <div class="d-flex justify-content-center">
+                                        <h5>No Data Found.</h5>
+                                    </div>
+                                @endforelse
                             </div>
                         </div> 
                     </div>

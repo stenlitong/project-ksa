@@ -210,10 +210,6 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
-
-            {{-- Modal 2 --}}
-            @foreach($orderHeads as $oh)
                 <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -237,7 +233,6 @@
                     </div>
                 </div>
             @endforeach
-            
         </main>
     </div>
 
