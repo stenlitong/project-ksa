@@ -161,22 +161,27 @@ class picAdminController extends Controller
             // dd($viewer);
             return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
         }
+        // elseif ($request->cabang == 'Babelan' && ){
+        //     $viewer = documents::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+        //     // dd($viewer);
+        //     return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+        // }
 
         if ($request->cabang == 'Berau'){
             $viewer = documentberau::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
             // dd($viewer);
-            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+            return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/" . $viewer);
         }
 
         if ($request->cabang == 'Banjarmasin'){
             $viewer = documentbanjarmasin::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
             // dd($viewer);
-            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+            return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/" . $viewer);
         }
         if ($request->cabang == 'Samarinda'){
             $viewer = documentsamarinda::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
             // dd($viewer);
-            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+            return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/" . $viewer);
         }
     }
 

@@ -30,14 +30,14 @@
                     }
                 </script>
             </h3>
-            <div class="jumbotron">
-                <h1 class="Header-5">Overview</h1>
+            <div class="jumbotron jumbotron-fluid" >
+                <h1 class="Header-1" style="margin-top: -3%; margin-left: 44%;">Overview</h1>
                 <hr class="my-4">
                 <form>
                     <div class="form-row">
                       <div class="col">
-                        <x-label for="cabang" :value="__('Cabang : ')" style="margin-top: 1%; margin-left: 1%; font-size: 16px" />
-                        <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
+                        <x-label for="cabang" :value="__('Cabang : ')" style="margin-top: -1%; margin-left: 2%; font-size: 16px" />
+                        <select name="cabang" class="form-select w-25" onchange="window.location = this.value;" style=" margin-left: 2%;">
                             <option selected disabled hidden='true' value="">Pilih Cabang</option>
                             <option value="/dashboard?search=All">Semua Cabang</option>
                             <option value="/dashboard?search=Babelan">Babelan</option>
@@ -63,7 +63,7 @@
                   </script>
                  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
-                <table class="table" style="margin-top: 2%">
+                <table class="table" style="margin-top: 1%">
                   <thead class="thead-dark">
                       <tr>
                           <th scope="col">No.</th>
