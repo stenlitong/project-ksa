@@ -51,7 +51,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </form>
                     {{-- <button class="btn btn-danger"   style="margin-left: 80%; width: 20%;">upload</button> --}}
         
