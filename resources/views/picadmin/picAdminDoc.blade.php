@@ -119,7 +119,7 @@
                                               <input type="hidden" name ='cabang' value={{$doc->cabang}}>
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                               </div>
                                               <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
                                             </div>
@@ -227,7 +227,7 @@
                                               <input type="hidden" name ='cabang' value={{$d->cabang}}>
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                               </div>
                                               <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
                                             </div>
@@ -337,7 +337,7 @@
                                               <input type="hidden" name ='cabang' value={{$b->cabang}}>
                                               <div class="form-group">
                                                   <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                               </div>
                                               <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
                                             </div>
@@ -452,7 +452,7 @@
                                             <input type="hidden" name ='cabang' value={{$s->cabang}}>
                                             <div class="form-group">
                                                 <label for="reason">Reason</label>
-                                                <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                               </div>
                                             </div>
                                             <div class="modal-footer">

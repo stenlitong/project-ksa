@@ -19,6 +19,11 @@
                     <option value="/picadmin/rpk?search=Banjarmasin">Banjarmasin</option>
                    </select>
                 <br>
+                @error('reasonbox')
+                  <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                      Alasan Wajib Diisi
+                  </div>
+                @enderror
                 <table class="table" style="margin-top: 2%">
                   <thead class="thead-dark">
                       <tr>
@@ -106,7 +111,7 @@
                                                 <input type="hidden" name = 'cabang' value={{$d->cabang}}>
                                                 <div class="form-group">
                                                     <label for="reason">Reason</label>
-                                                    <textarea class="form-control" name="reasonbox" id="reason" rows="3"></textarea>
+                                                    <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                                 </div>
                                                 {{-- <button type="submit" id="submitreject" class="btn btn-danger" style="display: none">Reject File</button> --}}
                                             </div>

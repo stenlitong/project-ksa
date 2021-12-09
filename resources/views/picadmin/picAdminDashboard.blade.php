@@ -7,7 +7,7 @@
     @include('picadmin.picAdminsidebar')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2>Welcome back, {{ Auth::user()->name }} ! - PicAdmin</h2>
+            <h2>Welcome back, {{ Auth::user()->name }} ! - Admin</h2>
             <h2>Cabang : {{ Auth::user()->cabang }}</h2>
             <h3>
                 <div id="txt"></div>
