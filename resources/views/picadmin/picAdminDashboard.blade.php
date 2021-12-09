@@ -340,7 +340,7 @@
                          <td>
                             <form method="post" action="/picadmin/dana/view">
                                 @csrf
-                                <input type="hidden" name = 'cabang' value={{$b->cabang}}>
+                                <input type="hidden" name = 'cabang' value={{$s->cabang}}>
                                 <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>

@@ -68,7 +68,6 @@
                         <td scope="col" id="duetime1">{{$date}}</td> 
                         @if ($d->$stats == "on review")
                         <td scope="col">
-                            
                                 <div class="form-row">
                                   <div class="col-md-auto">
                                       <form method="POST" action="/picadmin/rpk/update-status">
