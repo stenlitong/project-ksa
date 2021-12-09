@@ -74,6 +74,9 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
         Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
 
+        Route::post('/dana/view',[picAdminController::class, 'view']);
+        Route::post('/rpk/view',[picAdminController::class, 'viewrpk']);
+
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
         Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);

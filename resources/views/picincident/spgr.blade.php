@@ -4,19 +4,67 @@
 
 @section('container')
 <x-guest-layout>
-<div class="row">
+<div class="form-row">
     @include('picincident.sidebarincident')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="col" style="margin-top: 15px">
+        <div class="form-row">
+        <div class="col" style="margin-top: 1%">
             <div class="jumbotron jumbotron-fluid" >
                 <div class="container">
-                  <h1 class="display-4">Upload your RPK Documents</h1>
-                    <p class="lead">please only upload file size max 1MB with .PDF format only .
+                  <h4 class="display-4" style="margin-top: -6%; ">Upload SPGR Request Document</h4>
+                    <p class="lead" style="font-size:16px; margin-top: 2%;">please only upload file .PDF format only .
                       <br>
                         Please upload your SPGR Request form!
                     </p>
-                    <button class="btn btn-danger"  id="top" style="margin-left: 80%; width: 20%;">upload</button>
 
+                    <br>
+
+                    <form method="post" action="#" ectype="multipart/form-data">
+                        @csrf
+                        {{-- <div class="mb-3">
+                            <label for="formFile" class="form-label">Default file input example</label>
+                            <input class="form-control" type="file" id="uploadspgr">
+                        </div> --}}
+
+                        <div class="file-upload-wrapper">
+                            <label for="formFile" class="form-label">Insert file here (can drag & drop)</label>
+                            <input type="file" id="input-file-now" class="file-upload" />
+                        </div>
+
+                        <div class="row d-flex justify-content-center mt-100">
+                            <div class="col-md-20">
+                                <div class="card Light card">
+                                    <div class="card-header">
+                                        <h5>File Upload</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="#" class="dropzone dz-clickable" >
+                                            <div class="dz-default dz-message"><span> Drop files here to upload </span></div>
+                                            <div class="file-upload-wrapper">
+                                                <input type="file" style="display:none;" id="input-file-now" class="file-upload" />
+                                            </div>
+                                        </form>
+                                        <div class="text-center m-t-15">
+                                            <button id="top" class="btn btn-danger">Upload Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    {{-- <button class="btn btn-danger"   style="margin-left: 80%; width: 20%;">upload</button> --}}
+        
+                    @if(date("d") < 28)
+                        <button class="btn btn-danger" id="realsub" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
+                    @endif
+
+                </div>
+            </div>
+        </div> 
+        <div class="col" style="margin-top: 1%">
+            <div class="jumbotron jumbotron-fluid" >
+                <div class="container">
                     @if($errors->any())
                         @foreach ($errors->all() as $error)
                             <div class="alert error alert-danger" id="error">{{ $error }}
@@ -30,51 +78,42 @@
                         </div>
                     @endif
                     
-                    <table class="table" style="margin-top: 1%">
+                    {{-- @forelse($claims as $claim )
+                    <table class="table" style="margin-top: 2%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Nama File</th>
-                                <th scope="col">Upload Time</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Reason</th>
-                                <th scope="col">Due Date</th>
+                                <th scope="col">Jenis Incident</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Deductible</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Amount</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <form action="/picsite/uploadrpk" method="POST" enctype="multipart/form-data" name="formUploadrpk" id="formUploadrpk">
-                                @csrf
-{{-- Babelan --}}
-                            @if (Auth::user()->cabang == 'Babelan')
-                            @for ($a = 1 ; $a <= 7 ; $a++)
-                                @php
-                                    $name = array('Surat Keterangan Asal Barang','Cargo Manifest','Voyage Report/ Term Sheet'
-                                                ,'Bill of Lading','Ijin Olah Gerak Kapal',
-                                                'Docking','Surat Keterangan Persiapan Kapal');
-                                    $rfile = 'rfile'.$a;
-                                    $time_upload ="time_upload".$a;
-                                    $stats ="status".$a;
-                                    $reason ="reason".$a;
-                                    $date = date('Y-m-28');
-                                @endphp
                                 <tr>
-                                    <td scope="col">{{ $a }}</td>
-                                    <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                    @foreach ( $docrpk as $doc)
-                                    <td id="">{{$doc->$time_upload}}</td>
-                                    <td id="">{{$doc->$stats}}</td>
-                                    <td id="">{{$doc->$reason}}</td>
-                                    @endforeach
-                                    <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats))
-                                        <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
-                                    @else
-                                        <td> </td>
-                                    @endif
+                                    <td scope="col">{{$loop->index+1}}</td>
+                                    <td scope="col">{{$claim->jenis_incident}}</td>
+                                    <td scope="col">{{$claim->item}}</td>
+                                    <td scope="col">{{$claim->deductible}}</td>
+                                    <td scope="col">{{$claim->description}}</td>
+                                    <td scope="col">{{$claim->amount}}</td>
+                                    <td scope="col">
+                                        <form action="/picincident/formclaim/destroy/{{$claim->id}}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
+                                        </form>
+                                        <form>
+
+                                        </form>
+                                        <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
+                                    </td>
                                 </tr>
-                            @endfor
-                            @endif
+                                @empty
+                                    <tr> forms request not yet added </tr>
+                                @endforelse --}}
                         </tbody>
                     </table>
                     {{-- @if(date("d") < 28) --}}
@@ -87,17 +126,17 @@
                         }
                     </script>
                     <script>
+                        $('.file-upload').file_upload();
+                    </script>
+                    <script>
                         setTimeout(function(){
                         $("div.alert").remove();
                         }, 5000 ); // 5 secs
                     </script>
                     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-                    </form>
                 </div>
             </div>
-        </div>
-            </table>    
-        </div>
+        </div> 
     </div>
     </main>
 </div>

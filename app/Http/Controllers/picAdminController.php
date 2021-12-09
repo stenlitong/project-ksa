@@ -151,26 +151,74 @@ class picAdminController extends Controller
         return Response::download($path, 'stenli-picsite-3.txt');
     }
     
-    public function view(){
-        // $content = Storage::disk('s3')->get($path);
-        // $header = [
-        //     'Content-Type' => 'application/pdf',
-        //     'Content-Disposition' => 'inline; filename="'.$file->name.'"'
-        // ];
-        // return Response::make($content, 200, $header);
-        $path = "storage/files";
-        $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
-        $file = $request->file('fileInput');
+    public function view(Request $request){
+        
+        $year = date('Y');
+        $month = date('m');
+        $filename = $request->viewdoc;
+        if ($request->cabang == 'Babelan'){
+            $viewer = documents::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+        }
 
-        $url = Storage::disk('s3')->url($path."/".$filename);
-        //dd($url);
+        if ($request->cabang == 'Berau'){
+            $viewer = documentberau::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+        }
 
-        Storage::disk('s3')->delete($path."/".$filename);
-
-        $file->storeAs(
-            $path,
-            $filename,
-            's3'
-        );
+        if ($request->cabang == 'Banjarmasin'){
+            $viewer = documentbanjarmasin::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+        }
+        if ($request->cabang == 'Samarinda'){
+            $viewer = documentsamarinda::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
+        }
     }
+
+    public function viewrpk(Request $request){ 
+        $year = date('Y');
+        $month = date('m');
+        $filename = $request->viewdoc;
+
+        if ($request->cabang == 'Babelan'){
+            $viewer = documentrpk::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+        }
+        if ($request->cabang == 'Berau'){
+            $viewer = documentrpk::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+        }
+        if ($request->cabang == 'Banjarmasin'){
+            $viewer = documentrpk::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+        }
+        if ($request->cabang == 'Samarinda'){
+            $viewer = documentrpk::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            // dd($viewer);
+            return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+        }
+    }
+
+        // $path = "storage/files";
+        // $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
+        // $file = $request->file('fileInput');
+
+        // $url = Storage::disk('s3')->url($path."/".$filename);
+        // dd($url);
+
+        // Storage::disk('s3')->delete($path."/".$filename);
+
+        // $file->storeAs(
+        //     $path,
+        //     $filename,
+        //     's3'
+        // );
 }

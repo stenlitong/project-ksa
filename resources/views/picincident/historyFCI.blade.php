@@ -10,7 +10,7 @@
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >
                 <div class="container">
-                  <h1 class="display-4">Upload your RPK Documents</h1>
+                  <h1 class="display-4">History Form Claim</h1>
                     <p class="lead">please only upload file size max 1MB with .PDF format only .
                       <br>
                         Please upload your SPGR Request form!
@@ -43,21 +43,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <form action="/picsite/uploadrpk" method="POST" enctype="multipart/form-data" name="formUploadrpk" id="formUploadrpk">
+                            {{-- <form action="/picincident/uploadFCI" method="POST" enctype="multipart/form-data" name="formUploadFCI" id="formUploadFCI">
+                                Babelan
                                 @csrf
-{{-- Babelan --}}
                             @if (Auth::user()->cabang == 'Babelan')
                             @for ($a = 1 ; $a <= 7 ; $a++)
-                                @php
-                                    $name = array('Surat Keterangan Asal Barang','Cargo Manifest','Voyage Report/ Term Sheet'
-                                                ,'Bill of Lading','Ijin Olah Gerak Kapal',
-                                                'Docking','Surat Keterangan Persiapan Kapal');
-                                    $rfile = 'rfile'.$a;
-                                    $time_upload ="time_upload".$a;
-                                    $stats ="status".$a;
-                                    $reason ="reason".$a;
-                                    $date = date('Y-m-28');
-                                @endphp
                                 <tr>
                                     <td scope="col">{{ $a }}</td>
                                     <td scope="col" id="nama">{{$name[$a-1]}}</td>
@@ -74,7 +64,7 @@
                                     @endif
                                 </tr>
                             @endfor
-                            @endif
+                            @endif --}}
                         </tbody>
                     </table>
                     {{-- @if(date("d") < 28) --}}
@@ -95,8 +85,7 @@
                     </form>
                 </div>
             </div>
-        </div>
-            </table>    
+        </div>   
         </div>
     </div>
     </main>

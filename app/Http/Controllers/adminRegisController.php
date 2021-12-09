@@ -36,7 +36,7 @@ class adminRegisController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'no_induk_pegawai' => ['required', 'string', 'max:6', 'min:6', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'ends_with:ptksa.id', 'max:255', 'unique:users'],
             'cabang' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

@@ -31,10 +31,15 @@
                           <th scope="col">Action</th>
                       </tr>
                   </thead>
+                  
                   <tbody>
                     @forelse($docrpk as $d )
                     @for ( $r = 1 ; $r <= 7 ; $r++)
                     @php
+                    $RPK = array('surat_barang', 'cargo_manifest',
+                                'voyage','bill_lading',
+                                'gerak_kapal','docking',
+                                'surat_kapal');
                     $nama = array('Surat Keterangan Asal Barang', 'Cargo Manifest',
                                     'Voyage Report/ Term Sheet','Bill of Lading',
                                     'Ijin Olah Gerak Kapal','Docking',
@@ -58,16 +63,30 @@
                         <td scope="col" id="duetime1">{{$date}}</td> 
                         @if ($d->$stats == "on review")
                         <td scope="col">
-                            <form method="POST" action="/picadmin/rpk/update-status">
-                                @csrf
-                                <input type="hidden" name='status' value={{$stats}}>
-                                <input type="hidden" name = 'cabang' value={{$d->cabang}}>
-                                    <button type="submit" class="btn btn-success">approve</button>
-                            </form>
-                                
-                                <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                    Reject File
-                                </button>
+                            
+                                <div class="form-row">
+                                  <div class="col-md-auto">
+                                      <form method="POST" action="/picadmin/rpk/update-status">
+                                          @csrf
+                                          <input type="hidden" name='status' value={{$stats}}>
+                                          <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                          <button type="submit" class="btn btn-outline-success">approve</button>
+                                      </form>
+                                  </div>
+                                  <div class="col-md-auto">
+                                      <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                          Reject File
+                                      </button>
+                                  </div>
+                                  <div class="col-md-auto">
+                                    <form method="post" action="/picadmin/rpk/view">
+                                        @csrf
+                                        <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                        <input type="hidden" name='viewdoc' value={{$RPK[$r-1]}} />
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                  </div>
+                                </div>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
@@ -98,7 +117,6 @@
                                     </div>
                                     </div>
                                 </div>
-                            <a href="#" target="_blank">view</a>
                         </td>
                         @else
                             <td> </td>
