@@ -97,7 +97,8 @@
                             {{-- @endif --}}
 
                             <td class="bg-white">
-                                @if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false || strpos($oh -> status, 'Rechecked') !== false)
+                                {{-- @if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Being Finalized') !== false || strpos($oh -> status, 'Revised') !== false) --}}
+                                @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false)
                                     <a href="/logistic/{{ $oh -> id }}/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 @endif
                                 @if(strpos($oh -> status, 'Delivered') !== false)
@@ -162,6 +163,10 @@
                                             <th scope="col">Department</th>
                                             <th scope="col">Golongan</th>
                                             
+                                            @if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false)
+                                                <th scope="col">Status Barang</th>
+                                            @endif
+
                                             @if(strpos($o -> status, 'Request In Progress') !== false)
                                                 <th scope="col">Stok Barang</th>
                                             @endif
@@ -186,7 +191,17 @@
                                                     <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> item -> golongan }}</td>
 
-                                                    @if(strpos($o -> status, 'Request In Progress') !== false)
+                                                    @if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false)
+                                                        <td>
+                                                            @if($od -> orderItemState == 'Accepted')
+                                                                <span style="color: green; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                            @else
+                                                                <span style="color: red; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                            @endif
+                                                        </td>
+                                                    @endif
+
+                                                    @if(strpos($od -> status, 'Request In Progress') !== false)
                                                         @if($od -> quantity > $od -> item -> itemStock)
                                                             <td style="color: red; font-weight: bold;">{{ $od -> item -> itemStock}} {{ $od -> item -> unit }} (Stok Tidak Mencukupi)</td>
                                                         @else

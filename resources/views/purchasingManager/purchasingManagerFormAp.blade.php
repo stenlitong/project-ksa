@@ -138,12 +138,6 @@
                                     Saved Successfully
                                 </div>
                             @endif
-                            <div class="d-flex justify-content-end mb-3 mr-3">
-                                <div class="p-2 mr-auto">
-                                    <h5>Total Harga : Rp. {{ number_format($ap -> orderHead -> totalPrice, 2, ",", ".") }}</h5>
-                                </div>
-                            </div>
-
                             <div class="table-modal">
                                 <table class="table">
                                     <thead class="thead-dark">
@@ -164,6 +158,7 @@
                                                     $uploadTime = 'uploadTime_partial' . $i;
                                                     $description = 'description_partial' . $i;
                                                     $filename = 'doc_partial' . $i;
+                                                    $path_to_file = 'path_to_file' . $i;
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $ap -> $uploadTime }}</td>
@@ -237,6 +232,7 @@
                                                                     @csrf
                                                                     <input type="hidden" name="filename" value="{{ $filename }}">
                                                                     <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                    <input type="hidden" name="pathToFile" value="{{ $path_to_file }}">
                                                                     <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
                                                                 </form>
                                                             </div>

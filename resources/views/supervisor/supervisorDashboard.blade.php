@@ -81,8 +81,9 @@
 
                             <td>
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                @if(strpos($oh -> status, 'Rejected') !== false)
-                                @else
+                                {{-- @if(strpos($oh -> status, 'Rejected') !== false)
+                                @else --}}
+                                @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false)
                                     <a href="/supervisor/{{ $oh -> id }}/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
                                 @endif
                             </td>
@@ -130,13 +131,14 @@
                                             @else
                                                 <th scope="col">Quantity</th>
                                             @endif
-                                            <th scope="col">Umur Barang</th>
+                                            {{-- <th scope="col">Umur Barang</th> --}}
                                             <th scope="col">Department</th>
                                             <th scope="col">Terakhir Diberikan</th>
                                             @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                 <th scope="col">Stok Barang</th>
                                             @endif
                                             <th scope="col">Note</th>
+                                            <th scope="col">Status Barang</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -147,13 +149,20 @@
                                                     <td>
                                                         <strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong>
                                                     </td>
-                                                    <td>{{ $od -> item -> itemAge }}</td>
+                                                    {{-- <td>{{ $od -> item -> itemAge }}</td> --}}
                                                     <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> item -> lastGiven }}</td>
                                                     @if(strpos($o -> status, 'Order In Progress By Supervisor') !== false)
                                                         <td><strong>{{ $od -> item -> itemStock }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif
                                                     <td>{{ $od -> note }}</td>
+                                                    <td>
+                                                        @if($od -> orderItemState == 'Accepted')
+                                                            <span style="color: green; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                        @else
+                                                            <span style="color: red; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach

@@ -41,8 +41,8 @@
                                     <td>{{ $key + 1  }}</td>
                                     <td>{{ $o -> prDate }}</td>
                                     <td>{{ $o -> noPr }}</td>
-                                    @if(isset($o -> supplier -> supplierName))
-                                        <td>{{ $o -> supplier -> supplierName }}</td>
+                                    @if(isset($o -> supplier))
+                                        <td>{{ $o -> supplier }}</td>
                                     @else
                                         <td></td>
                                     @endif
@@ -50,7 +50,7 @@
                                     <td>{{ $o -> noPo}}</td>
                                     <td>{{ $o -> item['golongan']}}</td>
                                     <td>{{ $o -> boatName}}</td>
-                                    <td>{{ $o -> item -> codeMasterItem}}</td>
+                                    <td>{{ $o -> item -> serialNo}}</td>
                                     <td>{{ $o -> acceptedQuantity}} {{ $o -> item -> unit }}</td>
                                     <td>Rp. {{ number_format($o -> totalItemPrice, 2, ",", ".") }}</td>
                                     <td>{{ $o -> descriptions}}</td>

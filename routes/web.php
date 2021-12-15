@@ -129,9 +129,13 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
 
         // Approve Order page
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
+        Route::get('/order/{orderHeads}/revise', [PurchasingController::class, 'approveOrderPage']);
         Route::patch('/order/{orderHeads}/{orderDetails}/edit', [PurchasingController::class, 'editPriceOrderDetail']);
         Route::post('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrder']);
+        Route::post('/order/{orderHeads}/revise', [PurchasingController::class, 'reviseOrder']);
         Route::post('/order/{orderHeads}/reject', [PurchasingController::class, 'rejectOrder']);
+        Route::patch('/order/{orderDetails}/drop', [PurchasingController::class, 'dropOrderDetail']);
+        Route::get('/order/{orderHeads}/{orderDetails}/undo', [PurchasingController::class, 'undoDropOrderDetail']);
         
         // Report Page
         Route::get('/report', [PurchasingController::class, 'reportPage'])->name('report');
@@ -157,11 +161,14 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::post('/{suppliers}/edit', [PurchasingManagerController::class, 'editSupplier']);
         Route::get('/completed-order/{branch}', [PurchasingManagerController::class, 'completedOrder']);
         Route::get('/in-progress-order/{branch}', [PurchasingManagerController::class, 'inProgressOrder']);
-
+        
         // Approve Order Page
-        Route::get('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrderPage']);
+        // Route::get('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrderPage']);
+        Route::get('/order/{orderHeads}/order-detail', [PurchasingManagerController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrder']);
         Route::patch('/order/{orderHeads}/reject', [PurchasingManagerController::class, 'rejectOrder']);
+        Route::get('/{orderHeads}/revise-order', [PurchasingManagerController::class, 'reviseOrder']);
+        Route::get('/{orderHeads}/finalize-order', [PurchasingManagerController::class, 'finalizeOrder']);
 
         // AP Page
         Route::get('/form-ap', [PurchasingManagerController::class, 'formApPage'])->name('formApPage');

@@ -68,7 +68,7 @@ class DashboardController extends Controller
             $items_below_stock = $this -> checkStock();
 
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
-
+            
         }elseif(Auth::user()->hasRole('supervisorLogistic') or Auth::user()->hasRole('supervisorLogisticMaster')){
             // Find order from logistic role, then they can approve and send it to the purchasing role
             // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');

@@ -102,7 +102,8 @@ unset($__errorArgs, $__bag); ?>
                             
 
                             <td class="bg-white">
-                                <?php if(strpos($oh -> status, 'Order In Progress') !== false || strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
+                                
+                                <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false): ?>
                                     <a href="/logistic/<?php echo e($oh -> id); ?>/download-pr" style="color: white" class="btn btn-warning" target="_blank">Download PR</a>
                                 <?php endif; ?>
                                 <?php if(strpos($oh -> status, 'Delivered') !== false): ?>
@@ -167,6 +168,10 @@ unset($__errorArgs, $__bag); ?>
                                             <th scope="col">Department</th>
                                             <th scope="col">Golongan</th>
                                             
+                                            <?php if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false): ?>
+                                                <th scope="col">Status Barang</th>
+                                            <?php endif; ?>
+
                                             <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
                                                 <th scope="col">Stok Barang</th>
                                             <?php endif; ?>
@@ -191,7 +196,17 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <td><?php echo e($od -> item -> golongan); ?></td>
 
-                                                    <?php if(strpos($o -> status, 'Request In Progress') !== false): ?>
+                                                    <?php if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false): ?>
+                                                        <td>
+                                                            <?php if($od -> orderItemState == 'Accepted'): ?>
+                                                                <span style="color: green; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                            <?php else: ?>
+                                                                <span style="color: red; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    <?php endif; ?>
+
+                                                    <?php if(strpos($od -> status, 'Request In Progress') !== false): ?>
                                                         <?php if($od -> quantity > $od -> item -> itemStock): ?>
                                                             <td style="color: red; font-weight: bold;"><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?> (Stok Tidak Mencukupi)</td>
                                                         <?php else: ?>
@@ -215,10 +230,6 @@ unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
                 </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-            
-            <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -242,7 +253,6 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            
         </main>
     </div>
 

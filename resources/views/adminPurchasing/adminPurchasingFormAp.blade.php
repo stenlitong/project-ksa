@@ -154,9 +154,6 @@
                             @endif
                             
                             <div class="d-flex justify-content-end mb-3 mr-3">
-                                <div class="p-2 mr-auto">
-                                    <h5>Total Harga : Rp. {{ number_format($ap -> orderHead -> totalPrice, 2, ",", ".") }}</h5>
-                                </div>
                             <form action="/admin-purchasing/form-ap/upload" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
@@ -185,6 +182,7 @@
                                                 $uploadTime = 'uploadTime_partial' . $i;
                                                 $description = 'description_partial' . $i;
                                                 $filename = 'doc_partial' . $i;
+                                                $path_to_file = 'path_to_file' . $i;
                                             @endphp
                                             <tr>
                                                 <td>{{ $ap -> $uploadTime }}</td>
@@ -353,6 +351,13 @@
             }
         </style>
 
+        <script>
+            setTimeout(function() {
+                $('.alert').fadeOut('fast');
+                // $('div.alert').remove();
+            }, 3000);
+        </script>
+
         <script type="text/javascript">
             let id = {!! json_encode(count($apList)) !!};
             function refreshDiv(){
@@ -366,11 +371,6 @@
             //         $('.table-refresh' + i).load(location.href + ' .table-refresh' + i)
             //     }
             // }, 10000)
-
-            setTimeout(function() {
-                $('.alert').fadeOut('fast');
-                // $('div .alert').remove();
-            }, 3000);
         </script>
     @endsection
 

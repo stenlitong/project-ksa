@@ -20,7 +20,7 @@ class OrderInExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEven
         // Find order from logistic role/goods in
         $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
-        return OrderDetail::query()->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->join('suppliers', 'suppliers.id', '=', 'order_heads.supplier_id')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'golongan', 'supplierName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+        return OrderDetail::query()->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('items', 'items.id', 'order_details.item_id')->whereIn('user_id', $users)->where('status', 'like', '%' . 'Order Completed' . '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->select('approved_at', 'itemName', 'items.serialNo', 'quantity', 'items.unit', 'golongan', 'supplier', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
     }
 
     public function headings(): array{

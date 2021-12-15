@@ -80,7 +80,7 @@
     }
     @media (max-width: 768px) {
     body {
-        height:100vh;
+        height:117.7vh;
     }
 </style>
 

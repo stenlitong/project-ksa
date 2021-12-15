@@ -273,7 +273,7 @@ unset($__errorArgs, $__bag); ?>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <div class="d-flex justify-content-around">
+                                <div class="d-flex justify-content-around mb-3">
                                     <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
                                     <h5>Nomor PO : <?php echo e($o -> noPo); ?></h5>
                                 </div>
@@ -285,6 +285,7 @@ unset($__errorArgs, $__bag); ?>
                                             <th scope="col">Accepted Quantity</th>
                                             <th scope="col">Department</th>
                                             <th scope="col">Note</th>
+                                            <th scope="col">Status Barang</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -296,6 +297,13 @@ unset($__errorArgs, $__bag); ?>
                                                     <td><strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <td><?php echo e($od -> note); ?></td>
+                                                    <td>
+                                                        <?php if($od -> orderItemState == 'Accepted'): ?>
+                                                            <span style="color: green; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                        <?php else: ?>
+                                                            <span style="color: red; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
                                                 </tr>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -307,31 +315,33 @@ unset($__errorArgs, $__bag); ?>
                                 <?php if($o -> status == 'Order In Progress By Purchasing'): ?>
                                     
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
-                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Approve</a>
+                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary mr-3">Approve</a>
                                 <?php elseif(strpos($o -> status, 'Rechecked') !== false): ?>
-                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary">Review Order</a>
+                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary mr-3">Review Order</a>
+                                <?php elseif(strpos($o -> status, 'Revised') !== false): ?>
+                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/revise" class="btn btn-primary mr-3">Revise Order</a>
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                <div class="modal fade" id="reject-order-<?php echo e($o -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($oh -> order_id); ?></h5>
+                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($o -> order_id); ?></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" action="/purchasing/order/<?php echo e($oh->id); ?>/reject">
+                        <form method="POST" action="/purchasing/order/<?php echo e($o->id); ?>/reject">
                             <?php echo csrf_field(); ?>
                             <div class="modal-body"> 
                                 <label for="reason">Alasan</label>
                                 <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     </div>

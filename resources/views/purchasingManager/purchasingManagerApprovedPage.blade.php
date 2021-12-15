@@ -9,13 +9,19 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                 <h2 class="mt-3" style="text-align: center">Order {{ $orderHeads -> order_id }}</h2>
+
+                @if(strpos($orderHeads -> status, 'Finalized') !== false)
+                    <div class="d-flex justify-content-end mr-5">
+                        <button class="btn btn-info" data-toggle="modal" data-target="#finalize-{{ $orderHeads -> id }}">Finalize Order</button>
+                    </div>
+                @endif
                 
                 @error('reason')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    <div class="alert alert-danger alert-remove" style="width: 40%; margin-left: 30%">
                         Alasan Invalid
                     </div>
                 @enderror
-                
+
                 <div class="row mt-4">
                     <div class="col">
                         <div class="form-group">
@@ -66,17 +72,20 @@
                                 <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".") }}" readonly>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center mt-5">
-                            {{-- <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/reject">
-                                @method('patch')
-                                @csrf
-                                <button type="submit" class="btn btn-danger mr-3">Reject</button>
-                            </form> --}}
-                            <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#reject-order-{{ $orderHeads->id }}">Reject</button>
-                            <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/approve">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                        <div class="d-flex justify-content-center mt-4">
+                            @if(strpos($orderHeads -> status, 'Recheked') !== false || strpos($orderHeads -> status, 'In Progress By Purchasing Manager') !== false)
+                                <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#reject-order-{{ $orderHeads->id }}">Reject</button>
+                                <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/approve">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            @elseif($orderHeads -> retries < 2 && strpos($orderHeads -> status, 'Order Being Finalized By Purchasing Manager') !== false)
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#revise-{{ $orderHeads -> id }}">Revise Order</button>
+                            @elseif($orderHeads -> retries == 2)
+                                <div class="alert alert-danger" style="width: 40%;">
+                                    Maximum Revision Reached !
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col mt-3">
@@ -87,6 +96,7 @@
                                     <th scope="col">Harga per Barang</th>
                                     <th scope="col">Harga</th>
                                     <th scope="col">Supplier</th>
+                                    <th scope="col">Status Barang</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -100,22 +110,31 @@
                                             <h5>{{ $od -> quantity }} {{ $od -> item -> unit }}</h5>
                                         </td>
 
+                                        <td>
+                                            <div class="d-flex">
+                                                <h5 class="mr-2">Rp. {{ number_format($od -> itemPrice, 2, ",", ".") }}</h5>
+                                            </div>
+                                        </td>
+                                        
+                                        <td>
+                                            <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
+                                        </td>
+                                        
+                                        <td>
+                                            <h5>
+                                                {{ $od -> supplier }}
+                                            </h5>
+                                        </td>
 
-                                            <td>
-                                                <div class="d-flex">
-                                                    <h5 class="mr-2">Rp. {{ $od -> itemPrice }}</h5>
-                                                </div>
-                                            </td>
-                                            
-                                            <td>
-                                                <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
-                                            </td>
-                                            
-                                            <td>
-                                                <h5>
-                                                    {{ $od -> supplier_id }}
-                                                </h5>
-                                            </td>
+                                        <td>
+                                            <h5>
+                                                @if($od -> orderItemState == 'Accepted')
+                                                    <span style="color: green; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                @else
+                                                    <span style="color: red; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                @endif
+                                            </h5>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -149,11 +168,58 @@
                 </div>
             </div>
             
+            {{-- Modal Revise Order --}}
+            <div class="modal fade" id="revise-{{ $orderHeads -> id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="reviseTitle" style="color: white">Revise Order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"> 
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
+                                <h5 class="font-weight-bold mt-3">Are You Sure To Revise This Order ?</h5>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" href="/purchasing-manager/{{ $orderHeads -> id }}/revise-order">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Modal Finalize Order --}}
+            <div class="modal fade" id="finalize-{{ $orderHeads -> id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="finalizeTitle" style="color: white">Finalize Order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"> 
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
+                                <h5 class="font-weight-bold mt-3">Are You Sure To Finalize This Order ?</h5>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" href="/purchasing-manager/{{ $orderHeads -> id }}/finalize-order">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <script type="text/javascript">
         setTimeout(function() {
-            $('.alert').fadeOut('fast');
+            $('.alert-remove').fadeOut('fast');
         }, 3000);
     </script>
 

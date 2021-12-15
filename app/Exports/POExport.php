@@ -32,20 +32,20 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
 
     public function query()
     {
-        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->join('suppliers', 'suppliers.id', '=', 'order_details.supplier_id')->where('order_heads.order_id', $this->order_id)->select('itemName', 'quantity', 'items.unit', 'supplierName', 'codeMasterItem', 'itemPrice', 'totalItemPrice', 'note')->orderBy('itemName');
+        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->where('order_details.orderItemState', '=', 'Accepted')->select('itemName', 'quantity', 'items.unit', 'supplier', 'itemPrice', 'totalItemPrice', 'note')->orderBy('itemName');
 
         return $orderDetail;
     }
 
     public function headings(): array{
-        return ['Nama Barang', 'Quantity', 'Satuan', 'Nama Supplier', 'Code Master Item', 'Harga Per Satuan Barang', 'Total Harga Barang', 'Note'];
+        return ['Nama Barang', 'Quantity', 'Satuan', 'Nama Supplier', 'Harga Per Satuan Barang', 'Total Harga Barang', 'Note'];
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A1:G1')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

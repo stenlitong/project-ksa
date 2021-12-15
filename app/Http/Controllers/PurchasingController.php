@@ -194,7 +194,7 @@ class PurchasingController extends Controller
         $poNumber = $po_id . '.' . $first_char_name . '/' . 'PO-' . $orderHeads->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
 
         // Get the order details join with the item
-        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->id)->get();
+        $orderDetails = OrderDetail::with('item')->where('orders_id', $orderHeads->id)->where('orderItemState', 'like', 'Accepted')->get();
 
         $suppliers = Supplier::latest()->get();
 
@@ -202,28 +202,61 @@ class PurchasingController extends Controller
     }
 
     public function editPriceOrderDetail(Request $request, OrderHead $orderHeads, OrderDetail $orderDetails){
+        // Validate incoming request
         $request->validate([
-            'itemPrice' => 'required|integer|min:1',
-            'supplier_id' => 'required|exists:suppliers,id',
+            'itemPrice' => 'required|numeric|between:0,99999999999.99',
+            'supplier' => 'required',
         ]);
-
+        
+        // Calculate the subtotal (qty * price)
         $subTotal = $orderDetails -> acceptedQuantity * $request -> itemPrice;
 
+        // Then update the individual total item price for order details
         OrderDetail::where('id', $orderDetails->id)->update([
             'itemPrice' => $request->itemPrice,
             'totalItemPrice' => $subTotal,
-            'supplier_id' => $request->supplier_id,
+            'supplier' => $request->supplier,
         ]);
         
-        $totalPrice = OrderDetail::where('orders_id', $orderHeads -> id)->sum('totalItemPrice');
+        // Then re-calculate the total price
+        $totalPriceBeforeCalculation = OrderDetail::where('orders_id', $orderHeads -> id)->sum('totalItemPrice');
 
+        // Then update the total price on the order head
         OrderHead::find($orderHeads -> id)->update([
-            'totalPrice' => $totalPrice
+            // 'totalPrice' => $totalPriceBeforeCalculation,
+            'totalPriceBeforeCalculation' => $totalPriceBeforeCalculation
         ]);
 
+        // Redirect
         return redirect('/purchasing/order/' . $orderHeads->id . '/approve')->with('status', 'Price Updated Successfully');
     }
     
+    public function dropOrderDetail(Request $request, OrderDetail $orderDetails){
+        // Drop the order detail by changing the status
+        OrderDetail::where('id', $orderDetails -> id)->update([
+            'orderItemState' => 'Rejected',
+        ]);
+
+        // Also update the total price on the order head
+        OrderHead::where('id', $request -> orderHeadsId)->decrement('totalPriceBeforeCalculation', $orderDetails -> totalItemPrice);
+
+        // Redirect
+        return redirect()->back()->with('dropStatus', $orderDetails -> id);
+    }
+
+    public function undoDropOrderDetail(OrderHead $orderHeads, OrderDetail $orderDetails){
+        // Undo the drop item
+        OrderDetail::where('id', $orderDetails -> id)->update([
+            'orderItemState' => 'Accepted',
+        ]);
+
+        // Increment back the total price from the deleted item
+        OrderHead::where('id', $orderHeads -> id)->increment('totalPriceBeforeCalculation', $orderDetails -> totalItemPrice);
+
+        // Redirect
+        return redirect()->back()->with('status', 'Updated Succesfully');
+    }
+
     // ============================================ Fix this section ===========================================================
     public function approveOrder(Request $request, OrderHead $orderHeads){
         // Set default branch
@@ -242,7 +275,7 @@ class PurchasingController extends Controller
         ]);
 
         // calculate discount first, then PPN
-        $updatedPriceAfterDiscount = $orderHeads -> totalPrice - ($orderHeads -> totalPrice * $request -> discount / 100);
+        $updatedPriceAfterDiscount = $orderHeads -> totalPriceBeforeCalculation - ($orderHeads -> totalPriceBeforeCalculation * $request -> discount / 100);
 
         // calculate PPN
         $updatedPriceAfterPPN = $updatedPriceAfterDiscount + ($updatedPriceAfterDiscount * $request -> ppn / 100);
@@ -255,16 +288,18 @@ class PurchasingController extends Controller
 
         $orderDetails = OrderDetail::where('orders_id', $orderHeads -> id)->get();
 
+        // Check if there is one item that price is 0 also check if they somehow manage to bypass supplier inputs
         foreach($orderDetails as $od){
             if($od -> totalItemPrice == 0){
                 return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Harga ' . $od -> item -> itemName . ' Invalid');
             }
-            if(!$od -> supplier_id){
+            if(!$od -> supplier){
                 return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Supplier Invalid');
             }
         }
         
-        if(!$request->discount){
+        // Check if the discount value is null then set to zero
+        if(!$request -> discount){
             $updatedDiscount = 0;
         }else{
             $updatedDiscount = $request -> discount;
@@ -285,6 +320,62 @@ class PurchasingController extends Controller
         ]);
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
         // return redirect()->back()->with('statusB', 'Order Approved By Purchasing');
+    }
+    
+    public function reviseOrder(Request $request, OrderHead $orderHeads){
+        // Set default branch
+        $default_branch = $orderHeads -> cabang;
+
+        // Validate the request form
+        $request -> validate([
+            'invoiceAddress' => 'required',
+            'itemAddress' => 'required',
+            'ppn' => 'required|numeric|in:0,10',
+            'discount' => 'nullable|numeric|min:0|max:100',
+        ]);
+
+        // calculate discount first, then PPN
+        $updatedPriceAfterDiscount = $orderHeads -> totalPriceBeforeCalculation - ($orderHeads -> totalPriceBeforeCalculation * $request -> discount / 100);
+
+        // calculate PPN
+        $updatedPriceAfterPPN = $updatedPriceAfterDiscount + ($updatedPriceAfterDiscount * $request -> ppn / 100);
+
+        // Check if already been processed or not
+        if($orderHeads -> order_tracker == 7){
+            return redirect('/purchasing/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
+            // return redirect()->back()->with('errorB', 'Order Already Been Processed');
+        }
+
+        $orderDetails = OrderDetail::where('orders_id', $orderHeads -> id)->get();
+
+        // Check if there is one item that price is 0 also check if they somehow manage to bypass supplier inputs
+        foreach($orderDetails as $od){
+            if($od -> totalItemPrice == 0){
+                return redirect('/purchasing/order/' . $orderHeads -> id . '/revise')->with('error', 'Harga ' . $od -> item -> itemName . ' Invalid');
+            }
+            if(!$od -> supplier){
+                return redirect('/purchasing/order/' . $orderHeads -> id . '/revise')->with('error', 'Supplier Invalid');
+            }
+        }
+        
+        // Check if the discount value is null then set to zero
+        if(!$request -> discount){
+            $updatedDiscount = 0;
+        }else{
+            $updatedDiscount = $request -> discount;
+        }
+
+        // Then update the following order
+        OrderHead::find($orderHeads -> id)->update([
+            'status' => 'Order Being Finalized By Purchasing Manager',
+            'invoiceAddress' => $request->invoiceAddress,
+            'itemAddress' => $request->itemAddress,
+            'ppn' => $request->ppn,
+            'discount' => $updatedDiscount,
+            'totalPrice' => $updatedPriceAfterPPN,
+            'order_tracker' => 7,
+        ]);
+        return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
     }
 
     public function rejectOrder(Request $request, OrderHead $orderHeads){
@@ -517,12 +608,12 @@ class PurchasingController extends Controller
             'supplierNoRek' => ['required', 'string'],
             'supplierNPWP' => ['required', 'string'],
             'supplierCode' => ['required', 'string'],
-            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpSms' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpSmd' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,12'],
         ]);
         
         // Then create the supplier
@@ -539,12 +630,12 @@ class PurchasingController extends Controller
             'supplierAddress' => ['required', 'string'],
             'supplierNoRek' => ['required', 'string'],
             'supplierNPWP' => ['required', 'string'],
-            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpSms' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,11'],
-            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,11'],
+            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpSmd' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,12'],
         ]);
 
         // Then update the supplier

@@ -21,7 +21,7 @@ class PRExport implements FromQuery, WithHeadings, WithEvents
 
     public function query()
     {
-        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->select('noPr', 'prDate', 'boatName', 'itemName', 'quantity', 'items.unit', 'department', 'codeMasterItem', 'note')->orderBy('itemName');
+        $orderDetail = OrderDetail::join('order_heads', 'order_details.orders_id', '=', 'order_heads.id')->join('items', 'items.id', '=', 'order_details.item_id')->where('order_heads.order_id', $this->order_id)->where('order_details.orderItemState', '=', 'Accepted')->select('noPr', 'prDate', 'boatName', 'itemName', 'quantity', 'items.unit', 'department', 'codeMasterItem', 'note')->orderBy('itemName');
 
         return $orderDetail;
     }

@@ -91,8 +91,8 @@ unset($__errorArgs, $__bag); ?>
 
                             <td>
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
-                                <?php if(strpos($oh -> status, 'Rejected') !== false): ?>
-                                <?php else: ?>
+                                
+                                <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Order Completed') !== false): ?>
                                     <a href="/supervisor/<?php echo e($oh -> id); ?>/download-pr" class="btn btn-warning" target="_blank">Download PR</a>
                                 <?php endif; ?>
                             </td>
@@ -140,13 +140,14 @@ unset($__errorArgs, $__bag); ?>
                                             <?php else: ?>
                                                 <th scope="col">Quantity</th>
                                             <?php endif; ?>
-                                            <th scope="col">Umur Barang</th>
+                                            
                                             <th scope="col">Department</th>
                                             <th scope="col">Terakhir Diberikan</th>
                                             <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                 <th scope="col">Stok Barang</th>
                                             <?php endif; ?>
                                             <th scope="col">Note</th>
+                                            <th scope="col">Status Barang</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -157,13 +158,20 @@ unset($__errorArgs, $__bag); ?>
                                                     <td>
                                                         <strong><?php echo e($od -> acceptedQuantity); ?> <?php echo e($od -> item -> unit); ?></strong>
                                                     </td>
-                                                    <td><?php echo e($od -> item -> itemAge); ?></td>
+                                                    
                                                     <td><?php echo e($od -> department); ?></td>
                                                     <td><?php echo e($od -> item -> lastGiven); ?></td>
                                                     <?php if(strpos($o -> status, 'Order In Progress By Supervisor') !== false): ?>
                                                         <td><strong><?php echo e($od -> item -> itemStock); ?> <?php echo e($od -> item -> unit); ?></strong></td>
                                                     <?php endif; ?>
                                                     <td><?php echo e($od -> note); ?></td>
+                                                    <td>
+                                                        <?php if($od -> orderItemState == 'Accepted'): ?>
+                                                            <span style="color: green; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                        <?php else: ?>
+                                                            <span style="color: red; font-weight: bold;"><?php echo e($od -> orderItemState); ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
                                                 </tr>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

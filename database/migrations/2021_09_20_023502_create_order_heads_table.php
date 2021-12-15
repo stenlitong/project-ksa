@@ -22,9 +22,11 @@ class CreateOrderHeadsTable extends Migration
             $table->string('noPr')->nullable();
             $table->string('noPo')->nullable();
             $table->string('company')->nullable();
-            $table->decimal('totalPrice')->default(0);
+            $table->decimal('totalPriceBeforeCalculation', 13, 2)->default(0);
+            $table->decimal('totalPrice', 13, 2)->default(0);
             $table->string('approvedBy')->nullable();
             $table->integer('ppn')->nullable();
+            $table->integer('retries')->default(0);
             $table->decimal('discount')->default(0);
             $table->string('sender')->nullable();
             $table->string('receiver')->nullable();
@@ -34,7 +36,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('poDate')->nullable();
             $table->string('invoiceAddress')->nullable();
             $table->string('itemAddress')->nullable();
-            $table->string('status')->default('In Progress(Logistic)');
+            $table->string('status')->default('Request In Progress By Logistic');
             $table->string('descriptions')->nullable();
             $table->string('reason')->nullable();
             $table->string('approved_at')->nullable();

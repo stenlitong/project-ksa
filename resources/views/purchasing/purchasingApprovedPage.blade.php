@@ -15,6 +15,12 @@
                     {{ session('status') }}
                 </div>
             @endif
+
+            @if(session('dropStatus'))
+                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                    Dropped Successfully, <a href="/purchasing/order/{{ $orderHeads -> id }}/{{ Session::get('dropStatus') }}/undo">Click Here To Undo !</a>
+                </div>
+            @endif
             
             @if(session('error'))
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -84,7 +90,14 @@
 
                 <div class="row mt-4">
                     <div class="col">
-                        <form method="POST" action="/purchasing/order/{{ $orderHeads -> id }}/approve">
+                        @php
+                            if(strpos($orderHeads -> status, 'Revised') !== false){
+                                $route = 'revise';
+                            }else{
+                                $route = 'approve';
+                            }
+                        @endphp
+                        <form method="POST" action="/purchasing/order/{{ $orderHeads -> id }}/{{ $route }}">
                             @csrf
                             <div class="form-group">
                                 <label for="approvedBy">Approved By</label>
@@ -132,7 +145,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
-                                <select class="form-control" id="ppn" name="ppn">
+                                <select class="form-control" id="ppn" name="ppn" required>
                                     <option value="10" 
                                         @if($orderHeads->ppn == 10)
                                             {{ 'selected' }}
@@ -151,7 +164,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="{{ $orderHeads -> discount }}">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="{{ $orderHeads -> discount }}" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -160,7 +173,8 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".") }}" readonly>
+                                    {{-- <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPrice, 2, ",", ".") }}" readonly> --}}
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($orderHeads -> totalPriceBeforeCalculation, 2, ",", ".") }}" readonly>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-5">
@@ -169,7 +183,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col mt-3">
+                    <div class="col mt-3 overflow-auto">
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                     <th scope="col">Item Barang</th>
@@ -197,7 +211,7 @@
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ round($od -> itemPrice )}}" min="1" step="0.1">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
@@ -207,16 +221,19 @@
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="supplier_id" name="supplier_id">
+                                                    <select class="form-control" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         @foreach($suppliers as $s)
-                                                            <option class="h-25 w-50" value="{{ $s -> id }}">{{ $s -> supplierName }}</option>
+                                                            <option class="h-25 w-50" value="{{ $s -> supplierName }}">{{ $s -> supplierName }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </td>
 
                                             <td class="center">
+                                                @if(count($orderDetails) > 1)
+                                                    <button type="button" class="btn btn-sm mr-2" data-toggle="modal" data-target="#drop-{{ $od -> id }}"><span data-feather="trash-2"></span></button>
+                                                @endif
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
                                             </td>
                                         </form>
@@ -228,6 +245,35 @@
                 </div>
             </main>
     </div>
+
+    @foreach($orderDetails as $od)
+        <div class="modal fade" id="drop-{{ $od -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Item - {{ $od -> item -> itemName }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="/purchasing/order/{{ $od -> id }}/drop">
+                    @csrf
+                    @method('patch')
+                    <input type="hidden" name="orderHeadsId" value="{{ $orderHeads -> id }}">
+                    <div class="modal-body"> 
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
+                            <h5 class="font-weight-bold mt-3">Are You Sure To Reject This Item ?</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
 
     <script type="text/javascript">
         function showfield(name){
@@ -264,8 +310,8 @@
         }
         td, th{
             word-wrap: break-word;
-            min-width: 120px;
-            max-width: 120px;
+            min-width: 140px;
+            max-width: 140px;
             text-align: left;
             vertical-align: middle;
         }
@@ -274,7 +320,11 @@
         }
         .alert{
                 text-align: center;
-            }
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     @endsection

@@ -90,8 +90,8 @@
                                     <td><?php echo e($key + 1); ?></td>
                                     <td><?php echo e($o -> prDate); ?></td>
                                     <td><?php echo e($o -> noPr); ?></td>
-                                    <?php if(isset($o -> supplier -> supplierName)): ?>
-                                        <td><?php echo e($o -> supplier -> supplierName); ?></td>
+                                    <?php if(isset($o -> supplier)): ?>
+                                        <td><?php echo e($o -> supplier); ?></td>
                                     <?php else: ?>
                                         <td></td>
                                     <?php endif; ?>
@@ -99,7 +99,7 @@
                                     <td><?php echo e($o -> noPo); ?></td>
                                     <td><?php echo e($o -> item['golongan']); ?></td>
                                     <td><?php echo e($o -> boatName); ?></td>
-                                    <td><?php echo e($o -> item -> codeMasterItem); ?></td>
+                                    <td><?php echo e($o -> item -> serialNo); ?></td>
                                     <td><?php echo e($o -> acceptedQuantity); ?> <?php echo e($o -> item -> unit); ?></td>
                                     <td>Rp. <?php echo e(number_format($o -> totalItemPrice, 2, ",", ".")); ?></td>
                                     <td><?php echo e($o -> descriptions); ?></td>

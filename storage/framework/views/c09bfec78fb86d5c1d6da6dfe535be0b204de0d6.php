@@ -16,6 +16,12 @@
 
                 </div>
             <?php endif; ?>
+
+            <?php if(session('dropStatus')): ?>
+                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                    Dropped Successfully, <a href="/purchasing/order/<?php echo e($orderHeads -> id); ?>/<?php echo e(Session::get('dropStatus')); ?>/undo">Click Here To Undo !</a>
+                </div>
+            <?php endif; ?>
             
             <?php if(session('error')): ?>
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -156,7 +162,14 @@ unset($__errorArgs, $__bag); ?>
 
                 <div class="row mt-4">
                     <div class="col">
-                        <form method="POST" action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/approve">
+                        <?php
+                            if(strpos($orderHeads -> status, 'Revised') !== false){
+                                $route = 'revise';
+                            }else{
+                                $route = 'approve';
+                            }
+                        ?>
+                        <form method="POST" action="/purchasing/order/<?php echo e($orderHeads -> id); ?>/<?php echo e($route); ?>">
                             <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <label for="approvedBy">Approved By</label>
@@ -204,7 +217,7 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                             <div class="form-group">
                                 <label for="ppn">Tipe PPN</label>
-                                <select class="form-control" id="ppn" name="ppn">
+                                <select class="form-control" id="ppn" name="ppn" required>
                                     <option value="10" 
                                         <?php if($orderHeads->ppn == 10): ?>
                                             <?php echo e('selected'); ?>
@@ -225,7 +238,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="<?php echo e($orderHeads -> discount); ?>">
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="<?php echo e($orderHeads -> discount); ?>" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -234,7 +247,8 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e(number_format($orderHeads -> totalPrice, 2, ",", ".")); ?>" readonly>
+                                    
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e(number_format($orderHeads -> totalPriceBeforeCalculation, 2, ",", ".")); ?>" readonly>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-5">
@@ -243,7 +257,7 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         </form>
                     </div>
-                    <div class="col mt-3">
+                    <div class="col mt-3 overflow-auto">
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                     <th scope="col">Item Barang</th>
@@ -271,7 +285,7 @@ unset($__errorArgs, $__bag); ?>
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e(round($od -> itemPrice )); ?>" min="1" step="0.1">
+                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
@@ -281,16 +295,19 @@ unset($__errorArgs, $__bag); ?>
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="supplier_id" name="supplier_id">
+                                                    <select class="form-control" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option class="h-25 w-50" value="<?php echo e($s -> id); ?>"><?php echo e($s -> supplierName); ?></option>
+                                                            <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                 </div>
                                             </td>
 
                                             <td class="center">
+                                                <?php if(count($orderDetails) > 1): ?>
+                                                    <button type="button" class="btn btn-sm mr-2" data-toggle="modal" data-target="#drop-<?php echo e($od -> id); ?>"><span data-feather="trash-2"></span></button>
+                                                <?php endif; ?>
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
                                             </td>
                                         </form>
@@ -302,6 +319,35 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </main>
     </div>
+
+    <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="drop-<?php echo e($od -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Item - <?php echo e($od -> item -> itemName); ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="/purchasing/order/<?php echo e($od -> id); ?>/drop">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('patch'); ?>
+                    <input type="hidden" name="orderHeadsId" value="<?php echo e($orderHeads -> id); ?>">
+                    <div class="modal-body"> 
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
+                            <h5 class="font-weight-bold mt-3">Are You Sure To Reject This Item ?</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <script type="text/javascript">
         function showfield(name){
@@ -338,8 +384,8 @@ unset($__errorArgs, $__bag); ?>
         }
         td, th{
             word-wrap: break-word;
-            min-width: 120px;
-            max-width: 120px;
+            min-width: 140px;
+            max-width: 140px;
             text-align: left;
             vertical-align: middle;
         }
@@ -348,7 +394,11 @@ unset($__errorArgs, $__bag); ?>
         }
         .alert{
                 text-align: center;
-            }
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
 
     <?php $__env->stopSection(); ?>

@@ -200,6 +200,8 @@ class PurchasingManagerController extends Controller
     }
 
     public function approveOrder(OrderHead $orderHeads){
+        $default_branch = $orderHeads -> cabang;
+
         // We are not validating anything because we won't change/input anything to the database, Purchasing Manager only sees the order and decide if he/she approve it or not
         // Check if the order already been processed or not using order tracker
         if($orderHeads -> order_tracker == 5){
@@ -208,21 +210,17 @@ class PurchasingManagerController extends Controller
 
         OrderHead::find($orderHeads->id)->update([
             'order_tracker' => 5,
-            'status' => 'Item Delivered By Supplier'
+            // 'status' => 'Item Delivered By Supplier'
+            'status' => 'Order Being Finalized By Purchasing Manager'
         ]);
 
-        ApList::create([
-            'order_id' => $orderHeads -> id,
-            'cabang' => $orderHeads -> cabang,
-            'creationTime' => date("d/m/Y"),
-            'status' => 'OPEN',
-            'tracker' => 5
-        ]);
-
-        return redirect('/dashboard')->with('statusB', 'Order Approved By Purchasing Manager');
+        // return redirect('/dashboard')->with('statusB', 'Order Approved By Purchasing Manager');
+        return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
     }
 
     public function rejectOrder (Request $request, OrderHead $orderHeads){
+        $default_branch = $orderHeads -> cabang;
+        
         $request -> validate([
             'reason' => 'string|required'
         ]);
@@ -230,7 +228,9 @@ class PurchasingManagerController extends Controller
         // We are not validating anything because we won't change/input anything to the database, Purchasing Manager only sees the order and decide if he/she approve it or not
         // Check if the order already been processed or not using order tracker
         if($orderHeads -> order_tracker == 5){
-            return redirect('/purchasing-manager/order/' . $orderHeads -> id . '/approve')->with('error', 'Order Already Been Processed');
+            return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
+            // return redirect('/purchasing-manager/order/' . $orderHeads -> id . '/approve')->with('error', 'Order Already Been Processed');
+            // return redirect()->back()->with('error', 'Order Already Been Processed');
         };
 
         // Reset the price before ppn and discount
@@ -244,7 +244,54 @@ class PurchasingManagerController extends Controller
             'reason' => $request -> reason
         ]);
 
-        return redirect('/dashboard')->with('statusB', 'Order Rejected By Purchasing Manager');
+        // return redirect('/dashboard')->with('statusB', 'Order Rejected By Purchasing Manager');
+        return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
+    }
+
+    public function reviseOrder(OrderHead $orderHeads){
+        $default_branch = $orderHeads -> cabang;
+
+        // Check if the order already been processed or not
+        if($orderHeads -> order_tracker == 6){
+            return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
+
+        };
+
+        // Then update the status
+        OrderHead::where('id', $orderHeads -> id)->update([
+            'order_tracker' => 6,
+            'status' => 'Order Being Revised By Purchasing',
+            'totalPrice' => $orderHeads -> totalPriceBeforeCalculation,
+            'retries' => $orderHeads -> retries += 1
+        ]);
+        
+        return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
+    }
+
+    public function finalizeOrder(OrderHead $orderHeads){
+        $default_branch = $orderHeads -> cabang;
+
+        // Check if the order already been processed or not
+        if($orderHeads -> order_tracker == 8){
+            return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
+        };
+
+        // Then update the following order head
+        OrderHead::find($orderHeads->id)->update([
+            'order_tracker' => 8,
+            'status' => 'Item Delivered By Supplier'
+        ]);
+
+        // After finalized, then create new AP List
+        ApList::create([
+            'order_id' => $orderHeads -> id,
+            'cabang' => $orderHeads -> cabang,
+            'creationTime' => date("d/m/Y"),
+            'status' => 'OPEN',
+            'tracker' => 5
+        ]);
+
+        return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
     }
 
     public function reportPage(){
@@ -382,9 +429,10 @@ class PurchasingManagerController extends Controller
         // ($request -> apListId) will be the AP ID => 1 || ($request -> filename) will be the column => ex : doc_partial1, doc_partial2, and goes on
         // Get the filename of the following AP ID
         $filename = ApList::where('id', $request -> apListId)->pluck($request -> filename)[0];
+        $path = ApList::where('id', $request -> apListId)->pluck($request -> pathToFile)[0];
 
         // Then, find the file to download it
-        return Storage::download('/APList' . '/' . $filename);
+        return Storage::download($path . $filename);
     }
 
     public function approveDocument(Request $request){
