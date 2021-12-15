@@ -119,9 +119,6 @@
                                                     @method('delete')
                                                     <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
                                                 </form>
-                                                {{-- <form>
-
-                                                </form> --}}
                                                 <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
@@ -138,8 +135,8 @@
                                 </script>
                                 <script>
                                     setTimeout(function(){
-                                    $("div.alert").remove();
-                                    }, 5000 ); // 5 secs
+                                        $("div.alert").remove();
+                                    }, 3000 ); // 3 secs
                                 </script>
                                 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
                         </div>

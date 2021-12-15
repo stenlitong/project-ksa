@@ -34,27 +34,30 @@
                 <h1 class="Header-1" style="margin-top: -3%; margin-left: 44%;">Overview</h1>
                 <hr class="my-4">
                 <form>
+                    @csrf
                     <div class="form-row">
                       <div class="col">
-                        <x-label for="cabang" :value="__('Cabang : ')" style="margin-top: -1%; margin-left: 2%; font-size: 16px" />
-                        <select name="cabang" class="form-select w-25" onchange="window.location = this.value;" style=" margin-left: 2%;">
+                        <x-label for="cabangfilter" :value="__('Cabang : ')" style="margin-top: -1%; margin-left: 3%; font-size: 16px" />
+                        <select name="cabangfilter" id="cabangfilter"class="form-select w-full" {{-- onchange="window.location = this.value;" --}} style=" margin-left: 1%;">
                             <option selected disabled hidden='true' value="">Pilih Cabang</option>
-                            <option value="/dashboard?search=All">Semua Cabang</option>
-                            <option value="/dashboard?search=Babelan">Babelan</option>
-                            <option value="/dashboard?search=Berau">Berau</option>
-                            <option value="/dashboard?search=Samarinda">Samarinda</option>
-                            <option value="/dashboard?search=Banjarmasin">Banjarmasin</option>
+                            <option value="/dashboard?search1=All">Semua Cabang</option>
+                            <option value="/dashboard?search1=Babelan">Babelan</option>
+                            <option value="/dashboard?search1=Berau">Berau</option>
+                            <option value="/dashboard?search1=Samarinda">Samarinda</option>
+                            <option value="/dashboard?search1=Banjarmasin">Banjarmasin</option>
                            </select>
-                      </div>
                       </div>
                     </div>
                 </form>
-
-                  @error('reasonbox')
-                  <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                      Alasan Wajib Diisi
-                  </div>
-                  @enderror
+            </div>
+                
+                @if($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert error alert-danger" id="error">{{ $error }}
+                            <strong> No data found</strong>
+                        </div>
+                    @endforeach
+                @endif
 
                   <script>
                     setTimeout(function(){

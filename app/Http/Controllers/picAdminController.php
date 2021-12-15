@@ -22,11 +22,12 @@ use App\Models\User;
 class picAdminController extends Controller
 {
     public function checkform(){
+       
         if (request('search') == 'All') {
-            $document = DB::table('documents')->latest()->get();
-            $documentberau = DB::table('beraudb')->latest()->get();
-            $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
-            $documentsamarinda = DB::table('samarindadb')->latest()->get();
+            $document = DB::table('documents')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentberau = DB::table('beraudb')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->whereMonth('created_at', date('m'))->latest()->get();
         }
         elseif (request('search')) {
             $document = DB::table('documents')->where('cabang', request('search'))->latest()->get();
@@ -34,24 +35,25 @@ class picAdminController extends Controller
             $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search'))->latest()->get();
             $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search'))->latest()->get();
         }
-        else{
-            $document = DB::table('documents')->latest()->get();
-            $documentberau = DB::table('beraudb')->latest()->get();
-            $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
-            $documentsamarinda = DB::table('samarindadb')->latest()->get();
-        }
+        else{{
+            $document = DB::table('documents')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentberau = DB::table('beraudb')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->whereMonth('created_at', date('m'))->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->whereMonth('created_at', date('m'))->latest()->get();
+        }};
 
         return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda')); 
     }
+    
     public function checkrpk(){
         if (request('search') == 'All') {
-            $docrpk = DB::table('rpkdocuments')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->whereMonth('created_at', date('m'))->latest()->get();
         }
         elseif (request('search')) {
-            $docrpk = DB::table('rpkdocuments')->where('cabang', request('search'))->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->where('cabang', request('search')->whereMonth('created_at', date('m')))->latest()->get();
         }
         else{
-            $docrpk = DB::table('rpkdocuments')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->whereMonth('created_at', date('m'))->latest()->get();
         }
 
         return view('picadmin.picAdminRpk' , compact('docrpk'));
@@ -145,7 +147,6 @@ class picAdminController extends Controller
         return redirect('/picadmin/rpk');
     }
    
-
     public function download(){
         $path = Storage::path('assets/stenli-picsite-3' );
         return Response::download($path, 'stenli-picsite-3.txt');
@@ -158,32 +159,32 @@ class picAdminController extends Controller
         
         if ($request->cabang == 'Babelan'){
             $filename = $request->viewdoc;
-            $viewer = documents::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            $viewer = documents::whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
             // dd($viewer);
             return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
         }
         // elseif ($request->cabang == 'Babelan' && ){
-        //     $viewer = documents::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+        //     $viewer = documents::whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
         //     // dd($viewer);
         //     return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/" . $viewer);
         // }
 
         if ($request->cabang == 'Berau'){
             $filename = $request->viewdoc;
-            $viewer = documentberau::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            $viewer = documentberau::whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
             // dd($viewer);
             return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/" . $viewer);
         }
 
         if ($request->cabang == 'Banjarmasin'){
             $filename = $request->viewdoc;
-            $viewer = documentbanjarmasin::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            $viewer = documentbanjarmasin::whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
             // dd($viewer);
             return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/" . $viewer);
         }
         if ($request->cabang == 'Samarinda'){
             $filename = $request->viewdoc;
-            $viewer = documentsamarinda::whereMonth('updated_at', $month)->first()->pluck($filename)[0];
+            $viewer = documentsamarinda::whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
             // dd($viewer);
             return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/" . $viewer);
         }
@@ -216,18 +217,4 @@ class picAdminController extends Controller
         }
     }
 
-        // $path = "storage/files";
-        // $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
-        // $file = $request->file('fileInput');
-
-        // $url = Storage::disk('s3')->url($path."/".$filename);
-        // dd($url);
-
-        // Storage::disk('s3')->delete($path."/".$filename);
-
-        // $file->storeAs(
-        //     $path,
-        //     $filename,
-        //     's3'
-        // );
 }

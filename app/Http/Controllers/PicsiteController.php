@@ -22,11 +22,12 @@ use App\Models\User;
 class PicsiteController extends Controller
 {
     public function uploadform(){
-        $document = documents::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
-        $documentberau = documentberau::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
-        $documentbanjarmasin = documentbanjarmasin::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
-        $documentsamarinda = documentsamarinda::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
-        //dd($document);
+        $date = date('m');
+        $document = documents::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
+        $documentberau = documentberau::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
+        $documentbanjarmasin = documentbanjarmasin::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
+        $documentsamarinda = documentsamarinda::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
+        // dd($document);
         
         return view('picsite.upload',compact('document' , 'documentberau','documentbanjarmasin','documentsamarinda'));
     }
@@ -70,8 +71,7 @@ class PicsiteController extends Controller
                 $path = $request->file('ufile1')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
 
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'status1' => 'on review',
                         'time_upload1' => date("Y-m-d"),
@@ -96,8 +96,7 @@ class PicsiteController extends Controller
 
                 $path = $request->file('ufile2')->storeas('babelan/'. $year . "/". $month , $name2, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name2);
-                    documents::where('cabang', 'Babelan' )->update([                                        
+                documents::where('cabang', 'Babelan' )->update([                                        
                         'sertifikat_garis_muat' => basename($path),
                         'status2' => 'on review',
                         'time_upload2' => date("Y-m-d"),
@@ -121,8 +120,7 @@ class PicsiteController extends Controller
 
                 $path = $request->file('ufile3')->storeas('babelan/'. $year . "/". $month , $name3, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name3);
-                    documents::where('cabang', 'Babelan') ->update([
+                documents::where('cabang', 'Babelan') ->update([
                         //babelan                       
                             'penerbitan_sekali_jalan' => basename($path),
                             'status3' => 'on review',
@@ -147,8 +145,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile4')->storeas('babelan/'. $year . "/". $month , $name4, 's3');
                if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                   Storage::disk('s3')->delete($path."/".$name4);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                     //babelan
                     'sertifikat_safe_manning'=> basename($path),
                     'status4' => 'on review',
@@ -173,8 +170,7 @@ class PicsiteController extends Controller
                 
                 $path = $request->file('ufile5')->storeas('babelan/'. $year . "/". $month , $name5, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name5);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         'endorse_surat_laut'=> basename($path),
                         'status5' => 'on review',
                         'time_upload5' => date("Y-m-d"),
@@ -198,8 +194,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile6')->storeas('babelan/'. $year . "/". $month , $name6, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name6);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         'perpanjangan_sertifikat_sscec'=> basename($path),
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d"),
@@ -223,8 +218,7 @@ class PicsiteController extends Controller
                 
                 $path = $request->file('ufile7')->storeas('babelan/'. $year . "/". $month , $name7, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name7);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'perpanjangan_sertifikat_p3k'=> basename($path),
                         'status7' => 'on review',
@@ -250,8 +244,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile8')->storeas('babelan/'. $year . "/". $month , $name8, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name8);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'biaya_laporan_dok'=> basename($path),
                         'status8' => 'on review',
@@ -276,8 +269,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile9')->storeas('babelan/'. $year . "/". $month , $name9, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name9);
-                    documents::where('cabang', 'Babelan')->update([
+                documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sertifikat_keselamatan'=> basename($path),
                         'status9' => 'on review',
@@ -302,7 +294,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile10')->storeas('babelan/'. $year . "/". $month , $name10, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name10);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sertifikat_garis_muat'=> basename($path),
@@ -328,7 +320,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile11')->storeas('babelan/'. $year . "/". $month , $name11, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name11);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_surat_laut'=> basename($path),
@@ -354,7 +346,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile12')->storeas('babelan/'. $year . "/". $month , $name12, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name12);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'sertifikat_snpp'=> basename($path),
@@ -380,7 +372,7 @@ class PicsiteController extends Controller
                 
                 $path = $request->file('ufile13')->storeas('babelan/'. $year . "/". $month , $name13, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name13);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'sertifikat_anti_teritip'=> basename($path),
@@ -406,7 +398,7 @@ class PicsiteController extends Controller
                 
                 $path = $request->file('ufile14')->storeas('babelan/'. $year . "/". $month , $name14, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name14);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnbp_snpp&snat'=> basename($path),
@@ -431,7 +423,7 @@ class PicsiteController extends Controller
                
                 $path = $request->file('ufile15')->storeas('babelan/'. $year . "/". $month , $name15, 's3');
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name15);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'biaya_survey'=> basename($path),
@@ -457,7 +449,7 @@ class PicsiteController extends Controller
                 $path = $request->file('ufile16')->storeas('babelan/'. $year . "/". $month , $name16 , 's3');
 
                 if (documents::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name16);
+                    
                     documents::where('cabang', 'Babelan')->update([
                         //babelan
                         'pnpb_sscec'=> basename($path),
@@ -518,8 +510,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_sertifikat_konstruksi';
                 $path = $request->file('beraufile1')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([
+                documentberau::where('cabang', 'Berau' )->update([
                     'pnbp_sertifikat_konstruksi' => basename($path),
                     'cabang' => Auth::user()->cabang ,
                     'status1' => 'on review',]);
@@ -540,8 +531,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/jasa_urus_sertifikat';
                 $path = $request->file('beraufile2')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'jasa_urus_sertifikat' => basename($path),
                         'status2' => 'on review',
                         'time_upload2' => date("Y-m-d"),
@@ -563,8 +553,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_sertifikat_perlengkapan';
                 $path = $request->file('beraufile3')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_sertifikat_perlengkapan' => basename($path),
                         'status3' => 'on review',
                         'time_upload3' => date("Y-m-d"),
@@ -586,8 +575,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_sertifikat_radio';
                 $path = $request->file('beraufile4')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_sertifikat_radio' => basename($path),
                         'status4' => 'on review',
                         'time_upload4' => date("Y-m-d"),
@@ -609,8 +597,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_sertifikat_ows';
                 $path = $request->file('beraufile5')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_sertifikat_ows' => basename($path),
                         'status5' => 'on review',
                         'time_upload5' => date("Y-m-d"),
@@ -632,8 +619,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_garis_muat';
                 $path = $request->file('beraufile6')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_garis_muat' => basename($path),
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d"),
@@ -655,8 +641,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_pemeriksaan_endorse_sl';
                 $path = $request->file('beraufile7')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_pemeriksaan_endorse_sl' => basename($path),
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -678,8 +663,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pemeriksaan_sertifikat';
                 $path = $request->file('beraufile8')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pemeriksaan_sertifikat' => basename($path),
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d"),
@@ -701,8 +685,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/marine_inspektor';
                 $path = $request->file('beraufile9')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'marine_inspektor' => basename($path),
                         'status9' => 'on review',
                         'time_upload9' => date("Y-m-d"),
@@ -724,8 +707,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/biaya_clearance';
                 $path = $request->file('beraufile10')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'biaya_clearance' => basename($path),
                         'status10' => 'on review',
                         'time_upload10' => date("Y-m-d"),
@@ -747,8 +729,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_master_cable';
                 $path = $request->file('beraufile11')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_master_cable' => basename($path),
                         'status11' => 'on review',
                         'time_upload11' => date("Y-m-d"),
@@ -770,8 +751,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/cover_deck_logbook';
                 $path = $request->file('beraufile12')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'cover_deck_logbook' => basename($path),
                         'status12' => 'on review',
                         'time_upload12' => date("Y-m-d"),
@@ -793,8 +773,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/cover_engine_logbook';
                 $path = $request->file('beraufile13')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'cover_engine_logbook' => basename($path),
                         'status13' => 'on review',
                         'time_upload13' => date("Y-m-d"),
@@ -816,8 +795,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/exibitum_dect_logbook';
                 $path = $request->file('beraufile14')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'exibitum_dect_logbook' => basename($path),
                         'status14' => 'on review',
                         'time_upload14' => date("Y-m-d"),
@@ -839,8 +817,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/exibitum_engine_logbook';
                 $path = $request->file('beraufile15')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'exibitum_engine_logbook' => basename($path),
                         'status15' => 'on review',
                         'time_upload15' => date("Y-m-d"),
@@ -862,8 +839,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_deck_logbook';
                 $path = $request->file('beraufile16')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_deck_logbook' => basename($path),
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
@@ -885,8 +861,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_engine_logbook';             
                 $path = $request->file('beraufile17')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([
+                documentberau::where('cabang', 'Berau' )->update([
                         'status17' => 'on review',
                         'time_upload17' => date("Y-m-d"),
                         'pnbp_engine_logbook' => basename($path),
@@ -908,8 +883,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/biaya_docking';
                 $path = $request->file('beraufile18')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'biaya_docking' => basename($path),
                         'status18' => 'on review',
                         'time_upload18' => date("Y-m-d"),
@@ -931,8 +905,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/lain-lain';
                 $path = $request->file('beraufile19')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'lain-lain' => basename($path),
                         'status19' => 'on review',
                         'time_upload19' => date("Y-m-d"),]); 
@@ -954,8 +927,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/biaya_labuh_tambat';
                 $path = $request->file('beraufile20')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'biaya_labuh_tambat' => basename($path),
                         'status20' => 'on review',
                         'time_upload20' => date("Y-m-d"),]);
@@ -977,8 +949,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/biaya_rambu';
                 $path = $request->file('beraufile21')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'biaya_rambu' => basename($path),
                         'status21' => 'on review',
                         'time_upload20' => date("Y-m-d"),]);
@@ -999,8 +970,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnbp_pemeriksaan';
                 $path = $request->file('beraufile22')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnbp_pemeriksaan' => basename($path),
                         'status22' => 'on review',
                         'time_upload22' => date("Y-m-d"),]);
@@ -1022,8 +992,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/sertifikat_bebas_sanitasi&p3k';
                 $path = $request->file('beraufile23')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'sertifikat_bebas_sanitasi&p3k' => basename($path),
                         'status23' => 'on review',
                         'time_upload23' => date("Y-m-d"),]);
@@ -1045,8 +1014,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/sertifikat_garis_muat';
                 $path = $request->file('beraufile25')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'sertifikat_garis_muat' => basename($path),
                         'status24' => 'on review',
                         'time_upload24' => date("Y-m-d"),]);
@@ -1067,8 +1035,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/ijin_sekali_jalan';
                 $path = $request->file('beraufile25')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'ijin_sekali_jalan' => basename($path),
                         'status25' => 'on review',
                         'time_upload25' => date("Y-m-d"),]);
@@ -1090,8 +1057,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'berau/pnpb_sscec';
                 $path = $request->file('beraufile26')->storeas('berau/'. $year . "/". $month , $name1, 's3');
                 if (documentberau::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentberau::where('cabang', 'Berau' )->update([                   
+                documentberau::where('cabang', 'Berau' )->update([                   
                         'pnpb_sscec' => basename($path),
                         'status26' => 'on review',
                         'time_upload26' => date("Y-m-d"),]);
@@ -1154,7 +1120,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/perjalanan';
                 $path = $request->file('banjarmasinfile1')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status1' => 'on review',
                         'time_upload1' => date("Y-m-d"),
@@ -1176,7 +1141,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sertifikat_keselamatan';
                 $path = $request->file('banjarmasinfile2')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status2' => 'on review',
                         'time_upload2' => date("Y-m-d"),
@@ -1198,7 +1163,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sertifikat_anti_fauling';
                 $path = $request->file('banjarmasinfile3')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status3' => 'on review',
                         'time_upload3' => date("Y-m-d"),
@@ -1220,7 +1185,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surveyor';
                 $path = $request->file('banjarmasinfile4')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status4' => 'on review',
                         'time_upload4' => date("Y-m-d"),      
@@ -1242,7 +1207,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/drawing&stability';
                 $path = $request->file('banjarmasinfile5')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status5' => 'on review',
                         'time_upload5' => date("Y-m-d"),        
@@ -1264,7 +1229,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pengeringan';
                 $path = $request->file('banjarmasinfile6')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d"),       
@@ -1286,7 +1251,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_nautis';
                 $path = $request->file('banjarmasinfile7')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),   
@@ -1308,7 +1273,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_anti_faulin';
                 $path = $request->file('banjarmasinfile8')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d"),      
@@ -1330,7 +1295,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_radio';
                 $path = $request->file('banjarmasinfile9')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);   
+                
                     documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status9' => 'on review',
                         'time_upload9' => date("Y-m-d"),       
@@ -1352,7 +1317,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/berita_acara_lambung';
                 $path = $request->file('banjarmasinfile10')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status10' => 'on review',
                         'time_upload10' => date("Y-m-d"),
@@ -1374,7 +1338,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_snpp';
                 $path = $request->file('banjarmasinfile11')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status11' => 'on review',
                         'time_upload11' => date("Y-m-d"),
@@ -1396,7 +1359,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/bki';
                 $path = $request->file('banjarmasinfile12')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status12' => 'on review',
                         'time_upload12' => date("Y-m-d"),
@@ -1418,7 +1380,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/snpp_permanen';
                 $path = $request->file('banjarmasinfile13')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status13' => 'on review',
                         'time_upload13' => date("Y-m-d"),
@@ -1440,7 +1401,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/snpp_endorse';
                 $path = $request->file('banjarmasinfile14')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status14' => 'on review',
                         'time_upload14' => date("Y-m-d"),
@@ -1462,7 +1422,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surat_laut_endorse';
                 $path = $request->file('banjarmasinfile15')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status15' => 'on review',
                         'time_upload15' => date("Y-m-d"),
@@ -1484,7 +1443,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/surat_laut_permanen';
                 $path = $request->file('banjarmasinfile16')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status16' => 'on review',
                         'time_upload16' => date("Y-m-d"),
@@ -1506,7 +1464,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/compas_seren';
                 $path = $request->file('banjarmasinfile17')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status17' => 'on review',
                         'time_upload17' => date("Y-m-d"),
@@ -1528,7 +1485,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(tahunan)';
                 $path = $request->file('banjarmasinfile18')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status18' => 'on review',
                         'time_upload18' => date("Y-m-d"),
@@ -1550,7 +1506,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(pengaturan_dok)';
                 $path = $request->file('banjarmasinfile19')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status19' => 'on review',
                         'time_upload19' => date("Y-m-d"),
@@ -1572,7 +1527,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/keselamatan_(dok)';
                 $path = $request->file('banjarmasinfile20')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status20' => 'on review',
                         'time_upload20' => date("Y-m-d"),
@@ -1594,7 +1548,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/garis_muat';
                 $path = $request->file('banjarmasinfile21')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status21' => 'on review',
                         'time_upload21' => date("Y-m-d"),
@@ -1616,7 +1569,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/dispensasi_isr';
                 $path = $request->file('banjarmasinfile22')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status22' => 'on review',
                         'time_upload22' => date("Y-m-d"),
@@ -1638,7 +1590,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/life_raft_1_2_pemadam';
                 $path = $request->file('banjarmasinfile23')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status23' => 'on review',
                         'time_upload23' => date("Y-m-d"),
@@ -1660,7 +1611,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/sscec';
                 $path = $request->file('banjarmasinfile24')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status24' => 'on review',
                         'time_upload24' => date("Y-m-d"),
@@ -1682,7 +1632,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/seatrail';
                 $path = $request->file('banjarmasinfile25')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status25' => 'on review',
                         'time_upload25' => date("Y-m-d"),
@@ -1704,7 +1653,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_umum';
                 $path = $request->file('banjarmasinfile26')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status26' => 'on review',
                         'time_upload26' => date("Y-m-d"),
@@ -1726,7 +1674,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/laporan_pemeriksaan_mesin';
                 $path = $request->file('banjarmasinfile27')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status27' => 'on review',
                         'time_upload27' => date("Y-m-d"),
@@ -1748,7 +1695,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/nota_dinas_perubahan_kawasan';
                 $path = $request->file('banjarmasinfile28')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status28' => 'on review',
                         'time_upload28' => date("Y-m-d"),
@@ -1770,7 +1716,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/PAS';
                 $path = $request->file('banjarmasinfile29')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status29' => 'on review',
                         'time_upload29' => date("Y-m-d"),
@@ -1792,7 +1737,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/invoice_bki';
                 $path = $request->file('banjarmasinfile30')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status30' => 'on review',
                         'time_upload30' => date("Y-m-d"),
@@ -1814,7 +1758,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'banjarmasin/safe_manning';
                 $path = $request->file('banjarmasinfile31')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
                 if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
                         documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
                         'status31' => 'on review',
                         'time_upload31' => date("Y-m-d"),
@@ -1883,7 +1826,7 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/sertifikat_keselamatan(perpanjangan)';
                 $path = $request->file('samarindafile1')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()) {
-                    documentsamarinda::where('cabang', 'Samarinda')->update([
+                        documentsamarinda::where('cabang', 'Samarinda')->update([
                             'status1' => 'on review',
                             'time_upload1' => date("Y-m-d"),
                             'sertifikat_keselamatan(perpanjangan)' => basename($path),]);
@@ -1903,7 +1846,6 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/perubahan_ok_13_ke_ok_1';
                 $path = $request->file('samarindafile2')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
                 documentsamarinda::where('cabang', 'Samarinda')->update([
                         'status2' => 'on review',
                         'time_upload2' => date("Y-m-d"),
@@ -1924,7 +1866,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/keselamatan_(tahunan)';
                 $path = $request->file('samarindafile3')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status3' => 'on review',
                             'time_upload3' => date("Y-m-d"),
@@ -1945,7 +1886,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/keselamatan_(dok)';
                 $path = $request->file('samarindafile4')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status4' => 'on review',
                             'time_upload4' => date("Y-m-d"),
@@ -1967,7 +1907,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/keselamatan_(pengaturan_dok)';
                 $path = $request->file('samarindafile5')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status5' => 'on review',
                             'time_upload5' => date("Y-m-d"),
@@ -1988,7 +1927,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/keselamatan_(penundaan_dok)';
                 $path = $request->file('samarindafile6')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status6' => 'on review',
                             'time_upload6' => date("Y-m-d"),
@@ -2009,7 +1947,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/sertifikat_garis_muat';
                 $path = $request->file('samarindafile7')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status7' => 'on review',
                             'time_upload7' => date("Y-m-d"),
@@ -2030,7 +1967,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/laporan_pemeriksaan_garis_muat';
                 $path = $request->file('samarindafile8')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status8' => 'on review',
                             'time_upload8' => date("Y-m-d"),
@@ -2051,8 +1987,7 @@ class PicsiteController extends Controller
                     $tujuan_upload = 'samarinda/sertifikat_anti_fauling';
                         $path = $request->file('samarindafile9')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                     if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
-                        documentsamarinda::where('cabang', 'Samarinda')->update([  
+                            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status9' => 'on review',
                         'time_upload9' => date("Y-m-d"),
                         'sertifikat_anti_fauling' => basename($path),]);
@@ -2072,7 +2007,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/surat_laut_permanen';
                 $path = $request->file('samarindafile10')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status10' => 'on review',
                             'time_upload10' => date("Y-m-d"),
@@ -2093,7 +2027,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/surat_laut_endorse';
                 $path = $request->file('samarindafile11')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status11' => 'on review',
                             'time_upload11' => date("Y-m-d"),
@@ -2114,8 +2047,7 @@ class PicsiteController extends Controller
                     $tujuan_upload = 'samarinda/call_sign';
                 $path = $request->file('samarindafile12')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                     if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
-                        documentsamarinda::where('cabang', 'Samarinda')->update([  
+                            documentsamarinda::where('cabang', 'Samarinda')->update([  
                                 'status12' => 'on review',
                                 'time_upload12' => date("Y-m-d"),
                                 'call_sign' => basename($path),]);
@@ -2135,8 +2067,7 @@ class PicsiteController extends Controller
                     $tujuan_upload = 'samarinda/perubahan_sertifikat_keselamatan';
                 $path = $request->file('samarindafile13')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                     if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
-                        documentsamarinda::where('cabang', 'Samarinda')->update([  
+                            documentsamarinda::where('cabang', 'Samarinda')->update([  
                                 'status13' => 'on review',
                                 'time_upload13' => date("Y-m-d"),
                                 'perubahan_sertifikat_keselamatan' => basename($path),]);
@@ -2156,8 +2087,7 @@ class PicsiteController extends Controller
                     $tujuan_upload = 'samarinda/perubahan_kawasan_tanpa_notadin';
                 $path = $request->file('samarindafile14')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                     if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
-                        documentsamarinda::where('cabang', 'Samarinda')->update([  
+                            documentsamarinda::where('cabang', 'Samarinda')->update([  
                                 'status14' => 'on review',
                                 'time_upload14' => date("Y-m-d"),
                                 'perubahan_kawasan_tanpa_notadin' => basename($path),]);
@@ -2177,8 +2107,7 @@ class PicsiteController extends Controller
                     $tujuan_upload = 'samarinda/snpp_permanen';
                 $path = $request->file('samarindafile15')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                     if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                        Storage::disk('s3')->delete($path."/".$name1);
-                        documentsamarinda::where('cabang', 'Samarinda')->update([  
+                            documentsamarinda::where('cabang', 'Samarinda')->update([  
                                 'status15' => 'on review',
                                 'time_upload15' => date("Y-m-d"),
                                 'snpp_permanen' => basename($path),]);
@@ -2198,7 +2127,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/snpp_endorse';
                 $path = $request->file('samarindafile16')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status16' => 'on review',
                             'time_upload16' => date("Y-m-d"),
@@ -2219,7 +2147,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/laporan_pemeriksaan_snpp';
                 $path = $request->file('samarindafile17')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status17' => 'on review',
                             'time_upload17' => date("Y-m-d"),
@@ -2240,7 +2167,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/laporan_pemeriksaan_keselamatan';
                 $path = $request->file('samarindafile18')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status18' => 'on review',
                             'time_upload18' => date("Y-m-d"),
@@ -2261,7 +2187,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/buku_kesehatan';
                 $path = $request->file('samarindafile19')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status19' => 'on review',
                             'time_upload19' => date("Y-m-d"),
@@ -2282,7 +2207,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/sertifikat_sanitasi_water&p3k';
                 $path = $request->file('samarindafile20')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status20' => 'on review',
                             'time_upload20' => date("Y-m-d"),
@@ -2303,8 +2227,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/pengaturan_non_ke_klas_bki';
             $path = $request->file('samarindafile21')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status21' => 'on review',
                         'time_upload21' => date("Y-m-d"),
                         'pengaturan_non_ke_klas_bki' => basename($path),]);
@@ -2324,7 +2247,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/pengaturan_klas_bki_(dok_ss)';
                 $path = $request->file('samarindafile22')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status22' => 'on review',
                             'time_upload22' => date("Y-m-d"),
@@ -2345,7 +2267,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/surveyor_endorse_tahunan_bki';
                 $path = $request->file('samarindafile23')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status23' => 'on review',
                             'time_upload23' => date("Y-m-d"),
@@ -2366,7 +2287,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/pr_supplier_bki';
                 $path = $request->file('samarindafile24')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status24' => 'on review',
                             'time_upload24' => date("Y-m-d"),
@@ -2387,7 +2307,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/balik_nama_grosse';
                 $path = $request->file('samarindafile25')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status25' => 'on review',
                             'time_upload25' => date("Y-m-d"),
@@ -2408,7 +2327,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/kapal_baru_body_(set_dokumen)';
                 $path = $request->file('samarindafile26')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status26' => 'on review',
                             'time_upload26' => date("Y-m-d"),
@@ -2429,7 +2347,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/halaman_tambahan_grosse';
                 $path = $request->file('samarindafile27')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status27' => 'on review',
                             'time_upload27' => date("Y-m-d"),
@@ -2450,7 +2367,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/pnbp&pup';
                 $path = $request->file('samarindafile28')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status28' => 'on review',
                             'time_upload28' => date("Y-m-d"),
@@ -2471,7 +2387,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/laporan_pemeriksaan_anti_teriti';
                 $path = $request->file('samarindafile29')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status29' => 'on review',
                             'time_upload29' => date("Y-m-d"),
@@ -2492,8 +2407,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/surveyor_pengedokan';
             $path = $request->file('samarindafile30')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status30' => 'on review',
                         'time_upload30' => date("Y-m-d"),
                         'surveyor_pengedokan' => basename($path),]);
@@ -2514,7 +2428,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/surveyor_penerimaan_klas_bki';
                 $path = $request->file('samarindafile31')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status31' => 'on review',
                             'time_upload31' => date("Y-m-d"),
@@ -2535,7 +2448,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/nota_tagihan_jasa_perkapalan';
                 $path = $request->file('samarindafile32')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status32' => 'on review',
                             'time_upload32' => date("Y-m-d"),
@@ -2556,8 +2468,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/gambar_kapal_baru_(bki)';
             $path = $request->file('samarindafile33')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status33' => 'on review',
                         'time_upload33' => date("Y-m-d"),
                         'gambar_kapal_baru_(bki)' => basename($path),]);
@@ -2577,8 +2488,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/samarinda_jam1nan_(clc)';
             $path = $request->file('samarindafile34')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status34' => 'on review',
                         'time_upload34' => date("Y-m-d"),
                         'samarinda_jam1nan_(clc)' => basename($path),]);
@@ -2598,7 +2508,6 @@ class PicsiteController extends Controller
                 $tujuan_upload = 'samarinda/surat_ukur_dalam_negeri';
             $path = $request->file('samarindafile35')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
                 if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
                     documentsamarinda::where('cabang', 'Samarinda')->update([  
                             'status35' => 'on review',
                             'time_upload35' => date("Y-m-d"),
@@ -2619,8 +2528,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/penerbitan_sertifikat_kapal_baru';
             $path = $request->file('samarindafile36')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status36' => 'on review',
                         'time_upload36' => date("Y-m-d"),
                         'penerbitan_sertifikat_kapal_baru' => basename($path),]);
@@ -2640,8 +2548,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/buku_stabilitas';
             $path = $request->file('samarindafile37')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status37' => 'on review',
                         'time_upload37' => date("Y-m-d"),
                         'buku_stabilitas' => basename($path),]);
@@ -2661,8 +2568,7 @@ class PicsiteController extends Controller
             $tujuan_upload = 'samarinda/grosse_akta';
             $path = $request->file('samarindafile38')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
             if(documentsamarinda::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                Storage::disk('s3')->delete($path."/".$name1);
-                documentsamarinda::where('cabang', 'Samarinda')->update([  
+            documentsamarinda::where('cabang', 'Samarinda')->update([  
                         'status38' => 'on review',
                         'time_upload38' => date("Y-m-d"),
                         'grosse_akta' => basename($path),]);

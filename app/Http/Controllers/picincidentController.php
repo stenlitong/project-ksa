@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\spgrfile;
 use App\Models\formclaims;
 
+
 class picincidentController extends Controller
 {
     public function formclaim(){
@@ -29,7 +30,7 @@ class picincidentController extends Controller
             'reasonbox' => 'required|max:255',
         ]);
 
-        formclaims::create([
+        formclaims::add([
             'user_id' => Auth::user()->id,
             'tgl_insiden' => $request->dateincident ,
             'tgl_formclaim' => $request->dateclaim , 
@@ -50,7 +51,7 @@ class picincidentController extends Controller
         return redirect('/picincident/formclaim');
     }
 
-    // public function addToCart(Request $request)
+// public function addToCart(Request $request)
     // {
     //     Cart::add([
     //         'id' => $request->id,
@@ -66,7 +67,7 @@ class picincidentController extends Controller
     //     return redirect()->route('cart.list');
     // }
 
-    // public function updateCart(Request $request)
+// public function updateCart(Request $request)
     // {
     //     Cart::update(
     //         $request->id,
@@ -83,7 +84,7 @@ class picincidentController extends Controller
     //     return redirect()->route('cart.list');
     // }
 
-    // public function removeCart(Request $request)
+// public function removeCart(Request $request)
     // {
     //     Cart::remove($request->id);
     //     session()->flash('success', 'Item Cart Remove Successfully !');
@@ -91,7 +92,7 @@ class picincidentController extends Controller
     //     return redirect()->route('cart.list');
     // }
 
-    // public function clearAllCart()
+// public function clearAllCart()
     // {
     //     Cart::clear();
 
@@ -107,35 +108,173 @@ class picincidentController extends Controller
     }
 
     public function destroy(formclaims $claim){
-        
         formclaims::destroy($claim->id); 
         return redirect('/picincident/formclaim')->with('success', 'post telah dihapus.'); 
     }
 
-
     public function spgr(){
-            $year = date('Y');
-            $month = date('m');
-
-            $path = $request->file('banjarmasinfile1')->storeas('banjarmasin/'. $year . "/". $month , $name1, 's3');
-            if (documentbanjarmasin::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
-                    documentbanjarmasin::where('cabang', 'Banjarmasin' )->update([
-                    'status1' => 'on review',
-                    'time_upload1' => date("Y-m-d"),
-                    'perjalanan' => basename($path),]);
-                }else{
-                    documentbanjarmasin::create([
-                    'cabang' => Auth::user()->cabang ,
-                    'user_id' => Auth::user()->id,
-
-                    'status1' => 'on review',
-                    'time_upload1' => date("Y-m-d"),
-                    'perjalanan' => basename($path),
-                ]);
-            }
-        return view('picincident.spgr');
+        $uploadspgr = spgrfile::with('user')->where('id', '>=' , 1)->latest()->get();
+        return view('picincident.spgr', compact('uploadspgr'));
     }
 
+    public function spgrupload(Request $request){
+    // $uploadspgr = spgrfile::with('user')->where('id', '>=' , 1)->latest()->get();
+        // dd($request);
+        $year = date('Y');
+        $month = date('m');
+        $request->validate([
+            'spgrfile1' => 'mimes:pdf|max:3072', 
+            'spgrfile2' => 'mimes:pdf|max:3072', 
+            'spgrfile3' => 'mimes:pdf|max:3072', 
+            'spgrfile4' => 'mimes:pdf|max:3072', 
+            'spgrfile5' => 'mimes:pdf|max:3072', 
+            'spgrfile6' => 'mimes:pdf|max:3072', 
+            'spgrfile7' => 'mimes:pdf|max:3072' 
+        ]);
+            
+        if ($request->hasFile('spgrfile1')) {
+            $file = $request->File('spgrfile1');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile1')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status1' => 'on review',
+                    'time_upload1' => date("Y-m-d"),
+                    'spgr' => basename($path),]);
+            }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status1' => 'on review',
+                    'time_upload1' => date("Y-m-d"),
+                    'spgr' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile2')) {
+            $file = $request->File('spgrfile2');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile2')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status2' => 'on review',
+                    'time_upload2' => date("Y-m-d"),
+                    'Letter_of_Discharge' => basename($path),]);
+                }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status2' => 'on review',
+                    'time_upload2' => date("Y-m-d"),
+                    'Letter_of_Discharge' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile3')) {
+            $file = $request->File('spgrfile3');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile3')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status3' => 'on review',
+                    'time_upload3' => date("Y-m-d"),
+                    'CMC' => basename($path),]);
+                }else{
+                    spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status3' => 'on review',
+                    'time_upload3' => date("Y-m-d"),
+                    'CMC' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile4')) {
+            $file = $request->File('spgrfile4');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile4')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status4' => 'on review',
+                    'time_upload4' => date("Y-m-d"),
+                    'surat_laut' => basename($path),]);
+                }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status4' => 'on review',
+                    'time_upload4' => date("Y-m-d"),
+                    'surat_laut' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile5')) {
+            $file = $request->File('spgrfile5');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile5')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status5' => 'on review',
+                    'time_upload5' => date("Y-m-d"),
+                    'spb' => basename($path),]);
+                }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status5' => 'on review',
+                    'time_upload5' => date("Y-m-d"),
+                    'spb' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile6')) {
+            $file = $request->File('spgrfile6');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile6')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status6' => 'on review',
+                    'time_upload6' => date("Y-m-d"),
+                    'lot_line' => basename($path),]);
+                }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status6' => 'on review',
+                    'time_upload6' => date("Y-m-d"),
+                    'lot_line' => basename($path),
+                ]);
+            }
+        }
+        if ($request->hasFile('spgrfile7')) {
+            $file = $request->File('spgrfile7');
+            $name1 = 'SPGR-'. Auth::user()->name . '-' . $file->getClientOriginalName();
+            $path = $request->file('spgrfile7')->storeas('spgr/'. $year . "/". $month , $name1, 's3');
+            if (spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->exists()){
+                Storage::disk('s3')->delete($path."/".$name1);
+                spgrfile::where('cabang', 'Jakarta')->update([
+                    'status7' => 'on review',
+                    'time_upload7' => date("Y-m-d"),
+                    'surat_keterangan_bank' => basename($path),]);
+                }else{
+                spgrfile::create([
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+                    'status7' => 'on review',
+                    'time_upload7' => date("Y-m-d"),
+                    'surat_keterangan_bank' => basename($path),
+                ]);
+            }
+        }
+        return redirect('picincident/spgr')->with('success', 'Upload success!');
+    }
 
 }

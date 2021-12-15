@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\PicRpkController;
 use App\Http\Controllers\adminRegisController;
 use App\Http\Controllers\picAdminController;
 use App\Http\Controllers\picincidentController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
@@ -63,7 +65,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
         Route::get('/downloadrpk' , [PicRpkController::class, 'downloadrpk'])->name('downloadrpk');
 
-        Route::get('/view', [PicsiteController::class , 'view']);
+        // Route::get('/view', [PicsiteController::class , 'view']);
 
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
         Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
@@ -73,7 +75,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/dana', 'picAdminController@checkform');
         Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
         Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
-
+        
         Route::post('/dana/view',[picAdminController::class, 'view']);
         Route::post('/rpk/view',[picAdminController::class, 'viewrpk']);
 
@@ -85,14 +87,26 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
         Route::get('/formclaim', 'picincidentController@formclaim');
-        Route::get('/spgr', 'picincidentController@spgr');
-        Route::get('/history', 'picincidentController@formclaimhistory');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
+
+        Route::get('/spgr', 'picincidentController@spgr');
+        Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);
+        // Route::post('/viewspgr', 'picincidentController@view');
+
+        Route::get('/history', 'picincidentController@formclaimhistory');
         Route::delete('/formclaim/destroy/{claim}', [picincidentController::class , 'destroy']);
        
     });
+
     Route::prefix('insurance')->name('insurance.')->group(function(){
-        Route::get('/', 'picAdminController@checkform');
+        Route::get('/CheckSpgr', 'InsuranceController@checkspgr');
+        Route::post('/approvespgr',[InsuranceController::class, 'approvespgr']);
+        Route::post('/rejectspgr',[InsuranceController::class, 'rejectspgr']);
+        Route::post('/viewspgr',[InsuranceController::class, 'viewspgr']);
+
+        Route::get('/NoteSpgr', 'InsuranceController@notespgr');
+        Route::post('/addNoteSpgr', 'InsuranceController@uploadnotespgr');
+        Route::delete('/NoteSpgr/destroy/{UpNotes}', [InsuranceController::class , 'destroy']);
        
     });
 });

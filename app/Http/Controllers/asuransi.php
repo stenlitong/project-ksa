@@ -13,6 +13,7 @@ use validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Gmail;
 use App\Models\User;
+use App\Models\spgrfile;
 
 class asuransi extends Controller
 {

@@ -19,7 +19,8 @@ use App\Models\User;
 class PicRpkController extends Controller
 {
     public function rpk(){
-        $docrpk = documentrpk::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
+        $date = date('m');
+        $docrpk = documentrpk::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
         return view('picsite.rpk' , compact('docrpk'));
     }
 
@@ -52,7 +53,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('rfile1')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -75,7 +76,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('rfile2')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([      
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -98,7 +99,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('rfile3')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -121,7 +122,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('rfile4')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -144,7 +145,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('rfile5')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -167,7 +168,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('rfile6')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([                  
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -190,7 +191,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('rfile7')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
                 if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Babelan' )->update([              
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -229,7 +230,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('brfile1')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -252,7 +253,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('brfile2')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -275,7 +276,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('brfile3')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -298,7 +299,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('brfile4')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -321,7 +322,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('brfile5')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -344,7 +345,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('brfile6')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -367,7 +368,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('brfile7')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Berau' )->update([
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -406,7 +407,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('bjrfile1')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::create([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -429,7 +430,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('bjrfile2')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -452,7 +453,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('bjrfile3')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -475,7 +476,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('bjrfile4')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -499,7 +500,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('bjrfile5')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -522,7 +523,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('bjrfile6')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -545,7 +546,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('bjrfile7')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Banjarmasin' )->update([                
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -584,7 +585,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('smrfile1')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -607,7 +608,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('smrfile2')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([                       
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -630,7 +631,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('smrfile3')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -653,7 +654,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('smrfile4')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -676,7 +677,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('smrfile5')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -699,7 +700,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('smrfile6')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -722,7 +723,7 @@ class PicRpkController extends Controller
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('smrfile7')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
                 if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
-                    Storage::disk('s3')->delete($path."/".$name1);
+                    
                     documentrpk::where('cabang', 'Samarinda' )->update([                 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),

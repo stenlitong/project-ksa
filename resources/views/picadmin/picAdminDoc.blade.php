@@ -191,11 +191,11 @@
                                       @csrf
                                       <input type="hidden" name='status' value={{$stats}}>
                                       <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                      <button type="submit" class="btn btn-success">approve</button>
+                                      <button type="submit" class="btn btn-outline-success">approve</button>
                                   </form>
                                   </div>
                                   <div class="col-md-auto">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                       Reject File
                                 </button>
                                   </div>
@@ -301,11 +301,11 @@
                                   @csrf
                                   <input type="hidden" name='status' value={{$stats}}>
                                   <input type="hidden" name ='cabang' value={{$b->cabang}}>
-                                  <button type="submit" class="btn btn-success">approve</button>
+                                  <button type="submit" class="btn btn-outline-success">approve</button>
                                 </form>
                                 </div>
                                 <div class="col-md-auto">
-                                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                     Reject File
                                 </button>
                                 </div>
@@ -416,11 +416,11 @@
                                     @csrf
                                     <input type="hidden" name='status' value={{$stats}}>
                                     <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                    <button type="submit" class="btn btn-success">approve</button>
+                                    <button type="submit" class="btn btn-outline-success">approve</button>
                                   </form>
                                 </div>
                                 <div class="col-md-auto">
-                                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                     Reject File
                                 </button>
                                 </div>

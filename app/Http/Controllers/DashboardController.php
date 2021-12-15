@@ -19,11 +19,13 @@ use App\Models\documentberau;
 use App\Models\documentbanjarmasin;
 use App\Models\documentrpk;
 use App\Models\documentsamarinda;
+use App\Models\spgrfile;
+use App\Models\NoteSpgr;
 use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         if(Auth::user()->hasRole('crew')){
             // $orders = Order::latest()->Paginate(10);
 
@@ -46,20 +48,19 @@ class DashboardController extends Controller
             return view('picsite.picDashboard');
         }
         elseif(Auth::user()->hasRole('picAdmin')){
-            
-            if (request('search') == 'All' || request('search') == 'rpkdana') {
+            if (request('search1') == 'All') {
                 $document = DB::table('documents')->latest()->get();
                 $documentberau = DB::table('beraudb')->latest()->get();
                 $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
                 $documentsamarinda = DB::table('samarindadb')->latest()->get();
                 $docrpk = DB::table('rpkdocuments')->latest()->get();
             }
-            elseif (request('search')) {
-                $document = DB::table('documents')->where('cabang', request('search'))->latest()->get();
-                $documentberau = DB::table('beraudb')->where('cabang', request('search'))->latest()->get();
-                $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search'))->latest()->get();
-                $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search'))->latest()->get();
-                $docrpk = DB::table('rpkdocuments')->where('cabang', request('search'))->latest()->get();
+            elseif (request('search1')) {
+                $document = DB::table('documents')->where('cabang', request('search1'))->latest()->get();
+                $documentberau = DB::table('beraudb')->where('cabang', request('search1'))->latest()->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search1'))->latest()->get();
+                $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search1'))->latest()->get();
+                $docrpk = DB::table('rpkdocuments')->where('cabang', request('search1'))->latest()->get();  
             }
             else{
                 $document = DB::table('documents')->latest()->get();
@@ -75,7 +76,8 @@ class DashboardController extends Controller
             return view('picincident.dashboardincident' );
         }
         elseif(Auth::user()->hasRole('insurance')){
-            return view('insurance.insuranceDashboard');
+            $spgrfile = spgrfile::where('cabang', 'Jakarta')->get();
+            return view('insurance.Dashboardinsurance', compact('spgrfile'));
         }
-    }
+    }   
 }

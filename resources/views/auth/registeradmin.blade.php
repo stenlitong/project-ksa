@@ -54,6 +54,7 @@
                 </div>
             </div>
 
+            <br>
             <!-- Select Option role -->
             <div>
                 <x-label for="role_id" :value="__('Register as:')" />
@@ -106,7 +107,7 @@
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function(event){
                     
-                    if(dropdown.value=="picAdmin"){
+                    if(dropdown.value=="picAdmin" || dropdown.value=="picIncident" || dropdown.value=="insurance"){
                         selectopt('jakarta');
                         document.getElementById("samarinda").disabled = true;
                         document.getElementById("Banjarmasin").disabled = true;
