@@ -88,7 +88,7 @@
                 </div>
             @enderror
 
-            @error('orderType')
+            @error('itemType')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Tipe Order Invalid
                 </div>
@@ -186,21 +186,21 @@
                             <label for="radioButton">Tipe Order</label>
                             <div class="form-group">
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType1" value="Barang" checked>
-                                    <label class="form-check-label" for="orderType1">
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType1" value="Barang" checked>
+                                    <label class="form-check-label" for="itemType1">
                                         Barang
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType2" value="Jasa">
-                                    <label class="form-check-label" for="orderType2">
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType2" value="Jasa">
+                                    <label class="form-check-label" for="itemType2">
                                         Jasa
                                     </label>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center mt-5">
-                                <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="d-flex justify-content-center mt-2">
+                                <a href="/dashboard" class="btn btn-danger btn-lg mr-3">Cancel</a>
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                             </div>
                         </form>
                     </div>
