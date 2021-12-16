@@ -332,8 +332,8 @@ class PurchasingManagerController extends Controller
         // Find all the items that has been approved from the logistic | Per 3 months
         $orders = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
-                ->orWhere('status', 'Order In Progress By Purchasing')
-                ->orWhere('status', 'Order In Progress By Purchasing Manager')
+                // ->orWhere('status', 'Order In Progress By Purchasing')
+                // ->orWhere('status', 'Order In Progress By Purchasing Manager')
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
@@ -379,8 +379,11 @@ class PurchasingManagerController extends Controller
                 
         // Find all the items that has been approved from the logistic | Per 3 months
         $orders = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
-            $query->where('status', 'like', 'Order Completed (Logistic)')
-                ->orWhere('status', 'like', 'Item Delivered By Supplier');
+            $query->where('status', 'Order Completed (Logistic)')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
 
         return view('purchasingManager.purchasingManagerReport', compact('orders', 'default_branch', 'str_month'));
@@ -564,9 +567,14 @@ class PurchasingManagerController extends Controller
 
         // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
         // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
-        $orderDetails = OrderDetail::with(['supplier', 'item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
-            $query->where('status', 'like', 'Item Delivered By Supplier')
-                ->orWhere('status', 'like', 'Order Completed (Logistic)');
+        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+            $query->where('status', 'Order Completed (Logistic)')
+                ->orWhere('status', 'Order In Progress By Purchasing')
+                ->orWhere('status', 'Order In Progress By Purchasing Manager')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'Item Delivered By Supplier');
         })->get();
 
         return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
@@ -600,9 +608,14 @@ class PurchasingManagerController extends Controller
 
         // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
         // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
-        $orderDetails = OrderDetail::with('supplier')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
-            $query->where('status', 'like', 'Item Delivered By Supplier')
-                ->orWhere('status', 'like', 'Order Completed (Logistic)');
+        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+            $query->where('status', 'Order Completed (Logistic)')
+                ->orWhere('status', 'Order In Progress By Purchasing')
+                ->orWhere('status', 'Order In Progress By Purchasing Manager')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'Item Delivered By Supplier');
         })->get();
 
         return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
