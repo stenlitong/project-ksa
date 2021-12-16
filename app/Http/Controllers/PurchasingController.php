@@ -54,6 +54,8 @@ class PurchasingController extends Controller
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
             ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -79,6 +81,8 @@ class PurchasingController extends Controller
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
             ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -145,6 +149,8 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -157,6 +163,8 @@ class PurchasingController extends Controller
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
@@ -261,7 +269,6 @@ class PurchasingController extends Controller
     public function approveOrder(Request $request, OrderHead $orderHeads){
         // Set default branch
         $default_branch = $orderHeads -> cabang;
-
         // Validate the request form
         $request -> validate([
             'boatName' => 'required',
@@ -272,6 +279,7 @@ class PurchasingController extends Controller
             'ppn' => 'required|numeric|in:0,10',
             'discount' => 'nullable|numeric|min:0|max:100',
             'totalPrice' => 'required',
+            'orderType' => 'required|in:Barang,Jasa'
         ]);
 
         // calculate discount first, then PPN
@@ -286,18 +294,22 @@ class PurchasingController extends Controller
             return redirect()->back()->with('errorB', 'Order Already Been Processed');
         }
 
-        $orderDetails = OrderDetail::where('orders_id', $orderHeads -> id)->get();
-
+        // =============================== Still in Discussion ====================================
         // Check if there is one item that price is 0 also check if they somehow manage to bypass supplier inputs
-        foreach($orderDetails as $od){
-            if($od -> totalItemPrice == 0){
-                return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Harga ' . $od -> item -> itemName . ' Invalid');
-            }
-            if(!$od -> supplier){
-                return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Supplier Invalid');
-            }
-        }
+
+        // $orderDetails = OrderDetail::where('orders_id', $orderHeads -> id)->get();
         
+        // foreach($orderDetails as $od){
+        //     if($od -> totalItemPrice == 0){
+        //         return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Harga ' . $od -> item -> itemName . ' Invalid');
+        //     }
+        //     if(!$od -> supplier){
+        //         return redirect('/purchasing/order/' . $orderHeads -> id . '/approve')->with('error', 'Supplier Invalid');
+        //     }
+        // }
+        // =============================== Still in Discussion ====================================
+        
+
         // Check if the discount value is null then set to zero
         if(!$request -> discount){
             $updatedDiscount = 0;
@@ -310,12 +322,13 @@ class PurchasingController extends Controller
             'approvedBy' => Auth::user()->name,
             'status' => 'Order In Progress By Purchasing Manager',
             'poDate' => date('d/m/Y'),
-            'noPo' => $request->noPo,
-            'invoiceAddress' => $request->invoiceAddress,
-            'itemAddress' => $request->itemAddress,
-            'ppn' => $request->ppn,
+            'noPo' => $request -> noPo,
+            'invoiceAddress' => $request -> invoiceAddress,
+            'itemAddress' => $request -> itemAddress,
+            'ppn' => $request -> ppn,
             'discount' => $updatedDiscount,
             'totalPrice' => $updatedPriceAfterPPN,
+            'orderType' => $request -> orderType,
             'order_tracker' => 4,
         ]);
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
@@ -332,6 +345,7 @@ class PurchasingController extends Controller
             'itemAddress' => 'required',
             'ppn' => 'required|numeric|in:0,10',
             'discount' => 'nullable|numeric|min:0|max:100',
+            'orderType' => 'required|in:Barang,Jasa'
         ]);
 
         // calculate discount first, then PPN
@@ -373,6 +387,7 @@ class PurchasingController extends Controller
             'ppn' => $request->ppn,
             'discount' => $updatedDiscount,
             'totalPrice' => $updatedPriceAfterPPN,
+            'orderType' => $request -> orderType,
             'order_tracker' => 7,
         ]);
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');

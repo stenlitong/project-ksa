@@ -160,6 +160,19 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+            <?php $__errorArgs = ['orderType'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    Tipe Order Invalid
+                </div>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
                 <div class="row mt-4">
                     <div class="col">
                         <?php
@@ -249,6 +262,21 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                     
                                     <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<?php echo e(number_format($orderHeads -> totalPriceBeforeCalculation, 2, ",", ".")); ?>" readonly>
+                                </div>
+                            </div>
+                            <label for="radioButton">Tipe Order</label>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline ml-3">
+                                    <input class="form-check-input" type="radio" name="orderType" id="orderType1" value="Barang" checked>
+                                    <label class="form-check-label" for="orderType1">
+                                        Barang
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="orderType" id="orderType2" value="Jasa">
+                                    <label class="form-check-label" for="orderType2">
+                                        Jasa
+                                    </label>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-5">

@@ -38,6 +38,8 @@ class SupervisorController extends Controller
             $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
             ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
         })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
@@ -97,6 +99,8 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
@@ -108,6 +112,8 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     

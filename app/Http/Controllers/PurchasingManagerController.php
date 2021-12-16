@@ -282,14 +282,16 @@ class PurchasingManagerController extends Controller
             'status' => 'Item Delivered By Supplier'
         ]);
 
-        // After finalized, then create new AP List
-        ApList::create([
-            'order_id' => $orderHeads -> id,
-            'cabang' => $orderHeads -> cabang,
-            'creationTime' => date("d/m/Y"),
-            'status' => 'OPEN',
-            'tracker' => 5
-        ]);
+        // After finalized, then create new AP List IF the orderType is 'Barang'
+        if($orderHeads -> orderType == 'Barang'){
+            ApList::create([
+                'order_id' => $orderHeads -> id,
+                'cabang' => $orderHeads -> cabang,
+                'creationTime' => date("d/m/Y"),
+                'status' => 'OPEN',
+                'tracker' => 5
+            ]);
+        }
 
         return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
     }

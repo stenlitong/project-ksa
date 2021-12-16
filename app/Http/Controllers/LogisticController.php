@@ -55,7 +55,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             $items_below_stock = $this -> checkStock();
@@ -68,7 +70,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
             // Then get all the order detail
@@ -113,7 +117,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
@@ -133,7 +139,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', 'Items Ready')
                 ->orWhere('status', 'like', 'On Delivery')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
-                ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+                ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
     
             $completed = $orderHeads->count();

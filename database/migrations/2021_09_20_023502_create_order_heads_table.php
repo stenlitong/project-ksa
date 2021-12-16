@@ -43,6 +43,7 @@ class CreateOrderHeadsTable extends Migration
             $table->string('noSbk')->nullable();
             $table->string('orderType')->nullable();
             $table->integer('order_tracker');
+            $table->string('orderType', 10)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
