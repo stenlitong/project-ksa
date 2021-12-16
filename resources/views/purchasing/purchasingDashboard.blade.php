@@ -251,8 +251,10 @@
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-around">
-                                    <h5><span style="color: white">Order : {{ $o->order_id }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $o->approvedBy }}</span></h5>
+                                    <h5><span style="color: white">Order : {{ $o -> order_id }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $o -> approvedBy }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Order : {{ $o -> orderType }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Pesanan{{ $o -> itemType }}</span></h5>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
