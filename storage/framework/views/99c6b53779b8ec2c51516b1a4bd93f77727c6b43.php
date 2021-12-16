@@ -87,7 +87,7 @@
                                 <div class="card border-dark w-100 mb-3">
                                     <div class="card-body mr-3">
                                         <div class="d-flex justify-content-between">
-                                            <div class="ml-2 d-flex flex-column align-items-center">
+                                            <div class="ml-2 d-flex flex-column justify-content-center align-items-center">
                                                 
                                                 <img src="/images/profile.png" class="w-75">
                                                 <h5 class="supplier-name mt-2 font-weight-bold"><?php echo e($s -> supplierName); ?></h5>
@@ -239,8 +239,8 @@ unset($__errorArgs, $__bag); ?>
                                     <td>
                                         
                                         <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
+                                        <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Revised') !== false || strpos($oh -> status, 'Finalized') !== false): ?>
                                         
-                                        <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
                                             <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning mb-2" target="_blank">Download PO</a>
                                         <?php endif; ?>
                                     </td>
