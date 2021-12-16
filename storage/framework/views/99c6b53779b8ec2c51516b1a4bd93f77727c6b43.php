@@ -238,10 +238,10 @@ unset($__errorArgs, $__bag); ?>
                                     </td>
                                     <td>
                                         
-                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
+                                        <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#detail-<?php echo e($oh -> id); ?>">Detail</button>
                                         
                                         <?php if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false): ?>
-                                            <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning" target="_blank">Download PO</a>
+                                            <a href="/purchasing/<?php echo e($oh -> id); ?>/download-po" class="btn btn-warning mb-2" target="_blank">Download PO</a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>

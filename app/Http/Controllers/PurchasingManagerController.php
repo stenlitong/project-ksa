@@ -565,9 +565,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = 'Jakarta';
 
-        // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
-        // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
-        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')
@@ -606,9 +604,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = $branch;
 
-        // Get the all orders from the crew order => Crew order, then instantly order the stock back ex: (ROID2) differs from when logistic order from him/herself ex: (LOID2)
-        // This order from crew is what we want to show, the id that starts with (ROIDxxx) and the SBK column is not empty
-        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->whereNotNull('noSbk')->where(function($query){
+        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')
