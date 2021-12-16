@@ -75,24 +75,24 @@
                         <label for="radioButton">Tipe Order</label>
                             <div class="form-group">
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType1" value="Barang" 
-                                    @if($orderHeads -> orderType == 'Barang')
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType1" value="Barang" 
+                                    @if($orderHeads -> itemType == 'Barang')
                                         {{ 'checked' }}
                                     @endif
                                     disabled
                                     >
-                                    <label class="form-check-label" for="orderType1">
+                                    <label class="form-check-label" for="itemType1">
                                         Barang
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType2" value="Jasa"
-                                    @if($orderHeads -> orderType == 'Jasa')
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType2" value="Jasa"
+                                    @if($orderHeads -> itemType == 'Jasa')
                                         {{ 'checked' }}
                                     @endif
                                     disabled
                                     >
-                                    <label class="form-check-label" for="orderType2">
+                                    <label class="form-check-label" for="itemType2">
                                         Jasa
                                     </label>
                                 </div>

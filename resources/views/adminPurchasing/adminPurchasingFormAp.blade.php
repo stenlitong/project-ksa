@@ -223,47 +223,71 @@
                                     <input type="hidden" name="cabang" value="{{ $default_branch }}">
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="supplierName">Nama Supplier</label>
-                                        <select class="form-control" id="supplierName" name="supplierName">
-                                            <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
-                                            @foreach($suppliers as $s)
-                                                <option class="h-25 w-50" value="{{ $s -> supplierName }}">{{ $s -> supplierName }}</option>
-                                            @endforeach
-                                        </select>
+                                            <label for="supplierName">Nama Supplier</label>
+                                            <select class="form-control" id="supplierName" name="supplierName"
+                                                @if($ap -> status == 'CLOSED')
+                                                    {{ 'disabled' }}
+                                                @endif
+                                            >
+                                                <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
+                                                @foreach($suppliers as $s)
+                                                    <option class="h-25 w-50" value="{{ $s -> supplierName }}">{{ $s -> supplierName }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="noPr">Nomor PR</label>
-                                        <input type="text" class="form-control" name="noPr" id="noPr" value="{{ $ap -> orderHead -> noPr }}" readonly>
+                                            <label for="noPr">Nomor PR</label>
+                                            <input type="text" class="form-control" name="noPr" id="noPr" value="{{ $ap -> orderHead -> noPr }}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="noInvoice">Nomor Invoice</label>
-                                        <input type="text" class="form-control" name="noInvoice" id="noInvoice" placeholder="Input Nomor Invoice" required>
+                                            <label for="noInvoice">Nomor Invoice</label>
+                                            <input type="text" class="form-control" name="noInvoice" id="noInvoice" placeholder="Input Nomor Invoice" required
+                                                @if($ap -> status == 'CLOSED')
+                                                    {{ 'readonly' }}
+                                                @endif
+                                            >
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="nominalInvoice">Nominal Invoice</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp. </div>
+                                            <label for="nominalInvoice">Nominal Invoice</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp. </div>
+                                                </div>
+                                                <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required 
+                                                    @if($ap -> status == 'CLOSED')
+                                                        {{ 'readonly' }}
+                                                    @endif
+                                                >
                                             </div>
-                                            <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required>
-                                        </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="noFaktur">Nomor Faktur Pajak</label>
-                                        <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak" name="noFaktur" required>
+                                            <label for="noFaktur">Nomor Faktur Pajak</label>
+                                            <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak" name="noFaktur" required
+                                                @if($ap -> status == 'CLOSED')
+                                                    {{ 'readonly' }}
+                                                @endif
+                                            >
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="noDo">Nomor DO</label>
-                                        <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required>
+                                            <label for="noDo">Nomor DO</label>
+                                            <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required
+                                                @if($ap -> status == 'CLOSED')
+                                                    {{ 'readonly' }}
+                                                @endif
+                                            >
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="additionalInformation">Keterangan (optional)</label>
-                                        <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"></textarea>
+                                        <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"
+                                            @if($ap -> status == 'CLOSED')
+                                                {{ 'readonly' }}
+                                            @endif
+                                        ></textarea>
                                     </div>
                                     @if($ap -> status != 'CLOSED')
                                         <div class="d-flex justify-content-center">
