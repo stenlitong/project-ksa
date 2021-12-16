@@ -139,7 +139,7 @@
         @foreach($orderHeads as $o)
                 <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex-column">
@@ -184,8 +184,8 @@
         }
         td, th{
             word-wrap: break-word;
-            min-width: 200px;
-            max-width: 200px;
+            min-width: 120px;
+            max-width: 120px;
             text-align: center;
         }
         .alert{

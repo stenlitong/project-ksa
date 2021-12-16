@@ -199,6 +199,8 @@ class SupervisorController extends Controller
             $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 

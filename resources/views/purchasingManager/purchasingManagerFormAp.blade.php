@@ -139,7 +139,7 @@
                                 </div>
                             @endif
 
-                            @if($ap -> orderHead -> orderType == 'Barang')
+                            @if($ap -> orderHead -> itemType == 'Barang')
                                 <div class="table-modal">
                                     <table class="table">
                                         <thead class="thead-dark">
@@ -316,14 +316,14 @@
             }
             th, td{
                 word-wrap: break-word;
-                min-width: 100px;
-                max-width: 100px;
+                min-width: 80px;
+                max-width: 80px;
                 text-align: center;
             }
             .table-properties{
                 word-wrap: break-word;
-                min-width: 120px;
-                max-width: 120px;
+                min-width: 80px;
+                max-width: 80px;
                 text-align: center;
             }
             .table-modal{
@@ -339,10 +339,6 @@
                 color: black;
                 height: 24px;
                 width: 24px
-            }
-            .center{
-                margin-left: 25%;
-                width: 50%;
             }
             .alert{
                 text-align: center;

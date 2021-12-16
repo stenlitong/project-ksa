@@ -62,6 +62,8 @@ class PurchasingManagerController extends Controller
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
             ->orWhere('status', 'like', 'Order Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -88,6 +90,8 @@ class PurchasingManagerController extends Controller
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
             ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -155,6 +159,8 @@ class PurchasingManagerController extends Controller
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
@@ -167,6 +173,8 @@ class PurchasingManagerController extends Controller
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
                 ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                 ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     

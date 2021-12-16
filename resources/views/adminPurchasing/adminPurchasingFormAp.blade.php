@@ -159,13 +159,13 @@
                                 @method('put')
 
                                 @if($ap -> status == 'OPEN')
-                                    @if($ap -> orderHead -> orderType == 'Barang')
+                                    @if($ap -> orderHead -> itemType == 'Barang')
                                         <button type="submit" class="btn btn-info mr-3">Submit</button>
                                     @endif
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-{{ $ap -> id }}">Close PO</button>
                                 @endif
                             </div>
-                            @if($ap -> orderHead -> orderType == 'Barang')
+                            @if($ap -> orderHead -> itemType == 'Barang')
                                 <div class="table-modal">
                                     <table class="table myTable table-refresh{{ $key }}">
                                         <thead class="thead-dark">

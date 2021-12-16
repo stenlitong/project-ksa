@@ -47,23 +47,28 @@ class PurchasingReportExport implements FromQuery, WithHeadings, ShouldAutoSize,
         if(Auth::user()->hasRole('logistic')){
 
             // Find all the items that has been approved from the user | last 30 days only
-            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'supplier', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
+            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'supplier', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
 
         }elseif(Auth::user()->hasRole('supervisor') or Auth::user()->hasRole('supervisorLogisticMaster')){
 
             // Find all the items that has been approved from the user | last 30 days only
-            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->where(function($query){
+            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                     ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
                     ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                    ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                    ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                     ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'supplier', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
 
         }elseif(Auth::user()->hasRole('purchasing') or Auth::user()->hasRole('purchasingManager')){
 
             // Find all the items that has been approved from the user | last 30 days only
-            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->where(function($query){
+            return OrderHead::whereIn('user_id', $users)->where('cabang', $this->default_branch)->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
+                    ->orWhere('status', 'like', '%' . 'Revised' . '%')
+                    ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+                    ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                     ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->whereBetween('order_heads.created_at', [$start_date, $end_date])->select('prDate', 'noPr', 'supplier', 'noPo', 'boatName', 'descriptions')->orderBy('order_heads.updated_at', 'desc');
 

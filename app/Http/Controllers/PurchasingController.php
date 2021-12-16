@@ -279,7 +279,7 @@ class PurchasingController extends Controller
             'ppn' => 'required|numeric|in:0,10',
             'discount' => 'nullable|numeric|min:0|max:100',
             'totalPrice' => 'required',
-            'orderType' => 'required|in:Barang,Jasa'
+            'itemType' => 'required|in:Barang,Jasa'
         ]);
 
         // calculate discount first, then PPN
@@ -328,7 +328,7 @@ class PurchasingController extends Controller
             'ppn' => $request -> ppn,
             'discount' => $updatedDiscount,
             'totalPrice' => $updatedPriceAfterPPN,
-            'orderType' => $request -> orderType,
+            'itemType' => $request -> itemType,
             'order_tracker' => 4,
         ]);
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
@@ -345,7 +345,7 @@ class PurchasingController extends Controller
             'itemAddress' => 'required',
             'ppn' => 'required|numeric|in:0,10',
             'discount' => 'nullable|numeric|min:0|max:100',
-            'orderType' => 'required|in:Barang,Jasa'
+            'itemType' => 'required|in:Barang,Jasa'
         ]);
 
         // calculate discount first, then PPN
@@ -387,7 +387,7 @@ class PurchasingController extends Controller
             'ppn' => $request->ppn,
             'discount' => $updatedDiscount,
             'totalPrice' => $updatedPriceAfterPPN,
-            'orderType' => $request -> orderType,
+            'itemType' => $request -> itemType,
             'order_tracker' => 7,
         ]);
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
