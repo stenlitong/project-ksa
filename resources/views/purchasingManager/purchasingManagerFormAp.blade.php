@@ -282,7 +282,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="additionalInformation">Keterangan (optional)</label>
-                                            <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." value="{{ $apDetail['additionalInformation'] }}" rows="4" readonly></textarea>
+                                            <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4" readonly>{{ $apDetail['additionalInformation'] }}</textarea>
                                         </div>
                                     @endif
                                 @empty

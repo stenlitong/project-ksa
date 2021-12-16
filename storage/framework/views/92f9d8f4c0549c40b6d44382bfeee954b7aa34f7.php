@@ -314,8 +314,8 @@
             }
             th, td{
                 word-wrap: break-word;
-                min-width: 160px;
-                max-width: 160px;
+                min-width: 80px;
+                max-width: 80px;
                 text-align: center;
             }
             .table-properties{

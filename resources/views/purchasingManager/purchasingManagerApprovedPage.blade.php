@@ -41,11 +41,11 @@
                             <input type="text" class="form-control" id="noPo" name="noPo" value="{{ $orderHeads -> noPo }}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="invoiceAddress">{{ $orderHeads -> invoiceAddress }}</label>
+                            <label for="invoiceAddress">Alamat Invoice</label>
                             <input type="text" class="form-control" id="invoiceAddress" name="invoiceAddress" value="{{ $orderHeads -> invoiceAddress }}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="itemAddress">{{ $orderHeads -> itemAddress }}</label>
+                            <label for="itemAddress">Alamat Barang</label>
                             <input type="text" class="form-control" id="itemAddress" name="itemAddress" value="{{ $orderHeads -> itemAddress }}" readonly>
                         </div>
                         @php

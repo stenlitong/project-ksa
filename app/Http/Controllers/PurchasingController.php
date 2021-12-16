@@ -459,7 +459,7 @@ class PurchasingController extends Controller
         //         ->orWhere('status', 'like', 'Item Delivered By Supplier');
         // })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
 
-        $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
+        $orders = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
@@ -508,7 +508,7 @@ class PurchasingController extends Controller
         //         ->orWhere('status', 'like', 'Item Delivered By Supplier');
         // })->whereBetween('order_heads.created_at', [$start_date, $end_date])->orderBy('order_heads.updated_at', 'desc')->get();
 
-        $orders = OrderDetail::with(['item', 'supplier'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
+        $orders = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where(function($query){
             $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', $default_branch)->orderBy('order_heads.updated_at', 'desc')->get();
