@@ -82,7 +82,7 @@
                                     <tr>
                                         <td>{{ $od -> prDate }}</td>
                                         <td>{{ $od -> noPr }}</td>
-                                        <td>{{ $od -> supplier -> supplierName }}</td>
+                                        <td>{{ $od -> supplier }}</td>
                                         <td>{{ $od -> noSbk }}</td>
                                         <td>{{ $od -> boatName }}</td>
                                         <td>{{ $od -> item -> itemName }}</td>
