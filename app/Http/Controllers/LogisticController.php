@@ -478,7 +478,7 @@ class LogisticController extends Controller
         })->pluck('users.id');
         
         // Find all the items that has been approved from the user | last 6 month
-        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('suppliers', 'suppliers.id', '=', 'order_details.supplier_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
+        $orderHeads = OrderDetail::with('item')->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereIn('user_id', $users)->where('cabang', 'like', Auth::user()->cabang)->where('status', 'like', '%' . 'Order Completed'. '%')->whereMonth('order_heads.created_at', date('m'))->whereYear('order_heads.created_at', date('Y'))->orderBy('order_heads.updated_at', 'desc')->get();
 
         $items_below_stock = $this -> checkStock();
 
