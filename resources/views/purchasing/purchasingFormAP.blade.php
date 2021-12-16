@@ -125,8 +125,8 @@
         }
         td, th{
             word-wrap: break-word;
-            min-width: 160px;
-            max-width: 160px;
+            min-width: 100px;
+            max-width: 100px;
             text-align: center;
         }
         .icon{

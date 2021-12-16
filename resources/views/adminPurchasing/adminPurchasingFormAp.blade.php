@@ -159,58 +159,62 @@
                                 @method('put')
 
                                 @if($ap -> status == 'OPEN')
-                                    <button type="submit" class="btn btn-info mr-3">Submit</button>
+                                    @if($ap -> orderHead -> orderType == 'Barang')
+                                        <button type="submit" class="btn btn-info mr-3">Submit</button>
+                                    @endif
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-{{ $ap -> id }}">Close PO</button>
                                 @endif
                             </div>
-                            <div class="table-modal">
-                                <table class="table myTable table-refresh{{ $key }}">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th class="table-header">Date Uploaded</th>
-                                            <th class="table-header">Name</th>
-                                            <th class="table-header">Status</th>
-                                            <th class="table-header">Description</th>
-                                            <th class="table-header">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for($i = 1 ; $i <= 20 ; $i++)
-                                            @php
-                                                // Helper var
-                                                $status = 'status_partial' . $i;
-                                                $uploadTime = 'uploadTime_partial' . $i;
-                                                $description = 'description_partial' . $i;
-                                                $filename = 'doc_partial' . $i;
-                                                $path_to_file = 'path_to_file' . $i;
-                                            @endphp
+                            @if($ap -> orderHead -> orderType == 'Barang')
+                                <div class="table-modal">
+                                    <table class="table myTable table-refresh{{ $key }}">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                <td>{{ $ap -> $uploadTime }}</td>
-                                                <td>Partial {{ $i }}</td>
-                                                <td>
-                                                    @if($ap -> $status == 'On Review')
-                                                        <span style="color: gray; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @elseif($ap -> $status == 'Rejected')
-                                                        <span style="color: Red; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @else
-                                                        <span style="color: green; font-weight: bold">{{ $ap -> $status }}</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $ap -> $description }}</td>
-                                                <td>
-                                                    @if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED')
-                                                        <span>{{ $ap -> $filename }}</span>
-                                                    @else
-                                                        <input type="hidden" name="apListId" value="{{ $ap -> id }}">
-                                                        <input type="hidden" name="cabang" value="{{ $default_branch }}">
-                                                        <input type="file" name="doc_partial{{ $i }}" class="form-control">
-                                                    @endif
-                                                </td>
+                                                <th class="table-header">Date Uploaded</th>
+                                                <th class="table-header">Name</th>
+                                                <th class="table-header">Status</th>
+                                                <th class="table-header">Description</th>
+                                                <th class="table-header">Action</th>
                                             </tr>
-                                        @endfor
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @for($i = 1 ; $i <= 20 ; $i++)
+                                                @php
+                                                    // Helper var
+                                                    $status = 'status_partial' . $i;
+                                                    $uploadTime = 'uploadTime_partial' . $i;
+                                                    $description = 'description_partial' . $i;
+                                                    $filename = 'doc_partial' . $i;
+                                                    $path_to_file = 'path_to_file' . $i;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $ap -> $uploadTime }}</td>
+                                                    <td>Partial {{ $i }}</td>
+                                                    <td>
+                                                        @if($ap -> $status == 'On Review')
+                                                            <span style="color: gray; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @elseif($ap -> $status == 'Rejected')
+                                                            <span style="color: Red; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @else
+                                                            <span style="color: green; font-weight: bold">{{ $ap -> $status }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $ap -> $description }}</td>
+                                                    <td>
+                                                        @if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED')
+                                                            <span>{{ $ap -> $filename }}</span>
+                                                        @else
+                                                            <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                            <input type="hidden" name="cabang" value="{{ $default_branch }}">
+                                                            <input type="file" name="doc_partial{{ $i }}" class="form-control">
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endfor
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                             </form>
                             <div class="mt-4">
                                 <form action="/admin-purchasing/form-ap/ap-detail" method="POST">
