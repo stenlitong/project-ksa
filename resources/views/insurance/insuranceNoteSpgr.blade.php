@@ -47,10 +47,10 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">RP</span>
                                             </div>
-                                            <input type="number" class="form-control" min="1000" step="1000"  name="NilaiClaim" required id="NilaiClaim" >
+                                            <input type="number" class="form-control" name="NilaiClaim" required id="Nilai_Claim" >
                                         </div>
                                     </div>
-                                    {{-- <button type="submit" id="submitreject" class="btn btn-danger" style="display: none">Add Note</button> --}}
+                                   
                             </div>
                                 <div class="modal-footer">
                                     <button type="submit" id="submitreject2" class="btn btn-outline-dark">Add Note</button>

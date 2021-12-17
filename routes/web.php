@@ -88,13 +88,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('picincident')->name('picincident.')->group(function(){
         Route::get('/formclaim', 'picincidentController@formclaim');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
+        Route::delete('/formclaim/destroy/{claim}', [picincidentController::class , 'destroy']);
 
         Route::get('/spgr', 'picincidentController@spgr');
         Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);
-        // Route::post('/viewspgr', 'picincidentController@view');
 
         Route::get('/history', 'picincidentController@formclaimhistory');
-        Route::delete('/formclaim/destroy/{claim}', [picincidentController::class , 'destroy']);
        
     });
 

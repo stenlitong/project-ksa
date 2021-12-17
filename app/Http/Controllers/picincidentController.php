@@ -117,7 +117,7 @@ class picincidentController extends Controller
         return view('picincident.spgr', compact('uploadspgr'));
     }
 
-    public function spgrupload(Request $request){
+public function spgrupload(Request $request){
     // $uploadspgr = spgrfile::with('user')->where('id', '>=' , 1)->latest()->get();
         // dd($request);
         $year = date('Y');

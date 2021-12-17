@@ -31,6 +31,7 @@
                     }
                 </script>
             </h3>
+            <h1 class="h1-responsive ; text-center">History</h1>
             <table class="table" style="margin-top: 1%">
                 <thead class="thead-dark">
                     <tr>
@@ -43,20 +44,14 @@
                     </tr>
                 </thead>
 
-                @error('reasonbox')
-                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                    Alasan Wajib Diisi
-                </div>
-                @enderror
-
                 <tbody>
                     @forelse($spgrfile as $upspgr )
                     @for ( $r = 1 ; $r <= 7 ; $r++)
                     @php
                         $viewspgrfile = array('spgr','Letter_of_Discharge','CMC','surat_laut',
                                             'spb','lot_line','surat_keterangan_bank');
-                        $name = array('spgr','Letter of Discharge','CMC','surat laut',
-                                        'spb','lot line','surat keterangan bank');
+                        $name = array('SPGR','LETTER OF DISCHARGE','CMC','SURAT LAUT',
+                                        'SPB','LOT LINE','SURAT KETERANGAN BANK');
                         $spgrfile = 'spgrfile'.$r;
                         $time_upload ="time_upload".$r;
                         $stats ="status".$r;
@@ -66,14 +61,18 @@
                         <tr>
                            <td> </td> {{-- agar tidak keluar hasil kosong --}}
                         </tr>
-                    @else
+                    @elseif ($upspgr->$stats == 'on review')
+                        <tr>
+                             {{-- agar tidak keluar hasil on review --}}
+                        </tr>
+                    @elseif ($upspgr->$stats == 'rejected')
                     <tr>
-                        <td scope="col">{{ $r }}</td>
-                        <td scope="col" id="nama">{{$name[$r-1]}}</td>                                        
-                        <td scope="col" id="time">{{$upspgr->$time_upload}}</td>                                        
-                        <td scope="col" id="status">{{$upspgr->$stats}}</td>                                      
-                        <td scope="col" id="reason">{{$upspgr->$reason}}</td>                                        
-                        <td scope="col">
+                        <td class="table-danger">{{ $r }}</td>
+                        <td class="table-danger" id="nama">{{$name[$r-1]}}</td>                                        
+                        <td class="table-danger" id="time">{{$upspgr->$time_upload}}</td>                                        
+                        <td class="table-danger" id="status">{{$upspgr->$stats}}</td>                                      
+                        <td class="table-danger" id="reason">{{$upspgr->$reason}}</td>                                        
+                        <td class="table-danger">
                             <div class="col-md-auto">
                                 <form method="post" action="/insurance/viewspgr">
                                     @csrf
@@ -82,9 +81,26 @@
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                 </form>
                             </div>
-                        </div>
-                    </td>
+                        </td>
                     </tr>
+                    @else
+                        <tr>
+                            <td class="table-info">{{ $r }}</td>
+                            <td class="table-info" id="nama">{{$name[$r-1]}}</td>                                        
+                            <td class="table-info" id="time">{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-info" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-info" id="reason">{{$upspgr->$reason}}</td>                                        
+                            <td class="table-info">
+                                <div class="col-md-auto">
+                                    <form method="post" action="/insurance/viewspgr">
+                                        @csrf
+                                        <input type="hidden" name = 'cabang' value={{$upspgr->cabang}}>
+                                        <input type="hidden" name='viewspgrfile' value={{$viewspgrfile[$r-1]}} />
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
                     @endif
                     @endfor
                     @empty

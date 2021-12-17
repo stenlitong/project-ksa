@@ -18,7 +18,7 @@ class CreateNoteSpgrsTable extends Migration
             $table->date('DateNote')->nullable();
             $table->string('No_SPGR')->nullable();
             $table->string('Nama_Kapal')->nullable();
-            $table->decimal('Nilai_Claim', 12, 2)->nullable();
+            $table->decimal('Nilai_Claim', 14, 2)->nullable();
             $table->timestamps();
         });
     }
