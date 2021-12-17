@@ -682,7 +682,8 @@ class LogisticController extends Controller
                     SendItemBelowStockReportJob::dispatch($item->id, $item->cabang);
                 }
             }elseif(ItemBelowStock::where('item_id', $item -> id)->exists()){
-                ItemBelowStock::find($item -> id)->destroy();
+                // ItemBelowStock::find($item -> id)->destroy();
+                ItemBelowStock::where('item_id', $item -> id)->destroy();
             }
         }
 
