@@ -16,13 +16,13 @@ class CreateApListDetailsTable extends Migration
         Schema::create('ap_list_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('aplist_id');
+            $table->unsignedBigInteger('helper_cursor')->nullable();
 
             $table->string('supplierName');
             $table->string('noInvoice');
             $table->string('noFaktur');
             $table->string('noDo');
             $table->unsignedBigInteger('nominalInvoice');
-            $table->integer('tracker')->default(6);
             $table->string('additionalInformation')->nullable();
 
             $table->foreign('aplist_id')->references('id')->on('ap_lists')->onDelete('cascade')->onUpdate('cascade');

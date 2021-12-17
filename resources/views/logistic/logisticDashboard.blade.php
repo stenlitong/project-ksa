@@ -77,9 +77,9 @@
                             @endif
 
                             @if(strpos($oh -> status, 'Rejected') !== false)
-                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> reason}}</td>
+                                <td class="bg-white">{{ $oh -> reason}}</td>
                             @else
-                                <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $oh -> descriptions}}</td>
+                                <td class="bg-white">{{ $oh -> descriptions}}</td>
                             @endif
 
                             {{-- @if(strpos($oh -> status, 'Approved') !== false || strpos($oh -> status, 'Order Completed') !== false) --}}
@@ -112,11 +112,9 @@
                 </table>
             </div>
 
-            </div>
-
             {{-- Modal detail --}}
-            @foreach($orderHeads as $o)
-                <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+            @foreach($orderHeads as $oh)
+                <div class="modal fade" id="detail-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered modal-xl" role="document">
                         <div class="modal-content">
@@ -124,15 +122,15 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex-column">
                                         <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Order ID</strong></h5>
-                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->order_id }}</h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $oh -> order_id }}</h5>
                                     </div>
                                     <div class="d-flex-column ml-5">
                                         <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
-                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $oh -> boatName }}</h5>
                                     </div>
                                     <div class="d-flex-column ml-5">
                                         <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Request By</strong></h5>
-                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->user->name }}</h5>
+                                        <h5 class="modal-title" id="detailTitle" style="color: white">{{ $oh -> user -> name }}</h5>
                                     </div>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -140,10 +138,10 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                @if(strpos($o -> status, 'Order') !== false || strpos($o -> status, 'Delivered') !== false)
+                                @if(strpos($oh -> status, 'Order') !== false || strpos($oh -> status, 'Delivered') !== false)
                                     <div class="d-flex justify-content-around">
-                                        <h5>Nomor PR : {{ $o -> noPr }}</h5>
-                                        <h5>Tipe Order : {{ $o -> orderType }}</h5>
+                                        <h5>Nomor PR : {{ $oh -> noPr }}</h5>
+                                        <h5>Tipe Order : {{ $oh -> orderType }}</h5>
                                     </div>
                                 @endif
                                 <table class="table">
@@ -151,23 +149,23 @@
                                         <tr>
                                             <th scope="col">Item Barang</th>
                                             <th scope="col">Request Quantity</th>
-                                            @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                            @if(strpos($oh -> status, 'Items Ready') !== false || strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Request Completed') !== false)
                                                 <th scope="col">Accepted Quantity</th>
                                             @endif
 
-                                            {{-- @if(strpos($o -> status, 'Request') !== false || strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false) --}}
-                                            @if(strpos($o -> order_id, 'COID') !== false)
+                                            {{-- @if(strpos($oh -> status, 'Request') !== false || strpos($oh -> status, 'Items Ready') !== false || strpos($oh -> status, 'On Delivery') !== false) --}}
+                                            @if(strpos($oh -> order_id, 'COID') !== false)
                                                 <th scope="col">Terakhir Diberikan</th>
                                             @endif
                                             <th scope="col">Umur Barang</th>
                                             <th scope="col">Department</th>
                                             <th scope="col">Golongan</th>
                                             
-                                            @if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false)
+                                            @if(strpos($oh -> order_id, 'ROID') !== false || strpos($oh -> order_id, 'LOID') !== false)
                                                 <th scope="col">Status Barang</th>
                                             @endif
 
-                                            @if(strpos($o -> status, 'Request In Progress') !== false)
+                                            @if(strpos($oh -> status, 'Request In Progress') !== false)
                                                 <th scope="col">Stok Barang</th>
                                             @endif
 
@@ -175,15 +173,15 @@
                                     </thead>
                                     <tbody>
                                         @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $o -> id)
+                                            @if($od -> orders_id == $oh -> id)
                                                 <tr>
                                                     <td><strong>{{ $od -> item -> itemName }}</strong></td>
                                                     <td><strong>{{ $od -> quantity }} {{ $od -> item -> unit }}</strong></td>
-                                                    @if(strpos($o -> status, 'Items Ready') !== false || strpos($o -> status, 'On Delivery') !== false || strpos($o -> status, 'Request Completed') !== false)
+                                                    @if(strpos($oh -> status, 'Items Ready') !== false || strpos($oh -> status, 'On Delivery') !== false || strpos($oh -> status, 'Request Completed') !== false)
                                                         <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
                                                     @endif
 
-                                                    @if(strpos($o -> order_id, 'COID') !== false)
+                                                    @if(strpos($oh -> order_id, 'COID') !== false)
                                                         <td>{{ $od -> item -> lastGiven }}</td>
                                                     @endif
 
@@ -191,7 +189,7 @@
                                                     <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> item -> golongan }}</td>
 
-                                                    @if(strpos($o -> order_id, 'ROID') !== false || strpos($o -> order_id, 'LOID') !== false)
+                                                    @if(strpos($oh -> order_id, 'ROID') !== false || strpos($oh -> order_id, 'LOID') !== false)
                                                         <td>
                                                             @if($od -> orderItemState == 'Accepted')
                                                                 <span style="color: green; font-weight: bold;">{{ $od -> orderItemState }}</span>
@@ -216,10 +214,10 @@
                             </div> 
                             <div class="modal-footer">
                                 {{-- Check if the order is rejected, then do not show the approve & reject button --}}
-                                @if(strpos($o -> status, 'In Progress By Logistic') !== false)
+                                @if(strpos($oh -> status, 'In Progress By Logistic') !== false)
                                     {{-- Button to trigger modal 2 --}}
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
-                                    <a href="/logistic/order/{{ $o->id }}/approve" class="btn btn-primary">Approve</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $oh -> id }}">Reject</button>
+                                    <a href="/logistic/order/{{ $oh -> id }}/approve" class="btn btn-primary">Approve</a>
                                 @endif
                             </div>
                         </div>
@@ -248,6 +246,8 @@
                     </div>
                 </div>
             @endforeach
+            
+            </div>
         </main>
     </div>
 

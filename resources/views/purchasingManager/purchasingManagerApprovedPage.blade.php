@@ -102,7 +102,7 @@
                                 <button type="button" class="btn btn-danger mr-3" data-toggle="modal" data-target="#reject-order-{{ $orderHeads->id }}">Reject</button>
                                 <form method="POST" action="/purchasing-manager/order/{{ $orderHeads -> id }}/approve">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Approve</button>
                                 </form>
                             @elseif($orderHeads -> retries < 2 && strpos($orderHeads -> status, 'Order Being Finalized By Purchasing Manager') !== false)
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#revise-{{ $orderHeads -> id }}">Revise Order</button>
@@ -170,7 +170,7 @@
 
             {{-- Modal Reject Order --}}
             <div class="modal fade" id="reject-order-{{ $orderHeads -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
                         <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $orderHeads -> order_id }}</h5>
@@ -183,7 +183,7 @@
                         @method('patch')
                         <div class="modal-body"> 
                             <label for="reason">Alasan</label>
-                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order"></textarea>
+                            <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Reject Order" required></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -204,7 +204,18 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body"> 
+                        <form method="POST" action="/purchasing-manager/{{ $orderHeads -> id }}/revise-order">
+                            @csrf
+                            @method('patch')
+                            <div class="modal-body"> 
+                                <label for="reason">Alasan</label>
+                                <textarea class="form-control" name="reason" id="reason" rows="3" placeholder="Input Alasan Revisi Order" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                        {{-- <div class="modal-body"> 
                             <div class="d-flex flex-column justify-content-center align-items-center">
                                 <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
                                 <h5 class="font-weight-bold mt-3">Are You Sure To Revise This Order ?</h5>
@@ -212,7 +223,7 @@
                         </div>
                         <div class="modal-footer">
                             <a class="btn btn-primary" href="/purchasing-manager/{{ $orderHeads -> id }}/revise-order">Submit</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

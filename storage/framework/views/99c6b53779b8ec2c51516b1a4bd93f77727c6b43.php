@@ -218,7 +218,7 @@ unset($__errorArgs, $__bag); ?>
                                 <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><strong><?php echo e($oh -> order_id); ?></strong></td>
-                                    <?php if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
+                                    <?php if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false): ?>
                                         <td style="color: red; font-weight: bold"><?php echo e($oh -> status); ?></td>
                                     <?php elseif(strpos($oh -> status, 'Completed') !== false): ?>
                                         <td style="color: green; font-weight: bold"><?php echo e($oh -> status); ?></td>
@@ -228,7 +228,7 @@ unset($__errorArgs, $__bag); ?>
                                         <td><?php echo e($oh -> status); ?></td>
                                     <?php endif; ?>
                                     <td>
-                                        <?php if(strpos($oh -> status, 'Rejected By Purchasing') !== false || strpos($oh -> status, 'Rechecked') !== false): ?>
+                                        <?php if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false): ?>
                                             <?php echo e($oh -> reason); ?>
 
                                         <?php else: ?>
@@ -257,16 +257,17 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
-            
-            <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="modal fade" id="detail-<?php echo e($o->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+            <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="modal fade" id="detail-<?php echo e($oh->id); ?>" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-around">
-                                    <h5><span style="color: white">Order : <?php echo e($o->order_id); ?></span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Processed By : <?php echo e($o->approvedBy); ?></span></h5>
+                                    <h5><span style="color: white">Order : <?php echo e($oh -> order_id); ?></span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : <?php echo e($oh -> approvedBy); ?></span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Order : <?php echo e($oh -> orderType); ?></span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Pesanan : <?php echo e($oh -> itemType); ?></span></h5>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -274,8 +275,8 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                             <div class="modal-body">
                                 <div class="d-flex justify-content-around mb-3">
-                                    <h5>Nomor PR : <?php echo e($o -> noPr); ?></h5>
-                                    <h5>Nomor PO : <?php echo e($o -> noPo); ?></h5>
+                                    <h5>Nomor PR : <?php echo e($oh -> noPr); ?></h5>
+                                    <h5>Nomor PO : <?php echo e($oh -> noPo); ?></h5>
                                 </div>
                                 <table class="table">
                                     <thead class="thead-dark">
@@ -290,7 +291,7 @@ unset($__errorArgs, $__bag); ?>
                                     </thead>
                                     <tbody>
                                         <?php $__currentLoopData = $orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $od): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php if($od -> orders_id == $o -> id): ?>
+                                            <?php if($od -> orders_id == $oh -> id): ?>
                                                 <tr>
                                                     <td><strong><?php echo e($od -> item -> itemName); ?></strong></td>
                                                     <td><?php echo e($od -> quantity); ?> <?php echo e($od -> item -> unit); ?></td>
@@ -312,29 +313,29 @@ unset($__errorArgs, $__bag); ?>
                             </div> 
                             <div class="modal-footer">
                                 
-                                <?php if($o -> status == 'Order In Progress By Purchasing'): ?>
+                                <?php if($oh -> status == 'Order In Progress By Purchasing'): ?>
                                     
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($o -> id); ?>">Reject</button>
-                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary mr-3">Approve</a>
-                                <?php elseif(strpos($o -> status, 'Rechecked') !== false): ?>
-                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/approve" class="btn btn-primary mr-3">Review Order</a>
-                                <?php elseif(strpos($o -> status, 'Revised') !== false): ?>
-                                    <a href="/purchasing/order/<?php echo e($o->id); ?>/revise" class="btn btn-primary mr-3">Revise Order</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-<?php echo e($oh -> id); ?>">Reject</button>
+                                    <a href="/purchasing/order/<?php echo e($oh -> id); ?>/approve" class="btn btn-primary mr-3">Approve</a>
+                                <?php elseif(strpos($oh -> status, 'Rechecked') !== false): ?>
+                                    <a href="/purchasing/order/<?php echo e($oh -> id); ?>/approve" class="btn btn-primary mr-3">Review Order</a>
+                                <?php elseif(strpos($oh -> status, 'Revised') !== false): ?>
+                                    <a href="/purchasing/order/<?php echo e($oh -> id); ?>/revise" class="btn btn-primary mr-3">Revise Order</a>
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="reject-order-<?php echo e($o -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                <div class="modal fade" id="reject-order-<?php echo e($oh -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($o -> order_id); ?></h5>
+                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order <?php echo e($oh -> order_id); ?></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" action="/purchasing/order/<?php echo e($o->id); ?>/reject">
+                        <form method="POST" action="/purchasing/order/<?php echo e($oh -> id); ?>/reject">
                             <?php echo csrf_field(); ?>
                             <div class="modal-body"> 
                                 <label for="reason">Alasan</label>
@@ -348,7 +349,7 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            
+
             
             <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="modal fade" id="edit-rating-<?php echo e($s -> id); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

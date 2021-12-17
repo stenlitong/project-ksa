@@ -73,10 +73,6 @@ class PurchasingController extends Controller
             $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
-        // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
-
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
@@ -99,6 +95,10 @@ class PurchasingController extends Controller
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
             
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
@@ -111,7 +111,11 @@ class PurchasingController extends Controller
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $completed = $orderHeads->count();
-    
+            
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+            
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
@@ -126,10 +130,6 @@ class PurchasingController extends Controller
         $users = User::whereHas('roles', function($query){
             $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
-
-        // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
         // Count the completed & in progress order
         $completed = OrderHead::where(function($query){
@@ -154,6 +154,10 @@ class PurchasingController extends Controller
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
 
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
@@ -166,10 +170,14 @@ class PurchasingController extends Controller
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
     
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     

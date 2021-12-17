@@ -101,9 +101,8 @@ unset($__errorArgs, $__bag); ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-            </div>
 
-            </main>
+            </div>
 
             
             <?php $__currentLoopData = $orderHeads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -215,6 +214,8 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            </main>
         </div>
 
         <style>

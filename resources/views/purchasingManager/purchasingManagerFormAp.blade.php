@@ -182,6 +182,7 @@
                                                                         @csrf
                                                                         <input type="hidden" name="filename" value="{{ $filename }}">
                                                                         <input type="hidden" name="apListId" value="{{ $ap -> id }}">
+                                                                        <input type="hidden" name="pathToFile" value="{{ $path_to_file }}">
                                                                         <button class="btn_download" type="submit"><span class="icon" data-feather="download"></span></button>
                                                                     </form>
                                                                     
@@ -249,8 +250,10 @@
                             @endif
                                 
                             <div class="mt-4">
-                                @forelse($apListDetail as $apDetail)
-                                    @if($apDetail['aplist_id'] == $ap -> id)
+                                @foreach($apListDetail as $apDetail)
+                                    @if(!in_array($ap -> id, $check_ap_in_array))
+                                        <h5>Data Not Found.</h5>
+                                    @elseif($apDetail['aplist_id'] == $ap -> id)
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="supplierName">Nama Supplier</label>
@@ -267,7 +270,7 @@
                                                 <input type="text" class="form-control" id="noInvoice" placeholder="Input Nomor Invoice" value="{{ $apDetail['noInvoice'] }}" readonly>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="nominalInvoice">Nominal Invoice</label>
+                                                <label for="nominalInvoice">Nominal Invoice Yang Harus Dibayar</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="nominalInvoice" placeholder="Input Nominal Invoice" value="Rp. {{ number_format($apDetail['nominalInvoice'], 2, ",", ".") }}" readonly>
                                                 </div>
@@ -288,11 +291,7 @@
                                             <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4" readonly>{{ $apDetail['additionalInformation'] }}</textarea>
                                         </div>
                                     @endif
-                                @empty
-                                    <div class="d-flex justify-content-center">
-                                        <h5>No Data Found.</h5>
-                                    </div>
-                                @endforelse
+                                @endforeach
                             </div>
                         </div> 
                     </div>

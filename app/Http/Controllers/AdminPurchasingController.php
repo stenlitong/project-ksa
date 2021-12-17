@@ -166,7 +166,7 @@ class AdminPurchasingController extends Controller
             'additionalInformation' => 'nullable'
         ]);
 
-        ApListDetail::create([
+        $apListDetail = ApListDetail::create([
             'aplist_id' => $request -> apListId,
             'supplierName' => $request -> supplierName,
             'noInvoice' => $request -> noInvoice,
@@ -174,6 +174,10 @@ class AdminPurchasingController extends Controller
             'noDo' => $request -> noDo,
             'nominalInvoice' => $request -> nominalInvoice,
             'additionalInformation' => $request -> additionalInformation
+        ]);
+
+        $apListDetail->update([
+            'helper_cursor' => $apListDetail -> id
         ]);
 
         return redirect()->back()->with('openApListModalWithId', $request -> apListId);
@@ -259,6 +263,14 @@ class AdminPurchasingController extends Controller
         $apList = ApList::with('orderHead')->where('cabang', 'like', $default_branch)->join('ap_list_details', 'ap_list_details.aplist_id', '=', 'ap_lists.id')->whereBetween('ap_lists.created_at', [$start_date, $end_date])->orderBy('ap_lists.created_at', 'desc')->get();
 
         return view('adminPurchasing.adminPurchasingReportApPage', compact('default_branch', 'str_month', 'apList'));
+    }
+
+    public function deleteApDetail($helper_cursor){
+        // Find the Ap List Detail, then delete
+        ApListDetail::where('id', $helper_cursor)->delete();
+
+        // Refresh page
+        return redirect()->back()->with('status', 'Delete Successfully');
     }
 
     public function exportReportAp(Excel $excel, $branch){

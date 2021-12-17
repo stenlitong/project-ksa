@@ -69,35 +69,33 @@
     </div>
 
     <?php if(Auth::user()->hasRole('logistic') || Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('supervisorLogisticMaster')): ?>
-            <div class="modal fade" id="itemBelowStockModal" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-danger">
-                            <h5 class="modal-title" style="color: white" id="rejectTitle">Notification on Stocks</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div id="refreshItemBelowStock">
-                            <?php $__empty_1 = true; $__currentLoopData = $items_below_stock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <div class="card bg-light my-2 mx-2">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-around">
-                                            <span class="feather-icon" data-feather="file"></span>
-                                            <div class="mr-5">
-                                                <h5 class="card-title font-weight-bold text-center"><?php echo e($i -> itemName); ?></h5>
-                                                <p class="card-text mt-3"><span class="text-danger font-weight-bold">Warning !</span> stock is below <?php echo e($i -> stock_defficiency); ?> ! please check immediately ! <span class="font-weight-bold">(<?php echo e($i->created_at->format('d-m-Y')); ?>)</span></p>
-                                            </div>
+        <div class="modal fade" id="itemBelowStockModal" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" style="color: white" id="rejectTitle">Notification on Stocks</h5>
+                        
+                    </div>
+                    <div class="refreshItemBelowStock">
+                        <?php $__empty_1 = true; $__currentLoopData = $items_below_stock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <div class="card bg-light my-2 mx-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="feather-icon" data-feather="file"></span>
+                                        <div class="mr-5">
+                                            <h5 class="card-title font-weight-bold text-center"><?php echo e($i -> itemName); ?></h5>
+                                            <p class="card-text mt-3"><span class="text-danger font-weight-bold">Warning !</span> stock is below <?php echo e($i -> stock_defficiency); ?> ! please check immediately ! <span class="font-weight-bold">(<?php echo e($i->created_at->format('d-m-Y')); ?>)</span></p>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                <h5>No Items Found</h5>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <h5>No Items Found</h5>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
+        </div>
     <?php endif; ?>
 
 </body>
@@ -146,10 +144,18 @@
 </style>
 
 <script>
-    function refreshDiv(){
-        $('#refreshItemBelowStock').load(location.href + ' #refreshItemBelowStock')
-    }
-    setInterval(refreshDiv, 60000);
+    // function refreshDiv(){
+    //     $('#refreshItemBelowStock').load(location.href + ' #refreshItemBelowStock')
+    // }
+    // setInterval(refreshDiv, 60000);
+
+    setInterval(() => {
+        for(i = 0 ; i <= id - 1 ; i++){
+            $('.refreshItemBelowStock' + i).empty()
+            $('.refreshItemBelowStock' + i).load(location.href + ' .refreshItemBelowStock' + i)
+        }
+    }, 10000)
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

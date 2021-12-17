@@ -82,10 +82,6 @@ class PurchasingManagerController extends Controller
             $query->where('name', 'logistic');
         })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
-        // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
-
         $in_progress = OrderHead::where(function($query){
             $query->where('status', 'like', 'Order In Progress By Supervisor')
             ->orWhere('status', 'like', '%' . 'In Progress By Purchasing' . '%')
@@ -108,6 +104,10 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
             
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
@@ -117,10 +117,14 @@ class PurchasingManagerController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $completed = $orderHeads->count();
-    
+            
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
@@ -135,11 +139,7 @@ class PurchasingManagerController extends Controller
         // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
         $users = User::whereHas('roles', function($query){
             $query->where('name', 'logistic');
-        })->where('cabang', 'like', $default_branch)->pluck('users.id');
-
-        // Then find all the order details from the orderHeads
-        $order_id = OrderHead::whereIn('user_id', $users)->whereYear('created_at', date('Y'))->pluck('order_id');
-        $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+        })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
 
         // Count the completed & in progress order
         $completed = OrderHead::where(function($query){
@@ -153,7 +153,7 @@ class PurchasingManagerController extends Controller
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
+            })->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(6);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order In Progress By Supervisor')
@@ -163,6 +163,10 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
             })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->count();
+
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
 
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
@@ -176,10 +180,14 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
     
             $in_progress = $orderHeads->count();
-    
+            
+            // Then find all the order details from the orderHeads
+            $order_id = $orderHeads->pluck('id');
+            $orderDetails = OrderDetail::with('item')->whereIn('orders_id', $order_id)->get();
+
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
@@ -242,13 +250,11 @@ class PurchasingManagerController extends Controller
         };
 
         // Reset the price before ppn and discount
-        $sum_previous_price = OrderDetail::where('orders_id', $orderHeads -> id)->sum('totalItemPrice');
-
         // Then update the status, order tracker, also the reason as well
         OrderHead::find($orderHeads -> id)->update([
             'order_tracker' => 5,
             'status' => 'Order Being Rechecked By Purchasing',
-            'totalPrice' => $sum_previous_price,
+            'totalPrice' => $orderHeads -> totalPriceBeforeCalculation,
             'reason' => $request -> reason
         ]);
 
@@ -256,9 +262,13 @@ class PurchasingManagerController extends Controller
         return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('statusB', 'Updated Successfully');
     }
 
-    public function reviseOrder(OrderHead $orderHeads){
+    public function reviseOrder(Request $request, OrderHead $orderHeads){
         $default_branch = $orderHeads -> cabang;
 
+        $request -> validate([
+            'reason' => 'string|required'
+        ]);
+        
         // Check if the order already been processed or not
         if($orderHeads -> order_tracker == 6){
             return redirect('/purchasing-manager/dashboard/' . $default_branch)->with('errorB', 'Order Already Been Processed');
@@ -414,13 +424,15 @@ class PurchasingManagerController extends Controller
         $apListId = $apList -> pluck('id');
         $apListDetail = ApListDetail::with('apList')->whereIn('aplist_id', $apListId)->latest()->get()->unique('aplist_id');
 
+        $check_ap_in_array = $apListDetail -> pluck('aplist_id') ->toArray();
+        
         // Get all the supplier
         $suppliers = Supplier::latest()->get();
 
         // Default branch is Jakarta
         $default_branch = 'Jakarta';
 
-        return view('purchasingManager.purchasingManagerFormAp', compact('apList', 'default_branch', 'suppliers', 'apListDetail'));
+        return view('purchasingManager.purchasingManagerFormAp', compact('apList', 'default_branch', 'suppliers', 'apListDetail', 'check_ap_in_array'));
     }
 
     public function formApPageBranch($branch){

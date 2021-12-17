@@ -232,7 +232,7 @@
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
+                                                    <input class="input-sm" type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
@@ -242,7 +242,7 @@
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="supplier" name="supplier">
+                                                    <select class="form-control input-sm" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         @foreach($suppliers as $s)
                                                             <option class="h-25 w-50" value="{{ $s -> supplierName }}">{{ $s -> supplierName }}</option>

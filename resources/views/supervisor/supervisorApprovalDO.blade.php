@@ -126,6 +126,10 @@
             .alert{
                 text-align: center;
             }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
+            }
         </style>
 
         <script type="text/javascript">

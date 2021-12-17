@@ -11,6 +11,12 @@
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
                 <h1 class="d-flex justify-content-center mb-4">Reports List AP Cabang {{ $default_branch }} ({{ $str_month }})</h1>
                 
+                @if(session('status'))
+                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <div class="d-flex justify-content-between mr-3">
                     <div class="p-2">
                         <select name="cabang" class="form-select" onchange="window.location = this.value;">
@@ -59,9 +65,11 @@
                             >Berau</option>
                         </select>
                     </div>
+
                     <div class="p-2 mr-auto">
                         <input type="text" id="myInput" class="form-control" placeholder="Search by Invoice or Supplier" name="search" style="width: 15vw">
                     </div>
+
                     @if(count($apList) > 0)
                         <div class="p-2">
                             <a href="/purchasing-manager/report-ap/{{ $default_branch }}/export" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
@@ -70,8 +78,8 @@
                 </div>
 
                 <div id="content">
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
-                        <table id="myTable" class="table table-bordered sortable">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead overflow-auto">
+                        <table id="myTable" class="table table-bordered">
                             <thead class="thead bg-danger">
                                 <tr>
                                     <th scope="col">Nama Supplier</th>
@@ -82,6 +90,7 @@
                                     <th scope="col">No. PR</th>
                                     <th scope="col">Nominal Invoice</th>
                                     <th scope="col">Keterangan</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,6 +104,13 @@
                                         <td>{{ $ap -> orderHead -> noPr }}</td>
                                         <td>Rp. {{ number_format($ap -> nominalInvoice, 2, ",", ".") }}</td>
                                         <td>{{ $ap -> additionalInformation}}</td>
+                                        <td>
+                                            <form action="/admin-purchasing/report-ap/{{ $ap -> helper_cursor }}/delete" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-warning text-white">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

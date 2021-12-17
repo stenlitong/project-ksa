@@ -96,6 +96,10 @@
             text-align: center;
             background-color: white;
         }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
     </style>
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection

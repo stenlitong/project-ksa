@@ -162,58 +162,62 @@
                                 <?php echo method_field('put'); ?>
 
                                 <?php if($ap -> status == 'OPEN'): ?>
-                                    <button type="submit" class="btn btn-info mr-3">Submit</button>
+                                    <?php if($ap -> orderHead -> itemType == 'Barang'): ?>
+                                        <button type="submit" class="btn btn-info mr-3">Submit</button>
+                                    <?php endif; ?>
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-<?php echo e($ap -> id); ?>">Close PO</button>
                                 <?php endif; ?>
                             </div>
-                            <div class="table-modal">
-                                <table class="table myTable table-refresh<?php echo e($key); ?>">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th class="table-header">Date Uploaded</th>
-                                            <th class="table-header">Name</th>
-                                            <th class="table-header">Status</th>
-                                            <th class="table-header">Description</th>
-                                            <th class="table-header">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php for($i = 1 ; $i <= 20 ; $i++): ?>
-                                            <?php
-                                                // Helper var
-                                                $status = 'status_partial' . $i;
-                                                $uploadTime = 'uploadTime_partial' . $i;
-                                                $description = 'description_partial' . $i;
-                                                $filename = 'doc_partial' . $i;
-                                                $path_to_file = 'path_to_file' . $i;
-                                            ?>
+                            <?php if($ap -> orderHead -> itemType == 'Barang'): ?>
+                                <div class="table-modal">
+                                    <table class="table myTable table-refresh<?php echo e($key); ?>">
+                                        <thead class="thead-dark">
                                             <tr>
-                                                <td><?php echo e($ap -> $uploadTime); ?></td>
-                                                <td>Partial <?php echo e($i); ?></td>
-                                                <td>
-                                                    <?php if($ap -> $status == 'On Review'): ?>
-                                                        <span style="color: gray; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                    <?php elseif($ap -> $status == 'Rejected'): ?>
-                                                        <span style="color: Red; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                    <?php else: ?>
-                                                        <span style="color: green; font-weight: bold"><?php echo e($ap -> $status); ?></span>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td><?php echo e($ap -> $description); ?></td>
-                                                <td>
-                                                    <?php if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED'): ?>
-                                                        <span><?php echo e($ap -> $filename); ?></span>
-                                                    <?php else: ?>
-                                                        <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
-                                                        <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
-                                                        <input type="file" name="doc_partial<?php echo e($i); ?>" class="form-control">
-                                                    <?php endif; ?>
-                                                </td>
+                                                <th class="table-header">Date Uploaded</th>
+                                                <th class="table-header">Name</th>
+                                                <th class="table-header">Status</th>
+                                                <th class="table-header">Description</th>
+                                                <th class="table-header">Action</th>
                                             </tr>
-                                        <?php endfor; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            <?php for($i = 1 ; $i <= 20 ; $i++): ?>
+                                                <?php
+                                                    // Helper var
+                                                    $status = 'status_partial' . $i;
+                                                    $uploadTime = 'uploadTime_partial' . $i;
+                                                    $description = 'description_partial' . $i;
+                                                    $filename = 'doc_partial' . $i;
+                                                    $path_to_file = 'path_to_file' . $i;
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo e($ap -> $uploadTime); ?></td>
+                                                    <td>Partial <?php echo e($i); ?></td>
+                                                    <td>
+                                                        <?php if($ap -> $status == 'On Review'): ?>
+                                                            <span style="color: gray; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php elseif($ap -> $status == 'Rejected'): ?>
+                                                            <span style="color: Red; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php else: ?>
+                                                            <span style="color: green; font-weight: bold"><?php echo e($ap -> $status); ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td><?php echo e($ap -> $description); ?></td>
+                                                    <td>
+                                                        <?php if($ap -> $status == 'On Review' || $ap -> $status == 'Approved' || $ap -> status == 'CLOSED'): ?>
+                                                            <span><?php echo e($ap -> $filename); ?></span>
+                                                        <?php else: ?>
+                                                            <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
+                                                            <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
+                                                            <input type="file" name="doc_partial<?php echo e($i); ?>" class="form-control">
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endfor; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php endif; ?>
                             </form>
                             <div class="mt-4">
                                 <form action="/admin-purchasing/form-ap/ap-detail" method="POST">
@@ -222,47 +226,77 @@
                                     <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="supplierName">Nama Supplier</label>
-                                        <select class="form-control" id="supplierName" name="supplierName">
-                                            <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
-                                            <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
+                                            <label for="supplierName">Nama Supplier</label>
+                                            <select class="form-control" id="supplierName" name="supplierName"
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('disabled'); ?>
+
+                                                <?php endif; ?>
+                                            >
+                                                <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
+                                                <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="noPr">Nomor PR</label>
-                                        <input type="text" class="form-control" name="noPr" id="noPr" value="<?php echo e($ap -> orderHead -> noPr); ?>" readonly>
+                                            <label for="noPr">Nomor PR</label>
+                                            <input type="text" class="form-control" name="noPr" id="noPr" value="<?php echo e($ap -> orderHead -> noPr); ?>" readonly>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="noInvoice">Nomor Invoice</label>
-                                        <input type="text" class="form-control" name="noInvoice" id="noInvoice" placeholder="Input Nomor Invoice" required>
+                                            <label for="noInvoice">Nomor Invoice</label>
+                                            <input type="text" class="form-control" name="noInvoice" id="noInvoice" placeholder="Input Nomor Invoice" required
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('readonly'); ?>
+
+                                                <?php endif; ?>
+                                            >
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="nominalInvoice">Nominal Invoice</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp. </div>
+                                            <label for="nominalInvoice">Nominal Invoice Yang Harus Dibayar</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp. </div>
+                                                </div>
+                                                <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required 
+                                                    <?php if($ap -> status == 'CLOSED'): ?>
+                                                        <?php echo e('readonly'); ?>
+
+                                                    <?php endif; ?>
+                                                >
                                             </div>
-                                            <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required>
-                                        </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                        <label for="noFaktur">Nomor Faktur Pajak</label>
-                                        <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak" name="noFaktur" required>
+                                            <label for="noFaktur">Nomor Faktur Pajak</label>
+                                            <input type="text" class="form-control" id="noFaktur" placeholder="Input Nomor Faktur Pajak" name="noFaktur" required
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('readonly'); ?>
+
+                                                <?php endif; ?>
+                                            >
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <label for="noDo">Nomor DO</label>
-                                        <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required>
+                                            <label for="noDo">Nomor DO</label>
+                                            <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('readonly'); ?>
+
+                                                <?php endif; ?>
+                                            >
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="additionalInformation">Keterangan (optional)</label>
-                                        <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"></textarea>
+                                        <textarea class="form-control" name="additionalInformation" id="additionalInformation" placeholder="Input Keterangan..." rows="4"
+                                            <?php if($ap -> status == 'CLOSED'): ?>
+                                                <?php echo e('readonly'); ?>
+
+                                            <?php endif; ?>
+                                        ></textarea>
                                     </div>
                                     <?php if($ap -> status != 'CLOSED'): ?>
                                         <div class="d-flex justify-content-center">
@@ -314,8 +348,8 @@
             }
             th, td{
                 word-wrap: break-word;
-                min-width: 80px;
-                max-width: 80px;
+                min-width: 100px;
+                max-width: 100px;
                 text-align: center;
             }
             .table-properties{

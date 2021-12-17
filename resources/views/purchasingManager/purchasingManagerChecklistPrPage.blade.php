@@ -62,8 +62,8 @@
                 </div>
 
                 <div id="content">
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
-                        <table id="myTable" class="table table-bordered sortable">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead overflow-auto">
+                        <table id="myTable" class="table table-bordered">
                             <thead class="thead bg-danger">
                                 <tr>
                                     <th scope="col">Tanggal PR</th>
@@ -105,7 +105,7 @@
 
         .my-custom-scrollbar {
             position: relative;
-            height: 900px;
+            height: 800px;
             overflow: auto;
         }
         .table-wrapper-scroll-y {

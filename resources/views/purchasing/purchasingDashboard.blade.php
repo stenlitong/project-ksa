@@ -207,7 +207,7 @@
                                 @foreach($orderHeads as $oh)
                                 <tr>
                                     <td><strong>{{ $oh -> order_id }}</strong></td>
-                                    @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false)
+                                    @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false)
                                         <td style="color: red; font-weight: bold">{{ $oh -> status}}</td>
                                     @elseif(strpos($oh -> status, 'Completed') !== false)
                                         <td style="color: green; font-weight: bold">{{ $oh -> status}}</td>
@@ -217,7 +217,7 @@
                                         <td>{{ $oh -> status }}</td>
                                     @endif
                                     <td>
-                                        @if(strpos($oh -> status, 'Rejected By Purchasing') !== false || strpos($oh -> status, 'Rechecked') !== false)
+                                        @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false)
                                             {{ $oh -> reason }}
                                         @else
                                             {{ $oh -> descriptions }}
@@ -243,18 +243,17 @@
                 </div>
             </div>
 
-            {{-- Modal detail --}}
-            @foreach($orderHeads as $o)
-                <div class="modal fade" id="detail-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+            @foreach($orderHeads as $oh)
+                <div class="modal fade" id="detail-{{ $oh->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-around">
-                                    <h5><span style="color: white">Order : {{ $o -> order_id }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $o -> approvedBy }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Tipe Order : {{ $o -> orderType }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Tipe Pesanan{{ $o -> itemType }}</span></h5>
+                                    <h5><span style="color: white">Order : {{ $oh -> order_id }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $oh -> approvedBy }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Order : {{ $oh -> orderType }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Pesanan : {{ $oh -> itemType }}</span></h5>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -262,8 +261,8 @@
                             </div>
                             <div class="modal-body">
                                 <div class="d-flex justify-content-around mb-3">
-                                    <h5>Nomor PR : {{ $o -> noPr }}</h5>
-                                    <h5>Nomor PO : {{ $o -> noPo }}</h5>
+                                    <h5>Nomor PR : {{ $oh -> noPr }}</h5>
+                                    <h5>Nomor PO : {{ $oh -> noPo }}</h5>
                                 </div>
                                 <table class="table">
                                     <thead class="thead-dark">
@@ -278,7 +277,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $o -> id)
+                                            @if($od -> orders_id == $oh -> id)
                                                 <tr>
                                                     <td><strong>{{ $od -> item -> itemName }}</strong></td>
                                                     <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
@@ -300,29 +299,29 @@
                             </div> 
                             <div class="modal-footer">
                                 {{-- Check if the order is already progressed to the next stage/rejected, then do not show the approve & reject button --}}
-                                @if($o -> status == 'Order In Progress By Purchasing')
+                                @if($oh -> status == 'Order In Progress By Purchasing')
                                     {{-- Button to trigger modal 2 --}}
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $o -> id }}">Reject</button>
-                                    <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary mr-3">Approve</a>
-                                @elseif(strpos($o -> status, 'Rechecked') !== false)
-                                    <a href="/purchasing/order/{{ $o->id }}/approve" class="btn btn-primary mr-3">Review Order</a>
-                                @elseif(strpos($o -> status, 'Revised') !== false)
-                                    <a href="/purchasing/order/{{ $o->id }}/revise" class="btn btn-primary mr-3">Revise Order</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $oh -> id }}">Reject</button>
+                                    <a href="/purchasing/order/{{ $oh -> id }}/approve" class="btn btn-primary mr-3">Approve</a>
+                                @elseif(strpos($oh -> status, 'Rechecked') !== false)
+                                    <a href="/purchasing/order/{{ $oh -> id }}/approve" class="btn btn-primary mr-3">Review Order</a>
+                                @elseif(strpos($oh -> status, 'Revised') !== false)
+                                    <a href="/purchasing/order/{{ $oh -> id }}/revise" class="btn btn-primary mr-3">Revise Order</a>
                                 @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="reject-order-{{ $o -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $o -> order_id }}</h5>
+                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $oh -> order_id }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" action="/purchasing/order/{{ $o->id }}/reject">
+                        <form method="POST" action="/purchasing/order/{{ $oh -> id }}/reject">
                             @csrf
                             <div class="modal-body"> 
                                 <label for="reason">Alasan</label>
@@ -336,7 +335,7 @@
                     </div>
                 </div>
             @endforeach
-            
+
             {{-- Modal for edit supplier ratings --}}
             @foreach($suppliers as $s)
                 <div class="modal fade" id="edit-rating-{{ $s -> id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

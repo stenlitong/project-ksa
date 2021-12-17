@@ -92,9 +92,8 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
 
-            </main>
+            </div>
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $o)
@@ -206,6 +205,8 @@
                     </div>
                 </div>
             @endforeach
+
+            </main>
         </div>
 
         <style>

@@ -160,7 +160,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-            <?php $__errorArgs = ['orderType'];
+            <?php $__errorArgs = ['itemType'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -267,21 +267,21 @@ unset($__errorArgs, $__bag); ?>
                             <label for="radioButton">Tipe Order</label>
                             <div class="form-group">
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType1" value="Barang" checked>
-                                    <label class="form-check-label" for="orderType1">
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType1" value="Barang" checked>
+                                    <label class="form-check-label" for="itemType1">
                                         Barang
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="orderType" id="orderType2" value="Jasa">
-                                    <label class="form-check-label" for="orderType2">
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType2" value="Jasa">
+                                    <label class="form-check-label" for="itemType2">
                                         Jasa
                                     </label>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center mt-5">
-                                <a href="/dashboard" class="btn btn-danger mr-3">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="d-flex justify-content-center mt-2">
+                                <a href="/dashboard" class="btn btn-danger btn-lg mr-3">Cancel</a>
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -313,7 +313,7 @@ unset($__errorArgs, $__bag); ?>
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="1" step="0.01">
+                                                    <input class="input-sm" type="number" class="form-control" id="itemPrice" name="itemPrice" value="<?php echo e($od -> itemPrice); ?>" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
@@ -323,7 +323,7 @@ unset($__errorArgs, $__bag); ?>
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="supplier" name="supplier">
+                                                    <select class="form-control input-sm" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>

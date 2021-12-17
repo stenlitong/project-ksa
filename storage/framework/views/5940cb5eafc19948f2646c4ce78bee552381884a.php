@@ -139,7 +139,7 @@ unset($__errorArgs, $__bag); ?>
                             <div class="form-group p-2">
                                 <label for="quantity" class="mb-3">Quantity</label>
                                 <input name="quantity" type="number" min="1" class="form-control" id="quantity" placeholder="Input quantity dalam angka..."
-                                    style="height: 50px">
+                                    style="height: 50px" required>
                             </div>
                             <div class="form-group p-2">
                                 <label for="department" class="mb-3">Department</label>

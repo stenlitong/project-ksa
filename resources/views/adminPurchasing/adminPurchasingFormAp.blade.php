@@ -250,7 +250,7 @@
                                             >
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="nominalInvoice">Nominal Invoice</label>
+                                            <label for="nominalInvoice">Nominal Invoice Yang Harus Dibayar</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">Rp. </div>

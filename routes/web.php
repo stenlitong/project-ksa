@@ -167,7 +167,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         Route::get('/order/{orderHeads}/order-detail', [PurchasingManagerController::class, 'approveOrderPage']);
         Route::post('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrder']);
         Route::patch('/order/{orderHeads}/reject', [PurchasingManagerController::class, 'rejectOrder']);
-        Route::get('/{orderHeads}/revise-order', [PurchasingManagerController::class, 'reviseOrder']);
+        Route::patch('/{orderHeads}/revise-order', [PurchasingManagerController::class, 'reviseOrder']);
         Route::get('/{orderHeads}/finalize-order', [PurchasingManagerController::class, 'finalizeOrder']);
 
         // AP Page
@@ -202,6 +202,7 @@ Route::group(['middleware' => ['PreventBackHistory', 'auth']], function(){
         // Report AP Page
         Route::get('/report-ap', [AdminPurchasingController::class, 'reportApPage'])->name('reportAp');
         Route::get('/report-ap/{branch}', [AdminPurchasingController::class, 'reportApPageBranch']);
+        Route::delete('/report-ap/{helper_cursor}/delete', [AdminPurchasingController::class, 'deleteApDetail']);
         Route::get('/report-ap/download/{branch}', [AdminPurchasingController::class, 'downloadReportAp']);
 
         // Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
