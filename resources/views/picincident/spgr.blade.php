@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'PicIncident-spgr')
+@section('title', 'insiden-insurance-spgr')
 
 @section('container')
 
@@ -17,7 +17,7 @@
                     @if($errors->any())
                     @foreach ($errors->all() as $error)
                         <div class="alert error alert-danger" id="error">{{ $error }}
-                            {{-- <strong>    Please check the file is a PDF and Size 3MB. </strong> --}}
+                            <strong>Please check the file is a PDF and Size 3MB. </strong>
                         </div>
                     @endforeach
                     @endif
@@ -53,9 +53,9 @@
                                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                                 @php
                                                     $viewspgr = array('spgr','Letter_of_Discharge','CMC','surat_laut',
-                                                                        'spb','lot_line','surat_keterangan_bank');
+                                                                        'spb','load_line','surat_keterangan_bank');
                                                     $name = array('SPGR','LETTER OF DISCHARGE','CMC','SURAT LAUT',
-                                                                    'SPB','LOT LINE','SURAT KETERANGAN BANK');
+                                                                    'SPB','LOAD LINE','SURAT KETERANGAN BANK');
                                                     $spgrfile = 'spgrfile'.$a;
                                                     $time_upload ="time_upload".$a;
                                                     $stats ="status".$a;
@@ -70,7 +70,8 @@
                                                     <td id="">{{$upspgr->$reason}}</td>
                                                     @endforeach
                                                     @if (empty($upspgr->$stats) or $upspgr->$stats == 'rejected')
-                                                        <td><input name="{{$spgrfile}}" class=form-control id="rfile" type="file"/></td>
+                                                        <td><input name="{{$spgrfile}}" class=form-control type="file"/></td>
+                                                        <button class="btn btn-danger" id="realsub" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
                                                     @else
                                                         <td> 
                                                            
@@ -78,9 +79,9 @@
                                                     @endif
                                                 </tr>
                                                 @endfor
-                                                @if(date("d") < 28)
+                                                {{-- @if(date("d") < 28)
                                                     <button class="btn btn-danger" id="realsub" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
-                                                @endif
+                                                @endif --}}
                                             </form>
                                         </tbody>
                                     </table>

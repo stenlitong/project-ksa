@@ -50,7 +50,7 @@ class picAdminController extends Controller
             $docrpk = DB::table('rpkdocuments')->whereMonth('created_at', date('m'))->latest()->get();
         }
         elseif (request('search')) {
-            $docrpk = DB::table('rpkdocuments')->where('cabang', request('search')->whereMonth('created_at', date('m')))->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->where('cabang', request('search'))->latest()->get();
         }
         else{
             $docrpk = DB::table('rpkdocuments')->whereMonth('created_at', date('m'))->latest()->get();

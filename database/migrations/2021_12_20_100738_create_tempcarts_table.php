@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\formclaims;
 
-class Formclaim extends Migration
+class CreateTempcartsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +13,9 @@ class Formclaim extends Migration
      */
     public function up()
     {
-        Schema::create('formclaim', function (Blueprint $table) {
+        Schema::create('tempcarts', function (Blueprint $table) {
             $table->id();
+            
             $table->date('tgl_insiden') ->nullable();
             $table->date('tgl_formclaim') ->nullable();
             $table->string('name')->nullable();
@@ -31,9 +31,11 @@ class Formclaim extends Migration
             $table->string('tugBoat')->nullable();
             $table->string('incident')->nullable();
             $table->longText('description')->nullable();
+
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -41,6 +43,6 @@ class Formclaim extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('tempcarts');
     }
 }

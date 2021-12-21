@@ -11,14 +11,15 @@
                 <div class="col" style="margin-top: 5%">
                     <div class="jumbotron jumbotron-fluid" >
                         <div class="container">
-                        <h4 class="display-4" style="margin-top: -3%; margin-left: 30%" >Create Form Claim Insurance</h4>
-                            {{-- <p class="lead">please only upload file size max 1MB with .PDF format only .
-                            <br>
-                                Please upload your RPK Document !
-                            </p> --}}
+
+                            <div class="text-md-center">
+                                <h4 class="display-4">Create Form Claim Insurance</h4>
+                            </div>
+                        
                             <form method="POST" action="/picincident/formclaim/submitform">
                                 @csrf
                                 <div class="form-row">
+
                                     <div class="col-lg-3">
                                         <x-label for="name" :value="__('Name : ')" style="margin-top: 4%; margin-left: 1%" />
                                         <x-input id="name" class="block mt-1 w-full" type="text" name="name" placeholder="Enter Name" :value="old('name')" required autofocus />
@@ -40,23 +41,27 @@
                                         <x-input id="Item_name" class="block mt-1 w-full" type="text" name="Item_name" placeholder="Enter Item Name" :value="old('Item_name')" required autofocus />
                                 
                                     </div>
+
                                     <div class="col-lg-3">
                                         <x-label for="FormClaim" :value="__('No. FormClaim : ')" style="margin-top: 4%; margin-left: 1%"  />
                                         <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')" required autofocus />
 
-                                        <x-label for="TOW" :value="__('TOW : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="TOW" class="block mt-1 w-full" type="number" name="TOW" placeholder="Enter TOW" :value="old('TOW')" required autofocus />
+                                        <x-label for="barge" :value="__('barge : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="barge" class="block mt-1 w-full" type="number" name="barge" placeholder="Enter barge" :value="old('barge')" required autofocus />
                                         
-                                        <x-label for="TotalSumInsurade" :value="__('Total Sum Insurade : ')" style="margin-top: 2%; margin-left: 1%"  />
-                                        <x-input id="TotalSumInsurade" class="block mt-1 w-full" type="number" name="TotalSumInsurade" placeholder="Enter Total Sum Insurade" :value="old('TotalSumInsurade')" required autofocus />
+                                        <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                        <x-input id="TSI_barge" class="block mt-1 w-full" type="number" name="TSI_barge" placeholder="Enter TSI barge" :value="old('TSI_barge')" required autofocus />
+
+                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                        <x-input id="TSI_TugBoat" class="block mt-1 w-full" type="number" name="TSI_TugBoat" placeholder="Enter TSI TugBoat" :value="old('TSI_TugBoat')" required autofocus />
                                         
                                         <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" required autofocus />
 
                                         <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus />
-                                        
                                     </div>
+
                                     <div class="col-lg-3">
                                         <x-label for="Surveyor" :value="__('Surveyor : ')" style="margin-top: 4%; margin-left: 1%" />
                                         <x-input id="Surveyor" class="block mt-1 w-full" type="text" name="Surveyor" placeholder="Enter Surveyor's Name" :value="old('Surveyor')" required autofocus />
@@ -70,76 +75,75 @@
                                     </div>
                                 </div>
 
-                                
                                 <div>
                                     <x-label for="Description" :value="__('Description : ')" style="margin-top: 2%; margin-left: 1%;"  />
-                                    <textarea class="form-control" name="reasonbox" required id="Description" required autofocus rows="3"></textarea>
-                                    <button class="btn btn-dark" type="submit" id="addcart" style="margin-left: 80%; margin-top: 2%; width: 20%;">Add To List</button>
-                                    <button class="btn btn-outline-danger" id="createform" name="createform" style="margin-left: 80%; margin-top: 1%; width: 20%;">Create Form</button>
+                                    <textarea class="form-control" name="reasonbox" id="Description"  autofocus rows="3"></textarea>
                                 </div>
-
+                                <div class="text-md-right">
+                                    <button class="btn btn-dark" type="submit" id="addcart" style= "margin-top: 1%; margin-bottom: 1%;width: 20%;">Add To List</button>
+                                </div>
                             </form>
 
-                            @error('reasonbox')
-                            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                                Alasan Wajib Diisi
-                            </div>
-                            @enderror
+                            <form method="POST" action="/picincident/create-history">
+                                @csrf
+                                @php
+                                    $date = date('Y-m-d');
+                                    $name = 'file FCI-' . $date;
+                                @endphp
+                                    <input type="hidden" name ="nama_file" value ="{{$name}}" />
+                                <div class="text-md-right">
+                                    <button class="btn btn-outline-danger" type="submit" id="createform" name="createform"  style="margin-left: 80%;  width: 20%;">Create Form</button>
+                                </div>
+                            </form>
                             
-                            @if ($success = Session::get('message'))
-                                <div class="alert alert-success alert-block" id="message">
-                                    <strong>{{ $success }}</strong>
+                            @if ($success = Session::get('success'))
+                                <div class="center">
+                                    <div class="alert alert-success alert-block" id="message">
+                                        <strong>{{ $success }}</strong>
+                                    </div>
                                 </div>
                             @endif
 {{-- show form table --}}
-                            @forelse($claims as $claim )
-                            <table class="table" style="margin-top: 2%">
-                                <thead class="thead-dark">
+                        <table class="table" style="margin-top: 2%">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Jenis Incident</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Deductible</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            @forelse($tempcarts as $temp)
+                            <tbody>
                                     <tr>
-                                        <th scope="col">No.</th>
-                                        <th scope="col">Jenis Incident</th>
-                                        <th scope="col">Item</th>
-                                        <th scope="col">Deductible</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Action</th>
+                                        <td class="table-info">{{$loop->index+1}}</td>
+                                        <td class="table-info">{{$temp->jenis_incident}}</td>
+                                        <td class="table-info">{{$temp->item}}</td>
+                                        <td class="table-info">{{$temp->deductible}}</td>
+                                        <td class="table-info">{{$temp->description}}</td>
+                                        <td class="table-info">{{$temp->amount}}</td>
+                                        <td class="table-info">
+                                            <form action="/picincident/formclaim/destroy/{{$temp->id}}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                        <tr>
-                                            <td scope="col">{{$loop->index+1}}</td>
-                                            <td scope="col">{{$claim->jenis_incident}}</td>
-                                            <td scope="col">{{$claim->item}}</td>
-                                            <td scope="col">{{$claim->deductible}}</td>
-                                            <td scope="col">{{$claim->description}}</td>
-                                            <td scope="col">{{$claim->amount}}</td>
-                                            <td scope="col">
-                                                <form action="/picincident/formclaim/destroy/{{$claim->id}}" method="POST">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" id="Deletepost" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
-                                                </form>
-                                                <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" style="display: none" class="btn btn-danger">Delete</button>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                            <tr> forms request not yet added </tr>
-                                        @endforelse
-                                </tbody>
-                            </table>
-                                <script>
-                                    document.getElementById('createform').addEventListener('click', openDialog);
-                                    function openDialog() {
-                                        document.getElementById('realsub').click();
-                                    }
-                                </script>
-                                <script>
-                                    setTimeout(function(){
-                                        $("div.alert").remove();
-                                    }, 3000 ); // 3 secs
-                                </script>
-                                <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-                        </div>
+                                    @empty
+                                        <tr> <td class="table-warning" > <strong style="font-size:16px"> Request not yet added </strong> </td>  </tr>
+                                    @endforelse
+                            </tbody>
+                        </table>
+                        <script>
+                            setTimeout(function(){
+                                $("div.alert").remove();
+                            }, 3000 ); // 3 secs
+                        </script>
+                        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
                     </div>
                 </div>  
             </div>

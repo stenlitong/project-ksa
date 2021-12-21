@@ -47,7 +47,7 @@ class CreateSpgrfilesTable extends Migration
             $table->string('time_upload6')->nullable();
             $table->string('reason6')->nullable();
             $table->string('status6')->nullable();
-            $table->string('lot_line')->nullable();
+            $table->string('load_line')->nullable();
 
             $table->string('time_upload7')->nullable();
             $table->string('reason7')->nullable();

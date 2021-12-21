@@ -11,9 +11,9 @@
                     <span data-feather="page"></span>
                     Review SPGR Request Form
                 </a>
-                <a class="nav-link" aria-current="" href="/insurance/NoteSpgr">
+                <a class="nav-link" aria-current="" href="/insurance/HistoryNoteSpgr">
                     <span data-feather="file-plus" style="color: black"></span>
-                    Note SPGR Form
+                    History SPGR
                 </a>
             </li>
         </ul>

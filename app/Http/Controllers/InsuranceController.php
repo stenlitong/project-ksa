@@ -54,32 +54,9 @@ class InsuranceController extends Controller
         // dd($viewer);
         return Storage::disk('s3')->response('spgr/' . $year . "/". $month . "/" . $viewer);
     }
-
-    public function destroy(NoteSpgr $UpNotes){
-        NoteSpgr::destroy($UpNotes->id); 
-        return redirect('/insurance/NoteSpgr')->with('success', 'post telah dihapus.'); 
-    }
-
-    public function uploadnotespgr(Request $request){
-        // dd($request);
-        $request->validate([
-            'No_SPGR'=> 'required|max:255',
-            'NamaKapal'=> 'required|max:255',
-            'NilaiClaim'=> 'required',
-            // 'DateNote'=> 'required',
-        ]);
-
-        NoteSpgr::create([
-            'DateNote' => $request->Datebox ,
-            'No_SPGR' => $request->No_SPGR ,
-            'Nama_Kapal' => $request->NamaKapal ,
-            'Nilai_Claim' => $request->NilaiClaim ,
-        ]);
-        return redirect('/insurance/NoteSpgr')->with('success', 'Note telah ditambahkan.');
-    }
     
-    public function notespgr(){
+    public function historynotespgr(){
         $UploadNotes = NoteSpgr::whereMonth('created_at', date('m'))->latest()->get();
-        return view('insurance.insuranceNoteSpgr', compact('UploadNotes'));
+        return view('insurance.insuranceHistoryNotes', compact('UploadNotes'));
     }
 }

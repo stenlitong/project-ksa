@@ -29,7 +29,45 @@
                                 <strong>{{ $message }}</strong>
                             </div>
                         @endif
-
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            Launch demo modal
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="#">
+                                        <label>Nama Kapal</label>
+                                        <input type="text" class="form-control w-auto" placeholder="nama kapal">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>from</label>
+                                                <input type="date" class="form-control" placeholder="Periode Inisial">
+                                            </div>
+                                            <div class="col">
+                                                <label>to</label>
+                                                <input type="date" class="form-control" placeholder="Final Periode">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        
                         <table class="table"style="margin-top: 1%">
                             <thead class="thead-dark" >
                                 <tr>
@@ -127,7 +165,7 @@
                                         $name = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
                                                     'Drawing & Stability','Laporan Pengeringan','Berita Acara Lambung',
                                                     'Laporan Pemeriksaan Nautis','Laporan Pemeriksaan Anti Faulin','Laporan Pemeriksaan Radio ',
-                                                    'Berita Acara Lambung','Laporan Pemeriksaan SNPP','BKI',
+                                                    'Laporan Pemeriksaan SNPP','BKI',
                                                     'SNPP Permanen','SNPP Endorse','Surat Laut Endorse',
                                                     'Surat Laut Permanen','Compas Seren','Keselamatan (Tahunan)',
                                                     'Keselamatan (Pengaturan Dok)','Keselamatan (Dok)','Garis Muat',

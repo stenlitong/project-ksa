@@ -18,6 +18,10 @@
                     <span data-feather="file-plus" style="color: black"></span>
                     Request Extend SPGR
                 </a>
+                <a class="nav-link" aria-current="page" href="/picincident/NoteSpgr">
+                    <span data-feather="file-plus" style="color: black"></span>
+                    Note Spgr
+                </a>
                 
             </li>
         </ul>

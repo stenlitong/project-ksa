@@ -49,11 +49,11 @@ class DashboardController extends Controller
         }
         elseif(Auth::user()->hasRole('picAdmin')){
             if (request('search1') == 'All') {
-                $document = DB::table('documents')->latest()->get();
-                $documentberau = DB::table('beraudb')->latest()->get();
-                $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
-                $documentsamarinda = DB::table('samarindadb')->latest()->get();
-                $docrpk = DB::table('rpkdocuments')->latest()->get();
+                $document = DB::table('documents')->get();
+                $documentberau = DB::table('beraudb')->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->get();
+                $documentsamarinda = DB::table('samarindadb')->get();
+                $docrpk = DB::table('rpkdocuments')->get();
             }
             elseif (request('search1')) {
                 $document = DB::table('documents')->where('cabang', request('search1'))->latest()->get();
@@ -63,11 +63,11 @@ class DashboardController extends Controller
                 $docrpk = DB::table('rpkdocuments')->where('cabang', request('search1'))->latest()->get();  
             }
             else{
-                $document = DB::table('documents')->latest()->get();
-                $documentberau = DB::table('beraudb')->latest()->get();
-                $documentbanjarmasin = DB::table('banjarmasindb')->latest()->get();
-                $documentsamarinda = DB::table('samarindadb')->latest()->get();
-                $docrpk = DB::table('rpkdocuments')->latest()->get();
+                $document = DB::table('documents')->get();
+                $documentberau = DB::table('beraudb')->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->get();
+                $documentsamarinda = DB::table('samarindadb')->get();
+                $docrpk = DB::table('rpkdocuments')->get();
             }
             return view('picadmin.picAdminDashboard' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda', 'docrpk'));
         }

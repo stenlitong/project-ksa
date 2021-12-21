@@ -88,13 +88,22 @@ Route::group(['middleware' => ['auth']], function(){
     Route::prefix('picincident')->name('picincident.')->group(function(){
         Route::get('/formclaim', 'picincidentController@formclaim');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
-        Route::delete('/formclaim/destroy/{claim}', [picincidentController::class , 'destroy']);
-
+        Route::delete('/formclaim/destroy/{temp}', [picincidentController::class , 'destroy']);
+        
+        
+        Route::post('/create-history', 'picincidentController@createformclaim');
+        Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
+        Route::get('/history', 'picincidentController@formclaimhistory');
+        Route::get('/formclaimDownload', 'picincidentController@export');
+        
         Route::get('/spgr', 'picincidentController@spgr');
         Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);
 
-        Route::get('/history', 'picincidentController@formclaimhistory');
-       
+        Route::get('/NoteSpgr', 'picincidentController@notespgr');
+        Route::post('/addNoteSpgr', 'picincidentController@uploadnotespgr');
+        Route::delete('/NoteSpgr/destroy/{UpNotes}', [picincidentController::class , 'destroynote']);
+        Route::put('/NoteSpgr/update/{UpNotes}', [picincidentController::class, 'updatenote']);
+
     });
 
     Route::prefix('insurance')->name('insurance.')->group(function(){
@@ -103,9 +112,8 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/rejectspgr',[InsuranceController::class, 'rejectspgr']);
         Route::post('/viewspgr',[InsuranceController::class, 'viewspgr']);
 
-        Route::get('/NoteSpgr', 'InsuranceController@notespgr');
-        Route::post('/addNoteSpgr', 'InsuranceController@uploadnotespgr');
-        Route::delete('/NoteSpgr/destroy/{UpNotes}', [InsuranceController::class , 'destroy']);
+        Route::get('/HistoryNoteSpgr', 'InsuranceController@historynotespgr');
+        
        
     });
 });
