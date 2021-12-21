@@ -168,7 +168,6 @@
                         } else {
                             document.getElementById("Jakarta").disabled = false;
                         }
-
                         if(dropdown.value == "adminPurchasing" || dropdown.value == "purchasingManager"){
                             selectopt('Jakarta');
                             document.getElementById("Banjarmasin").disabled = true;
