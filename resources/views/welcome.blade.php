@@ -48,11 +48,7 @@
             </div>
             
             <div class="center-items mt-5">
-<<<<<<< HEAD
                 <img src="/images/logo_ksa_1.png" class="mt-5" style="width: 50%; height: 50%;">
-=======
-                <img src="/images/logo.png" class="mt-5" style="width: 50%; height: 50%;">
->>>>>>> testing_merge
                 <h1 style="color: white;" class="mt-5">The Best Service For Our Customer</h1>
             </div>
         </div>

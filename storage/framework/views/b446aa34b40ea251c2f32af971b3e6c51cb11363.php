@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>KSA</title>
-
+        
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
@@ -40,6 +40,7 @@
     </body>
 </html>
 
+<!-- Styles -->
 <style>
     body{
         background-image: url('/images/background-img-2.jpg');
@@ -65,7 +66,11 @@
     }
     @media (max-width: 768px) {
     body {
+<<<<<<< HEAD
         height:117.7vh;
+=======
+        height:100vh;
+>>>>>>> testing_merge
     }
 </style>
 

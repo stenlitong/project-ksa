@@ -170,6 +170,34 @@
 
             <br>
 
+            <!-- No Telp -->
+            <div class="mt-4">
+                <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.label','data' => ['for' => 'user_noTelp','value' => __('Nomor Telepon')]]); ?>
+<?php $component->withName('label'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['for' => 'user_noTelp','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Nomor Telepon'))]); ?>
+<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
+<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
+<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
+<?php endif; ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+                <div class="input-group mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text" style="height: 45px">(+62)
+                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp"
+                            style="border-radius: 8px; border-color: rgb(196, 194, 194);"
+                            placeholder="Input nomor telepon dalam angka..."
+                            value=<?php echo e(old('user_noTelp')); ?>>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
             <!-- Select Option role -->
             <div>
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
@@ -228,6 +256,53 @@
                     <option value="Kendari" id="Kendari" <?php if(old('cabang') == 'Kendari'): ?> selected="selected" <?php endif; ?>>Kendari</option>
                 </select>
             </div>
+            
+            <script>
+                 
+                function myFunction() {
+                    var x = document.getElementById("password");
+                    var y = document.getElementById("password_confirmation");
+                    if (x.type === "password") {
+                        x.type = "text";
+                    } else {
+                        x.type = "password";
+                    }
+                    if (y.type === "password") {
+                        y.type = "text";
+                    } else {
+                        y.type = "password";
+                    }
+                }
+                
+                function selectopt(id)
+                {
+                    var e = document.getElementById("cabang");
+                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
+                }
+                var dropdown = document.getElementById("role_id");
+                dropdown.onchange = function(event){
+                    
+                    // if(dropdown.value=="picAdmin"){
+                    //     selectopt('jakarta');
+                    //     document.getElementById("samarinda").disabled = true;
+                    //     document.getElementById("Banjarmasin").disabled = true;
+                    //     document.getElementById("bunati").disabled = true; 
+                    // }else{
+                    //     document.getElementById("samarinda").disabled = false;
+                    //     document.getElementById("Banjarmasin").disabled = false;
+                    //     document.getElementById("bunati").disabled = false;   
+                    // }
+                    
+                    if (dropdown.value=="picSite") {
+                        document.getElementById("jakarta").disabled = true;
+                        selectopt('samarinda');
+    
+                    } else {
+                            document.getElementById("jakarta").disabled = false;
+                        }
+                }
+            </script>
+
 
             <!-- Password -->
             <div class="mt-4">
@@ -288,7 +363,6 @@
             </div>
 
             <br>
-
             <div class="ml-1">
                 <input type="checkbox" onclick="myFunction()" style="border-radius: 30%">
                 <label for="">Show Password</label>
@@ -302,13 +376,12 @@
                 </a>
 
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.button','data' => ['class' => 'ml-4']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.button','data' => ['class' => 'ml-4','href' => ''.e(route('login')).'']]); ?>
 <?php $component->withName('button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['class' => 'ml-4']); ?>
-                    <?php echo e(__('Register')); ?>
-
+<?php $component->withAttributes(['class' => 'ml-4','href' => ''.e(route('login')).'']); ?>
+                    Register
                  <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
 <?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
