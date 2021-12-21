@@ -170,34 +170,6 @@
 
             <br>
 
-            <!-- No Telp -->
-            <div class="mt-4">
-                <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.label','data' => ['for' => 'user_noTelp','value' => __('Nomor Telepon')]]); ?>
-<?php $component->withName('label'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['for' => 'user_noTelp','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Nomor Telepon'))]); ?>
-<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
-<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
-<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
-<?php endif; ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-                <div class="input-group mt-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text" style="height: 45px">(+62)
-                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp"
-                            style="border-radius: 8px; border-color: rgb(196, 194, 194);"
-                            placeholder="Input nomor telepon dalam angka..."
-                            value=<?php echo e(old('user_noTelp')); ?>>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <br>
-
             <!-- Select Option role -->
             <div>
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
