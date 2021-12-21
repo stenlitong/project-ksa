@@ -16,6 +16,8 @@ class Formclaim extends Migration
     {
         Schema::create('formclaim', function (Blueprint $table) {
             $table->id();
+            $table->string('code_special')->nullable();
+            
             $table->date('tgl_insiden') ->nullable();
             $table->date('tgl_formclaim') ->nullable();
             $table->string('name')->nullable();
@@ -31,6 +33,7 @@ class Formclaim extends Migration
             $table->string('tugBoat')->nullable();
             $table->string('incident')->nullable();
             $table->longText('description')->nullable();
+            
             $table->timestamps();
         });
     }

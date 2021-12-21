@@ -17,7 +17,8 @@ class CreateHeaderformclaimsTable extends Migration
             $table->id();
             
             $table->string('nama_file')->nullable();
-            
+            $table->string('code_special')->nullable();
+
 
             $table->timestamps();
         });

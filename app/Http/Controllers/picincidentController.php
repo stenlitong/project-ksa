@@ -107,7 +107,6 @@ class picincidentController extends Controller
         return $this->excel::download(new FCIexport, 'FCI.xlsx');
     }
 
-    
     // note spgr
     public function destroynote(NoteSpgr $UpNotes){
         NoteSpgr::destroy($UpNotes->id); 
@@ -152,7 +151,6 @@ class picincidentController extends Controller
         $UploadNotes =  DB::table('note_spgrs')->latest()->get();
         return view('picincident.NoteSpgr', compact('UploadNotes'));
     }
-
 
     // upload spgr file
     public function spgr(){
