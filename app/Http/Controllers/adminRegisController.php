@@ -7,28 +7,21 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-class RegisteredUserController extends Controller
+class adminRegisController extends Controller
 {
+    public function view()
+    {
+        return view('registeradmin');
+    }
     /**
      * Display the registration view.
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
-        Redirect::setIntendedUrl(url()->previous());
-        return view('auth.register');
-    }
-
-    public function createAdmin()
-    {
-        return view('auth.registerAdmin');
-    }
 
     /**
      * Handle an incoming registration request.
@@ -39,14 +32,11 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {   
-        // digits_between:6,7
+    {
         $request->validate([
-            'name' => ['required', 'regex:/^[a-zA-Z\s-]*$/'],
-            'no_induk_pegawai' => ['required', 'numeric', 'digits_between:6,7', 'unique:users'],
-            'user_noTelp' => ['required', 'numeric','digits_between:8,12', 'unique:users'],
-            // 'email' => ['required', 'string', 'email:rfc,dns', 'ends_with:ptksa.id', 'max:255', 'unique:users'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255'],
+            'no_induk_pegawai' => ['required', 'string', 'max:6', 'min:6', 'unique:users'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'ends_with:ptksa.id', 'max:255', 'unique:users'],
             'cabang' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -54,17 +44,13 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'no_induk_pegawai' => $request->no_induk_pegawai,
-            'user_noTelp' => $request->user_noTelp,
             'email' => $request->email,
             'cabang' => $request->cabang,
             'password' => Hash::make($request->password),
         ]);
-
         $user->attachRole($request->role_id);
         event(new Registered($user));
 
-        // Preferences: auto login after register || change the code below
         Auth::login($user);
-        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

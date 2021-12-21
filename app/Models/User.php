@@ -58,4 +58,7 @@ class User extends Authenticatable
         return $this->hasMany(OrderDo::class);
     }
 
+    public function document(){
+        return $this->hasMany(documents::class);
+    }
 }

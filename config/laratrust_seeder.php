@@ -37,6 +37,7 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+<<<<<<< HEAD
         'adminPurchasing' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
@@ -62,6 +63,29 @@ return [
             'profile' => 'r,u'
         ],
         'asuransi' => [
+=======
+        'picSite' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'picAdmin' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'picIncident' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'insurance' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'adminOperational' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'adminPurchase' => [
+>>>>>>> testing_merge
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],

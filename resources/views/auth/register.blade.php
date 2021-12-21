@@ -58,8 +58,25 @@
             <div>
                 <x-label for="no_induk_pegawai" :value="__('No Induk Pegawai')" />
 
-                <x-input id="no_induk_pegawai" class="block mt-1 w-full" type="text" name="no_induk_pegawai"
+                <x-input id="no_induk_pegawai" class="block mt-1 w-full" type="text" name="no_induk_pegawai" 
                     :value="old('no_induk_pegawai')" required autofocus placeholder="Input Nomor Induk Pegawai..."/>
+            </div>
+
+            <br>
+
+            <!-- No Telp -->
+            <div class="mt-4">
+                <x-label for="user_noTelp" :value="__('Nomor Telepon')" />
+                <div class="input-group mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text" style="height: 45px">(+62)
+                        <input type="text" class="form-control" id="user_noTelp" name="user_noTelp"
+                            style="border-radius: 8px; border-color: rgb(196, 194, 194);"
+                            placeholder="Input nomor telepon dalam angka..."
+                            value={{ old('user_noTelp') }}>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <br>
@@ -100,6 +117,53 @@
                     <option value="Kendari" id="Kendari" @if (old('cabang') == 'Kendari') selected="selected" @endif>Kendari</option>
                 </select>
             </div>
+            
+            <script>
+                 
+                function myFunction() {
+                    var x = document.getElementById("password");
+                    var y = document.getElementById("password_confirmation");
+                    if (x.type === "password") {
+                        x.type = "text";
+                    } else {
+                        x.type = "password";
+                    }
+                    if (y.type === "password") {
+                        y.type = "text";
+                    } else {
+                        y.type = "password";
+                    }
+                }
+                
+                function selectopt(id)
+                {
+                    var e = document.getElementById("cabang");
+                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
+                }
+                var dropdown = document.getElementById("role_id");
+                dropdown.onchange = function(event){
+                    
+                    // if(dropdown.value=="picAdmin"){
+                    //     selectopt('jakarta');
+                    //     document.getElementById("samarinda").disabled = true;
+                    //     document.getElementById("Banjarmasin").disabled = true;
+                    //     document.getElementById("bunati").disabled = true; 
+                    // }else{
+                    //     document.getElementById("samarinda").disabled = false;
+                    //     document.getElementById("Banjarmasin").disabled = false;
+                    //     document.getElementById("bunati").disabled = false;   
+                    // }
+                    
+                    if (dropdown.value=="picSite") {
+                        document.getElementById("jakarta").disabled = true;
+                        selectopt('samarinda');
+    
+                    } else {
+                            document.getElementById("jakarta").disabled = false;
+                        }
+                }
+            </script>
+{{-- validation script --}}
 
             <!-- Password -->
             <div class="mt-4">
@@ -118,7 +182,6 @@
             </div>
 
             <br>
-
             <div class="ml-1">
                 <input type="checkbox" onclick="myFunction()" style="border-radius: 30%">
                 <label for="">Show Password</label>
@@ -130,8 +193,8 @@
                     {{ __('Already registered?') }}
                 </a>
 
-                <x-button class="ml-4">
-                    {{ __('Register') }}
+                <x-button class="ml-4" href="{{ route('login') }}">
+                    Register
                 </x-button>
             </div>
             {{-- validation script --}}

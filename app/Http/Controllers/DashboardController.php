@@ -8,10 +8,26 @@ use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\ApList;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Storage;
+use Response;
+use validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Gmail;
+use App\Models\documents;
+use App\Models\documentberau;
+use App\Models\documentbanjarmasin;
+use App\Models\documentrpk;
+use App\Models\documentsamarinda;
+use App\Models\spgrfile;
+use App\Models\NoteSpgr;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         if(Auth::user()->hasRole('crew')){
             // Get all the order within the logged in user within 6 month
             $orderHeads = OrderHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->latest()->paginate(7);
@@ -210,8 +226,42 @@ class DashboardController extends Controller
 
             return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'default_branch', 'completed', 'in_progress'));
         }
+        elseif(Auth::user()->hasRole('picSite')){
+            return view('picsite.picDashboard');
+        }
+        elseif(Auth::user()->hasRole('picAdmin')){
+            if (request('search1') == 'All') {
+                $document = DB::table('documents')->get();
+                $documentberau = DB::table('beraudb')->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->get();
+                $documentsamarinda = DB::table('samarindadb')->get();
+                $docrpk = DB::table('rpkdocuments')->get();
+            }
+            elseif (request('search1')) {
+                $document = DB::table('documents')->where('cabang', request('search1'))->latest()->get();
+                $documentberau = DB::table('beraudb')->where('cabang', request('search1'))->latest()->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', request('search1'))->latest()->get();
+                $documentsamarinda = DB::table('samarindadb')->where('cabang', request('search1'))->latest()->get();
+                $docrpk = DB::table('rpkdocuments')->where('cabang', request('search1'))->latest()->get();  
+            }
+            else{
+                $document = DB::table('documents')->get();
+                $documentberau = DB::table('beraudb')->get();
+                $documentbanjarmasin = DB::table('banjarmasindb')->get();
+                $documentsamarinda = DB::table('samarindadb')->get();
+                $docrpk = DB::table('rpkdocuments')->get();
+            }
+            return view('picadmin.picAdminDashboard' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda', 'docrpk'));
+        }
+        elseif(Auth::user()->hasRole('picIncident')){
+            
+            return view('picincident.dashboardincident' );
+        }
+        elseif(Auth::user()->hasRole('insurance')){
+            $spgrfile = spgrfile::where('cabang', 'Jakarta')->get();
+            return view('insurance.Dashboardinsurance', compact('spgrfile'));
+        }
     }
-
     public function checkStock(){
         $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
 

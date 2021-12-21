@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>KSA</title>
-
+        
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
@@ -48,13 +48,18 @@
             </div>
             
             <div class="center-items mt-5">
+<<<<<<< HEAD
                 <img src="/images/logo_ksa_1.png" class="mt-5" style="width: 50%; height: 50%;">
+=======
+                <img src="/images/logo.png" class="mt-5" style="width: 50%; height: 50%;">
+>>>>>>> testing_merge
                 <h1 style="color: white;" class="mt-5">The Best Service For Our Customer</h1>
             </div>
         </div>
     </body>
 </html>
 
+<!-- Styles -->
 <style>
     body{
         background-image: url('/images/background-img-2.jpg');
@@ -80,7 +85,11 @@
     }
     @media (max-width: 768px) {
     body {
+<<<<<<< HEAD
         height:117.7vh;
+=======
+        height:100vh;
+>>>>>>> testing_merge
     }
 </style>
 
