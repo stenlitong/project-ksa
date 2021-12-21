@@ -316,7 +316,6 @@ class PurchasingManagerController extends Controller
         // Basically the report is created per 3 months, so we divide it into 4 reports
         // Base on current month, then we classified what period is the report
         $month_now = (int)(date('m'));
-
         if($month_now <= 3){
             $start_date = date('Y-01-01');
             $end_date = date('Y-03-31');
@@ -585,7 +584,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = 'Jakarta';
 
-        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')
@@ -624,7 +623,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = $branch;
 
-        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class WeeklyItemBelowStockReportMail extends Mailable
+class DailyItemBelowStockReport extends Mailable
 {
     use Queueable, SerializesModels;
 

@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'form-ap'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'form-ap') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('purchasingManager.formApPage') }}">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'checklist-pr'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'checklist-pr') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('purchasingManager.checklistPrPage') }}">
@@ -37,7 +37,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'report-po'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'report-po') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('purchasingManager.reportPoPage') }}">
@@ -48,7 +48,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'report-ap') !== false){
                         echo('active');
                     }
                 @endphp" href="/purchasing-manager/report-ap">

@@ -232,13 +232,19 @@ unset($__errorArgs, $__bag); ?>
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn" required>
                                     <option value="10" 
-                                        <?php if($orderHeads->ppn == 10): ?>
+                                        <?php if($orderHeads -> ppn == 10): ?>
                                             <?php echo e('selected'); ?>
 
                                         <?php endif; ?>
-                                    >PPN</option>
+                                    >PPN 10%</option>
+                                    <option value="11" 
+                                        <?php if($orderHeads -> ppn == 11): ?>
+                                            <?php echo e('selected'); ?>
+
+                                        <?php endif; ?>
+                                    >PPN 11%</option>
                                     <option value="0"
-                                        <?php if($orderHeads->ppn == 0): ?>
+                                        <?php if($orderHeads -> ppn == 0): ?>
                                             <?php echo e('selected'); ?>
 
                                         <?php endif; ?>
@@ -323,7 +329,7 @@ unset($__errorArgs, $__bag); ?>
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control input-sm" id="supplier" name="supplier">
+                                                    <select class="form-control form-control-sm" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         <?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <option class="h-25 w-50" value="<?php echo e($s -> supplierName); ?>"><?php echo e($s -> supplierName); ?></option>

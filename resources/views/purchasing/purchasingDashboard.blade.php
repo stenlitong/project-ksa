@@ -469,7 +469,7 @@
                                             <input type="text" class="form-control" name="supplierNPWP" id="supplierNPWP" value="{{ $s -> supplierNPWP }}" readonly>
                                         </div>
                                     </div>
-                                    <h5><u>No. Telp</u></h5>
+                                    {{-- <h5><u>No. Telp</u></h5>
                                     <div class="form-row my-3">
                                         <div class="col">
                                             <label for="noTelpBks">Bekasi</label>
@@ -497,6 +497,10 @@
                                             <label for="noTelpJkt">Jakarta</label>
                                             <input type="text" class="form-control" name="noTelpJkt" value="{{ $s -> noTelpJkt }}" readonly>
                                         </div>
+                                    </div> --}}
+                                    <div class="form-group">
+                                        <label for="supplierNote">Note</label>
+                                        <textarea class="form-control" id="supplierNote" name="supplierNote" rows="10">{{ $s -> supplierNote }}</textarea>
                                     </div>
                                 </form>
                             </div>

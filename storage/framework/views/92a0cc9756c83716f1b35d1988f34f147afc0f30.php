@@ -225,6 +225,7 @@
                     <option value="Bunati" id="Bunati" <?php if(old('cabang') == 'Bunati'): ?> selected="selected" <?php endif; ?>>Bunati</option>
                     <option value="Babelan" id="Babelan" <?php if(old('cabang') == 'Babelan'): ?> selected="selected" <?php endif; ?>>Babelan</option>
                     <option value="Berau" id="Berau" <?php if(old('cabang') == 'Berau'): ?> selected="selected" <?php endif; ?>>Berau</option>
+                    <option value="Kendari" id="Kendari" <?php if(old('cabang') == 'Kendari'): ?> selected="selected" <?php endif; ?>>Kendari</option>
                 </select>
             </div>
 
@@ -346,11 +347,21 @@
                     }
                     
                     if(dropdown.value == "purchasing"){
+                        selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;
                         document.getElementById("Bunati").disabled = true;
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
+                        document.getElementById("Kendari").disabled = false;
+                    }else{
+                        document.getElementById("Jakarta").disabled = false;
+                        document.getElementById("Samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("Bunati").disabled = false;
+                        document.getElementById("Babelan").disabled = false;
+                        document.getElementById("Berau").disabled = false;
+                        document.getElementById("Kendari").disabled = false;
                     }
                 }
             </script>

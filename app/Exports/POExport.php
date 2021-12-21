@@ -53,7 +53,6 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
                         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                         'color' => ['argb' => 'A01D23']
                     ]
-
                 ]);
 
                 $event->sheet->appendRows(array(

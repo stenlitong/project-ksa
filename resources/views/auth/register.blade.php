@@ -97,6 +97,7 @@
                     <option value="Bunati" id="Bunati" @if (old('cabang') == 'Bunati') selected="selected" @endif>Bunati</option>
                     <option value="Babelan" id="Babelan" @if (old('cabang') == 'Babelan') selected="selected" @endif>Babelan</option>
                     <option value="Berau" id="Berau" @if (old('cabang') == 'Berau') selected="selected" @endif>Berau</option>
+                    <option value="Kendari" id="Kendari" @if (old('cabang') == 'Kendari') selected="selected" @endif>Kendari</option>
                 </select>
             </div>
 
@@ -164,11 +165,21 @@
                     }
                     
                     if(dropdown.value == "purchasing"){
+                        selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;
                         document.getElementById("Bunati").disabled = true;
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
+                        document.getElementById("Kendari").disabled = false;
+                    }else{
+                        document.getElementById("Jakarta").disabled = false;
+                        document.getElementById("Samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("Bunati").disabled = false;
+                        document.getElementById("Babelan").disabled = false;
+                        document.getElementById("Berau").disabled = false;
+                        document.getElementById("Kendari").disabled = false;
                     }
                 }
             </script>

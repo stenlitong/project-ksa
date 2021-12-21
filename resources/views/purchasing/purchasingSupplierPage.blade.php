@@ -40,11 +40,6 @@
                                             <h5 class="supplier-name font-weight-bold">{{ $s -> supplierName }}</h5>
                                             <h5 class="supplier-code font-weight-light">{{ $s -> supplierCode }}</h5>
                                             <h5 class="supplier-pic font-weight-light">{{ $s -> supplierPic }}</h5>
-                                            {{-- <h5 class="smaller-screen-size "><span data-feather="phone"></span> (+62) {{ $s -> noTelp }}</h5>
-                                            <h5 class="smaller-screen-size"><span data-feather="mail"></span> {{ $s -> supplierEmail }}</h5>
-                                            <h5 class="smaller-screen-size"><span data-feather="home"></span> {{ $s -> supplierAddress }}</h5>
-                                            <h5 class="smaller-screen-size"><span data-feather="credit-card"></span> {{ $s -> supplierNoRek }}</h5>
-                                            <h5 class="smaller-screen-size"><span data-feather="check-square"></span> {{ $s -> supplierNPWP }}</h5> --}}
                                     </div>
                                     <div class="d-flex flex-column">
                                         <button class="btn btn-success mt-3 mb-3 w-100" data-toggle="modal" id="detail" data-target="#editItem-{{ $s->id }}">Details/Edit</button>
@@ -106,7 +101,11 @@
                                                     <input type="text" class="form-control" name="supplierCode" id="supplierCode" value="{{ $s -> supplierCode }}" required>
                                                 </div>
                                             </div>
-                                            <h5><u>No. Telp</u></h5>
+                                            <div class="form-group">
+                                                <label for="supplierNote">Note</label>
+                                                <textarea class="form-control" id="supplierNote" name="supplierNote" rows="10">{{ $s -> supplierNote }}</textarea>
+                                            </div>
+                                            {{-- <h5><u>No. Telp</u></h5>
                                             <div class="form-row my-3">
                                                 <div class="col">
                                                     <label for="noTelpBks">Bekasi</label>
@@ -134,7 +133,7 @@
                                                     <label for="noTelpJkt">Jakarta</label>
                                                     <input type="text" class="form-control" name="noTelpJkt" value="{{ $s -> noTelpJkt }}">
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="d-flex ml-3 justify-content-center pb-3">
                                                 <button type="submit" class="btn btn-primary">Save</button>
                                             </div>
@@ -213,9 +212,9 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center font-weight-bold mt-4">
-                            <h5><u>No. Telp</u></h5>
+                            <h5><u>Note</u></h5>
                         </div>
-                        <div class="form-row my-3">
+                        {{-- <div class="form-row my-3">
                             <div class="col">
                                 <label for="noTelpBks">Bekasi</label>
                                 <input type="text" class="form-control" name="noTelpBks" value="{{ old('noTelpBks') }}" placeholder="Input No. Telp Cabang Bekasi">
@@ -242,9 +241,12 @@
                                 <label for="noTelpJkt">Jakarta</label>
                                 <input type="text" class="form-control" name="noTelpJkt" value="{{ old('noTelpJkt') }}" placeholder="Input No. Telp Cabang Jakarta">
                             </div>
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="supplierNote">Note</label>
+                            <textarea class="form-control" id="supplierNote" name="supplierNote" rows="10"></textarea>
                         </div>
-                        <br>
-                        <div class="d-flex ml-3 justify-content-center pb-3">
+                        <div class="d-flex mt-4 justify-content-center pb-3">
                             <button type="submit" class="btn btn-primary">Add Supplier</button>
                         </div>
                     </form>

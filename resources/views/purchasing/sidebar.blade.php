@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'report'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'report') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('purchasing.report') }}">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'report-ap'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'report-ap') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('purchasing.reportAp') }}">

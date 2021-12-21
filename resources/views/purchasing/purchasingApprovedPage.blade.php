@@ -153,12 +153,17 @@
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn" required>
                                     <option value="10" 
-                                        @if($orderHeads->ppn == 10)
+                                        @if($orderHeads -> ppn == 10)
                                             {{ 'selected' }}
                                         @endif
-                                    >PPN</option>
+                                    >PPN 10%</option>
+                                    <option value="11" 
+                                        @if($orderHeads -> ppn == 11)
+                                            {{ 'selected' }}
+                                        @endif
+                                    >PPN 11%</option>
                                     <option value="0"
-                                        @if($orderHeads->ppn == 0)
+                                        @if($orderHeads -> ppn == 0)
                                             {{ 'selected' }}
                                         @endif
                                     >Non - PPN</option>
@@ -242,7 +247,7 @@
                                             
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control input-sm" id="supplier" name="supplier">
+                                                    <select class="form-control form-control-sm" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
                                                         @foreach($suppliers as $s)
                                                             <option class="h-25 w-50" value="{{ $s -> supplierName }}">{{ $s -> supplierName }}</option>

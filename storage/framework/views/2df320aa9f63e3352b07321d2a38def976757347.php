@@ -62,7 +62,7 @@
 
     <div class="container-fluid" id="testing">
         <script>
-            document.body.style.zoom = "50%";
+            document.body.style.zoom = "60%";
             // document.body.style.zoom = screen.logicalXDPI;
         </script>
         <?php echo $__env->yieldContent('container'); ?>

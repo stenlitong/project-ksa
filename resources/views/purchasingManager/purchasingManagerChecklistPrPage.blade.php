@@ -68,6 +68,8 @@
                                 <tr>
                                     <th scope="col">Tanggal PR</th>
                                     <th scope="col">No. PR</th>
+                                    <th scope="col">Pembuat PR</th>
+                                    <th scope="col">Yang Menyetujui</th>
                                     <th scope="col">Supplier</th>
                                     <th scope="col">No. SBK</th>
                                     <th scope="col">Nama Kapal</th>
@@ -82,6 +84,8 @@
                                     <tr>
                                         <td>{{ $od -> prDate }}</td>
                                         <td>{{ $od -> noPr }}</td>
+                                        <td>{{ $od -> name }}</td>
+                                        <td>{{ $od -> approvedBy }}</td>
                                         <td>{{ $od -> supplier }}</td>
                                         <td>{{ $od -> noSbk }}</td>
                                         <td>{{ $od -> boatName }}</td>
@@ -117,8 +121,8 @@
 
         td, th{
             word-wrap: break-word;
-            min-width: 160px;
-            max-width: 160px;
+            min-width: 120px;
+            max-width: 120px;
             text-align: center;
         }
     </style>

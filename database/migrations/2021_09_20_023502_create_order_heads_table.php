@@ -24,7 +24,10 @@ class CreateOrderHeadsTable extends Migration
             $table->string('company')->nullable();
             $table->decimal('totalPriceBeforeCalculation', 13, 2)->default(0);
             $table->decimal('totalPrice', 13, 2)->default(0);
+
+            // They wanted to include approved by purchasing 
             $table->string('approvedBy')->nullable();
+            
             $table->integer('ppn')->nullable();
             $table->integer('retries')->default(0);
             $table->decimal('discount')->default(0);

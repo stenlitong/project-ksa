@@ -22,6 +22,7 @@ class CreateApListsTable extends Migration
             $table->string('creationTime', 15);
             $table->string('status', 15)->default('Open');
             $table->integer('tracker')->default(5);
+            $table->decimal('paidPrice', 13, 2)->default(0);
 
             // File Partial 1
             $table->string('doc_partial1')->nullable();

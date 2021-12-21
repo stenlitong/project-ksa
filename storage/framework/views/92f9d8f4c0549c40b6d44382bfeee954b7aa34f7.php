@@ -24,6 +24,13 @@
                     </div>
                 <?php endif; ?>
 
+                <?php if(session('fail')): ?>
+                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                        <?php echo e(session('fail')); ?>
+
+                    </div>
+                <?php endif; ?>
+
                 <?php if(count($errors) > 0): ?>
                     <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -155,12 +162,13 @@
                                     PO Already Been Closed
                                 </div>
                             <?php endif; ?>
-                            
+
                             <div class="d-flex justify-content-end mb-3 mr-3">
+                            <h5 class="mr-auto">Price To Paid : Rp. <?php echo e(number_format($ap -> orderHead -> totalPrice - $ap -> paidPrice, 2, ",", ".")); ?></h5>
                             <form action="/admin-purchasing/form-ap/upload" method="POST" enctype="multipart/form-data">
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('put'); ?>
-
+                                <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
                                 <?php if($ap -> status == 'OPEN'): ?>
                                     <?php if($ap -> orderHead -> itemType == 'Barang'): ?>
                                         <button type="submit" class="btn btn-info mr-3">Submit</button>
@@ -168,6 +176,9 @@
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#close-<?php echo e($ap -> id); ?>">Close PO</button>
                                 <?php endif; ?>
                             </div>
+
+                            <h5 class="mr-auto mb-3">Original Price : Rp. <?php echo e(number_format($ap -> orderHead -> totalPrice, 2, ",", ".")); ?></h5>
+
                             <?php if($ap -> orderHead -> itemType == 'Barang'): ?>
                                 <div class="table-modal">
                                     <table class="table myTable table-refresh<?php echo e($key); ?>">
@@ -222,8 +233,11 @@
                             <div class="mt-4">
                                 <form action="/admin-purchasing/form-ap/ap-detail" method="POST">
                                     <?php echo csrf_field(); ?>
+
+                                    <input type="hidden" name="totalPrice" value="<?php echo e($ap -> orderHead -> totalPrice); ?>">
                                     <input type="hidden" name="apListId" value="<?php echo e($ap -> id); ?>">
                                     <input type="hidden" name="cabang" value="<?php echo e($default_branch); ?>">
+
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="supplierName">Nama Supplier</label>
@@ -255,18 +269,13 @@
                                             >
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="nominalInvoice">Nominal Invoice Yang Harus Dibayar</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp. </div>
-                                                </div>
-                                                <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.1" placeholder="Input Nominal Invoice" required 
-                                                    <?php if($ap -> status == 'CLOSED'): ?>
-                                                        <?php echo e('readonly'); ?>
+                                            <label for="dueDate">Due Date</label>
+                                            <input type="date" class="form-control" id="dueDate" name="dueDate" required
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('readonly'); ?>
 
-                                                    <?php endif; ?>
-                                                >
-                                            </div>
+                                                <?php endif; ?>
+                                            >
                                         </div>
                                     </div>
                                     <div class="form-row">
@@ -282,6 +291,20 @@
                                         <div class="form-group col-md-6">
                                             <label for="noDo">Nomor DO</label>
                                             <input type="text" class="form-control" id="noDo" placeholder="Input Nomor DO" name="noDo" required
+                                                <?php if($ap -> status == 'CLOSED'): ?>
+                                                    <?php echo e('readonly'); ?>
+
+                                                <?php endif; ?>
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nominalInvoice">Nominal Invoice Yang Harus Dibayar</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp. </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="nominalInvoice" name="nominalInvoice" min="1" step="0.01" placeholder="Input Nominal Invoice" required 
                                                 <?php if($ap -> status == 'CLOSED'): ?>
                                                     <?php echo e('readonly'); ?>
 

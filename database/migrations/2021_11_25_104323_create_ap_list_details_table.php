@@ -22,6 +22,8 @@ class CreateApListDetailsTable extends Migration
             $table->string('noInvoice');
             $table->string('noFaktur');
             $table->string('noDo');
+            $table->date('dueDate');
+            $table->string('userWhoSubmitted');
             $table->unsignedBigInteger('nominalInvoice');
             $table->string('additionalInformation')->nullable();
 

@@ -160,10 +160,21 @@ class AdminPurchasingController extends Controller
         // Validate the request
         $request -> validate([
             'noInvoice' => 'required',
-            'nominalInvoice' => 'required|integer|min:1',
+            'nominalInvoice' => 'required|numeric|between:0,99999999999.99',
             'noFaktur' => 'required',
             'noDo' => 'required',
+            'dueDate' => 'required|date',
             'additionalInformation' => 'nullable'
+        ]);
+
+        $remaining_price = ApList::find($request -> apListId)->pluck('paidPrice')[0] + $request -> nominalInvoice;
+        
+        if($remaining_price > $request -> totalPrice){
+            return redirect()->back()->with('fail', 'Nominal Invoice Invalid, Kindly Re-Check The Remaining Price');
+        }
+
+        ApList::where('id', $request -> apListId)->update([
+            'paidPrice' => $remaining_price
         ]);
 
         $apListDetail = ApListDetail::create([
@@ -173,7 +184,9 @@ class AdminPurchasingController extends Controller
             'noFaktur' => $request -> noFaktur,
             'noDo' => $request -> noDo,
             'nominalInvoice' => $request -> nominalInvoice,
-            'additionalInformation' => $request -> additionalInformation
+            'additionalInformation' => $request -> additionalInformation,
+            'dueDate' => date($request -> dueDate),
+            'userWhoSubmitted' => Auth::user()->name,
         ]);
 
         $apListDetail->update([

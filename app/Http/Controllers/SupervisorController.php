@@ -17,6 +17,8 @@ use App\Models\OrderDo;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\SendItemBelowStockReportJob;
+use App\Mail\DailyItemBelowStockReport;
+use Illuminate\Support\Facades\Mail;
 
 class SupervisorController extends Controller
 {

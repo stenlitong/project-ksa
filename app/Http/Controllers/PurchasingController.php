@@ -284,7 +284,7 @@ class PurchasingController extends Controller
             'noPo' => 'required',
             'invoiceAddress' => 'required',
             'itemAddress' => 'required',
-            'ppn' => 'required|numeric|in:0,10',
+            'ppn' => 'required|numeric|in:0,10,11',
             'discount' => 'nullable|numeric|min:0|max:100',
             'totalPrice' => 'required',
             'itemType' => 'required|in:Barang,Jasa'
@@ -631,12 +631,7 @@ class PurchasingController extends Controller
             'supplierNoRek' => ['required', 'string'],
             'supplierNPWP' => ['required', 'string'],
             'supplierCode' => ['required', 'string'],
-            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpSmd' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'supplierNote' => ['nullable', 'string']
         ]);
         
         // Then create the supplier
@@ -653,12 +648,7 @@ class PurchasingController extends Controller
             'supplierAddress' => ['required', 'string'],
             'supplierNoRek' => ['required', 'string'],
             'supplierNPWP' => ['required', 'string'],
-            'noTelpBks' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpSmd' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBer' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBnt' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpBnj' => ['nullable', 'numeric', 'digits_between:8,12'],
-            'noTelpJkt' => ['nullable', 'numeric', 'digits_between:8,12'],
+            'supplierNote' => ['nullable', 'string']
         ]);
 
         // Then update the supplier

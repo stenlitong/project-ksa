@@ -483,34 +483,10 @@ unset($__errorArgs, $__bag); ?>
                                             <input type="text" class="form-control" name="supplierNPWP" id="supplierNPWP" value="<?php echo e($s -> supplierNPWP); ?>" readonly>
                                         </div>
                                     </div>
-                                    <h5><u>No. Telp</u></h5>
-                                    <div class="form-row my-3">
-                                        <div class="col">
-                                            <label for="noTelpBks">Bekasi</label>
-                                            <input type="text" class="form-control" name="noTelpBks" value="<?php echo e($s -> noTelpBks); ?>" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label for="noTelpSmd">Samarinda</label>
-                                            <input type="text" class="form-control" name="noTelpSmd" value="<?php echo e($s -> noTelpSmd); ?>" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label for="noTelpBer">Berau</label>
-                                            <input type="text" class="form-control" name="noTelpBer" value="<?php echo e($s -> noTelpBer); ?>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-row my-3">
-                                        <div class="col">
-                                            <label for="noTelpBnt">Bunati</label>
-                                            <input type="text" class="form-control" name="noTelpBnt" value="<?php echo e($s -> noTelpBnt); ?>" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label for="noTelpBnj">Banjarmasin</label>
-                                            <input type="text" class="form-control" name="noTelpBnj" value="<?php echo e($s -> noTelpBnj); ?>" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label for="noTelpJkt">Jakarta</label>
-                                            <input type="text" class="form-control" name="noTelpJkt" value="<?php echo e($s -> noTelpJkt); ?>" readonly>
-                                        </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="supplierNote">Note</label>
+                                        <textarea class="form-control" id="supplierNote" name="supplierNote" rows="10"><?php echo e($s -> supplierNote); ?></textarea>
                                     </div>
                                 </form>
                             </div>
