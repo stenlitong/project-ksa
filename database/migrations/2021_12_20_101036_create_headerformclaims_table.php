@@ -15,9 +15,10 @@ class CreateHeaderformclaimsTable extends Migration
     {
         Schema::create('headerformclaims', function (Blueprint $table) {
             $table->id();
-            
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nama_file')->nullable();
-            
+
 
             $table->timestamps();
         });

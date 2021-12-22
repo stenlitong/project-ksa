@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth']], function(){
         Route::post('/create-history', 'picincidentController@createformclaim');
         Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
         Route::get('/history', 'picincidentController@formclaimhistory');
-        Route::get('/formclaimDownload', 'picincidentController@export');
+        Route::post('/formclaimDownload', 'picincidentController@export');
         
         Route::get('/spgr', 'picincidentController@spgr');
         Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);

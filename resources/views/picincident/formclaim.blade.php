@@ -47,7 +47,7 @@
                                         <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')" required autofocus />
 
                                         <x-label for="barge" :value="__('barge : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="barge" class="block mt-1 w-full" type="number" name="barge" placeholder="Enter barge" :value="old('barge')" required autofocus />
+                                        <x-input id="barge" class="block mt-1 w-full" type="text" name="barge" placeholder="Enter barge" :value="old('barge')" required autofocus />
                                         
                                         <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  />
                                         <x-input id="TSI_barge" class="block mt-1 w-full" type="number" name="TSI_barge" placeholder="Enter TSI barge" :value="old('TSI_barge')" required autofocus />
@@ -88,7 +88,8 @@
                                 @csrf
                                 @php
                                     $date = date('Y-m-d');
-                                    $name = 'file FCI-' . $date;
+                                    $spc = rand(1,100);
+                                    $name = 'file FCI-'. $spc . ' - ' . $date;
                                 @endphp
                                     <input type="hidden" name ="nama_file" value ="{{$name}}" />
                                 <div class="text-md-right">
@@ -100,6 +101,14 @@
                                 <div class="center">
                                     <div class="alert alert-success alert-block" id="message">
                                         <strong>{{ $success }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if ($ERR = Session::get('ERR'))
+                                <div class="center">
+                                    <div class="alert alert-danger alert-block" id="message">
+                                        <strong>{{ $ERR }}</strong>
                                     </div>
                                 </div>
                             @endif

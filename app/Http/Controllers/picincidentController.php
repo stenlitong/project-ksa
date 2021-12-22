@@ -24,9 +24,11 @@ use App\Exports\FCIexport;
 
 class picincidentController extends Controller
 {
+    //view FCI
     public function formclaim(){
-        $tempcarts = tempcart::all();
-        return view('picincident.formclaim' , compact('tempcarts'));
+        $tempcarts = tempcart::where('user_id', Auth::user()->id)->get();
+        $latestcarts = tempcart::where('user_id', Auth::user()->id)->first();
+        return view('picincident.formclaim' , compact('tempcarts' , 'latestcarts'));
     }
 
     public function destroy(tempcart $temp){
@@ -35,10 +37,13 @@ class picincidentController extends Controller
         return redirect('/picincident/formclaim')->with('success', 'post telah dihapus.'); 
     }
 
-    // create historyFCI
+    // addtoCart 
     public function submitformclaim(Request $request){
-        // dd($request);
+        // dd(Auth::user()->id);
+        // dd($request->TSI_TugBoat);
+        $user = Auth::user()->id;
         tempcart::create([
+            'user_id' => $user,
             'tgl_insiden' => $request->dateincident ,
             'tgl_formclaim' => $request->dateclaim , 
             'name'=> $request->name ,
@@ -47,7 +52,7 @@ class picincidentController extends Controller
             'no_FormClaim'=> $request->FormClaim , 
             'barge'=> $request->barge ,
             'TSI_barge'=> $request->TSI_barge,
-            'TSI_Tugboat'=> $request->TSI_TugBoat,
+            'TSI_TugBoat'=> $request->TSI_TugBoat,
             'deductible'=>$request->Deductible ,
             'amount'=> $request->Amount,
             'surveyor'=> $request->Surveyor,
@@ -56,33 +61,48 @@ class picincidentController extends Controller
             'description'=> $request->reasonbox ,
         ]);
 
-        formclaims::create([
-            'user_id' => Auth::user()->id,
-            'tgl_insiden' => $request->dateincident ,
-            'tgl_formclaim' => $request->dateclaim , 
-            'name'=> $request->name ,
-            'jenis_incident'=> $request->jenisincident ,
-            'item' => $request->Item_name ,
-            'no_FormClaim'=> $request->FormClaim , 
-            'barge'=> $request->barge ,
-            'TSI_barge'=> $request->TSI_barge,
-            'TSI_Tugboat'=> $request->TSI_TugBoat,
-            'deductible'=>$request->Deductible ,
-            'amount'=> $request->Amount,
-            'surveyor'=> $request->Surveyor,
-            'tugBoat'=> $request->TugBoat,
-            'incident'=> $request->Incident ,
-            'description'=> $request->reasonbox ,
-        ]);
-        
-        return redirect('/picincident/formclaim')->with('success', 'Form Telah Berhasil Di Tambahkan.');
+        // return redirect('/picincident/formclaim')->with('success', 'Form Telah Berhasil Di Tambahkan.');
+        return redirect()->back()->with('success', 'Form Telah Berhasil Di Tambahkan.');
     }
 
+    // create finallize/historyFCI
     public function createformclaim(Request $request){
-        tempcart::truncate();
-        headerformclaim::create([
-            'nama_file'=> $request->nama_file , 
+        // tempcart::truncate();
+        $temp = tempcart::where('user_id', Auth::user()->id)->get();
+
+        if (count($temp) == 0){
+            return redirect()->back()->with('ERR' , "Cart is empty , Please ADD to list" );
+        }
+
+        $headerid = headerformclaim::create([
+            'user_id' => Auth::user()->id,
+            'nama_file'=> $request->nama_file ,
         ]);
+
+        foreach( $temp as $temp){
+            formclaims::create([
+                'user_id' => Auth::user()->id,
+                'header_id' => $headerid -> id,
+                'tgl_insiden' => $temp->tgl_insiden ,
+                'tgl_formclaim' => $temp->tgl_formclaim , 
+                'name'=> $temp->name ,
+                'jenis_incident'=> $temp->jenis_incident ,
+                'item' => $temp->item ,
+                'no_FormClaim'=> $temp->no_FormClaim , 
+                'barge'=> $temp->barge ,
+                'TSI_barge'=> $temp->TSI_barge,
+                'TSI_TugBoat'=> $temp->TSI_TugBoat,
+                'deductible'=>$temp->deductible ,
+                'amount'=> $temp->amount,
+                'surveyor'=> $temp->surveyor,
+                'tugBoat'=> $temp->tugBoat,
+                'incident'=> $temp->incident ,
+                'description'=> $temp->description ,
+            ]);
+        }
+        
+        tempcart::where('user_id', Auth::user()->id)->delete();
+        
         return redirect('/picincident/history');
     }
 
@@ -97,14 +117,16 @@ class picincidentController extends Controller
     }
 
     // export function
+    private $excel;
     public function __construct(Excel $excel){
         $this->excel = $excel;
     }
 
-    public function export() {
-        // $claims = formclaims::where('word_one', $word_id)->pluck('no_FormClaim')->get();
-        // $Filename = 'FCI' . $claims .'.xlsx' ;
-        return $this->excel::download(new FCIexport, 'FCI.xlsx');
+    public function export(Request $request) {
+        // dd($request);
+        $identify = $request->file_id;
+        return $this->excel::download(new FCIexport($identify), 'FCI.xlsx');
+        // return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
     }
 
     

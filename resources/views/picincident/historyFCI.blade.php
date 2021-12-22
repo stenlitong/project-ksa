@@ -41,8 +41,9 @@
                                 <td class="table-info">
                                     <div class="form-row">
                                         <div class="col-md-auto">
-                                            <form method="get" action="/picincident/formclaimDownload">
+                                            <form method="POST" action="/picincident/formclaimDownload">
                                                 @csrf
+                                                    <input type="hidden" name ="file_id" value="{{$claims->id}}"/>
                                                     <button class="btn btn-outline-success" id="downloadexcel"><span class="text-center" data-feather="download" style="color: black"></span></button>
                                             </form>
                                         </div>

@@ -12,12 +12,12 @@ class formclaims extends Model
     protected $guarded = [
         'id'
     ];
-    Protected $hidden =['created_at','updated_at'];
-    Protected $fillable = ['tgl_insiden', 'tgl_formclaim' , 'name', 'item' ,
-    'jenis_incident','no_FormClaim',
-    'barge','TSI_barge','TSI_Tugboat',
-    'deductible','amount','surveyor',
-    'tugBoat','incident','description'];
+    Protected $hidden =['user_id','header_id','created_at','updated_at'];
+    // Protected $fillable = ['tgl_insiden', 'tgl_formclaim' , 'name', 'item' ,
+    // 'jenis_incident','no_FormClaim',
+    // 'barge','TSI_barge','TSI_Tugboat',
+    // 'deductible','amount','surveyor',
+    // 'tugBoat','incident','description'];
     
 }
  

@@ -11,9 +11,9 @@ class tempcart extends Model
     protected $guarded = [
         'id'
     ];
-    Protected $fillable = ['tgl_insiden', 'tgl_formclaim' , 'name', 'item' ,
-    'jenis_incident','no_FormClaim',
-    'barge','TSI_barge','TSI_Tugboat',
-    'deductible','amount','surveyor',
-    'tugBoat','incident','description'];
+    // Protected $fillable = ['tgl_insiden', 'tgl_formclaim' , 'name', 'item' ,
+    // 'jenis_incident','no_FormClaim',
+    // 'barge','TSI_barge','TSI_Tugboat',
+    // 'deductible','amount','surveyor',
+    // 'tugBoat','incident','description'];
 }
