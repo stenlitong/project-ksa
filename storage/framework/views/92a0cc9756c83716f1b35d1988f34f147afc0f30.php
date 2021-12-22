@@ -188,10 +188,10 @@
                 <select name="role_id" id="role_id"
                     class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     required>
-                    <option selected disabled value="">Choose...</option>
-                    <option value="picSite" id="picSite" disabled <?php if(old('role_id') == 'picSite'): ?> selected="selected" <?php endif; ?>>PIC Site</option>
-                    <option value="picIncident" id="picIncident" disabled <?php if(old('role_id') == 'picIncident'): ?> selected="selected" <?php endif; ?>>PIC Incident</option>
-                    <option value="insurance" id="insurance" disabled <?php if(old('role_id') == 'insurance'): ?> selected="selected" <?php endif; ?>>Asuransi</option>
+                    <option selected value="">Choose...</option>
+                    <option value="picSite" id="picSite" <?php if(old('role_id') == 'picSite'): ?> selected="selected" <?php endif; ?>>PIC Site</option>
+                    <option value="picIncident" id="picIncident" <?php if(old('role_id') == 'picIncident'): ?> selected="selected" <?php endif; ?>>PIC Incident</option>
+                    <option value="insurance" id="insurance" <?php if(old('role_id') == 'insurance'): ?> selected="selected" <?php endif; ?>>Asuransi</option>
                     <option value="purchasing"  <?php if(old('role_id') == 'purchasing'): ?> selected="selected" <?php endif; ?>>Purchasing</option>
                     <option value="logistic"  <?php if(old('role_id') == 'logistic'): ?> selected="selected" <?php endif; ?>>Logistic</option>
                     <option value="supervisorLogistic"  <?php if(old('role_id') == 'supervisorLogistic'): ?> selected="selected" <?php endif; ?>>Supervisor Logistic</option>
@@ -274,8 +274,6 @@
                         }
                 }
             </script>
-
-
             <!-- Password -->
             <div class="mt-4">
                 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
