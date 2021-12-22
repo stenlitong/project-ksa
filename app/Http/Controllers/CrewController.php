@@ -75,8 +75,7 @@ class CrewController extends Controller
     // this mechanism will check if the order is already processed or not by checking the number => crew(1), logistic(2), supervisor A(3), supervisor B(4),
     // purchasing (5), if the tracker number is different then it will return the "error" message.
 
-    public function orderPage()
-    {
+    public function orderPage(){
         // Select items to choose in the order page & carts according to the login user
         $items = Item::where('cabang', Auth::user()->cabang)->where('itemState', 'like', 'Available')->get();
         $barges = Barge::all();
@@ -231,8 +230,19 @@ class CrewController extends Controller
 
     public function taskPage()
     {
-        // ==== In Progress ====
+        // Get all the tugs and barge
+        $tugs = Tug::all();
+        $barges = Barge::all();
 
-        return view('crew.crewTask');
+        return view('crew.crewCreateTask', compact('tugs', 'barges'));
+    }
+
+    public function createTaskDetailPage(){
+
+        // Get all the tugs and barge
+        $tugs = Tug::all();
+        $barges = Barge::all();
+
+        return view('crew.crewCreateTaskDetail', compact('tugs', 'barges'));
     }
 }

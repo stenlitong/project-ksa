@@ -137,11 +137,6 @@
                                         <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <datalist id="tugName">
-                                    @foreach($tugs as $t)
-                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                    @endforeach
-                                </datalist> --}}
                             </div>
                             <div class="col">
                                 <label>Barge (Optional)</label>
@@ -151,12 +146,6 @@
                                         <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <datalist id="bargeName">
-                                    <option value="">None</option>
-                                    @foreach($barges as $b)
-                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                    @endforeach
-                                </datalist> --}}
                             </div>
                         </div>
                     </div>

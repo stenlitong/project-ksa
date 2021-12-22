@@ -20,20 +20,15 @@ use App\Http\Controllers\picincidentController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
+// ========================================================================== Message ===============================================================================================
+// Apologizes for the bad code or we called it "spaghetti" code, because we are consists of 2 intern programmers who are still learning everything while doing our final semester
+// We need to research for every single thing and crammed everything while building this project under 6 months without the help of senior/project manager/any other it department 
+// (just pure 2 intern programmers) 
+// So we need to find every information on the internet, including creating the logic flow -> making the database -> implementing it using laravel (instead of cool & flashy js 
+// framework, coz we need to build this project asap) -> hosting to AWS/prod (also learn how to use EC2, load balancer, auto scaling, security group, route53, rds)
+// We knew that our project is far from perfect, there are a lot of inconsistencies, no optimization, many bloated files around, also the ui is not good
+// we hope you guys the best of luck and can make a better version of our own project ! 
+// ===================================================================================================================================================================================
 
 Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -45,7 +40,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
 
         // Task Page
-        Route::get('/task', [CrewController::class, 'taskPage'])->name('task');
+        Route::get('/create-task', [CrewController::class, 'taskPage'])->name('createTask');
+        Route::get('/create-task/detail', [CrewController::class, 'createTaskDetailPage'])->name('taskDetail');
 
         // Order Page
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
@@ -54,7 +50,6 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
     });
-
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
         // Dashboard Page
@@ -217,30 +212,6 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         // Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
     });
 
-});
-
-// ================================================= Dev Route =======================================================
-Route::get('/add-boat', function(){
-    Tug::create([
-        'tugName' => 'Tug A',
-        'areaOperations' => 'Jakarta',
-        'classification' => 'Kapal',
-        'yearModel' => '2021',
-        'status' => 'operational'
-    ]);
-
-    Barge::create([
-        'bargeName' => 'Barge A',
-        'size' => 300,
-        'type' => 'Barge',
-        'areaOperation' => 'Jakarta',
-        'bargeYear' => '2021',
-        'status' => 'operational'
-    ]);
-
-    return redirect('/dashboard');
-});
-
     Route::prefix('picsite')->name('picsite.')->group(function(){
         Route::get('/rpk', [PicRpkController::class , 'rpk']);
         Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
@@ -294,10 +265,34 @@ Route::get('/add-boat', function(){
         Route::post('/viewspgr',[InsuranceController::class, 'viewspgr']);
 
         Route::get('/HistoryNoteSpgr', 'InsuranceController@historynotespgr');
-        
        
     });
+});
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// ================================================= Dev Route =======================================================
+Route::get('/add-boat', function(){
+    Tug::create([
+        'tugName' => 'Tug A',
+        // 'areaOperations' => 'Jakarta',
+        // 'classification' => 'Kapal',
+        // 'yearModel' => '2021',
+        // 'status' => 'operational'
+    ]);
+
+    Barge::create([
+        'bargeName' => 'Barge A',
+        // 'size' => 300,
+        // 'type' => 'Barge',
+        // 'areaOperation' => 'Jakarta',
+        // 'bargeYear' => '2021',
+        // 'status' => 'operational'
+    ]);
+
+    return redirect('/dashboard');
+});
+
 require __DIR__.'/auth.php';
-
-Route::get('/registeradmin' , [RegisteredUserController::class , 'view']);
-

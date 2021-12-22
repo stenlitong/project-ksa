@@ -65,6 +65,6 @@ class RegisteredUserController extends Controller
 
         // Preferences: auto login after register || change the code below
         Auth::login($user);
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME);
     }
 }

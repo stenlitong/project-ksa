@@ -16,10 +16,10 @@ class CreateTugsTable extends Migration
         Schema::create('tugs', function (Blueprint $table) {
             $table->id();
             $table->string('tugName');
-            $table->string('areaOperations');
-            $table->string('classification');
-            $table->string('yearModel');
-            $table->string('status');
+            // $table->string('areaOperations');
+            // $table->string('classification');
+            // $table->string('yearModel');
+            // $table->string('status');
             $table->timestamps();
         });
     }
