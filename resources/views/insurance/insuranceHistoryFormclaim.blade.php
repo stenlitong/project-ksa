@@ -1,11 +1,11 @@
 @extends('../layouts.base')
 
-@section('title', 'PicIncident-history-FCI')
+@section('title', 'insurance-history-FCI')
 
 @section('container')
 <x-guest-layout>
 <div class="row">
-    @include('picincident.sidebarincident')
+    @include('insurance.insuranceSidebar')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >
@@ -41,14 +41,14 @@
                                 <td class="table-info">
                                     <div class="form-row">
                                         <div class="col-md-auto">
-                                            <form method="POST" action="/picincident/formclaimDownload">
+                                            <form method="POST" action="/insurance/historyFormclaimdownload">
                                                 @csrf
                                                     <input type="hidden" name ="file_id" value="{{$claims->id}}"/>
-                                                    <button class="btn btn-outline-success" id="downloadexcel"><span class="text-center" data-feather="download" style="color: black"></span></button>
+                                                    <button class="btn btn-outline-success" id="downloadexcel">Download</button>
                                             </form>
                                         </div>
                                         <div class="col-md-auto">
-                                            <form method="POST" action="/picincident/history/destroy/{{$claims->id}}">
+                                            <form method="POST" action="/insurance/historyFormclaim/destroy/{{$claims->id}}">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-outline-danger" type="submit" style="font-size: 16px" id="deleteexcel">Delete</button>

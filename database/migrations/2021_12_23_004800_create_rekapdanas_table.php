@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoteSpgrsTable extends Migration
+class CreateRekapdanasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateNoteSpgrsTable extends Migration
      */
     public function up()
     {
-        Schema::create('note_spgrs', function (Blueprint $table) {
+        Schema::create('rekapdanas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->date('DateNote')->nullable();
-            $table->string('No_SPGR')->nullable();
+            $table->string('Cabang')->nullable();
             $table->string('No_FormClaim')->nullable();
             $table->string('Nama_Kapal')->nullable();
             $table->string('status_pembayaran')->nullable();
@@ -37,6 +37,6 @@ class CreateNoteSpgrsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('note_spgrs');
+        Schema::dropIfExists('rekapdanas');
     }
 }

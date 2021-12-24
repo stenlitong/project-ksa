@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Storage;
 use Response;
 use validator;
-use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 use App\Mail\Gmail;
-use App\Models\documents;
-use App\Models\documentberau;
-use App\Models\documentbanjarmasin;
-use App\Models\documentrpk;
-use App\Models\documentsamarinda;
 use App\Models\User;
+use App\Models\documents;
+use App\Models\Rekapdana;
+use App\Models\documentrpk;
+use Illuminate\Http\Request;
+use App\Models\documentberau;
+use App\Models\documentsamarinda;
+use Illuminate\Support\Facades\DB;
+use App\Models\documentbanjarmasin;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 
 class picAdminController extends Controller
 {
     public function checkform(){
-       
         if (request('search') == 'All') {
             $document = DB::table('documents')->whereMonth('created_at', date('m'))->latest()->get();
             $documentberau = DB::table('beraudb')->whereMonth('created_at', date('m'))->latest()->get();
@@ -146,11 +146,6 @@ class picAdminController extends Controller
 
         return redirect('/picadmin/rpk');
     }
-   
-    public function download(){
-        $path = Storage::path('assets/stenli-picsite-3' );
-        return Response::download($path, 'stenli-picsite-3.txt');
-    }
     
     public function view(Request $request){
         
@@ -217,4 +212,54 @@ class picAdminController extends Controller
         }
     }
 
+    // RekapulasiDana delete
+    public function destroyrekap(Rekapdana $rekap){
+        Rekapdana::destroy($rekap->id); 
+        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah dihapus.'); 
+    }
+    //update RekapulasiDana
+    public function updaterekap(Request $request,Rekapdana $rekap){
+        $update = Rekapdana::findorfail($rekap->id);
+        $update->DateNote = $request->Datebox;
+        $update->Cabang = $request->Cabang;
+        $update->No_FormClaim = $request->No_FormClaim;
+        $update->Nama_Kapal = $request->NamaKapal;
+        $update->status_pembayaran = $request->status_pembayaran;
+        $update->Nilai = $request->Nilai;
+        $update->mata_uang_nilai = $request->mata_uang_nilai;
+        $update->Nilai_Claim = $request->NilaiClaim;
+        $update->mata_uang_claim = $request->mata_uang_claim;
+        $update->update();
+        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah terupdate.'); 
+    }
+    //create RekapulasiDana
+    public function uploadrekap(Request $request){
+        // dd($request);
+        $request->validate([
+            'Cabang'=> 'required|max:255',
+            'NamaKapal'=> 'required|max:255',
+            'NilaiClaim'=> 'required',
+            // 'DateNote'=> 'required',
+        ]);
+
+        Rekapdana::create([
+            'user_id'=> Auth::user()->id,
+            'DateNote' => $request->Datebox ,
+            'Cabang' => $request->Cabang ,
+            'No_FormClaim' => $request->No_FormClaim ,
+            'Nama_Kapal' => $request->NamaKapal ,
+            'status_pembayaran' => $request->status_pembayaran ,
+            'Nilai' => $request->Nilai ,
+            'mata_uang_nilai' => $request->mata_uang_nilai ,
+            'Nilai_Claim' => $request->NilaiClaim ,
+            'mata_uang_claim' => $request->mata_uang_claim ,
+            
+        ]);
+        return redirect('/picadmin/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
+    }
+
+    public function RekapulasiDana(){
+        $rekapdana= Rekapdana::all();
+        return view('picadmin.picAdminRekapulasiDana', compact('rekapdana'));
+    }
 }

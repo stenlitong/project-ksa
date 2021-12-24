@@ -73,8 +73,8 @@
                     required>
                     <option selected value="">Choose...</option>
                     <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
-                    <option value="picIncident" id="picIncident" @if (old('role_id') == 'picIncident') selected="selected" @endif>PIC Incident</option>
-                    <option value="insurance" id="insurance" @if (old('role_id') == 'insurance') selected="selected" @endif>Asuransi</option>
+                    <option value="picIncident" id="picIncident" @if (old('role_id') == 'picIncident') selected="selected" @endif>Asuransi Incident</option>
+                    <option value="insurance" id="insurance" @if (old('role_id') == 'insurance') selected="selected" @endif>Manager Asuransi</option>
                     <option value="purchasing"  @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
                     <option value="logistic"  @if (old('role_id') == 'logistic') selected="selected" @endif>Logistic</option>
                     <option value="supervisorLogistic"  @if (old('role_id') == 'supervisorLogistic') selected="selected" @endif>Supervisor Logistic</option>

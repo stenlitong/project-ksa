@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\formclaims;
 
-class CreateTempcartsTable extends Migration
+class Formclaim extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +14,13 @@ class CreateTempcartsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tempcarts', function (Blueprint $table) {
+        Schema::create('formclaim', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('header_id');
+            $table->foreign('header_id')->references('id')->on('headerformclaims')->onDelete('cascade')->onUpdate('cascade');
+            // $table->string('code_special')->nullable();
             
             $table->string('name')->nullable();
             $table->string('no_FormClaim')->nullable();
@@ -36,11 +40,9 @@ class CreateTempcartsTable extends Migration
             $table->decimal('amount', 14, 2)->nullable();
             $table->string('mata_uang_amount', 10)->nullable();
             $table->longText('description')->nullable();
-
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -48,6 +50,6 @@ class CreateTempcartsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tempcarts');
+        //
     }
 }

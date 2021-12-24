@@ -39,9 +39,9 @@
                             @for ( $r = 1 ; $r <= 7 ; $r++)
                             @php
                                 $viewspgrfile = array('spgr','Letter_of_Discharge','CMC','surat_laut',
-                                                    'spb','lot_line','surat_keterangan_bank');
+                                                    'spb','load_line','surat_keterangan_bank');
                                 $name = array('SPGR','LETTER OF DISCHARGE','CMC','SURAT LAUT',
-                                        'SPB','LOT LINE','SURAT KETERANGAN BANK');
+                                        'SPB','LOAD LINE','SURAT KETERANGAN BANK');
                                 $spgrfile = 'spgrfile'.$r;
                                 $time_upload ="time_upload".$r;
                                 $stats ="status".$r;

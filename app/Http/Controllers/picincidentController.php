@@ -24,39 +24,16 @@ use App\Exports\FCIexport;
 
 class picincidentController extends Controller
 {
+    //view Form Claim page
     public function formclaim(){
-        $tempcarts = tempcart::all();
-        return view('picincident.formclaim' , compact('tempcarts'));
+        $tempcarts = tempcart::where('user_id', Auth::user()->id)->get();
+        $latestcarts = tempcart::where('user_id', Auth::user()->id)->first();
+        return view('picincident.formclaim' , compact('tempcarts' , 'latestcarts'));
     }
-
-    public function destroy(tempcart $temp){
-        tempcart::destroy($temp->id); 
-        formclaims::destroy($temp->id); 
-        return redirect('/picincident/formclaim')->with('success', 'post telah dihapus.'); 
-    }
-
-    // create historyFCI
+   
+    // addtoCart 
     public function submitformclaim(Request $request){
-        // dd($request);
         tempcart::create([
-            'tgl_insiden' => $request->dateincident ,
-            'tgl_formclaim' => $request->dateclaim , 
-            'name'=> $request->name ,
-            'jenis_incident'=> $request->jenisincident ,
-            'item' => $request->Item_name ,
-            'no_FormClaim'=> $request->FormClaim , 
-            'barge'=> $request->barge ,
-            'TSI_barge'=> $request->TSI_barge,
-            'TSI_Tugboat'=> $request->TSI_TugBoat,
-            'deductible'=>$request->Deductible ,
-            'amount'=> $request->Amount,
-            'surveyor'=> $request->Surveyor,
-            'tugBoat'=> $request->TugBoat,
-            'incident'=> $request->Incident ,
-            'description'=> $request->reasonbox ,
-        ]);
-
-        formclaims::create([
             'user_id' => Auth::user()->id,
             'tgl_insiden' => $request->dateincident ,
             'tgl_formclaim' => $request->dateclaim , 
@@ -66,53 +43,101 @@ class picincidentController extends Controller
             'no_FormClaim'=> $request->FormClaim , 
             'barge'=> $request->barge ,
             'TSI_barge'=> $request->TSI_barge,
-            'TSI_Tugboat'=> $request->TSI_TugBoat,
+            'TSI_TugBoat'=> $request->TSI_TugBoat,
             'deductible'=>$request->Deductible ,
+            'mata_uang_amount'=>$request->mata_uang_amount,
+            'mata_uang_TSI'=>$request-> mata_uang_TSI,
             'amount'=> $request->Amount,
             'surveyor'=> $request->Surveyor,
             'tugBoat'=> $request->TugBoat,
             'incident'=> $request->Incident ,
             'description'=> $request->reasonbox ,
         ]);
-        
-        return redirect('/picincident/formclaim')->with('success', 'Form Telah Berhasil Di Tambahkan.');
+
+        // return redirect('/picincident/formclaim')->with('success', 'Form Telah Berhasil Di Tambahkan.');
+        return redirect()->back()->withInput()->with('success', 'Form Telah Berhasil Di Tambahkan.');
     }
 
+    //delete post on Form Claim page
+    public function destroy(tempcart $temp){
+        tempcart::destroy($temp->id); 
+        formclaims::destroy($temp->id); 
+        return redirect('/picincident/formclaim')->with('success', 'post telah dihapus.'); 
+    }
+
+    // create finallize/historyFCI
     public function createformclaim(Request $request){
-        tempcart::truncate();
-        headerformclaim::create([
-            'nama_file'=> $request->nama_file , 
+        // tempcart::truncate();
+        $temp = tempcart::where('user_id', Auth::user()->id)->get();
+
+        if (count($temp) == 0){
+            return redirect()->back()->with('ERR' , "Cart is empty , Please ADD to list" );
+        }
+
+        $headerid = headerformclaim::create([
+            'user_id' => Auth::user()->id,
+            'nama_file'=> $request->nama_file ,
         ]);
+
+        foreach( $temp as $temp){
+            formclaims::create([
+                'user_id' => Auth::user()->id,
+                'header_id' => $headerid -> id,
+                'tgl_insiden' => $temp->tgl_insiden ,
+                'tgl_formclaim' => $temp->tgl_formclaim , 
+                'name'=> $temp->name ,
+                'jenis_incident'=> $temp->jenis_incident ,
+                'item' => $temp->item ,
+                'no_FormClaim'=> $temp->no_FormClaim , 
+                'barge'=> $temp->barge ,
+                'TSI_barge'=> $temp->TSI_barge,
+                'TSI_TugBoat'=> $temp->TSI_TugBoat,
+                'mata_uang_TSI'=>$temp-> mata_uang_TSI,
+                'deductible'=>$temp->deductible ,
+                'amount'=> $temp->amount,
+                'mata_uang_amount'=>$temp->mata_uang_amount,
+                'surveyor'=> $temp->surveyor,
+                'tugBoat'=> $temp->tugBoat,
+                'incident'=> $temp->incident ,
+                'description'=> $temp->description ,
+            ]);
+        }
+        
+        tempcart::where('user_id', Auth::user()->id)->delete();
+        
         return redirect('/picincident/history');
     }
-
+    //view FCI for export page
     public function formclaimhistory() {
         $Headclaim = headerformclaim::all();
         return view('picincident.historyFCI' , compact('Headclaim'));
     }
-    
+    //delete Export post
     public function DestroyExcel(headerformclaim $claims){
         headerformclaim::destroy($claims->id); 
         return redirect('/picincident/history')->with('success', 'File telah dihapus.'); 
     }
 
     // export function
+    private $excel;
     public function __construct(Excel $excel){
         $this->excel = $excel;
     }
 
-    public function export() {
-        // $claims = formclaims::where('word_one', $word_id)->pluck('no_FormClaim')->get();
-        // $Filename = 'FCI' . $claims .'.xlsx' ;
-        return $this->excel::download(new FCIexport, 'FCI.xlsx');
+    public function export(Request $request) {
+        // dd($request);
+        $identify = $request->file_id;
+        return $this->excel::download(new FCIexport($identify), 'FCI.xlsx');
+        // return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
     }
 
-    // note spgr
+    
+    // note spgr delete
     public function destroynote(NoteSpgr $UpNotes){
         NoteSpgr::destroy($UpNotes->id); 
         return redirect('/picincident/NoteSpgr')->with('success', 'post telah dihapus.'); 
     }
-
+    //update notes
     public function updatenote(Request $request, NoteSpgr $UpNotes){
         $update = NoteSpgr::find($UpNotes->id);
         $update->DateNote = $request->Datebox;
@@ -120,12 +145,14 @@ class picincidentController extends Controller
         $update->No_FormClaim = $request->No_FormClaim;
         $update->Nama_Kapal = $request->NamaKapal;
         $update->status_pembayaran = $request->status_pembayaran;
+        $update->mata_uang_nilai = $request->mata_uang_nilai;
         $update->Nilai = $request->Nilai;
+        $update->mata_uang_claim = $request->mata_uang_claim;
         $update->Nilai_Claim = $request->NilaiClaim;
         $update->update();
         return redirect('/picincident/NoteSpgr')->with('success', 'post telah terupdate.'); 
     }
-
+    //create notes
     public function uploadnotespgr(Request $request){
         // dd($request);
         $request->validate([
@@ -136,21 +163,25 @@ class picincidentController extends Controller
         ]);
 
         NoteSpgr::create([
+            'user_id' => Auth::user()->id,
             'DateNote' => $request->Datebox ,
             'No_SPGR' => $request->No_SPGR ,
             'No_FormClaim' => $request->No_FormClaim ,
             'Nama_Kapal' => $request->NamaKapal ,
             'status_pembayaran' => $request->status_pembayaran ,
             'Nilai' => $request->Nilai ,
+            'mata_uang_nilai' => $request->mata_uang_nilai ,
             'Nilai_Claim' => $request->NilaiClaim ,
+            'mata_uang_claim' => $request->mata_uang_claim ,
         ]);
         return redirect('/picincident/NoteSpgr')->with('success', 'Note telah ditambahkan.');
     }
     
     public function notespgr(){
-        $UploadNotes =  DB::table('note_spgrs')->latest()->get();
+        $UploadNotes =  DB::table('note_spgrs')->get();
         return view('picincident.NoteSpgr', compact('UploadNotes'));
     }
+
 
     // upload spgr file
     public function spgr(){

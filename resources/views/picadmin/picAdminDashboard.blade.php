@@ -101,6 +101,10 @@
                         <tr>
                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
+                    @elseif ($d->$stats == 'on review')
+                        <tr>
+                             {{-- agar tidak keluar hasil on review --}}
+                        </tr>
                     @else
                     <tr>
                         <td scope="col">{{ $r }}</td>
@@ -147,9 +151,13 @@
                     @endphp
                     <input type="hidden" name='status' value={{$stats}}>
                      @if(empty($doc->$stats))
-                     <tr>
-                         {{-- agar tidak keluar hasil kosong --}}
-                     </tr>
+                        <tr>
+                            {{-- agar tidak keluar hasil kosong --}}
+                        </tr>
+                     @elseif ($doc->$stats == 'on review')
+                        <tr>
+                            {{-- agar tidak keluar hasil on review --}}
+                        </tr>
                      @else
                      <tr>
                          <td scope="col">{{ $a }}</td>
@@ -203,11 +211,15 @@
                          $date = date('Y-m-28');
                     @endphp
                     <input type="hidden" name='status' value={{$stats}}>
-                     @if(empty($d->$stats))
+                    @if(empty($d->$stats))
                      <tr>
                          {{-- agar tidak keluar hasil kosong --}}
                      </tr>
-                     @else
+                    @elseif ($d->$stats == 'on review')
+                        <tr>
+                            {{-- agar tidak keluar hasil on review --}}
+                        </tr>
+                    @else
                      <tr>
                          <td scope="col">{{ $a }}</td>
                          <td scope="col" id="nama">{{$name[$a-1]}}</td>  
@@ -267,6 +279,10 @@
                      <tr>
                          {{-- agar tidak keluar hasil kosong --}}
                      </tr>
+                     @elseif ($b->$stats == 'on review')
+                        <tr>
+                            {{-- agar tidak keluar hasil on review --}}
+                        </tr>
                      @else
                      <tr>
                          <td scope="col">{{ $a }}</td>
@@ -332,6 +348,10 @@
                      <tr>
                          {{-- agar tidak keluar hasil kosong --}}
                      </tr>
+                     @elseif ($s->$stats == 'on review')
+                        <tr>
+                            {{-- agar tidak keluar hasil on review --}}
+                        </tr>
                      @else
                      <tr>
                          <td scope="col">{{ $a }}</td>

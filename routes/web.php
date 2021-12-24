@@ -213,44 +213,54 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     });
 
     Route::prefix('picsite')->name('picsite.')->group(function(){
+        //RPK page
         Route::get('/rpk', [PicRpkController::class , 'rpk']);
         Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
         Route::get('/downloadrpk' , [PicRpkController::class, 'downloadrpk'])->name('downloadrpk');
 
-        // Route::get('/view', [PicsiteController::class , 'view']);
-
+        //Fund Request page
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
         Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
     });
 
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
+        // admin review funds page
         Route::get('/dana', 'picAdminController@checkform');
         Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
         Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
         
+        //view route for RPK and Funds page
         Route::post('/dana/view',[picAdminController::class, 'view']);
         Route::post('/rpk/view',[picAdminController::class, 'viewrpk']);
-
+        
+        //Admin RPK page
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
         Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);
-        Route::get('/download' , [picAdminController::class , 'download'])->name('download');
+
+        Route::get('/RekapulasiDana',[picAdminController::class, 'RekapulasiDana']);
+        Route::post('/uploadrekap',[picAdminController::class, 'uploadrekap']);
+        Route::delete('/RekapulasiDana/destroy/{rekap}',[picAdminController::class, 'destroyrekap']);
+        Route::put('/RekapulasiDana/update/{rekap}',[picAdminController::class, 'updaterekap']);
     });
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
+        //form claim page
         Route::get('/formclaim', 'picincidentController@formclaim');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
         Route::delete('/formclaim/destroy/{temp}', [picincidentController::class , 'destroy']);
         
-        
+        //FCI History page
         Route::post('/create-history', 'picincidentController@createformclaim');
-        Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
         Route::get('/history', 'picincidentController@formclaimhistory');
-        Route::get('/formclaimDownload', 'picincidentController@export');
+        Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
+        Route::post('/formclaimDownload', 'picincidentController@export');
         
+        // SPGR Upload page
         Route::get('/spgr', 'picincidentController@spgr');
         Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);
 
+        //SPGR Note page
         Route::get('/NoteSpgr', 'picincidentController@notespgr');
         Route::post('/addNoteSpgr', 'picincidentController@uploadnotespgr');
         Route::delete('/NoteSpgr/destroy/{UpNotes}', [picincidentController::class , 'destroynote']);
@@ -259,15 +269,30 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     });
 
     Route::prefix('insurance')->name('insurance.')->group(function(){
+        // Review uploaded Spgr file page 
         Route::get('/CheckSpgr', 'InsuranceController@checkspgr');
         Route::post('/approvespgr',[InsuranceController::class, 'approvespgr']);
         Route::post('/rejectspgr',[InsuranceController::class, 'rejectspgr']);
         Route::post('/viewspgr',[InsuranceController::class, 'viewspgr']);
 
+        //SPGR history notes page
         Route::get('/HistoryNoteSpgr', 'InsuranceController@historynotespgr');
-       
+        // Route::put('/update/{UpNotes}', 'InsuranceController@Updatehistorynotespgr');
+        // Route::delete('/destroy/{UpNotes}', 'InsuranceController@Deletehistorynotespgr');
+
+        //Review history formclaim page
+        Route::get('/historyFormclaim', 'InsuranceController@historyFormclaim');
+        Route::post('/historyFormclaimdownload', 'InsuranceController@historyFormclaimDownload');
+        Route::delete('/historyFormclaim/destroy/{claims}', 'InsuranceController@historyFormclaimDelete');
+
+        //Rekapulasi Dana history page
+        Route::get('/HistoryRekapulasiDana', 'InsuranceController@historyRekapulasiDana');
+        Route::delete('/destroy/{rekap}', [InsuranceController::class , 'DestroyHistoryRekap']);
+        Route::put('/update/{rekap}', [InsuranceController::class, 'UpdateHistoryRekap']);
     });
 });
+
+Route::get('/registeradmin' , [RegisteredUserController::class , 'createAdmin']);
 
 Route::get('/', function () {
     return view('welcome');
