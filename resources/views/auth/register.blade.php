@@ -136,14 +136,6 @@
                     //     document.getElementById("Banjarmasin").disabled = false;
                     //     document.getElementById("bunati").disabled = false;   
                     // }
-                    
-                    if (dropdown.value=="picSite") {
-                        document.getElementById("jakarta").disabled = true;
-                        selectopt('samarinda');
-    
-                    } else {
-                            document.getElementById("jakarta").disabled = false;
-                        }
                 }
             </script>
             <!-- Password -->
@@ -201,11 +193,7 @@
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function (event) {
                     if (dropdown.value == "picSite") {
-                        document.getElementById("Jakarta").disabled = true;
-                        document.getElementById("Berau").disabled = true;
-                        selectopt('samarinda');
-                    }else {
-                        document.getElementById("Jakarta").disabled = false;
+                        document.getElementById("Kendari").disabled = true;
                     }
                     
                     if(dropdown.value == "purchasing"){

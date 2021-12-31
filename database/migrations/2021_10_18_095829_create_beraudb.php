@@ -19,6 +19,10 @@ class CreateBeraudb extends Migration
             $table->string('cabang', 15)->nullable();
             $table->unsignedBigInteger('user_id');
 
+            $table->string('nama_kapal',100)->nullable();
+            $table->date('periode_awal')->nullable();
+            $table->date('periode_akhir')->nullable();
+            
             $table->date('time_upload1') ->nullable();
             $table->string('status1', 10)->nullable();
             $table->string('reason1')->nullable();

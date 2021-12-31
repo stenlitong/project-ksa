@@ -44,14 +44,8 @@
                                             <form method="POST" action="/insurance/historyFormclaimdownload">
                                                 @csrf
                                                     <input type="hidden" name ="file_id" value="{{$claims->id}}"/>
+                                                    <input type="hidden" name ="file_name" value="{{$claims->nama_file}}"/>
                                                     <button class="btn btn-outline-success" id="downloadexcel">Download</button>
-                                            </form>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <form method="POST" action="/insurance/historyFormclaim/destroy/{{$claims->id}}">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px" id="deleteexcel">Delete</button>
                                             </form>
                                         </div>
                                     </div>

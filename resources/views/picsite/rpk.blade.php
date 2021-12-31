@@ -15,7 +15,7 @@
                           <br>
                             Please upload your RPK Document !
                         </p>
-                        <button class="btn btn-danger"  id="top" style="margin-left: 80%; width: 20%;">upload</button>
+                        <button class="btn btn-danger"  id="top" style="margin-left: 80%; width: 20%;">Submit</button>
 
                         @if($errors->any())
                             @foreach ($errors->all() as $error)
@@ -29,23 +29,39 @@
                                 <strong>{{ $success }}</strong>
                             </div>
                         @endif
-                        
+
+                        <form action="/picsite/uploadrpk" method="POST" enctype="multipart/form-data" name="formUploadrpk" id="formUploadrpk">
+                            @csrf
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label>Nama Kapal</label>
+                                    <input type="text" name="nama_kapal" style="text-transform: uppercase;"class="form-control" placeholder="Nama Kapal">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>from</label>
+                                    <input type="date" name="tgl_awal" class="form-control" placeholder="Periode Awal">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>to</label>
+                                    <input type="date" name="tgl_akhir" class="form-control" placeholder="Periode Akhir">
+                                </div>
+                            </div>
+                       
                         <table class="table" style="margin-top: 1%">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">No.</th>
                                     <th scope="col">Nama File</th>
-                                    <th scope="col">Upload Time</th>
+                                    {{-- <th scope="col">Upload Time</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Reason</th>
-                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Due Date</th> --}}
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <form action="/picsite/uploadrpk" method="POST" enctype="multipart/form-data" name="formUploadrpk" id="formUploadrpk">
-                                    @csrf
-{{-- Babelan --}}
+                                
+                        {{-- Babelan --}}
                                 @if (Auth::user()->cabang == 'Babelan')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                     @php
@@ -59,23 +75,28 @@
                                         $date = date('Y-m-28');
                                     @endphp
                                     <tr>
-                                        <td scope="col">{{ $a }}</td>
-                                        <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                        @foreach ( $docrpk as $doc)
+                                        <td class=table-primary>{{ $a }}</td>
+                                        <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                        {{-- @foreach ( $docrpk as $doc)
                                         <td id="">{{$doc->$time_upload}}</td>
                                         <td id="">{{$doc->$stats}}</td>
                                         <td id="">{{$doc->$reason}}</td>
                                         @endforeach
                                         <td id="">{{$date}}</td>
-                                        @if (empty($doc->$stats) or $doc->$stats == 'rejected')
-                                            <td><input name="{{$rfile}}" id="rfile" type="file"/></td>
-                                        @else
+                                        @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
+                                            <td>
+                                                <div class="input-group mb-3">
+                                                    <input type="file" name="{{$rfile}}" id="rfile" class="form-control" id="inputGroupFile01">
+                                                  </div>
+                                            </td>
+                                                {{-- <input name="{{$rfile}}" id="rfile" type="file"/> --}}
+                                        {{-- @else
                                             <td> </td>
-                                        @endif
+                                        @endif --}}
                                     </tr>
                                 @endfor
                                 @endif
-{{-- Berau --}}
+                        {{-- Berau --}}
                                 @if (Auth::user()->cabang == 'Berau')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -89,23 +110,28 @@
                                     $date = date('Y-m-28');
                                 @endphp
                                 <tr>
-                                    <td scope="col">{{ $a }}</td>
-                                    <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                    @foreach ( $docrpk as $doc)
+                                    <td class=table-primary>{{ $a }}</td>
+                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
-                                        <td><input name="{{$brfile}}" id="rfile" type="file"/></td>
-                                    @else
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
+                                    <td class=table-primary>
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control" name="{{$brfile}}" id="rfile">
+                                          </div>
+                                    </td>
+                                        <td><input  type="file"/></td>
+                                    {{-- @else
                                         <td> </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                                 @endfor
                                 @endif
-{{-- Banjarmasin --}}
+                    {{-- Banjarmasin --}}
                                 @if (Auth::user()->cabang == 'Banjarmasin')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -119,23 +145,28 @@
                                     $date = date('Y-m-28');
                                 @endphp
                                 <tr>
-                                    <td scope="col">{{ $a }}</td>
-                                    <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                    @foreach ( $docrpk as $doc)
+                                    <td class=table-primary>{{ $a }}</td>
+                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
-                                        <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td>
-                                    @else
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
+                                    <td class=table-primary>
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control" name="{{$bjrfile}}" id="rfile">
+                                          </div>
+                                    </td>
+                                        {{-- <td><input name="{{$bjrfile}}" id="rfile" type="file"/></td> --}}
+                                    {{-- @else
                                         <td> </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                                 @endfor
                                 @endif
-{{-- Samarinda --}}
+                    {{-- Samarinda --}}
                                 @if (Auth::user()->cabang == 'Samarinda')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
@@ -149,19 +180,24 @@
                                     $date = date('Y-m-28');
                                 @endphp
                                 <tr>
-                                    <td scope="col">{{ $a }}</td>
-                                    <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                    @foreach ( $docrpk as $doc)
+                                    <td class=table-primary>{{ $a }}</td>
+                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
                                     <td id="">{{$doc->$reason}}</td>
                                     @endforeach
                                     <td id="">{{$date}}</td>
-                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected')
-                                        <td><input name="{{$smrfile}}" id="rfile" type="file"/></td>
-                                    @else
+                                    @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
+                                    <td class=table-primary>
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control" name="{{$smrfile}}" id="rfile">
+                                          </div>
+                                    </td>
+                                        {{-- <td><input name="{{$smrfile}}" id="rfile" type="file"/></td> --}}
+                                    {{-- @else
                                         <td> </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                                 @endfor
                                 @endif
@@ -186,8 +222,6 @@
                     </div>
                 </div>
             </div>
-            
-                </table>    
             </div>
         </div>
     </main>

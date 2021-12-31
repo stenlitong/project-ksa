@@ -17,6 +17,10 @@ class CreateSamarindadb extends Migration
             $table->id();
             $table->string('cabang', 10)->nullable();
             $table->unsignedBigInteger('user_id');
+
+            $table->string('nama_kapal',70)->nullable();
+            $table->date('periode_awal')->nullable();
+            $table->date('periode_akhir')->nullable();
            
             $table->date('time_upload1')->nullable();
             $table->string('status1', 10)->nullable();

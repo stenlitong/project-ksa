@@ -17,6 +17,7 @@
                         </p>
                         <br>
                         <button class="btn btn-danger" id="topsubmit" style="margin-left: 80%; width: 20%;" onClick="">Submit</button>
+
                         @if($errors->any())
                             @foreach ($errors->all() as $error)
                                 <div class="alert error alert-danger" id="error">{{ $error }}
@@ -29,60 +30,37 @@
                                 <strong>{{ $message }}</strong>
                             </div>
                         @endif
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                            Launch demo modal
-                        </button>
-                        
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                       
+                        <form action="/picsite/upload" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label>Nama Kapal</label>
+                                    <input type="text" style="text-transform: uppercase;" name="nama_kapal" class="form-control" placeholder="Nama Kapal">
                                 </div>
-                                <div class="modal-body">
-                                    <form method="post" action="#">
-                                        <label>Nama Kapal</label>
-                                        <input type="text" class="form-control w-auto" placeholder="nama kapal">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>from</label>
-                                                <input type="date" class="form-control" placeholder="Periode Inisial">
-                                            </div>
-                                            <div class="col">
-                                                <label>to</label>
-                                                <input type="date" class="form-control" placeholder="Final Periode">
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="col-md-4">
+                                    <label>from</label>
+                                    <input type="date" class="form-control" name="tgl_awal" placeholder="Periode Awal">
                                 </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <div class="col-md-4">
+                                    <label>to</label>
+                                    <input type="date" class="form-control" name="tgl_akhir" placeholder="Periode Akhir">
                                 </div>
-                            </div>
-                            </div>
-                        </div>
                         
                         <table class="table"style="margin-top: 1%">
                             <thead class="thead-dark" >
                                 <tr>
                                     <th scope="col">No.</th>
                                     <th scope="col">Nama File</th>
-                                    <th scope="col">Upload Time</th>
+                                    {{-- <th scope="col">Upload Time</th>
                                     <th scope="col">status</th>
                                     <th scope="col">Reason</th>
-                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Due Date</th> --}}
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             
                             <tbody>
-                                <form action="/picsite/upload" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload">
+                                {{-- <form action="/picsite/upload" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload"> --}}
                                     @csrf
 {{--Babelan ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Babelan')
@@ -100,22 +78,25 @@
                                             $date = date('Y-m-28');
                                         @endphp
                                         <tr>
-                                            <td scope="col">{{ $a }}</td>
-                                            <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                            @foreach ($document as $doc )
-                                                <td scope="col" id="time1">{{$doc->$time_upload}}</td> 
-                                                <td scope="col" id="status1">{{$doc->$stats}}</td>
-                                                <td scope="col" id="reason1">{{$doc->$reason}}</td>
+                                            <td class=table-primary>{{ $a }}</td>
+                                            <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                            {{-- @foreach ($document as $doc )
+                                                <td class=table-primary id="time1">{{$doc->$time_upload}}</td> 
+                                                <td class=table-primary id="status1">{{$doc->$stats}}</td>
+                                                <td class=table-primary id="reason1">{{$doc->$reason}}</td>
                                                 @endforeach
-                                            <td scope="col" id="duetime1">{{$date}}</td> 
-                                            @if (empty($doc->$stats) or $doc->$stats == 'rejected')
-                                                <td scope="col">
-                                                    <input name={{$ufile}} id="ufile" type="file" onClick=""/> 
-                                                    {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                            <td class=table-primary id="duetime1">{{$date}}</td> 
+                                            @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
+                                                <td class=table-light>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" name={{$ufile}} id="ufile">
+                                                    </div>
                                                 </td>  
-                                            @else
+                                                {{-- <input name={{$ufile}} id="ufile" type="file" onClick=""/>  --}}
+                                                {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                            {{-- @else
                                                 <td>  </td>
-                                            @endif
+                                            @endif --}}
                                         </tr>
                                     @endfor
                                     @endif
@@ -138,25 +119,28 @@
                                         $reason ="reason".$a;
                                         $date = date('Y-m-28');
                                     @endphp
-                                            <tr>
-                                                <td scope="col">{{$a}}</td>   
-                                                <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                                @foreach ($documentberau as $d )                           
-                                                    <td scope="col" id="time">{{$d->$time_upload}}</td>                                        
-                                                    <td scope="col" id="status">{{$d->$stats}}</td>                                      
-                                                    <td scope="col" id="reason">{{$d->$reason}}</td>                                        
-                                                @endforeach
-                                                <td scope="col" id="duetime1">{{$date}}</td> 
-                                                @if (empty($d->$stats) or $d->$stats == 'rejected')
-                                                <td scope="col">
-                                                    <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/> 
-                                                    {{-- <a href="/picsite/view" target="_blank">view</a> --}}
-                                                </td>  
-                                                @else
-                                                <td> </td>
-                                                @endif
-                                            </tr>
-                                        @endfor
+                                        <tr>
+                                            <td class=table-primary>{{$a}}</td>   
+                                            <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                            {{-- @foreach ($documentberau as $d )                           
+                                                <td class=table-primary id="time">{{$d->$time_upload}}</td>                                        
+                                                <td class=table-primary id="status">{{$d->$stats}}</td>                                      
+                                                <td class=table-primary id="reason">{{$d->$reason}}</td>                                        
+                                            @endforeach
+                                            <td class=table-primary id="duetime1">{{$date}}</td> 
+                                            @if (empty($d->$stats) or $d->$stats == 'rejected') --}}
+                                            <td class=table-light>
+                                                <div class="input-group mb-3">
+                                                    <input type="file" class="form-control" name="{{$beraufile}}" id="beraufile">
+                                                </div>
+                                            </td>  
+                                            {{-- <input name="{{$beraufile}}" id="beraufile" type="file" onClick=""/>  --}}
+                                            {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                            {{-- @else
+                                            <td> </td>
+                                            @endif --}}
+                                        </tr>
+                                    @endfor
                                     @endif
 {{--Banjarmasin --------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                             @if (Auth::user()->cabang == 'Banjarmasin')
@@ -180,23 +164,25 @@
                                         $date = date('Y-m-28');
                                     @endphp
                                     <tr>   
-                                        <td scope="col">{{ $a }}</td>
-                                        <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                        @foreach ($documentbanjarmasin as $b )
-                                        {{-- <td>PNBP Sertifikat Konstruksi</td> --}}                                
-                                        <td scope="col" id="time">{{$b->$time_upload}}</td>                                        
-                                        <td scope="col" id="status">{{$b->$stats}}</td>                                      
-                                        <td scope="col" id="reason">{{$b->$reason}}</td>                                        
+                                        <td class=table-primary>{{ $a }}</td>
+                                        <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                        {{-- @foreach ($documentbanjarmasin as $b )
+                                        <td class=table-primary id="time">{{$b->$time_upload}}</td>                                        
+                                        <td class=table-primary id="status">{{$b->$stats}}</td>                                      
+                                        <td class=table-primary id="reason">{{$b->$reason}}</td>                                        
                                         @endforeach
-                                        <td scope="col" id="duetime1">{{$date}}</td> 
-                                        @if (empty($b->$stats)or $b->$stats == 'rejected')
-                                            <td scope="col">
-                                                <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
-                                                {{-- <a href="/picsite/view" target="_blank">view</a> --}}
+                                        <td class=table-primary id="duetime1">{{$date}}</td> 
+                                        @if (empty($b->$stats)or $b->$stats == 'rejected') --}}
+                                            <td class=table-light>
+                                                <div class="input-group mb-3">
+                                                    <input type="file" class="form-control" name="{{$banjarmasinfile}}" id="banjarmasinfile">
+                                                </div>
+                                                  {{-- <a href="/picsite/view" target="_blank">view</a> --}}
                                             </td>  
-                                        @else
+                                                <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
+                                        {{-- @else
                                             <td> </td>
-                                        @endif
+                                        @endif --}}
                                     </tr>      
                                 @endfor
                             @endif
@@ -224,29 +210,32 @@
                                         $date = date('Y-m-28');
                                     @endphp
                                         <tr>
-                                            <td scope="col">{{ $a }}</td>   
-                                            <td scope="col" id="nama">{{$name[$a-1]}}</td>
-                                            @foreach ($documentsamarinda as $s )                           
-                                                <td scope="col" id="time">{{$s->$time_upload}}</td>                                        
-                                                <td scope="col" id="status">{{$s->$stats}}</td>                                      
-                                                <td scope="col" id="reason">{{$s->$reason}}</td>                                        
+                                            <td class=table-primary>{{ $a }}</td>   
+                                            <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                            {{-- @foreach ($documentsamarinda as $s )                           
+                                                <td class=table-primary id="time">{{$s->$time_upload}}</td>                                        
+                                                <td class=table-primary id="status">{{$s->$stats}}</td>                                      
+                                                <td class=table-primary id="reason">{{$s->$reason}}</td>                                        
                                             @endforeach
-                                            <td scope="col" id="duetime1">{{$date}}</td> 
-                                            @if (empty($s->$stats)or $s->$stats == 'rejected')
-                                                <td scope="col">
-                                                    <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/> 
+                                            <td class=table-primary id="duetime1">{{$date}}</td> 
+                                            @if (empty($s->$stats)or $s->$stats == 'rejected') --}}
+                                                <td class=table-light>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" name="{{$samarindafile}}" id="samarindafile">
+                                                    </div>
                                                 </td>  
-                                            @else
+                                                    {{-- <input name="{{$samarindafile}}" id="samarindafile" type="file" onClick=""/>  --}}
+                                            {{-- @else
                                                 <td> </td>
-                                            @endif
+                                            @endif --}}
                                         </tr>     
                                         @endfor
                                     @endif
                                 </tbody>   
                         </table>
-                        @if(date("d") < 28)
-                            <button class="btn btn-danger" id="realsubmit" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
-                         @endif
+                        <button class="btn btn-danger" id="realsubmit" style="margin-left: 50%; display: none;" type="submit" name="Submit" value="Upload" onClick="">Submit</button>
+                        {{-- @if(date("d") <= 28)
+                         @endif --}}
 
                         <script>
                             document.getElementById('topsubmit').addEventListener('click', openDialog);

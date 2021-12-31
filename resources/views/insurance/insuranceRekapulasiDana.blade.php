@@ -18,11 +18,9 @@
                                 <th scope="col">No.</th>
                                 <th scope="col">Tahun/Bulan/Tanggal</th>
                                 <th scope="col">Cabang</th>
-                                <th scope="col">No Form Claim</th>
                                 <th scope="col">Nama Kapal</th>
-                                <th scope="col">status pembayaran</th>
-                                <th scope="col">Nilai</th>
-                                <th scope="col">Nilai Claim yang di setujui</th>
+                                <th scope="col">Status pembayaran</th>
+                                <th scope="col">Nilai Jumlah Di Bayar</th>
                                 {{-- <th scope="col">Action</th> --}}
                             </tr>
                         </thead>
@@ -35,11 +33,9 @@
                                 <td class="table-info">{{$loop->index+1}}</td>
                                 <td class="table-info">{{$rekap->DateNote}}</td>
                                 <td class="table-info">{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->No_FormClaim}}</td>
                                 <td class="table-info">{{$rekap->Nama_Kapal}}</td>
                                 <td class="table-info">{{$rekap->status_pembayaran}}</td>
                                 <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
-                                <td class="table-info">{{$rekap->mata_uang_claim}} - {{number_format($rekap->Nilai_Claim, 2)}}</td>
                                 {{-- <td scope="col">
                                     <div class="row">
                                         <div class="col-md-auto">

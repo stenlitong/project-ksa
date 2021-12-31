@@ -19,14 +19,10 @@ use App\Models\User;
 class PicRpkController extends Controller
 {
     public function rpk(){
-        $date = date('m');
-        $docrpk = documentrpk::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
-        return view('picsite.rpk' , compact('docrpk'));
-    }
-
-    public function downloadrpk(){
-        $path = Storage::path('SuratBarang/stenli-picsiteRPK-1.pdf' );
-        return Response::download($path, 'stenli-picsiteRPK-1.pdf');
+        // $date = date('m');
+        // $docrpk = documentrpk::with('user')->where('cabang',Auth::user()->cabang)->whereMonth('created_at', date('m'))->latest()->get();
+        // return view('picsite.rpk' , compact('docrpk'));
+        return view('picsite.rpk');
     }
 
     public function uploadrpk(Request $request){
@@ -52,9 +48,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('rfile1')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
                         'time_upload1' => date("Y-m-d"),
@@ -63,6 +59,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -75,9 +75,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('rfile2')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([      
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([      
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
                         'time_upload2' => date("Y-m-d"),
@@ -86,6 +86,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -98,9 +102,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('rfile3')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
                         'time_upload3' => date("Y-m-d"),
@@ -109,6 +113,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -121,9 +129,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('rfile4')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
                         'time_upload4' => date("Y-m-d"),
@@ -132,6 +140,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -144,9 +156,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('rfile5')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([                   
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
                         'time_upload5' => date("Y-m-d"),
@@ -155,6 +167,10 @@ class PicRpkController extends Controller
                     documentrpk::create([                   
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -167,9 +183,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('rfile6')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([                  
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                  
                         'status6' => 'on review',
                         'docking' => basename($path),
                         'time_upload6' => date("Y-m-d"),
@@ -178,6 +194,10 @@ class PicRpkController extends Controller
                     documentrpk::create([      
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -190,9 +210,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('rfile7')->storeas('babelan/'. $year . "/". $month . '/RPK', $name1, 's3');
-                if (documentrpk::where('cabang', 'Babelan')->whereMonth('created_at', date('m'))->exists()){
+                if (documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Babelan' )->update([              
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([              
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                         'surat_kapal' => basename($path),
@@ -201,7 +221,11 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
-                         
+
+                         'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                         'surat_kapal' => basename($path),
@@ -229,9 +253,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('brfile1')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
                         'time_upload1' => date("Y-m-d"),
@@ -240,6 +264,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -252,9 +280,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('brfile2')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
                         'time_upload2' => date("Y-m-d"),
@@ -263,6 +291,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -275,9 +307,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('brfile3')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
                         'time_upload3' => date("Y-m-d"),
@@ -286,6 +318,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -298,9 +334,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('brfile4')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
                         'time_upload4' => date("Y-m-d"),
@@ -309,6 +345,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -321,9 +361,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('brfile5')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([                   
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
                         'time_upload5' => date("Y-m-d"),
@@ -332,6 +372,10 @@ class PicRpkController extends Controller
                     documentrpk::create([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -344,9 +388,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('brfile6')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([                
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
                         'time_upload6' => date("Y-m-d"),
@@ -355,6 +399,10 @@ class PicRpkController extends Controller
                     documentrpk::create([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -367,9 +415,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('brfile7')->storeas('berau/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Berau')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Berau' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                         'surat_kapal' => basename($path),
@@ -378,6 +426,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -406,9 +458,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('bjrfile1')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::create([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
                         'time_upload1' => date("Y-m-d"),
@@ -417,6 +469,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -429,9 +485,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('bjrfile2')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
                         'time_upload2' => date("Y-m-d"),
@@ -440,6 +496,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -452,9 +512,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('bjrfile3')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
                         'time_upload3' => date("Y-m-d"),
@@ -463,6 +523,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
@@ -475,9 +539,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('bjrfile4')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
                         'time_upload4' => date("Y-m-d"),
@@ -486,6 +550,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -499,9 +567,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('bjrfile5')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([                   
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
                         'time_upload5' => date("Y-m-d"),
@@ -510,6 +578,10 @@ class PicRpkController extends Controller
                     documentrpk::create([       
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -522,9 +594,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('bjrfile6')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([                
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
                         'time_upload6' => date("Y-m-d"),
@@ -533,6 +605,10 @@ class PicRpkController extends Controller
                     documentrpk::create([         
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -545,9 +621,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('bjrfile7')->storeas('banjarmasin/'. $year . "/". $month. '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Banjarmasin')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Banjarmasin' )->update([                
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                         'surat_kapal' => basename($path),
@@ -556,6 +632,10 @@ class PicRpkController extends Controller
                     documentrpk::create([       
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
@@ -584,9 +664,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_barang';
                 $path = $request->file('smrfile1')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
                         'time_upload1' => date("Y-m-d"),
@@ -595,6 +675,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
@@ -607,9 +691,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/cargo_manifest';
                 $path = $request->file('smrfile2')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([                       
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                       
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
                         'time_upload2' => date("Y-m-d"),
@@ -618,6 +702,10 @@ class PicRpkController extends Controller
                     documentrpk::create([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
@@ -630,19 +718,23 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/voyage';
                 $path = $request->file('smrfile3')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
                         'time_upload3' => date("Y-m-d"),
                     ]);
                 }else{
                     documentrpk::create([
-                        'status3' => 'on review',
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
+                        'status3' => 'on review',
                         'voyage' => basename($path),
                         'time_upload3' => date("Y-m-d"),
                     ]);
@@ -653,9 +745,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/bill_lading';
                 $path = $request->file('smrfile4')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
                         'time_upload4' => date("Y-m-d"),
@@ -664,6 +756,10 @@ class PicRpkController extends Controller
                     documentrpk::create([
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
@@ -676,9 +772,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/gerak_kapal';
                 $path = $request->file('smrfile5')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([                   
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
                         'time_upload5' => date("Y-m-d"),
@@ -687,6 +783,10 @@ class PicRpkController extends Controller
                     documentrpk::create([    
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
@@ -699,9 +799,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/docking';
                 $path = $request->file('smrfile6')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([                
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
                         'time_upload6' => date("Y-m-d"),
@@ -710,6 +810,10 @@ class PicRpkController extends Controller
                     documentrpk::create([     
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
@@ -722,9 +826,9 @@ class PicRpkController extends Controller
                 $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
                 $tujuan_upload = 'RPK/surat_kapal';
                 $path = $request->file('smrfile7')->storeas('samarinda/'. $year . "/". $month . '/RPK' , $name1, 's3');
-                if(documentrpk::where('cabang', 'Samarinda')->whereMonth('created_at', date('m'))->exists()){
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     
-                    documentrpk::where('cabang', 'Samarinda' )->update([                 
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                 
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),
                         'surat_kapal' => basename($path),
@@ -733,6 +837,10 @@ class PicRpkController extends Controller
                     documentrpk::create([     
                         'user_id' => Auth::user()->id,
                         'cabang' => Auth::user()->cabang ,
+
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
                         'time_upload7' => date("Y-m-d"),

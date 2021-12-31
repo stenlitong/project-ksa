@@ -10,15 +10,47 @@
             <div class="jumbotron">
                 <h1 class="Header-5">Document & Fund Request Review</h1>
                 <hr class="my-4">
-                <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
-                    <option selected disabled hidden='true' value="">Pilih Cabang</option>
-                    <option value="/picadmin/dana?search=All">Semua Cabang</option>
-                    <option value="/picadmin/dana?search=Babelan">Babelan</option>
-                    <option value="/picadmin/dana?search=Berau">Berau</option>
-                    <option value="/picadmin/dana?search=Samarinda">Samarinda</option>
-                    <option value="/picadmin/dana?search=Banjarmasin">Banjarmasin</option>
-                   </select>
-                <br>
+
+                <div class="form-row">
+                  {{-- cabang filter --}}
+                  <div class="col-md-auto">
+                    <select name="cabang" class="form-select" onchange="window.location = this.value;">
+                        <option selected disabled hidden='true' value="">Pilih Cabang</option>
+                        <option value="/picadmin/dana?search=All">Semua Cabang</option>
+                        <option value="/picadmin/dana?search=Babelan">Babelan</option>
+                        <option value="/picadmin/dana?search=Berau">Berau</option>
+                        <option value="/picadmin/dana?search=Samarinda">Samarinda</option>
+                        <option value="/picadmin/dana?search=Banjarmasin">Banjarmasin</option>
+                    </select>
+                  </div>
+
+                  {{-- search bar --}}
+                  <div class="col-md-auto">
+                    <form method="GET" action="/picadmin/dana/search" role="search">
+                      <div class="auto-cols-auto">
+                          <div class="col" style="margin-left:-1%" >
+                              <label class="sr-only" for="search_kapal">Nama Kapal</label>
+                              <div class="input-group">
+                                {{-- <div class="input-group-prepend">
+                                  <div class="input-group-text">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                      </svg>
+                                  </div>
+                                </div> --}}
+                                <input type="text" style="text-transform: uppercase;" name="search_kapal" id="search_kapal" class="form-control" placeholder="Search Nama Kapal" autofocus>
+                                <button type="submit" class="btn btn-info">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                  </svg>
+                                </button>
+                              </div>
+                          </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
                   @error('reasonbox')
                   <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                       Alasan Wajib Diisi
@@ -30,119 +62,178 @@
                     }, 5000 ); // 5 secs
                   </script>
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
                 <table class="table" style="margin-top: 2%">
                   <thead class="thead-dark">
                       <tr>
-                          <th scope="col">No.</th>
-                          <th scope="col">Nama File</th>
-                          <th scope="col">Cabang</th>
-                          <th scope="col">Upload Time</th>
-                          <th scope="col">status</th>
-                          <th scope="col">Due Date</th>
-                          <th scope="col">Action</th>
+                        <th>Time Uploaded</th>
+                        <th>Cabang</th>
+                        <th>Nama Kapal</th>
+                        <th>Periode (Y-M-D)</th>
+                        <th>Nama File</th>
+                        <th>Jenis File</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                        <th>Action</th>
                       </tr>
                   </thead>
                   <tbody> 
 {{-- Babelan------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
-                      @forelse($document as $doc )
-                       @for ( $a = 1 ; $a <= 16 ; $a++)
-                       @php
-                            $BABELAN = array('sertifikat_keselamatan',
-                              'sertifikat_garis_muat','penerbitan_sekali_jalan','sertifikat_safe_manning',
-                              'endorse_surat_laut','perpanjangan_sertifikat_sscec','perpanjangan_sertifikat_p3k' ,
-                              'biaya_laporan_dok','pnpb_sertifikat_keselamatan','pnpb_sertifikat_garis_muat',
-                              'pnpb_surat_laut','sertifikat_snpp','sertifikat_anti_teritip',    
-                              'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec');
+                    @forelse($document as $doc )
+                      @for ( $a = 1 ; $a <= 16 ; $a++)
+                      @php
+                          $BABELAN = array('sertifikat_keselamatan',
+                            'sertifikat_garis_muat','penerbitan_sekali_jalan','sertifikat_safe_manning',
+                            'endorse_surat_laut','perpanjangan_sertifikat_sscec','perpanjangan_sertifikat_p3k' ,
+                            'biaya_laporan_dok','pnpb_sertifikat_keselamatan','pnpb_sertifikat_garis_muat',
+                            'pnpb_surat_laut','sertifikat_snpp','sertifikat_anti_teritip',    
+                            'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec');
 
-                            $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,
-                             'Endorse Surat Laut' , 'Perpanjangan Sertifikat SSCEC' , 'Perpanjangan Sertifikat P3K' , 'Biaya Laporan Dok' , 
-                             'PNPB Sertifikat Keselamatan' , 'PNPB Sertifikat Garis Muat' , 'PNPB Surat Laut'  , 'Sertifikat SNPP' ,
-                              'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC');
-                            $time_upload ="time_upload".$a;
-                            $stats ="status".$a;
-                            $reason = "reason".$a;
-                            $date = date('Y-m-28');
-                       @endphp
-                        @if(empty($doc->$stats))
-                        <tr>
-                            {{-- agar tidak keluar hasil kosong --}}
-                        </tr>
-                        @else
-                        <tr>
-                            <td scope="col">{{ $a }}</td>
-                            <td scope="col" id="nama">{{$names[$a-1]}}</td>                                        
-                            <td scope="col" id="cabang">{{$doc->cabang}}</td>                                        
-                            <td scope="col" id="time">{{$doc ->$time_upload}}</td>                                        
-                            <td scope="col" id="status">{{$doc->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$date}}</td> 
-                            @if ($doc->$stats == "on review")
-                            <td scope="col">
-                              <div class="form-row">
-                                <div class="col-md-auto">
-                                  <form method="POST" action="/picadmin/dana/approvedana">
+                          $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,
+                            'Endorse Surat Laut' , 'Perpanjangan Sertifikat SSCEC' , 'Perpanjangan Sertifikat P3K' , 'Biaya Laporan Dok' , 
+                            'PNPB Sertifikat Keselamatan' , 'PNPB Sertifikat Garis Muat' , 'PNPB Surat Laut'  , 'Sertifikat SNPP' ,
+                            'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC');
+                          $time_upload ="time_upload".$a;
+                          $stats ="status".$a;
+                          $reason = "reason".$a;
+                          $date = date('Y-m-28');
+                          $scan = $BABELAN[$a-1];
+                      @endphp
+                      @if(empty($doc->$stats))
+                      <tr>
+                          {{-- dont show null value--}}
+                      </tr>
+                      @else
+                      <tr>
+                        @if ($doc->$stats == "rejected")
+                          <td class="table-danger"><strong>{{ $doc->created_at }}</strong></td>
+                          <td class="table-danger" id=""><strong>{{$doc->cabang}}</strong></td>                                        
+                          <td class="table-danger" style="text-transform: uppercase;"id="namakapal">{{$doc->nama_kapal}}</td>                                        
+                          <td class="table-danger" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
+                          <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>  
+                          <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                          <td class="table-danger" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-danger" id="reason">{{$doc ->$reason}}</td>
+                        @elseif($doc->$stats == "approved")
+                          <td class="table-success"><strong>{{ $doc->created_at }}</strong></td>
+                          <td class="table-success" id=""><strong>{{$doc->cabang}}</strong></td>                                        
+                          <td class="table-success" style="text-transform: uppercase;"id="namakapal">{{$doc->nama_kapal}}</td>                                        
+                          <td class="table-success" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
+                          <td class="table-success" id="namafile">{{$names[$a-1]}}</td>  
+                          <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                          <td class="table-success" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-success" id="reason">{{$doc ->$reason}}</td>
+                        @endif
+                        @if ($doc->$stats == "on review")
+                          <td class="table-info"><strong>{{ $doc->created_at }}</strong></td>
+                          <td class="table-info" id=""><strong>{{$doc->cabang}}</strong></td>                                        
+                          <td class="table-info" style="text-transform: uppercase;"id="namakapal">{{$doc->nama_kapal}}</td>                                        
+                          <td class="table-info" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
+                          <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                          <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                          <td class="table-info" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-info" id="reason">{{$doc ->$reason}}</td>
+                          <td scope="col">
+                            <div class="form-row">
+                            {{-- Approve Button --}}
+                              <div class="col-md-auto">
+                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ApproveTitle-{{$reason}}">
+                                  Approve File
+                                </button>
+                              </div>
+                            {{-- Reject Button --}}
+                              <div class="col-md-auto">
+                                <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                  Reject File
+                                </button>
+                              </div>
+                            {{-- view Button --}}
+                              <div class="col-md-auto">
+                                <form method="post" action="/picadmin/dana/view" target="_blank">
                                   @csrf
-                                  <input type="hidden" name='status' value={{$stats}}>
                                   <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
-                                  <button type="submit" class="btn btn-outline-success"  >approve</button>
-                                  </form>
-                                </div>
-                                <div class="col-md-auto">
-                                  <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                    Reject File
-                                  </button>
-                                </div>
-                                <div class="col-md-auto">
-                                  <form method="post" action="/picadmin/dana/view">
-                                    @csrf
-                                    <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
-                                    <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
-                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                  </form>  
+                                      <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
+                                      <input type="hidden" name='result' value={{$doc->$scan}} />
+                                      <input type="hidden" name = 'tipefile' value='DANA'>
+                                  <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                </form>  
+                              </div>
+                            </div>
+
+                          <!-- Modal Approve -->
+                              <div class="modal fade" id="ApproveTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="ApproveTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Approve Document ?</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <form method="POST" action="/picadmin/dana/approvedana">
+                                      @csrf
+                                      <div class="modal-body">
+                                        <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$doc->$scan}} />
+                                        <input type="hidden" name='reason' value={{$reason}}>
+                                        <input type="hidden" name='status' value={{$stats}}>
+                                        <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
+                                        <div class="form-group">
+                                          <label for="reason">Reason</label>
+                                          <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="submit" id="submitapprove" class="btn btn-success">Approve File</button>
+                                      </div>
+                                    </form>
+                                  </div>
                                 </div>
                               </div>
-                              
-                                  <!-- Modal -->
-                                  <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <form method="POST" action="/picadmin/dana/rejectdana">
-                                            @csrf
-                                              <input type="hidden" name='reason' value={{$reason}}>
-                                              <input type="hidden" name='status' value={{$stats}}>
-                                              <input type="hidden" name ='cabang' value={{$doc->cabang}}>
-                                              <div class="form-group">
-                                                  <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
-                                              </div>
-                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
+                            
+                          <!-- Modal Reject-->
+                                <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <form method="POST" action="/picadmin/dana/rejectdana">
+                                          @csrf
+                                            <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
+                                            <input type="hidden" name='result' value={{$doc->$scan}} />
+                                            <input type="hidden" name='reason' value={{$reason}}>
+                                            <input type="hidden" name='status' value={{$stats}}>
+                                            <input type="hidden" name ='cabang' value={{$doc->cabang}}>
+                                            <div class="form-group">
+                                                <label for="reason">Reason</label>
+                                                <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                             </div>
-                                            <div class="modal-footer">
-                                              <button type="submit" id="submitreject2" class="btn btn-outline-danger">Reject File</button>
-                                          </form>
-                                        </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="submit" id="submitreject2" class="btn btn-outline-danger">Reject File</button>
+                                        </form>
                                       </div>
                                     </div>
                                   </div>
-                                  
-                              </td>
-                              @else
-                                <td></td>
-                              @endif
-                          </tr>
-                        @endif
-                        @endfor
-                        @empty
-                          <tr>
-                              {{-- nothing --}}
-                          </tr>
-                        @endforelse
+                                </div>
+                                
+                            </td>
+                          @else
+                            <td></td>
+                          @endif
+                      </tr>
+                      @endif
+                      @endfor
+                      @empty
+                        <tr>
+                            <td>Babelan Fund Request Not Found</td>
+                        </tr>
+                      @endforelse
 {{-- Berau----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($documentberau as $d )
                        @for ( $a = 1 ; $a <= 26 ; $a++)
@@ -170,6 +261,7 @@
                             $stats ="status".$a;
                             $reason = "reason".$a;
                             $date = date('Y-m-28');
+                            $scan = $BERAU[$a-1];
                        @endphp
                         @if(empty($d->$stats))
                         <tr>
@@ -177,84 +269,139 @@
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $a }}</td>
-                            <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
-                            <td scope="col" id="cabang">{{$d->cabang}}</td>                                        
-                            <td scope="col" id="time">{{$d ->$time_upload}}</td>                                        
-                            <td scope="col" id="status">{{$d->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$date}}</td> 
-                            @if ($d->$stats == "on review")
-                              <td scope="col">
+                          @if ($d->$stats == "approved")
+                            <td class="table-success"><strong>{{$d->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{$d->cabang }}</strong></td>
+                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
+                            <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
+                            <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
+                            <td class="table-success" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-success" id="reason">{{$d->$reason}}</td>    
+                          @elseif($d->$stats == "rejected")
+                            <td class="table-danger"><strong>{{$d->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{$d->cabang }}</strong></td>
+                            <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
+                            <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
+                            <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>       
+                            <td class="table-danger" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-danger" id="reason">{{$d->$reason}}</td>   
+                          @endif
+                          @if ($d->$stats == "on review")
+                            <td class="table-info"><strong>{{$d->created_at }}</strong></td>
+                            <td class="table-info"><strong>{{$d->cabang }}</strong></td>
+                            <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
+                            <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
+                            <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                            <td class="table-info" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-info" id="reason">{{$d ->$reason}}</td>
+                            <td scope="col">
                                 <div class="form-row">
-                                  <div class="col-md-auto">
+                              {{-- Approve Button --}}
+                                <div class="col-md-auto">
+                                  <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ApproveTitle-{{$reason}}">
+                                    Approve File
+                                  </button>
+                                </div>
+                              {{-- Reject Button --}}
+                                <div class="col-md-auto">
+                                  <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                    Reject File
+                                  </button>
+                                </div>
+                              {{-- view button --}}
+                                <div class="col-md-auto">
+                                  <form method="post" action="/picadmin/dana/view" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                      <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
+                                      <input type="hidden" name='result' value={{$d->$scan}} />
+                                      <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                  </form>
+                                </div>
+                              </div>
+                              
+                            <!-- Modal approve-->
+                              <div class="modal fade" id="ApproveTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="ApproveTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Approve Document ?</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
                                     <form method="POST" action="/picadmin/dana/approvedana">
                                       @csrf
-                                      <input type="hidden" name='status' value={{$stats}}>
-                                      <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                      <button type="submit" class="btn btn-outline-success">approve</button>
-                                  </form>
-                                  </div>
-                                  <div class="col-md-auto">
-                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                      Reject File
-                                </button>
-                                  </div>
-                                  <div class="col-md-auto">
-                                    <form method="post" action="/picadmin/dana/view">
-                                      @csrf
-                                      <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                      <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
-                                      <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                    </form>
+                                      <div class="modal-body">
+                                        <input type="hidden" name='status' value={{$stats}}>
+                                        <input type="hidden" name='reason' value={{$reason}}>
+                                        <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$d->$scan}} />
+                                        <input type="hidden" name ='cabang' value={{$d->cabang}}>
+                                        <button type="submit" class="btn btn-outline-success">approve</button>
+                                          <div class="form-group">
+                                            <label for="reason">Reason</label>
+                                            <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                          </div>
+                                      </div>
+                                        <div class="modal-footer">
+                                          <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                        </div>
+                                      </form>
                                   </div>
                                 </div>
+                              </div>
                                 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
+                            <!-- Modal Reject-->
+                              <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <form method="POST" action="/picadmin/dana/rejectdana">
+                                        @csrf
                                         <div class="modal-body">
-                                          <form method="POST" action="/picadmin/dana/rejectdana">
-                                            @csrf
-                                              <input type="hidden" name='reason' value={{$reason}}>
-                                              <input type="hidden" name='status' value={{$stats}}>
-                                              <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                              <div class="form-group">
-                                                  <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
-                                              </div>
-                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
-                                            </div>
-                                            <div class="modal-footer">
-                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
-                                          </form>
+                                          <input type="hidden" name='reason' value={{$reason}}>
+                                          <input type="hidden" name='status' value={{$stats}}>
+                                          <input type="hidden" name ='cabang' value={{$d->cabang}}>
+                                          <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
+                                          <input type="hidden" name='result' value={{$d->$scan}} />
+                                          <div class="form-group">
+                                              <label for="reason">Reason</label>
+                                              <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                          </div>
                                         </div>
-                                      </div>
+                                        <div class="modal-footer">
+                                          <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                      </form>
                                     </div>
                                   </div>
-                              </td>
-                              @else
-                                <td></td>
-                              @endif
-                        </tr>
+                                </div>
+                        </td>
+                        @else
+                          <td></td>
                         @endif
-                        @endfor
-                        @empty
-                        <tr>
-                            {{-- nothing --}}
-                        </tr>
-                        @endforelse
+                      </tr>
+                      @endif
+                      @endfor
+                      @empty
+                      <tr>
+                        <td>Berau Fund Request Not Found</td>
+                      </tr>
+                      @endforelse
 {{-- Banjarmasin---------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($documentbanjarmasin as $b )
                        @for ( $a = 1 ; $a <= 31 ; $a++)
                        @php
-                       $BANJARMASIN = array('perjalanan','sertifikat_keselamatan','sertifikat_anti_fauling','surveyor',
+                        $BANJARMASIN = array('perjalanan','sertifikat_keselamatan','sertifikat_anti_fauling','surveyor',
                                             'drawing&stability','laporan_pengeringan','berita_acara_lambung',
                                             'laporan_pemeriksaan_nautis','laporan_pemeriksaan_anti_faulin','laporan_pemeriksaan_radio',
                                             'laporan_pemeriksaan_snpp','bki','snpp_permanen',
@@ -280,6 +427,7 @@
                             $stats ="status".$a;
                             $reason = "reason".$a;
                             $date = date('Y-m-28');
+                            $scan = $BANJARMASIN[$a-1];
                        @endphp
                         @if(empty($b->$stats))
                         <tr>
@@ -287,68 +435,97 @@
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $a }}</td>
-                            <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
-                            <td scope="col" id="cabang">{{$b->cabang}}</td>                                        
-                            <td scope="col" id="time">{{$b ->$time_upload}}</td>                                        
-                            <td scope="col" id="status">{{$b->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$date}}</td> 
-                            @if ($b->$stats == "on review")
+                          @if ($b->$stats == "approved")
+                            <td class="table-success"><strong>{{ $b->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{ $b->cabang }}</strong></td>
+                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
+                            <td class="table-success" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
+                            <td class="table-success" id="namafile">{{$names[$a-1]}}</td> 
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>      
+                            <td class="table-success" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-success" id="reason">{{$b->$reason}}</td>
+                          @elseif ($b->$stats == "rejected")
+                            <td class="table-danger"><strong>{{ $b->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{ $b->cabang }}</strong></td>
+                            <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
+                            <td class="table-danger" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
+                            <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
+                            <td class="table-danger" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-danger" id="reason">{{$b->$reason}}</td>
+                          @endif
+                          @if ($b->$stats == "on review")
+                            <td class="table-info"><strong>{{ $b->created_at }}</strong></td>
+                            <td class="table-info"><strong>{{ $b->cabang }}</strong></td>
+                            <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
+                            <td class="table-info" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
+                            <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                            <td class="table-info" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-info" id="reason">{{$b ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
+                                {{-- approve button --}}
                                 <div class="col-md-auto">
                                   <form method="POST" action="/picadmin/dana/approvedana">
-                                  @csrf
-                                  <input type="hidden" name='status' value={{$stats}}>
-                                  <input type="hidden" name ='cabang' value={{$b->cabang}}>
-                                  <button type="submit" class="btn btn-outline-success">approve</button>
-                                </form>
-                                </div>
-                                <div class="col-md-auto">
-                                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                    Reject File
-                                </button>
-                                </div>
-                                <div class="col-md-auto">
-                                  <form method="post" action="/picadmin/dana/view">
                                     @csrf
-                                    <input type="hidden" name ='cabang' value={{$b->cabang}}>
                                     <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
+                                    <input type="hidden" name='result' value={{$b->$scan}} />
+                                    <input type="hidden" name='status' value={{$stats}}>
+                                    <input type="hidden" name ='cabang' value={{$b->cabang}}>
+                                    <button type="submit" class="btn btn-outline-success">approve</button>
+                                  </form>
+                                </div>
+                              {{-- reject button --}}
+                                  <div class="col-md-auto">
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                      Reject File
+                                  </button>
+                                </div>
+                              {{-- view button --}}
+                                <div class="col-md-auto">
+                                  <form method="post" action="/picadmin/dana/view" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name = 'cabang' value={{$b->cabang}}>
+                                    <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
+                                    <input type="hidden" name='result' value={{$b->$scan}} />
+                                    <input type="hidden" name = 'tipefile' value='DANA'>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                   </form>
                                 </div>
                               </div>
                               
-                                  <!-- Modal -->
-                                  <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
+                            <!-- Modal reject-->
+                              <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Reject Document ?</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form method="POST" action="/picadmin/dana/rejectdana">
+                                        @csrf
+                                          <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
+                                          <input type="hidden" name='result' value={{$b->$scan}} />
+                                          <input type="hidden" name='reason' value={{$reason}}>
+                                          <input type="hidden" name='status' value={{$stats}}>
+                                          <input type="hidden" name ='cabang' value={{$b->cabang}}>
+                                          <div class="form-group">
+                                              <label for="reason">Reason</label>
+                                              <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                          </div>
                                         </div>
-                                        <div class="modal-body">
-                                          <form method="POST" action="/picadmin/dana/rejectdana">
-                                            @csrf
-                                              <input type="hidden" name='reason' value={{$reason}}>
-                                              <input type="hidden" name='status' value={{$stats}}>
-                                              <input type="hidden" name ='cabang' value={{$b->cabang}}>
-                                              <div class="form-group">
-                                                  <label for="reason">Reason</label>
-                                                  <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
-                                              </div>
-                                              <button type="submit" id="submitreject" class="btn btn-danger" style="display: none;">Reject File</button>
-                                            </div>
-                                            <div class="modal-footer">
-                                              <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
-                                          </form>
-                                        </div>
-                                      </div>
+                                        <div class="modal-footer">
+                                          <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                      </form>
                                     </div>
                                   </div>
-                                </td>
+                                </div>
+                              </div>
+                            </td>
                             @else
                               <td> </td>
                             @endif
@@ -357,14 +534,14 @@
                     @endfor
                     @empty
                       <tr>
-                          {{-- nothing --}}
+                        <td>Banjarmasin Fund Request Not Found</td>
                       </tr>
                     @endforelse
 {{-- Samarinda-------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                       @forelse($documentsamarinda as $s )
-                       @for ( $a = 1 ; $a <= 38 ; $a++)
-                       @php
-                       $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
+                      @for ( $a = 1 ; $a <= 38 ; $a++)
+                      @php
+                        $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
                                           'keselamatan_(tahunan)','keselamatan_(dok)','keselamatan_(pengaturan_dok)',
                                           'keselamatan_(penundaan_dok)','sertifikat_garis_muat','laporan_pemeriksaan_garis_muat',
                                           'sertifikat_anti_fauling','surat_laut_permanen','surat_laut_endorse',
@@ -391,50 +568,108 @@
                                       'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
                                       'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
                                       'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta');
-                            $time_upload ="time_upload".$a;
-                            $stats ="status".$a;
-                            $reason = "reason".$a;
-                            $date = date('Y-m-28');
-                       @endphp
+                        $time_upload ="time_upload".$a;
+                        $stats ="status".$a;
+                        $reason = "reason".$a;
+                        $date = date('Y-m-28');
+                        $scan = $SAMARINDA[$a-1];
+                      @endphp
                         @if(empty($s->$stats))
                         <tr>
                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
                         @else
                         <tr>
-                            <td scope="col">{{ $a }}</td>
-                            <td scope="col" id="nama">{{$name[$a-1]}}</td>                                        
-                            <td scope="col" id="cabang">{{$s->cabang}}</td>                                        
-                            <td scope="col" id="time">{{$s ->$time_upload}}</td>                                        
-                            <td scope="col" id="status">{{$s->$stats}}</td>                                      
-                            <td scope="col" id="duetime1">{{$date}}</td> 
-                            @if ($s->$stats == "on review")
+                          @if ($s->$stats == "approved")
+                            <td class="table-success"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{ $s->cabang }}</strong></td>
+                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-success" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                            <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
+                            <td class="table-success" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-success" id="reason">{{$s->$reason}}</td>
+                          @elseif ($s->$stats == "rejected")
+                            <td class="table-danger"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{ $s->cabang }}</strong></td>
+                            <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-danger" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                            <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
+                            <td class="table-danger" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-danger" id="reason">{{$s->$reason}}</td>
+                          @endif
+                          @if ($s->$stats == "on review")
+                          <td class="table-warning"><strong>{{ $s->created_at }}</strong></td>
+                          <td class="table-warning"><strong>{{ $s->cabang }}</strong></td>
+                          <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                          <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                          <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
+                          <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                          <td class="table-warning" id="status">{{$s->$stats}}</td>                                      
+                          <td class="table-warning" id="reason">{{$s ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
+                              {{-- approve button --}}
                                 <div class="col-md-auto">
-                                  <form method="POST" action="/picadmin/dana/approvedana">
-                                    @csrf
-                                    <input type="hidden" name='status' value={{$stats}}>
-                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                    <button type="submit" class="btn btn-outline-success">approve</button>
-                                  </form>
+                                  <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#ApproveTitle-{{$reason}}">
+                                    Approve File
+                                  </button>
                                 </div>
+
+                              {{-- reject button --}}
                                 <div class="col-md-auto">
                                   <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
                                     Reject File
-                                </button>
+                                  </button>
                                 </div>
+
+                              {{-- view button --}}
                                 <div class="col-md-auto">
-                                  <form method="post" action="/picadmin/dana/view">
+                                  <form method="post" action="/picadmin/dana/view" target="_blank">
                                     @csrf
-                                    <input type="hidden" name ='cabang' value={{$s->cabang}}>
-                                    <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$s->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='DANA'>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                   </form>
                                 </div>
                               </div>
+
+                                <!-- Modal Approve -->
+                                  <div class="modal fade" id="ApproveTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="ApproveTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLongTitle">Approve Document ?</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <form method="POST" action="/picadmin/dana/approvedana">
+                                          @csrf
+                                          <div class="modal-body">
+                                            <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                            <input type="hidden" name='result' value={{$s->$scan}} />
+                                            <input type="hidden" name='reason' value={{$reason}}>
+                                            <input type="hidden" name='status' value={{$stats}}>
+                                            <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                            <button type="submit" class="btn btn-outline-success">approve</button>
+                                            <div class="form-group">
+                                              <label for="reason">Reason</label>
+                                              <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                            </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="submit" id="submitreject2" class="btn btn-outline-success">Approve File</button>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
                               
-                                  <!-- Modal -->
+                                <!-- Modal Reject-->
                                   <div class="modal fade" id="rejectTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="rejectTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                       <div class="modal-content">
@@ -447,18 +682,20 @@
                                         <div class="modal-body">
                                           <form method="POST" action="/picadmin/dana/rejectdana">
                                             @csrf
+                                            <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                            <input type="hidden" name='result' value={{$s->$scan}} />
                                             <input type="hidden" name='reason' value={{$reason}}>
                                             <input type="hidden" name='status' value={{$stats}}>
                                             <input type="hidden" name ='cabang' value={{$s->cabang}}>
                                             <div class="form-group">
-                                                <label for="reason">Reason</label>
-                                                <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
-                                              </div>
+                                              <label for="reason">Reason</label>
+                                              <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                            </div>
                                             </div>
                                             <div class="modal-footer">
                                               <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
-                                            </form>
                                             </div>
+                                          </form>
                                       </div>
                                     </div>
                                   </div>
@@ -471,7 +708,7 @@
                         @endfor
                         @empty
                           <tr> 
-                            {{-- nothing --}}
+                            <td>Samarinda Fund Request Not Found</td>
                           </tr>
                         @endforelse
                   </tbody>

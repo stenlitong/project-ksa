@@ -26,8 +26,8 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+                            <form method="POST" action="/picadmin/uploadrekap">
                             <div class="modal-body">
-                                <form method="POST" action="/picadmin/uploadrekap">
                                     @csrf
                                     <div class="form-group">
                                         <label for="Datebox">Date</label>
@@ -44,10 +44,6 @@
                                         </select>
 
                                         <br>
-                                        <label for="No_FormClaim">No Form Claim</label>
-                                        <input type="text" class="form-control" name="No_FormClaim" required id="No_FormClaim" >
-
-                                        <br>
                                         <label for="NamaKapal">Nama Kapal</label>
                                         <input type="text" class="form-control" name="NamaKapal" required id="NamaKapal" >
                                         
@@ -62,44 +58,38 @@
 
                                         <br>
                                         
-                                        <label for="Nilai">Nilai</label>
+                                        <label for="Nilai">Nilai Jumlah Di Bayar</label>
                                         <div class="input-group mb-1">
                                             <select class="btn btn-outline-secondary" name="mata_uang_nilai">
-                                                <option selected value="USD" id="">USD</option>
-                                                <option value="IDR" id="">IDR</option>
+                                                <option selected value="IDR" id="">RP</option>
                                             </select>
                                             <input type="number" class="form-control" name="Nilai" required id="Nilai" >
                                         </div>
-
-                                        <br>
-                                        <label for="NilaiClaim">Nilai Claim yang di setujui</label>
-                                        <div class="input-group mb-1">
-                                            <select class="btn btn-outline-secondary" name="mata_uang_claim">
-                                                <option selected value="USD" id="">USD</option>
-                                                <option value="IDR" id="">IDR</option>
-                                            </select>
-                                            <input type="number" class="form-control" name="NilaiClaim" required id="Nilai_Claim" >
-                                        </div>
                                     </div>
-                            </div>
+                                </div>
                                 <div class="modal-footer">
                                     <button type="submit" id="submitreject2" class="btn btn-outline-dark">Add Note</button>
-                                </form>
                                 </div>
-                        </div>
+                            </form>
+                            </div>
                         </div>
                     </div>
+
+                    @if ($success = Session::get('success'))
+                    <div class="alert alert-success alert-block" id="success">
+                        <strong>{{ $success }}</strong>
+                    </div>
+                    @endif
+
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">No.</th>
                                 <th scope="col">Tahun/Bulan/Tanggal</th>
                                 <th scope="col">Cabang</th>
-                                <th scope="col">No Form Claim</th>
                                 <th scope="col">Nama Kapal</th>
                                 <th scope="col">status pembayaran</th>
-                                <th scope="col">Nilai</th>
-                                <th scope="col">Nilai Claim yang di setujui</th>
+                                <th scope="col">Nilai Jumlah Di Bayar</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -112,11 +102,9 @@
                                 <td class="table-info">{{$loop->index+1}}</td>
                                 <td class="table-info">{{$rekap->DateNote}}</td>
                                 <td class="table-info">{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->No_FormClaim}}</td>
                                 <td class="table-info">{{$rekap->Nama_Kapal}}</td>
                                 <td class="table-info">{{$rekap->status_pembayaran}}</td>
                                 <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
-                                <td class="table-info">{{$rekap->mata_uang_claim}} - {{number_format($rekap->Nilai_Claim, 2)}}</td>
                                 <td scope="col">
                                     <div class="row">
                                         <div class="col-md-auto">
@@ -220,11 +208,6 @@
                         <script 
                             src="https://code.jquery.com/jquery-3.2.1.min.js">
                         </script>
-                        @if ($success = Session::get('success'))
-                        <div class="alert alert-success alert-block" id="success">
-                            <strong>{{ $success }}</strong>
-                        </div>
-                        @endif
                     </form>
                 </div>
             </div>

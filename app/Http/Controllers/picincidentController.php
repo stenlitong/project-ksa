@@ -126,8 +126,9 @@ class picincidentController extends Controller
 
     public function export(Request $request) {
         // dd($request);
+        $name = $request->file_name;
         $identify = $request->file_id;
-        return $this->excel::download(new FCIexport($identify), 'FCI.xlsx');
+        return $this->excel::download(new FCIexport($identify), 'FCI'.$name.'.xlsx');
         // return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
     }
 
@@ -181,7 +182,6 @@ class picincidentController extends Controller
         $UploadNotes =  DB::table('note_spgrs')->get();
         return view('picincident.NoteSpgr', compact('UploadNotes'));
     }
-
 
     // upload spgr file
     public function spgr(){

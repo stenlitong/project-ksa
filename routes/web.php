@@ -32,6 +32,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/search', [DashboardController::class, 'index']);
+    Route::post('/dashboard/dana/view', [DashboardController::class, 'index']);
+    Route::post('/dashboard/rpk/view', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
         // Dashboard Page
@@ -216,7 +219,6 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         //RPK page
         Route::get('/rpk', [PicRpkController::class , 'rpk']);
         Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
-        Route::get('/downloadrpk' , [PicRpkController::class, 'downloadrpk'])->name('downloadrpk');
 
         //Fund Request page
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
@@ -226,8 +228,10 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
         // admin review funds page
         Route::get('/dana', 'picAdminController@checkform');
+        Route::get('/dana/search', 'picAdminController@checkform');
         Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
         Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
+ 
         
         //view route for RPK and Funds page
         Route::post('/dana/view',[picAdminController::class, 'view']);
@@ -235,6 +239,7 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         
         //Admin RPK page
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
+        Route::get('/RPK/search', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
         Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);
 
@@ -292,7 +297,7 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     });
 });
 
-Route::get('/registeradmin' , [RegisteredUserController::class , 'createAdmin']);
+// Route::get('/registeradmin' , [RegisteredUserController::class , 'createAdmin']);
 
 Route::get('/', function () {
     return view('welcome');

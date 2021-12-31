@@ -95,10 +95,10 @@ class InsuranceController extends Controller
     }
    
     //History form claim delete load func
-    public function historyFormclaimDelete(headerformclaim $claims){
-        headerformclaim::destroy($claims->id); 
-        return redirect('/insurance/historyFormclaim')->with('success', 'File telah dihapus.'); 
-    }
+    // public function historyFormclaimDelete(headerformclaim $claims){
+    //     headerformclaim::destroy($claims->id); 
+    //     return redirect('/insurance/historyFormclaim')->with('success', 'File telah dihapus.'); 
+    // }
 
     //History form claim download func
     private $excel;
@@ -107,8 +107,9 @@ class InsuranceController extends Controller
     }
     public function historyFormclaimDownload(Request $request) {
         // dd($request);
+        $name = $request->file_name;
         $identify = $request->file_id;
-        return $this->excel::download(new FCIexport($identify), 'FCI.xlsx');
+        return $this->excel::download(new FCIexport($identify), 'FCI'.$name.'.xlsx');
     }
 
     // RekapulasiDana delete

@@ -90,7 +90,7 @@
                                 <th scope="col">No SPGR</th>
                                 <th scope="col">No Form Claim</th>
                                 <th scope="col">Nama Kapal</th>
-                                <th scope="col">status pembayaran</th>
+                                <th scope="col">Status pembayaran</th>
                                 <th scope="col">Nilai</th>
                                 <th scope="col">Nilai Claim yang di setujui</th>
                                 <th scope="col">Action</th>
@@ -119,12 +119,12 @@
                                                 <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</button>
                                             </form>
                                         </div>
-                                        <div class="col-md-auto">
+                                        {{-- <div class="col-md-auto">
                                             <form action="/picincident/NoteSpgr/update/{{$UpNotes->id}}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                     <button class="btn btn-outline-primary"   data-toggle="modal" data-target="#Updatespgrnote">Update</button>
-                                                {{-- Modal  --}}
+                                                Modal 
                                                 <div class="modal fade" id="Updatespgrnote" tabindex="-1" role="dialog" aria-labelledby="Updatespgrnote" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
@@ -186,7 +186,7 @@
                                                     <button type="submit" id="submitreject2" class="btn btn-outline-dark">Add Note</button>
                                                 </div>
                                             </form>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </td>
                             </tr>
