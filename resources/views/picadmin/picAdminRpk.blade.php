@@ -134,7 +134,7 @@
                                             <input type="hidden" name='result' value={{$d->$scan}} />
                                             <input type="hidden" name='status' value={{$stats}}>
                                             <input type="hidden" name='cabang' value={{$d->cabang}}>
-                                        <button type="submit" class="btn btn-outline-success">approve</button>
+                                        <button type="submit" class="btn btn-outline-success">Approve File</button>
                                     </form>
                                 </div>
                                 @else

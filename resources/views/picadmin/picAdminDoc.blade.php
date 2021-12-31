@@ -248,7 +248,7 @@
                         'biaya_rambu','pnbp_pemeriksaan','sertifikat_bebas_sanitasi&p3k',
                         'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan');
 
-                        $name = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
+                        $names = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
                                         'PNBP Sertifikat Radio','PNBP Sertifikat OWS','PNBP Garis Muat',
                                         'PNBP Pemeriksaan Endorse SL','Pemeriksaan Sertifikat','Marine Inspektor',
                                         'Biaya Clearance','PNBP Master Cable','Cover Deck LogBook',
@@ -289,14 +289,14 @@
                             <td class="table-danger" id="reason">{{$d->$reason}}</td>   
                           @endif
                           @if ($d->$stats == "on review")
-                            <td class="table-info"><strong>{{$d->created_at }}</strong></td>
-                            <td class="table-info"><strong>{{$d->cabang }}</strong></td>
-                            <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
-                            <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
-                            <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                            <td class="table-warning"><strong>{{$d->created_at }}</strong></td>
+                            <td class="table-warning"><strong>{{$d->cabang }}</strong></td>
+                            <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
+                            <td class="table-warning" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
+                            <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                            <td class="table-info" id="status">{{$d->$stats}}</td>                                      
-                            <td class="table-info" id="reason">{{$d ->$reason}}</td>
+                            <td class="table-warning" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-warning" id="reason">{{$d ->$reason}}</td>
                             <td scope="col">
                                 <div class="form-row">
                               {{-- Approve Button --}}
@@ -342,14 +342,14 @@
                                         <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                         <input type="hidden" name='result' value={{$d->$scan}} />
                                         <input type="hidden" name ='cabang' value={{$d->cabang}}>
-                                        <button type="submit" class="btn btn-outline-success">approve</button>
+                                        
                                           <div class="form-group">
                                             <label for="reason">Reason</label>
                                             <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
                                           </div>
                                       </div>
                                         <div class="modal-footer">
-                                          <button type="submit" id="submitreject2" class="btn btn-danger">Reject File</button>
+                                          <button type="submit" class="btn btn-outline-success">Approve File</button>
                                         </div>
                                       </form>
                                   </div>
@@ -455,14 +455,14 @@
                             <td class="table-danger" id="reason">{{$b->$reason}}</td>
                           @endif
                           @if ($b->$stats == "on review")
-                            <td class="table-info"><strong>{{ $b->created_at }}</strong></td>
-                            <td class="table-info"><strong>{{ $b->cabang }}</strong></td>
-                            <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
-                            <td class="table-info" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
-                            <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                            <td class="table-warning"><strong>{{ $b->created_at }}</strong></td>
+                            <td class="table-warning"><strong>{{ $b->cabang }}</strong></td>
+                            <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
+                            <td class="table-warning" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
+                            <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                            <td class="table-info" id="status">{{$b->$stats}}</td>                                      
-                            <td class="table-info" id="reason">{{$b ->$reason}}</td>
+                            <td class="table-warning" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-warning" id="reason">{{$b ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
                                 {{-- approve button --}}
@@ -473,7 +473,7 @@
                                     <input type="hidden" name='result' value={{$b->$scan}} />
                                     <input type="hidden" name='status' value={{$stats}}>
                                     <input type="hidden" name ='cabang' value={{$b->cabang}}>
-                                    <button type="submit" class="btn btn-outline-success">approve</button>
+                                    <button type="submit" class="btn btn-outline-success">Approve File</button>
                                   </form>
                                 </div>
                               {{-- reject button --}}

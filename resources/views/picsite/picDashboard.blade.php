@@ -303,7 +303,7 @@
                         @elseif ($d->$stats == 'on review')
                             <tr>
                                 {{-- hasil on review --}}
-                                <td class="table-info"><strong>{{ $$d->created_at }}</strong></td>
+                                <td class="table-info"><strong>{{ $d->created_at }}</strong></td>
                                 <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                                 <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                                 <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
@@ -323,7 +323,7 @@
                             </tr>
                         @elseif($d->$stats == 'approved')
                             <tr>
-                                <td class="table-success"><strong>{{ $$d->created_at }}</strong></td>
+                                <td class="table-success"><strong>{{ $d->created_at }}</strong></td>
                                 <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                                 <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                                 <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
@@ -343,7 +343,7 @@
                             </tr>
                         @else
                             <tr>
-                                <td class="table-danger"><strong>{{ $$d->created_at }}</strong></td>
+                                <td class="table-danger"><strong>{{ $d->created_at }}</strong></td>
                                 <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                                 <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                                 <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>
@@ -495,7 +495,7 @@
                                                 'surveyor_pengedokan','surveyor_penerimaan_klas_bki','nota_tagihan_jasa_perkapalan',
                                                 'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
                                                 'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta');
-                            $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
+                            $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                         "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
                                         "Sertifikat Garis Muat","Laporan Pemeriksaan Garis Muat","Sertifikat Anti Fauling",
                                         'Surat Laut Permanen','Surat Laut Endorse','Call Sign',

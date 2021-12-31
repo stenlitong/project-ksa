@@ -119,12 +119,12 @@
                                     @endforeach
                                     <td id="">{{$date}}</td>
                                     @if (empty($doc->$stats) or $doc->$stats == 'rejected') --}}
-                                    <td class=table-primary>
+                                    <td class=table-light>
                                         <div class="input-group mb-3">
                                             <input type="file" class="form-control" name="{{$brfile}}" id="rfile">
                                           </div>
                                     </td>
-                                        <td><input  type="file"/></td>
+                                        {{-- <td><input  type="file"/></td> --}}
                                     {{-- @else
                                         <td> </td>
                                     @endif --}}

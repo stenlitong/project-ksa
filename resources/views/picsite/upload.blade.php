@@ -179,7 +179,7 @@
                                                 </div>
                                                   {{-- <a href="/picsite/view" target="_blank">view</a> --}}
                                             </td>  
-                                                <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/> 
+                                                {{-- <input name="{{$banjarmasinfile}}" id="banjarmasinfile" type="file" onClick=""/>  --}}
                                         {{-- @else
                                             <td> </td>
                                         @endif --}}
