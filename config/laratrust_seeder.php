@@ -49,19 +49,11 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'picSite' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u'
-        ],
         'picAdmin' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'picIncident' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u'
-        ],
-        'asuransi' => [
+        'AsuransiIncident' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
@@ -69,15 +61,7 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'picAdmin' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u'
-        ],
-        'picIncident' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u'
-        ],
-        'insurance' => [
+        'InsuranceManager' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],

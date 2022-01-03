@@ -409,25 +409,28 @@ class picAdminController extends Controller
         // }
     }
 
+
+   
+    // RekapulasiDana edit
+    public function editrekap(Rekapdana $rekap){
+        return view('picadmin.picAdminEditRekap', compact('rekap'));
+    }
+    //update RekapulasiDana
+    public function updaterekap(Request $request,Rekapdana $rekap){
+        $rekap = Rekapdana::find($rekap->id);
+        $rekap->DateNote = $request->Datebox;
+        $rekap->Cabang = $request->Cabang;
+        $rekap->Nama_Kapal = $request->NamaKapal;
+        $rekap->status_pembayaran = $request->status_pembayaran;
+        $rekap->Nilai = $request->Nilai;
+        $rekap->mata_uang_nilai = $request->mata_uang_nilai;
+        $rekap->update();
+        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah terupdate.'); 
+    }
     // RekapulasiDana delete
     public function destroyrekap(Rekapdana $rekap){
         Rekapdana::destroy($rekap->id); 
         return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah dihapus.'); 
-    }
-    //update RekapulasiDana
-    public function updaterekap(Request $request,Rekapdana $rekap){
-        $update = Rekapdana::findorfail($rekap->id);
-        $update->DateNote = $request->Datebox;
-        $update->Cabang = $request->Cabang;
-        $update->No_FormClaim = $request->No_FormClaim;
-        $update->Nama_Kapal = $request->NamaKapal;
-        $update->status_pembayaran = $request->status_pembayaran;
-        $update->Nilai = $request->Nilai;
-        $update->mata_uang_nilai = $request->mata_uang_nilai;
-        $update->Nilai_Claim = $request->NilaiClaim;
-        $update->mata_uang_claim = $request->mata_uang_claim;
-        $update->update();
-        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah terupdate.'); 
     }
     //create RekapulasiDana
     public function uploadrekap(Request $request){
@@ -454,9 +457,10 @@ class picAdminController extends Controller
         ]);
         return redirect('/picadmin/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
     }
-
+    // RekapulasiDana page
     public function RekapulasiDana(){
         $rekapdana= Rekapdana::all();
         return view('picadmin.picAdminRekapulasiDana', compact('rekapdana'));
     }
+    
 }

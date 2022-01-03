@@ -25,13 +25,32 @@ use Maatwebsite\Excel\Facades\Excel;
 class InsuranceController extends Controller
 {
     //check SPGR UPLOAD,approved,rejected,view
-    public function checkspgr(){
+    public function checkspgr(Request $request){
         $uploadspgr = spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->latest()->get();
+
+        //Search bar
+        //check if search-bar is filled or not
+        if ($request->filled('search_no_formclaim')) {
+            $uploadspgr = spgrfile::where('no_formclaim', 'Like', '%' . $request->search_no_formclaim . '%')
+            ->orderBy('id', 'DESC')
+            ->latest()->get();
+        }
+
         return view('insurance.insuranceSpgr', compact('uploadspgr'));
     }
 
     public function approvespgr(Request $request){
-        spgrfile::where('cabang', $request->cabang)->whereMonth('created_at', date('m'))->update([
+
+        $claim = $request->no_claim;
+        $filename = $request->viewspgrfile;
+        $result = $request->result;
+
+        spgrfile::where('cabang', $request->cabang)
+        ->whereMonth('created_at', date('m'))
+        ->whereYear('created_at', date('Y'))
+        ->where('no_formclaim', 'Like', '%' . $claim . '%')
+        ->where($filename, 'Like', '%' . $result . '%')
+        ->update([
             $request->status => 'approved'
         ]);
         return redirect('/insurance/CheckSpgr');
@@ -39,11 +58,20 @@ class InsuranceController extends Controller
 
     public function rejectspgr(Request $request){
         // dd($request);
+        $claim = $request->no_claim;
+        $filename = $request->viewspgrfile;
+        $result = $request->result;
+        
         $request->validate([
             'reasonbox' => 'required|max:255',
         ]);
 
-        spgrfile::where('cabang',$request->cabang)->whereMonth('created_at', date('m'))->update([
+        spgrfile::where('cabang',$request->cabang)
+        ->whereMonth('created_at', date('m'))
+        ->whereYear('created_at', date('Y'))
+        ->where('no_formclaim', 'Like', '%' . $claim . '%')
+        ->where($filename, 'Like', '%' . $result . '%')
+        ->update([
             $request->status => 'rejected',
             $request->reason => $request->reasonbox ,
         ]);
@@ -52,14 +80,25 @@ class InsuranceController extends Controller
     }
 
     public function viewspgr(Request $request){
-        $year = date('Y');
-        $month = date('m');
-        $cabang = $request->cabang;
-        $filename = $request->viewspgrfile;
-        $viewer = spgrfile::where('cabang', 'Jakarta')->whereMonth('updated_at', $month)->latest()->pluck($filename)[0];
-        // dd($request);
-        // dd($viewer);
-        return Storage::disk('s3')->response('spgr/' . $year . "/". $month . "/" . $viewer);
+        // view spgr
+        if($request->tipefile == 'SPGR'){
+            $year = date('Y');
+            $month = date('m');
+
+            $cabang = $request->cabang;
+            $filename = $request->viewspgrfile;
+            $result = $request->result;
+            $claim = $request->no_claim;
+
+            $viewer = spgrfile::where('cabang', 'Jakarta')
+            ->whereNotNull ($filename)
+            ->where('no_formclaim', 'Like', '%' . $claim . '%')
+            ->where($filename, 'Like', '%' . $result . '%')
+            ->pluck($filename)[0];
+            // dd($request);
+            // dd($viewer);
+            return Storage::disk('s3')->response('spgr/' . $year . "/". $month . "/" . $viewer);
+        }
     }
     
     //history note SPGR page
@@ -67,26 +106,7 @@ class InsuranceController extends Controller
         $UploadNotes = DB::table('note_spgrs')->latest()->get();
         return view('insurance.insuranceHistoryNotes', compact('UploadNotes'));
     }
-    //update history note SPGR page
-    // public function Updatehistorynotespgr(Request $request, NoteSpgr $UpNotes){
-    //     $update = NoteSpgr::find($UpNotes->id);
-    //     $update->DateNote = $request->Datebox;
-    //     $update->No_SPGR = $request->No_SPGR;
-    //     $update->No_FormClaim = $request->No_FormClaim;
-    //     $update->Nama_Kapal = $request->NamaKapal;
-    //     $update->status_pembayaran = $request->status_pembayaran;
-    //     $update->mata_uang_nilai = $request->mata_uang_nilai;
-    //     $update->Nilai = $request->Nilai;
-    //     $update->mata_uang_claim = $request->mata_uang_claim;
-    //     $update->Nilai_Claim = $request->NilaiClaim;
-    //     $update->update();
-    //     return redirect('/insurance/HistoryNoteSpgr')->with('success', 'post telah terupdate.'); 
-    // }
-    // //delete history note SPGR page
-    // public function Deletehistorynotespgr(NoteSpgr $UpNotes){
-    //     NoteSpgr::destroy($UpNotes->id);
-    //     return redirect('/insurance/HistoryNoteSpgr')->with('success', 'post telah dihapus.'); 
-    // }
+    
 
     //History form claim page
     public function historyFormclaim(){
@@ -94,11 +114,7 @@ class InsuranceController extends Controller
         return view('insurance.insuranceHistoryFormclaim', compact('Headclaim'));
     }
    
-    //History form claim delete load func
-    // public function historyFormclaimDelete(headerformclaim $claims){
-    //     headerformclaim::destroy($claims->id); 
-    //     return redirect('/insurance/historyFormclaim')->with('success', 'File telah dihapus.'); 
-    // }
+    
 
     //History form claim download func
     private $excel;
@@ -112,24 +128,6 @@ class InsuranceController extends Controller
         return $this->excel::download(new FCIexport($identify), 'FCI'.$name.'.xlsx');
     }
 
-    // RekapulasiDana delete
-    public function DestroyHistoryRekap(Rekapdana $rekap){
-        Rekapdana::destroy($rekap->id); 
-        return redirect('/insurance/HistoryRekapulasiDana')->with('success', 'post telah dihapus.'); 
-    }
-    //update RekapulasiDana
-    public function UpdateHistoryRekap(Request $request, Rekapdana $rekap){
-        $update = Rekapdana::find($rekap->id);
-        $update->DateNote = $request->Datebox;
-        $update->Cabang = $request->Cabang;
-        $update->No_FormClaim = $request->No_FormClaim;
-        $update->Nama_Kapal = $request->NamaKapal;
-        $update->status_pembayaran = $request->status_pembayaran;
-        $update->Nilai = $request->Nilai;
-        $update->Nilai_Claim = $request->NilaiClaim;
-        $update->update();
-        return redirect('/insurance/HistoryRekapulasiDana')->with('success', 'post telah terupdate.'); 
-    }
     //History Rekapulsi Dana page
     public function historyRekapulasiDana(){
         $rekapdana= Rekapdana::all();

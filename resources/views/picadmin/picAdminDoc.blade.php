@@ -154,6 +154,7 @@
                                   <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
                                       <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                       <input type="hidden" name='result' value={{$doc->$scan}} />
+                                      <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                       <input type="hidden" name = 'tipefile' value='DANA'>
                                   <button type="submit" name="views3" class="btn btn-dark">view</button>
                                 </form>  
@@ -315,7 +316,8 @@
                                 <div class="col-md-auto">
                                   <form method="post" action="/picadmin/dana/view" target="_blank">
                                     @csrf
-                                    <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                      <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                      <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                       <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                       <input type="hidden" name='result' value={{$d->$scan}} />
                                       <input type="hidden" name = 'tipefile' value='DANA'>
@@ -412,7 +414,7 @@
                                             'laporan_pemeriksaan_umum','laporan_pemeriksaan_mesin','nota_dinas_perubahan_kawasan',
                                             'PAS','invoice_bki','safe_manning');
 
-                        $name = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
+                        $names = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
                                       'Drawing & Stability','Laporan Pengeringan','Berita Acara Lambung',
                                       'Laporan Pemeriksaan Nautis','Laporan Pemeriksaan Anti Faulin','Laporan Pemeriksaan Radio ',
                                       'Berita Acara Lambung','Laporan Pemeriksaan SNPP','BKI',
@@ -465,7 +467,7 @@
                             <td class="table-warning" id="reason">{{$b ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
-                                {{-- approve button --}}
+                              {{-- approve button --}}
                                 <div class="col-md-auto">
                                   <form method="POST" action="/picadmin/dana/approvedana">
                                     @csrf
@@ -489,6 +491,7 @@
                                     <input type="hidden" name = 'cabang' value={{$b->cabang}}>
                                     <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                     <input type="hidden" name='result' value={{$b->$scan}} />
+                                    <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                     <input type="hidden" name = 'tipefile' value='DANA'>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                   </form>
@@ -555,7 +558,7 @@
                                           'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
                                           'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta');
 
-                        $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
+                        $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                       "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
                                       "Sertifikat Garis Muat","Laporan Pemeriksaan Garis Muat","Sertifikat Anti Fauling",
                                       'Surat Laut Permanen','Surat Laut Endorse','Call Sign',
@@ -632,11 +635,11 @@
                                         <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
                                         <input type="hidden" name='result' value={{$s->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
+                                        <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                   </form>
                                 </div>
                               </div>
-
                                 <!-- Modal Approve -->
                                   <div class="modal fade" id="ApproveTitle-{{$reason}}" tabindex="-1" role="dialog" aria-labelledby="ApproveTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">

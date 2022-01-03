@@ -69,10 +69,10 @@
                     <tr>
                         <th class="table-info">Time Uploaded</th>
                         <th class="table-info">Nama Kapal</th>
-                        <th class="table-info">Periode (Y-M-D) To (Y-M-D)</th>
+                        <th class="table-info">Periode (Y-M-D)</th>
                         <th class="table-info">Nama File</th>
                         <th class="table-info">Jenis File</th>
-                        <th class="table-info">status</th>
+                        <th class="table-info">Status</th>
                         <th class="table-info">Reason</th>
                         <th class="table-info">Action</th>
                     </tr>
@@ -82,19 +82,19 @@
                     @forelse($docrpk as $d )
                     @for ( $r = 1 ; $r <= 7 ; $r++)
                     @php
-                    $RPK = array('surat_barang', 'cargo_manifest',
-                                'voyage','bill_lading',
-                                'gerak_kapal','docking',
-                                'surat_kapal');
-                    $names = array('Surat Keterangan Asal Barang', 'Cargo Manifest',
-                                    'Voyage Report/ Term Sheet','Bill of Lading',
-                                    'Ijin Olah Gerak Kapal','Docking',
-                                    'Surat Keterangan Persiapan Kapal');
-                    $time_upload ="time_upload".$r;
-                    $stats ="status".$r;
-                    $reason = "reason".$r;
-                    $date = date('Y-m-28');
-                    $scan = $RPK[$r-1];
+                        $RPK = array('surat_barang', 'cargo_manifest',
+                                    'voyage','bill_lading',
+                                    'gerak_kapal','docking',
+                                    'surat_kapal');
+                        $names = array('Surat Keterangan Asal Barang', 'Cargo Manifest',
+                                        'Voyage Report/ Term Sheet','Bill of Lading',
+                                        'Ijin Olah Gerak Kapal','Docking',
+                                        'Surat Keterangan Persiapan Kapal');
+                        $time_upload ="time_upload".$r;
+                        $stats ="status".$r;
+                        $reason = "reason".$r;
+                        $date = date('Y-m-28');
+                        $scan = $RPK[$r-1];
                     @endphp
                     <input type="hidden" name='status' value={{$stats}}>
                     @if(empty($d->$stats))
@@ -103,7 +103,7 @@
                         </tr>
                         @elseif ($d->$stats == 'on review')
                         <tr>
-                            {{-- hasil on review --}}
+                        {{-- hasil on review --}}
                             <td class="table-info"><strong>{{ $d->created_at }}</strong></td>
                             <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                             <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -115,6 +115,7 @@
                                 <form method="post" action="/dashboard/rpk/view" target="_blank">
                                     @csrf
                                     <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                    <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                     <input type="hidden" name = 'tipefile' value='RPK'>
                                     <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                     <input type="hidden" name='result' value={{$d->$scan}} />
@@ -135,6 +136,7 @@
                                 <form method="post" action="/dashboard/rpk/view" target="_blank">
                                     @csrf
                                     <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                    <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                     <input type="hidden" name = 'tipefile' value='RPK'>
                                     <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                     <input type="hidden" name='result' value={{$d->$scan}} />
@@ -155,6 +157,7 @@
                                 <form method="post" action="/dashboard/rpk/view" target="_blank">
                                     @csrf
                                     <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                    <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                     <input type="hidden" name = 'tipefile' value='RPK'>
                                     <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                     <input type="hidden" name='result' value={{$d->$scan}} />
@@ -210,6 +213,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$doc->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -230,6 +234,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$doc->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -250,6 +255,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$doc->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$doc->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -314,6 +320,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                         <input type="hidden" name='result' value={{$d->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -334,6 +341,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                         <input type="hidden" name='result' value={{$d->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -354,6 +362,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                         <input type="hidden" name='result' value={{$d->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -421,6 +430,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$b->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$b->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -441,6 +451,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$b->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$b->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -461,6 +472,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$b->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                         <input type="hidden" name='result' value={{$b->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -533,6 +545,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
                                         <input type="hidden" name='result' value={{$s->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -553,6 +566,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
                                         <input type="hidden" name='result' value={{$s->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
@@ -573,6 +587,7 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
                                         <input type="hidden" name='result' value={{$s->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>

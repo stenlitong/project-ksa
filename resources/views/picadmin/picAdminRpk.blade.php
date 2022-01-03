@@ -155,6 +155,7 @@
                                     <form method="post" action="/picadmin/rpk/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name ='tipefile' value='RPK'>
+                                        <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                         <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                         <input type="hidden" name='result' value={{$d->$scan}} />
                                         <input type="hidden" name='cabang' value={{$d->cabang}}>

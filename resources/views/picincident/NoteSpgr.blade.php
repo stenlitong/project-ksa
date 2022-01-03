@@ -116,77 +116,10 @@
                                             <form action="/picincident/NoteSpgr/destroy/{{$UpNotes->id}}" method="POST">
                                                 @csrf
                                                 @method('delete')
+                                                <a class="btn btn-outline-primary" href="/picincident/EditNoteSpgr/{{$UpNotes->id}}">Edit</a>
                                                 <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</button>
                                             </form>
                                         </div>
-                                        {{-- <div class="col-md-auto">
-                                            <form action="/picincident/NoteSpgr/update/{{$UpNotes->id}}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                    <button class="btn btn-outline-primary"   data-toggle="modal" data-target="#Updatespgrnote">Update</button>
-                                                Modal 
-                                                <div class="modal fade" id="Updatespgrnote" tabindex="-1" role="dialog" aria-labelledby="Updatespgrnote" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="Updatespgrnote">Add Note ?</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="Datebox">Date</label>
-                                                        <input type="date" class="form-control" name="Datebox" required id="Datebox" >
-                
-                                                        <br>
-                                                        <label for="No_SPGR">No.SPGR</label>
-                                                        <input type="text" class="form-control" name="No_SPGR" required id="No_SPGR" >
-                
-                                                        <br>
-                                                        <label for="No_FormClaim">No Form Claim</label>
-                                                        <input type="text" class="form-control" name="No_FormClaim" required id="No_FormClaim" >
-                
-                                                        <br>
-                                                        <label for="NamaKapal">Nama Kapal</label>
-                                                        <input type="text" class="form-control" name="NamaKapal" required id="NamaKapal" >
-                                                        
-                                                        <br>
-                                                        <label for="status_pembayaran">status pembayaran</label>
-                                                        <select name="status_pembayaran" id="status_pembayaran" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required autofocus>
-                                                            <option selected disabled value="">Please Choose...</option>
-                                                            <option value="Paid" >Paid</option>
-                                                            <option value="unpaid" >unpaid</option>
-                                                            <option value="partial" >partial</option>
-                                                        </select>
-                
-                                                        <br>
-                                                        <label for="Nilai">Nilai</label>
-                                                        <div class="input-group mb-1">
-                                                            <select class="btn btn-outline-secondary" name="mata_uang_nilai">
-                                                                <option selected value="USD" id="">USD</option>
-                                                                <option value="IDR" id="">IDR</option>
-                                                            </select>
-                                                            <input type="number" class="form-control" name="Nilai" required id="Nilai" >
-                                                        </div>
-
-                                                        <br>
-                                                        <label for="NilaiClaim">Nilai Claim yang di setujui</label>
-                                                        <div class="input-group mb-1">
-                                                            <select class="btn btn-outline-secondary" name="mata_uang_claim">
-                                                                <option selected value="USD" id="">USD</option>
-                                                                <option value="IDR" id="">IDR</option>
-                                                            </select>
-                                                            <input type="number" class="form-control" name="NilaiClaim" required id="Nilai_Claim" >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" id="submitreject2" class="btn btn-outline-dark">Add Note</button>
-                                                </div>
-                                            </form>
-                                        </div> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -210,7 +143,6 @@
                             <strong>{{ $success }}</strong>
                         </div>
                         @endif
-                    </form>
                 </div>
             </div>
         </div>   

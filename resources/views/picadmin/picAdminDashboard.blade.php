@@ -39,13 +39,8 @@
                         <div class="auto-cols-auto">
                             <div class="col" style="margin-left:-1%" >
                                 <div class="input-group">
-                                {{-- <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                        </svg>
-                                    </div>
-                                </div> --}}
+                                <div class="input-group-prepend">
+                                </div>
                                 <input type="text" style="text-transform: uppercase;" name="search_kapal" id="search_kapal" class="form-control" placeholder="Search Nama Kapal" autofocus>
                                 <button type="submit" class="btn btn-info">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -92,7 +87,7 @@
                         <th>Time Uploaded</th>
                         <th>cabang</th>
                         <th>Nama Kapal</th>
-                        <th>Periode (Y-M-D) To (Y-M-D)</th>
+                        <th>Periode (Y-M-D)</th>
                         <th>Nama File</th>
                         <th>Jenis File</th>
                         <th>status</th>
@@ -140,6 +135,7 @@
                                 @csrf
                                 <input type="hidden" name = 'cabang' value={{$d->cabang}}>
                                 <input type="hidden" name = 'tipefile' value='RPK'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
@@ -161,6 +157,7 @@
                                 @csrf
                                 <input type="hidden" name = 'cabang' value={{$d->cabang}}>
                                 <input type="hidden" name = 'tipefile' value='RPK'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
@@ -182,6 +179,7 @@
                                 @csrf
                                 <input type="hidden" name = 'cabang' value={{$d->cabang}}>
                                 <input type="hidden" name = 'tipefile' value='RPK'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
@@ -238,6 +236,7 @@
                                     <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                     <input type="hidden" name='result' value={{$doc->$scan}} />
                                     <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                 </form>
                             </td>                                     
@@ -259,6 +258,7 @@
                                     <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                     <input type="hidden" name='result' value={{$doc->$scan}} />
                                     <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                 </form>
                             </td>
@@ -280,6 +280,7 @@
                                     <input type="hidden" name='viewdoc' value={{$BABELAN[$a-1]}} />
                                     <input type="hidden" name='result' value={{$doc->$scan}} />
                                     <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$doc->nama_kapal}}>
                                     <button type="submit" name="views3" class="btn btn-dark">view</button>
                                 </form>
                             </td>    
@@ -343,6 +344,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>    
@@ -364,6 +366,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>                                        
@@ -385,6 +388,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BERAU[$a-1]}} />
                                 <input type="hidden" name='result' value={{$d->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>     
@@ -450,6 +454,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                 <input type="hidden" name='result' value={{$b->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>                                          
@@ -471,6 +476,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                 <input type="hidden" name='result' value={{$b->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>                                          
@@ -492,6 +498,7 @@
                                 <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
                                 <input type="hidden" name='result' value={{$b->$scan}} />
                                 <input type="hidden" name = 'tipefile' value='DANA'>
+                                <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
                                 <button type="submit" name="views3" class="btn btn-dark">view</button>
                             </form>
                         </td>        
@@ -545,77 +552,80 @@
                         {{-- agar tidak keluar hasil kosong --}}
                     </tr>
                     @elseif ($s->$stats == 'on review')
-                    <tr>
-                        {{-- hasil on review --}}
-                        <td class="table-warning"><strong>{{ $s->created_at }}</strong></td>
-                        <td class="table-warning"><strong>{{ $s->cabang }}</strong></td>
-                        <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
-                        <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
-                        <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
-                        <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                        <td class="table-warning" id="status">{{$s->$stats}}</td>                                      
-                        <td class="table-warning" id="reason">{{$s ->$reason}}</td>   
-                        <td class="table-warning">
-                            <form method="post" action="/dashboard/dana/view" target="_blank">
-                                @csrf
-                                <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
-                                <input type="hidden" name='result' value={{$s->$scan}} />
-                                <input type="hidden" name = 'tipefile' value='DANA'>
-                                <button type="submit" name="views3" class="btn btn-dark">view</button>
-                            </form>
-                        </td>                                                                   
-                    </tr>
-                @elseif($s->$stats == 'approved')
-                    <tr>
-                        <td class="table-success"><strong>{{ $s->created_at }}</strong></td>
-                        <td class="table-success"><strong>{{ $s->cabang }}</strong></td>
-                        <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
-                        <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
-                        <td class="table-success" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
-                        <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
-                        <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
-                        <td class="table-success" id="status">{{$s->$stats}}</td>                                      
-                        <td class="table-success" id="reason">{{$s->$reason}}</td>    
-                        <td class="table-success">
-                            <form method="post" action="/dashboard/dana/view" target="_blank">
-                                @csrf
-                                <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
-                                <input type="hidden" name='result' value={{$s->$scan}} />
-                                <input type="hidden" name = 'tipefile' value='DANA'>
-                                <button type="submit" name="views3" class="btn btn-dark">view</button>
-                            </form>
-                        </td>                                                      
-                    </tr>
-                @else
-                    <tr>
-                        <td class="table-danger"><strong>{{ $s->created_at }}</strong></td>
-                        <td class="table-danger"><strong>{{ $s->cabang }}</strong></td>
-                        <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
-                        <td class="table-danger" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
-                        <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
-                        <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
-                        <td class="table-danger" id="status">{{$s->$stats}}</td>                                      
-                        <td class="table-danger" id="reason">{{$s->$reason}}</td>    
-                        <td class="table-danger">
-                            <form method="post" action="/dashboard/dana/view" target="_blank">
-                                @csrf
-                                <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
-                                <input type="hidden" name='result' value={{$s->$scan}} />
-                                <input type="hidden" name = 'tipefile' value='DANA'>
-                                <button type="submit" name="views3" class="btn btn-dark">view</button>
-                            </form>
-                        </td>                  
-                    </tr>
-                    @endif
-                    @endfor
-                    @empty
                         <tr>
-                            <td>No Samarinda Fund Request Data Found</td>
+                            {{-- hasil on review --}}
+                            <td class="table-warning"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-warning"><strong>{{ $s->cabang }}</strong></td>
+                            <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                            <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                            <td class="table-warning" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-warning" id="reason">{{$s ->$reason}}</td>   
+                            <td class="table-warning">
+                                <form method="post" action="/dashboard/dana/view" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                    <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                    <input type="hidden" name='result' value={{$s->$scan}} />
+                                    <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
+                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                </form>
+                            </td>                                                                   
                         </tr>
-                    @endforelse
+                    @elseif($s->$stats == 'approved')
+                        <tr>
+                            <td class="table-success"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{ $s->cabang }}</strong></td>
+                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-success" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                            <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
+                            <td class="table-success" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-success" id="reason">{{$s->$reason}}</td>    
+                            <td class="table-success">
+                                <form method="post" action="/dashboard/dana/view" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                    <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                    <input type="hidden" name='result' value={{$s->$scan}} />
+                                    <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
+                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                </form>
+                            </td>                                                      
+                        </tr>
+                    @else
+                        <tr>
+                            <td class="table-danger"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{ $s->cabang }}</strong></td>
+                            <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
+                            <td class="table-danger" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
+                            <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
+                            <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
+                            <td class="table-danger" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-danger" id="reason">{{$s->$reason}}</td>    
+                            <td class="table-danger">
+                                <form method="post" action="/dashboard/dana/view" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                    <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
+                                    <input type="hidden" name='result' value={{$s->$scan}} />
+                                    <input type="hidden" name = 'tipefile' value='DANA'>
+                                    <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
+                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                </form>
+                            </td>                  
+                        </tr>
+                        @endif
+                        @endfor
+                        @empty
+                            <tr>
+                                <td>No Samarinda Fund Request Data Found</td>
+                            </tr>
+                        @endforelse
                   </tbody>
                 </table>
             </div>

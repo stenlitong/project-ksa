@@ -32,6 +32,22 @@
                 </script>
             </h3>
             <h1 class="h1-responsive ; text-center">History</h1>
+            {{-- searchbar --}}
+                <form method="GET" action="/dashboard/searchspgr" role="search">
+                    <div class="auto-cols-auto">
+                        <div class="col-sm-3 my-1" style="margin-left:-1%" >
+                            <div class="input-group">
+                            <input type="text" name="search_no_formclaim" id="search_no_formclaim" class="form-control" placeholder="Search No.FormClaim" autofocus>
+                            <button type="submit" class="btn btn-info">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {{-- table data --}}
             <table class="table" style="margin-top: 1%">
                 <thead class="thead-dark">
                     <tr>
@@ -45,55 +61,79 @@
                 </thead>
 
                 <tbody>
-                    @forelse($spgrfile as $upspgr )
+                    @forelse($uploadspgr as $upspgr )
                     @for ( $r = 1 ; $r <= 7 ; $r++)
                     @php
                         $viewspgrfile = array('spgr','Letter_of_Discharge','CMC','surat_laut',
-                                            'spb','lot_line','surat_keterangan_bank');
+                                            'spb','load_line','surat_keterangan_bank');
                         $name = array('SPGR','LETTER OF DISCHARGE','CMC','SURAT LAUT',
-                                        'SPB','LOT LINE','SURAT KETERANGAN BANK');
+                                'SPB','LOAD LINE','SURAT KETERANGAN BANK');
                         $spgrfile = 'spgrfile'.$r;
                         $time_upload ="time_upload".$r;
                         $stats ="status".$r;
                         $reason ="reason".$r;
+                        $scan=$viewspgrfile[$r-1];
                     @endphp
                     @if(empty($upspgr->$stats))
                         <tr>
-                           <td> </td> {{-- agar tidak keluar hasil kosong --}}
+                            <td> </td> {{-- agar tidak keluar hasil kosong --}}
                         </tr>
                     @elseif ($upspgr->$stats == 'on review')
                         <tr>
-                             {{-- agar tidak keluar hasil on review --}}
+                            <td class="table-warning" id="time">{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-warning">{{$upspgr->no_formclaim}}</td>
+                            <td class="table-warning" id="nama">{{$name[$r-1]}}</td>                                        
+                            <td class="table-warning" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-warning" id="reason">{{$upspgr->$reason}}</td>
+                            <td>
+                                <div class="col-md-auto">
+                                    <form method="post" action="/dashboard/spgr/view" target="_blank">
+                                        @csrf
+                                        <input type="hidden" name='result' value={{$upspgr->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='SPGR'>
+                                        <input type="hidden" name = 'no_claim' value={{$upspgr->no_formclaim}}>
+                                        <input type="hidden" name = 'cabang' value={{$upspgr->cabang}}>
+                                        <input type="hidden" name='viewspgrfile' value={{$viewspgrfile[$r-1]}} />
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @elseif ($upspgr->$stats == 'approved')
+                        <tr>
+                            <td class="table-success" id="time">{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-success">{{$upspgr->no_formclaim}}</td>
+                            <td class="table-success" id="nama">{{$name[$r-1]}}</td>                                        
+                            <td class="table-success" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-success" id="reason">{{$upspgr->$reason}}</td>
+                            <td>
+                                <div class="col-md-auto">
+                                    <form method="post" action="/dashboard/spgr/view" target="_blank">
+                                        @csrf
+                                        <input type="hidden" name='result' value={{$upspgr->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='SPGR'>
+                                        <input type="hidden" name = 'no_claim' value={{$upspgr->no_formclaim}}>
+                                        <input type="hidden" name = 'cabang' value={{$upspgr->cabang}}>
+                                        <input type="hidden" name='viewspgrfile' value={{$viewspgrfile[$r-1]}} />
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @elseif ($upspgr->$stats == 'rejected')
-                    <tr>
-                        <td class="table-danger">{{ $r }}</td>
-                        <td class="table-danger" id="nama">{{$name[$r-1]}}</td>                                        
-                        <td class="table-danger" id="time">{{$upspgr->$time_upload}}</td>                                        
-                        <td class="table-danger" id="status">{{$upspgr->$stats}}</td>                                      
-                        <td class="table-danger" id="reason">{{$upspgr->$reason}}</td>                                        
-                        <td class="table-danger">
-                            <div class="col-md-auto">
-                                <form method="post" action="/insurance/viewspgr">
-                                    @csrf
-                                    <input type="hidden" name = 'cabang' value={{$upspgr->cabang}}>
-                                    <input type="hidden" name='viewspgrfile' value={{$viewspgrfile[$r-1]}} />
-                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @else
                         <tr>
-                            <td class="table-info">{{ $r }}</td>
-                            <td class="table-info" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-info" id="time">{{$upspgr->$time_upload}}</td>                                        
-                            <td class="table-info" id="status">{{$upspgr->$stats}}</td>                                      
-                            <td class="table-info" id="reason">{{$upspgr->$reason}}</td>                                        
-                            <td class="table-info">
+                            <td class="table-danger" id="time">{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-danger">{{$upspgr->no_formclaim}}</td>
+                            <td class="table-danger" id="nama">{{$name[$r-1]}}</td>                                        
+                            <td class="table-danger" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-danger" id="reason">{{$upspgr->$reason}}</td>
+                            <td>
                                 <div class="col-md-auto">
-                                    <form method="post" action="/insurance/viewspgr">
+                                    <form method="post" action="/dashboard/spgr/view" target="_blank">
                                         @csrf
+                                        <input type="hidden" name='result' value={{$upspgr->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='SPGR'>
+                                        <input type="hidden" name = 'no_claim' value={{$upspgr->no_formclaim}}>
                                         <input type="hidden" name = 'cabang' value={{$upspgr->cabang}}>
                                         <input type="hidden" name='viewspgrfile' value={{$viewspgrfile[$r-1]}} />
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
@@ -105,7 +145,7 @@
                     @endfor
                     @empty
                     <tr>
-                        <td>Data not found</td>
+                        <td>Data Not Found or Not Uploaded This Month</td>
                     </tr>
                     @endforelse
                 </tbody>
