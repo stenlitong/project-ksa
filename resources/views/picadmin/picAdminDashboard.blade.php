@@ -518,7 +518,7 @@
                 @endforelse
 {{-- Samarinda------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
                 @forelse($documentsamarinda as $s )
-                @for ( $a = 1 ; $a <= 43 ; $a++)
+                @for ( $a = 1 ; $a <= 44 ; $a++)
                 @php
                     $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
                                         'keselamatan_(tahunan)','keselamatan_(dok)','keselamatan_(pengaturan_dok)',
