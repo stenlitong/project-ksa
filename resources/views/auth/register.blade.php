@@ -213,7 +213,25 @@
                         document.getElementById("Berau").disabled = false;
                         document.getElementById("Kendari").disabled = false;
                     }
+                    if(dropdown.value == "AsuransiIncident"){
+                        selectopt('Jakarta');
+                        document.getElementById("Banjarmasin").disabled = true;
+                        document.getElementById("Samarinda").disabled = true;
+                        document.getElementById("Bunati").disabled = true;
+                        document.getElementById("Babelan").disabled = true;
+                        document.getElementById("Berau").disabled = true;
+                        document.getElementById("Kendari").disabled = true;
+                    }else{
+                        document.getElementById("Jakarta").disabled = false;
+                        document.getElementById("Samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("Bunati").disabled = false;
+                        document.getElementById("Babelan").disabled = false;
+                        document.getElementById("Berau").disabled = false;
+                        document.getElementById("Kendari").disabled = false;
+                    }
                 }
+            
             </script>
         </form>
     </x-auth-card>

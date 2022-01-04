@@ -16,6 +16,12 @@
                         <button class="btn btn-outline-info"  id="top" style=" width: 20%;" data-toggle="modal" data-target="#Addspgrnote">Add List</button>
                     </div>
 
+                    @if ($success = Session::get('success'))
+                        <div class="alert alert-success alert-block" id="success">
+                            <strong>{{ $success }}</strong>
+                        </div>
+                    @endif
+
                     {{-- Modal  --}}
                     <div class="modal fade" id="Addspgrnote" tabindex="-1" role="dialog" aria-labelledby="Addspgrnote" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -138,11 +144,6 @@
                         <script 
                             src="https://code.jquery.com/jquery-3.2.1.min.js">
                         </script>
-                        @if ($success = Session::get('success'))
-                        <div class="alert alert-success alert-block" id="success">
-                            <strong>{{ $success }}</strong>
-                        </div>
-                        @endif
                 </div>
             </div>
         </div>   

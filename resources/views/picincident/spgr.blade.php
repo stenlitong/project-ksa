@@ -44,7 +44,7 @@
                                     <form method="POST" action="/picincident/uploadSPGR" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-floating" style="margin-bottom: 2%">
-                                            <input type="text" id ="no_formclaim" name="no_formclaim" {{-- style="text-transform: uppercase;" --}}class="form-control" placeholder="Insert Nomor FormClaim"> 
+                                            <input type="text" id ="no_formclaim" name="no_formclaim" {{-- style="text-transform: uppercase;" --}}class="form-control" required placeholder="Insert Nomor FormClaim"> 
                                             <label for="no_formclaim">Insert No FormClaim Here</label>
                                         </div>
                                                
