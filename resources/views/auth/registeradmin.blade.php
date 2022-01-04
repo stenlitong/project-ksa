@@ -162,13 +162,7 @@
                             document.getElementById("Kendari").disabled = false;
                         }
                         
-                        // if (dropdown.value=="picSite") {
-                        //     document.getElementById("Jakarta").disabled = true;
-                        //     selectopt('Samarinda');
-                            
-                        // } else {
-                        //     document.getElementById("Jakarta").disabled = false;
-                        // }
+                       
                         if(dropdown.value == "adminPurchasing" || dropdown.value == "purchasingManager"){
                             selectopt('Jakarta');
                             document.getElementById("Banjarmasin").disabled = true;
