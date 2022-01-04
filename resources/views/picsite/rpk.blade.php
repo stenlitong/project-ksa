@@ -76,7 +76,7 @@
                                     @endphp
                                     <tr>
                                         <td class=table-primary>{{ $a }}</td>
-                                        <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                        <td class=table-primary id="nama"><strong>{{$name[$a-1]}}</td>
                                         {{-- @foreach ( $docrpk as $doc)
                                         <td id="">{{$doc->$time_upload}}</td>
                                         <td id="">{{$doc->$stats}}</td>
@@ -111,7 +111,7 @@
                                 @endphp
                                 <tr>
                                     <td class=table-primary>{{ $a }}</td>
-                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    <td class=table-primary id="nama"><strong>{{$name[$a-1]}}</td>
                                     {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
@@ -146,7 +146,7 @@
                                 @endphp
                                 <tr>
                                     <td class=table-primary>{{ $a }}</td>
-                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    <td class=table-primary id="nama"><strong>{{$name[$a-1]}}</td>
                                     {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
@@ -181,7 +181,7 @@
                                 @endphp
                                 <tr>
                                     <td class=table-primary>{{ $a }}</td>
-                                    <td class=table-primary id="nama">{{$name[$a-1]}}</td>
+                                    <td class=table-primary id="nama"><strong>{{$name[$a-1]}}</td>
                                     {{-- @foreach ( $docrpk as $doc)
                                     <td id="">{{$doc->$time_upload}}</td>
                                     <td id="">{{$doc->$stats}}</td>
@@ -198,6 +198,31 @@
                                     {{-- @else
                                         <td> </td>
                                     @endif --}}
+                                </tr>
+                                @endfor
+                                @endif
+                    {{-- Jakarta --}}
+                                @if (Auth::user()->cabang == 'Jakarta')
+                                @for ($a = 1 ; $a <= 7 ; $a++)
+                                @php
+                                    $name = array('Surat Keterangan Asal Barang','Cargo Manifest','Voyage Report/ Term Sheet'
+                                                    ,'Bill of Lading','Ijin Olah Gerak Kapal',
+                                                    'Docking','Surat Keterangan Persiapan Kapal');
+                                    $jktfile = 'jktfile'.$a;
+                                    $time_upload ="time_upload".$a;
+                                    $stats ="status".$a;
+                                    $reason ="reason".$a;
+                                    $date = date('Y-m-28');
+                                @endphp
+                                <tr>
+                                    <td class=table-primary>{{ $a }}</td>
+                                    <td class=table-primary id="nama"><strong>{{$name[$a-1]}}</td>
+                                    <td class=table-light>
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control" name="{{$jktfile}}" id="rfile">
+                                          </div>
+                                    </td>
+                                     
                                 </tr>
                                 @endfor
                                 @endif

@@ -62,6 +62,7 @@
                         <option value="/dashboard?search=Berau">Berau</option>
                         <option value="/dashboard?search=Samarinda">Samarinda</option>
                         <option value="/dashboard?search=Banjarmasin">Banjarmasin</option>
+                        <option value="/picadmin/dana?search=Jakarta">Jakarta</option>
                     </select>
                 </div>
 
@@ -122,7 +123,7 @@
                     @elseif ($d->$stats == 'on review')
                     <tr>
                         {{-- hasil on review --}}
-                        <td class="table-warning"><strong>{{ $d->created_at }}</strong></td>
+                        <td class="table-warning"><strong>{{ $d->$time_upload }}</strong></td>
                         <td class="table-warning"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-warning" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -144,7 +145,7 @@
                     </tr>
                 @elseif($d->$stats == 'approved')
                     <tr>
-                        <td class="table-success">{{ $d->created_at }}</td>
+                        <td class="table-success">{{ $d->$time_upload }}</td>
                         <td class="table-success"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -166,7 +167,7 @@
                     </tr>
                 @else
                     <tr>
-                        <td class="table-danger">{{ $d->created_at }}</td>
+                        <td class="table-danger">{{ $d->$time_upload }}</td>
                         <td class="table-danger"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -195,19 +196,21 @@
                 @endforelse
 {{-- Babelan------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}} 
                     @forelse($document as $doc )
-                    @for ( $a = 1 ; $a <= 16 ; $a++)
+                    @for ( $a = 1 ; $a <= 21 ; $a++)
                     @php
                         $BABELAN = array('sertifikat_keselamatan',
                         'sertifikat_garis_muat','penerbitan_sekali_jalan','sertifikat_safe_manning',
                         'endorse_surat_laut','perpanjangan_sertifikat_sscec','perpanjangan_sertifikat_p3k' ,
                         'biaya_laporan_dok','pnpb_sertifikat_keselamatan','pnpb_sertifikat_garis_muat',
                         'pnpb_surat_laut','sertifikat_snpp','sertifikat_anti_teritip',    
-                        'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec');
+                        'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec',
+                        'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                         $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,
                         'Endorse Surat Laut' , 'Perpanjangan Sertifikat SSCEC' , 'Perpanjangan Sertifikat P3K' , 'Biaya Laporan Dok' , 
                         'PNPB Sertifikat Keselamatan' , 'PNPB Sertifikat Garis Muat' , 'PNPB Surat Laut'  , 'Sertifikat SNPP' ,
-                        'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC');
+                        'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC' ,
+                        'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                         $time_upload ="time_upload".$a;
                         $stats ="status".$a;
                         $reason = "reason".$a;
@@ -221,7 +224,7 @@
                     @elseif ($doc->$stats == 'on review')
                         <tr>
                             {{-- hasil on review --}}
-                            <td class="table-warning"><strong>{{ $doc->created_at }}</strong></td>
+                            <td class="table-warning"><strong>{{ $doc->$time_upload }}</strong></td>
                             <td class="table-warning"><strong>{{ $doc->cabang }}</strong></td>
                             <td class="table-warning" style="text-transform: uppercase;"id="namakapal">{{$doc->nama_kapal}}</td>                                        
                             <td class="table-warning" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
@@ -243,7 +246,7 @@
                         </tr>
                     @elseif($doc->$stats == 'approved')
                         <tr>
-                            <td class="table-success"><strong>{{ $doc->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{ $doc->$time_upload }}</strong></td>
                             <td class="table-success"><strong>{{ $doc->cabang }}</strong></td>
                             <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$doc->nama_kapal}}</td>                                        
                             <td class="table-success" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
@@ -265,7 +268,7 @@
                         </tr>
                     @else
                         <tr>
-                            <td class="table-danger"><strong>{{ $doc->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{ $doc->$time_upload }}</strong></td>
                             <td class="table-danger"><strong>{{ $doc->cabang }}</strong></td>
                             <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$doc->nama_kapal}}</td>                                        
                             <td class="table-danger" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
@@ -294,7 +297,7 @@
                     @endforelse
 {{-- Berau----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                 @forelse($documentberau as $d )
-                @for ( $a = 1 ; $a <= 26 ; $a++)
+                @for ( $a = 1 ; $a <= 31 ; $a++)
                 @php
                 $BERAU = array('pnbp_sertifikat_konstruksi','jasa_urus_sertifikat',
                                 'pnbp_sertifikat_perlengkapan','pnbp_sertifikat_radio','pnbp_sertifikat_ows',
@@ -304,7 +307,8 @@
                                 'exibitum_engine_logbook','pnbp_deck_logbook','pnbp_engine_logbook',
                                 'biaya_docking','lain-lain','biaya_labuh_tambat',
                                 'biaya_rambu','pnbp_pemeriksaan','sertifikat_bebas_sanitasi&p3k',
-                                'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan');
+                                'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan' ,
+                                'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                 $names = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
                                 'PNBP Sertifikat Radio','PNBP Sertifikat OWS','PNBP Garis Muat',
@@ -314,7 +318,8 @@
                                 'PNBP Deck Logbook','PNBP Engine Logbook','Biaya Docking',
                                 'Lain-lain','Biaya Labuh Tambat','Biaya Rambu',
                                 'PNBP Pemeriksaan','Sertifikat Bebas Sanitasi & P3K','Sertifikat Garis Muat',
-                                'PNBP SSCEC','Ijin Sekali Jalan');
+                                'PNBP SSCEC','Ijin Sekali Jalan',
+                                'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                     $time_upload ="time_upload".$a;
                     $stats ="status".$a;
                     $reason = "reason".$a;
@@ -329,7 +334,7 @@
                 @elseif ($d->$stats == 'on review')
                     <tr>
                         {{-- hasil on review --}}
-                        <td class="table-warning"><strong>{{ $d->created_at }}</strong></td>
+                        <td class="table-warning"><strong>{{ $d->$time_upload }}</strong></td>
                         <td class="table-warning"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-warning" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -351,7 +356,7 @@
                     </tr>
                 @elseif($d->$stats == 'approved')
                     <tr>
-                        <td class="table-success"><strong>{{ $d->created_at }}</strong></td>
+                        <td class="table-success"><strong>{{ $d->$time_upload }}</strong></td>
                         <td class="table-success"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -373,7 +378,7 @@
                     </tr>
                 @else
                     <tr>
-                        <td class="table-danger"><strong>{{ $d->created_at }}</strong></td>
+                        <td class="table-danger"><strong>{{ $d->$time_upload }}</strong></td>
                         <td class="table-danger"><strong>{{ $d->cabang }}</strong></td>
                         <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
@@ -402,7 +407,7 @@
                 @endforelse
 {{-- Banjarmasin---------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
             @forelse($documentbanjarmasin as $b )
-            @for ( $a = 1 ; $a <= 31 ; $a++)
+            @for ( $a = 1 ; $a <= 36 ; $a++)
             @php
                 $BANJARMASIN = array('perjalanan','sertifikat_keselamatan','sertifikat_anti_fauling','surveyor',
                                     'drawing&stability','laporan_pengeringan','berita_acara_lambung',
@@ -413,7 +418,8 @@
                                     'keselamatan_(dok)','garis_muat','dispensasi_isr',
                                     'life_raft_1_2_pemadam','sscec','seatrail',
                                     'laporan_pemeriksaan_umum','laporan_pemeriksaan_mesin','nota_dinas_perubahan_kawasan',
-                                    'PAS','invoice_bki','safe_manning');
+                                    'PAS','invoice_bki','safe_manning',
+                                    'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                 $names = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
                             'Drawing & Stability','Laporan Pengeringan','Berita Acara Lambung',
                             'Laporan Pemeriksaan Nautis','Laporan Pemeriksaan Anti Faulin','Laporan Pemeriksaan Radio ',
@@ -424,7 +430,7 @@
                             'Dispensasi ISR','Life Raft 1 2, Pemadam',
                             'SSCEC','Seatrail','Laporan Pemeriksaan Umum',
                             'Laporan Pemeriksaan Mesin','Nota Dinas Perubahan Kawasan','PAS',
-                            'Invoice BKI','Safe Manning',);
+                            'Invoice BKI','Safe Manning','File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                 $time_upload ="time_upload".$a;
                 $stats ="status".$a;
                 $reason = "reason".$a;
@@ -439,7 +445,7 @@
                 @elseif ($b->$stats == 'on review')
                     <tr>
                         {{-- hasil on review --}}
-                        <td class="table-warning"><strong>{{ $b->created_at }}</strong></td>
+                        <td class="table-warning"><strong>{{ $b->$time_upload }}</strong></td>
                         <td class="table-warning"><strong>{{ $b->cabang }}</strong></td>
                         <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
                         <td class="table-warning" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
@@ -461,7 +467,7 @@
                     </tr>
                 @elseif($b->$stats == 'approved')
                     <tr>
-                        <td class="table-success"><strong>{{ $b->created_at }}</strong></td>
+                        <td class="table-success"><strong>{{ $b->$time_upload }}</strong></td>
                         <td class="table-success"><strong>{{ $b->cabang }}</strong></td>
                         <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
                         <td class="table-success" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
@@ -483,7 +489,7 @@
                     </tr>
                 @else
                     <tr>
-                        <td class="table-danger"><strong>{{ $b->created_at }}</strong></td>
+                        <td class="table-danger"><strong>{{ $b->$time_upload }}</strong></td>
                         <td class="table-danger"><strong>{{ $b->cabang }}</strong></td>
                         <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
                         <td class="table-danger" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
@@ -512,7 +518,7 @@
                 @endforelse
 {{-- Samarinda------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
                 @forelse($documentsamarinda as $s )
-                @for ( $a = 1 ; $a <= 38 ; $a++)
+                @for ( $a = 1 ; $a <= 43 ; $a++)
                 @php
                     $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
                                         'keselamatan_(tahunan)','keselamatan_(dok)','keselamatan_(pengaturan_dok)',
@@ -526,7 +532,8 @@
                                         'halaman_tambahan_grosse','pnbp&pup','laporan_pemeriksaan_anti_teriti',
                                         'surveyor_pengedokan','surveyor_penerimaan_klas_bki','nota_tagihan_jasa_perkapalan',
                                         'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
-                                        'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta');
+                                        'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta', 'penerbitan_nota_dinas_kedua'
+                                        'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                     $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                 "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
                                 "Sertifikat Garis Muat","Laporan Pemeriksaan Garis Muat","Sertifikat Anti Fauling",
@@ -539,7 +546,8 @@
                                 'Halaman Tambahan Grosse','PNBP & PUP','Laporan Pemeriksaan Anti Teriti',
                                 'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
                                 'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
-                                'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta');
+                                'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta', 'Penerbitan Nota Dinas Kedua' ,
+                                'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                     $time_upload ="time_upload".$a;
                     $stats ="status".$a;
                     $reason = "reason".$a;
@@ -554,7 +562,7 @@
                     @elseif ($s->$stats == 'on review')
                         <tr>
                             {{-- hasil on review --}}
-                            <td class="table-warning"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-warning"><strong>{{ $s->$time_upload }}</strong></td>
                             <td class="table-warning"><strong>{{ $s->cabang }}</strong></td>
                             <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
                             <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
@@ -576,7 +584,7 @@
                         </tr>
                     @elseif($s->$stats == 'approved')
                         <tr>
-                            <td class="table-success"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-success"><strong>{{ $s->$time_upload }}</strong></td>
                             <td class="table-success"><strong>{{ $s->cabang }}</strong></td>
                             <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
                             <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
@@ -599,7 +607,7 @@
                         </tr>
                     @else
                         <tr>
-                            <td class="table-danger"><strong>{{ $s->created_at }}</strong></td>
+                            <td class="table-danger"><strong>{{ $s->$time_upload }}</strong></td>
                             <td class="table-danger"><strong>{{ $s->cabang }}</strong></td>
                             <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
                             <td class="table-danger" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
@@ -624,6 +632,121 @@
                         @empty
                             <tr>
                                 <td>No Samarinda Fund Request Data Found</td>
+                            </tr>
+                        @endforelse
+{{-- Jakarta------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}}          
+                        @forelse($documentjakarta as $jkt )
+                        @for ( $a = 1 ; $a <= 43 ; $a++)
+                        @php
+                            $JAKARTA = array('pnbp_rpt','pps','pnbp_spesifikasi_kapal'
+                                                ,'anti_fauling_permanen','pnbp_pemeriksaan_anti_fauling','snpp_permanen'
+                                                ,'pengesahan_gambar','surat_laut_permanen','pnbp_surat_laut'
+                                                ,'pnbp_surat_laut_(ubah_pemilik)','clc_bunker','nota_dinas_penundaan_dok_i'
+                                                ,'nota_dinas_penundaan_dok_ii','nota_dinas_perubahan_kawasan' ,'call_sign'
+                                                ,'perubahan_kepemilikan_kapal','nota_dinas_bendera_(baru)','pup_safe_manning'
+                                                ,'corporate','dokumen_kapal_asing_(baru)','rekomendasi_radio_kapal'
+                                                ,'izin_stasiun_radio_kapal','mmsi','pnbp_pemeriksaan_konstruksi'
+                                                ,'ok_1_skb','ok_1_skp','ok_1_skr'
+                                                ,'status_hukum_kapal','autorization_garis_muat','otorisasi_klas'
+                                                ,'pnbp_otorisasi(all)','halaman_tambah_grosse_akta','pnbp_surat_ukur'
+                                                ,'nota_dinas_penundaan_klas_bki_ss','uwild_pengganti_doking','update_nomor_call_sign'
+                                                ,'clc_badan_kapal','wreck_removal'
+                                                ,'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
+                            $names = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
+                                            ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
+                                            ,'Pengesahan Gambar','Surat Laut Permanen','PNBP Surat Laut'
+                                            ,'PNBP Surat Laut (Ubah Pemilik)','CLC Bunker','Nota Dinas Penundaan Dok I'
+                                            ,'Nota Dinas Penundaan Dok II','Nota Dinas Perubahan Kawasan','Call Sign'
+                                            ,'Perubahan Kepemilikan Kapal','Nota Dinas Bendera (Baru)','PUP Safe Manning'
+                                            ,'Corporate','Dokumen Kapal Asing (Baru)',Lain-'Lain'
+                                            ,'Rekomendasi Radio Kapal','Izin Stasiun Radio Kapal','MMSI'
+                                            ,'PNBP Pemeriksaan Konstruksi','OK 1 SKB','OK 1 SKP','OK 1 SKR'
+                                            ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
+                                            ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
+                                            ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
+                                            ,'CLC Badan Kapal','Wreck Removal'
+                                            ,'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
+                                            );
+                            $time_upload ="time_upload".$a;
+                            $stats ="status".$a;
+                            $reason = "reason".$a;
+                            $date = date('Y-m-28');
+                            $scan = $JAKARTA[$a-1];
+                        @endphp
+                            <input type="hidden" name='status' value={{$stats}}>
+                            @if(empty($jkt->$stats))
+                            <tr>
+                                {{-- agar tidak keluar hasil kosong --}}
+                            </tr>
+                            @elseif ($jkt->$stats == 'on review')
+                            <tr>
+                                {{-- hasil on review --}}
+                                <td class="table-warning"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
+                                <td class="table-warning" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
+                                <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
+                                <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
+                                <td class="table-warning" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-warning" id="reason">{{$jkt ->$reason}}</td>   
+                                <td class="table-warning">
+                                    <form method="post" action="/dashboard/dana/view" target="_blank">
+                                        @csrf
+                                        <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
+                                        <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$jkt->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='DANA'>
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </td>                                                                   
+                            </tr>
+                        @elseif($s->$stats == 'approved')
+                            <tr>
+                                <td class="table-success"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
+                                <td class="table-success" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
+                                <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
+                                <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
+                                <td class="table-success" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-success" id="reason">{{$jkt->$reason}}</td>    
+                                <td class="table-info">
+                                    <form method="post" action="/dashboard/dana/view" target="_blank">
+                                        @csrf
+                                        <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$sjkt->nama_kapal}}>
+                                        <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$jkt>$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='DANA'>
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </td>                                                      
+                            </tr>
+                        @else
+                            <tr>
+                                <td class="table-danger"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
+                                <td class="table-danger" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
+                                <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
+                                <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
+                                <td class="table-danger" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-danger" id="reason">{{$jkt->$reason}}</td>    
+                                <td class="table-info">
+                                    <form method="post" action="/dashboard/dana/view" target="_blank">
+                                        @csrf
+                                        <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
+                                        <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
+                                        <input type="hidden" name='result' value={{$jkt->$scan}} />
+                                        <input type="hidden" name = 'tipefile' value='DANA'>
+                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                    </form>
+                                </td>                  
+                            </tr>
+                        @endif
+                        @endfor
+                        @empty
+                            <tr>
+                                <td>No Jakarta Fund Request Data Found</td>
                             </tr>
                         @endforelse
                   </tbody>

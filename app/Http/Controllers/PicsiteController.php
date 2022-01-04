@@ -17,6 +17,7 @@ use App\Models\documents;
 use App\Models\documentberau;
 use App\Models\documentbanjarmasin;
 use App\Models\documentsamarinda;
+use App\Models\documentJakarta;
 use App\Models\User;
 
 class PicsiteController extends Controller
@@ -49,9 +50,7 @@ class PicsiteController extends Controller
         $documentsamarinda = documentsamarinda::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
         //dd($document->created_at);
         // dd($request);
-        // if (Auth::user()->cabang == 'Babelan') {
-
-        // }
+       
         if (Auth::user()->cabang == 'Babelan') {
 
             $year = date('Y');
@@ -74,6 +73,11 @@ class PicsiteController extends Controller
                 'ufile14' => 'mimes:pdf|max:3072' ,
                 'ufile15' => 'mimes:pdf|max:3072' ,
                 'ufile16' => 'mimes:pdf|max:3072' ,
+                'ufile17' => 'mimes:pdf|max:3072' ,
+                'ufile18' => 'mimes:pdf|max:3072' ,
+                'ufile19' => 'mimes:pdf|max:3072' ,
+                'ufile20' => 'mimes:pdf|max:3072' ,
+                'ufile21' => 'mimes:pdf|max:3072' ,
             ]);
 
             if ($request->hasFile('ufile1')) {
@@ -84,7 +88,7 @@ class PicsiteController extends Controller
                 if (documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                     'status1' => 'on review',
-                    'time_upload1' => date("Y-m-d"),
+                    'time_upload1' => date("Y-m-d h:i:s"),
                     'sertifikat_keselamatan' => basename($path),
                 ]);
                 }else{
@@ -97,7 +101,7 @@ class PicsiteController extends Controller
                     'periode_akhir' => $request->tgl_akhir,
                     
                     'status1' => 'on review',
-                    'time_upload1' => date("Y-m-d"),
+                    'time_upload1' => date("Y-m-d h:i:s"),
                     'sertifikat_keselamatan' => basename($path)
                     ]);
                 }
@@ -113,7 +117,7 @@ class PicsiteController extends Controller
                 documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                                        
                         'sertifikat_garis_muat' => basename($path),
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -126,7 +130,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_garis_muat' => basename($path),
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -142,7 +146,7 @@ class PicsiteController extends Controller
                                                
                             'penerbitan_sekali_jalan' => basename($path),
                             'status3' => 'on review',
-                            'time_upload3' => date("Y-m-d"),
+                            'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documents::create([
@@ -155,7 +159,7 @@ class PicsiteController extends Controller
 
                         'penerbitan_sekali_jalan' => basename($path),
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]); 
                 }
             }
@@ -171,7 +175,7 @@ class PicsiteController extends Controller
                     
                     'sertifikat_safe_manning'=> basename($path),
                     'status4' => 'on review',
-                    'time_upload4' => date("Y-m-d"),
+                    'time_upload4' => date("Y-m-d h:i:s"),
                 ]);
                 }else{
                     documents::create([
@@ -184,7 +188,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_safe_manning'=> basename($path),
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -199,7 +203,7 @@ class PicsiteController extends Controller
                 documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'endorse_surat_laut'=> basename($path),
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);   
                 }else{
                     documents::create([
@@ -212,7 +216,7 @@ class PicsiteController extends Controller
 
                         'endorse_surat_laut'=> basename($path),
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -227,7 +231,7 @@ class PicsiteController extends Controller
                 documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'perpanjangan_sertifikat_sscec'=> basename($path),
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -240,7 +244,7 @@ class PicsiteController extends Controller
 
                         'perpanjangan_sertifikat_sscec'=> basename($path),
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -256,7 +260,7 @@ class PicsiteController extends Controller
                         
                         'perpanjangan_sertifikat_p3k'=> basename($path),
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -269,7 +273,7 @@ class PicsiteController extends Controller
 
                         'perpanjangan_sertifikat_p3k'=> basename($path),
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                     ]);
                 }
                 
@@ -286,7 +290,7 @@ class PicsiteController extends Controller
                         
                         'biaya_laporan_dok'=> basename($path),
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                     ]);     
                 }else{
                     documents::create([
@@ -299,7 +303,7 @@ class PicsiteController extends Controller
 
                         'biaya_laporan_dok'=> basename($path),
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                     ]); 
                 }  
             }
@@ -315,7 +319,7 @@ class PicsiteController extends Controller
                         
                         'pnpb_sertifikat_keselamatan'=> basename($path),
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),
+                        'time_upload9' => date("Y-m-d h:i:s"),
                     ]);                   
                 }else{
                     documents::create([
@@ -328,7 +332,7 @@ class PicsiteController extends Controller
 
                         'pnpb_sertifikat_keselamatan'=> basename($path),
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),
+                        'time_upload9' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -345,7 +349,7 @@ class PicsiteController extends Controller
                         
                         'pnpb_sertifikat_garis_muat'=> basename($path),
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                     ]);          
                 }else{
                     documents::create([
@@ -358,7 +362,7 @@ class PicsiteController extends Controller
 
                         'pnpb_sertifikat_garis_muat'=> basename($path),
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -375,7 +379,7 @@ class PicsiteController extends Controller
                         
                         'pnpb_surat_laut'=> basename($path),
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -388,7 +392,7 @@ class PicsiteController extends Controller
 
                         'pnpb_surat_laut'=> basename($path),
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -405,7 +409,7 @@ class PicsiteController extends Controller
                         
                         'sertifikat_snpp'=> basename($path),
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -418,7 +422,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_snpp'=> basename($path),
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -435,7 +439,7 @@ class PicsiteController extends Controller
                         
                         'sertifikat_anti_teritip'=> basename($path),
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -448,7 +452,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_anti_teritip'=> basename($path),
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -465,7 +469,7 @@ class PicsiteController extends Controller
                         
                         'pnbp_snpp&snat'=> basename($path),
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documents::create([
@@ -478,7 +482,7 @@ class PicsiteController extends Controller
 
                         'pnbp_snpp&snat'=> basename($path),
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }  
@@ -494,7 +498,7 @@ class PicsiteController extends Controller
                         
                         'biaya_survey'=> basename($path),
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -507,7 +511,7 @@ class PicsiteController extends Controller
 
                         'biaya_survey'=> basename($path),
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                     ]);                    
                 }
             }
@@ -524,7 +528,7 @@ class PicsiteController extends Controller
                         
                         'pnpb_sscec'=> basename($path),
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documents::create([
@@ -537,9 +541,124 @@ class PicsiteController extends Controller
 
                         'pnpb_sscec'=> basename($path),
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                     ]);
                 }
+            }
+            if ($request->hasFile('ufile17')) {
+                $file1 = $request->file('ufile17');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('ufile17')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
+                if(documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status17' => 'on review',
+                        'time_upload17' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                }else{
+                    documents::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status17' => 'on review',
+                        'time_upload17' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('ufile18')) {
+                $file1 = $request->file('ufile18');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('ufile18')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
+                if(documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status18' => 'on review',
+                        'time_upload18' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                }else{
+                    documents::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status18' => 'on review',
+                        'time_upload18' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('ufile19')) {
+                $file1 = $request->file('ufile19');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('ufile19')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
+                if(documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status19' => 'on review',
+                        'time_upload19' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                }else{
+                    documents::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status19' => 'on review',
+                        'time_upload19' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('ufile20')) {
+                $file1 = $request->file('ufile20');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('ufile20')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
+                if(documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status20' => 'on review',
+                        'time_upload20' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                }else{
+                    documents::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status20' => 'on review',
+                        'time_upload20' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('ufile21')) {
+                $file1 = $request->file('ufile21');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('ufile21')->storeas('babelan/'. $year . "/". $month , $name1, 's3');
+                if(documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documents::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status21' => 'on review',
+                        'time_upload21' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                }else{
+                    documents::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status21' => 'on review',
+                        'time_upload21' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                    }
             }
             return redirect('/picsite/upload')->with('success', 'Upload Success!');
         }
@@ -577,6 +696,11 @@ class PicsiteController extends Controller
                 'beraufile24'=> 'mimes:pdf|max:3072' , 
                 'beraufile25'=> 'mimes:pdf|max:3072' ,
                 'beraufile26'=> 'mimes:pdf|max:3072' ,
+                'beraufile27'=> 'mimes:pdf|max:3072' ,
+                'beraufile28'=> 'mimes:pdf|max:3072' ,
+                'beraufile29'=> 'mimes:pdf|max:3072' ,
+                'beraufile30'=> 'mimes:pdf|max:3072' ,
+                'beraufile31'=> 'mimes:pdf|max:3072' ,
             ]);
             if ($request->hasFile('beraufile1')) {
                 $file1 = $request->file('beraufile1');
@@ -599,7 +723,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
                     
                     'status1' => 'on review',
-                    'time_upload1' => date("Y-m-d"),
+                    'time_upload1' => date("Y-m-d h:i:s"),
                     'pnbp_sertifikat_konstruksi' => basename($path),]);
                 }
             }
@@ -612,7 +736,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'jasa_urus_sertifikat' => basename($path),
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentberau::create([
@@ -625,7 +749,7 @@ class PicsiteController extends Controller
 
                         'jasa_urus_sertifikat' => basename($path),
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -638,7 +762,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_sertifikat_perlengkapan' => basename($path),
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -651,7 +775,7 @@ class PicsiteController extends Controller
 
                         'pnbp_sertifikat_perlengkapan' => basename($path),
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -664,7 +788,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_sertifikat_radio' => basename($path),
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -677,7 +801,7 @@ class PicsiteController extends Controller
 
                         'pnbp_sertifikat_radio' => basename($path),
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -690,7 +814,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_sertifikat_ows' => basename($path),
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -703,7 +827,7 @@ class PicsiteController extends Controller
 
                         'pnbp_sertifikat_ows' => basename($path),
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -716,7 +840,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_garis_muat' => basename($path),
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -729,7 +853,7 @@ class PicsiteController extends Controller
 
                         'pnbp_garis_muat' => basename($path),
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -742,7 +866,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_pemeriksaan_endorse_sl' => basename($path),
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -755,7 +879,7 @@ class PicsiteController extends Controller
 
                         'pnbp_pemeriksaan_endorse_sl' => basename($path),
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -768,7 +892,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pemeriksaan_sertifikat' => basename($path),
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -781,7 +905,7 @@ class PicsiteController extends Controller
 
                         'pemeriksaan_sertifikat' => basename($path),
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -794,7 +918,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'marine_inspektor' => basename($path),
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),
+                        'time_upload9' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -807,7 +931,7 @@ class PicsiteController extends Controller
 
                         'marine_inspektor' => basename($path),
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),
+                        'time_upload9' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -820,7 +944,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'biaya_clearance' => basename($path),
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -833,7 +957,7 @@ class PicsiteController extends Controller
 
                         'biaya_clearance' => basename($path),
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }          
@@ -846,7 +970,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_master_cable' => basename($path),
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -859,7 +983,7 @@ class PicsiteController extends Controller
 
                         'pnbp_master_cable' => basename($path),
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -872,7 +996,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'cover_deck_logbook' => basename($path),
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -885,7 +1009,7 @@ class PicsiteController extends Controller
 
                         'cover_deck_logbook' => basename($path),
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -898,7 +1022,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'cover_engine_logbook' => basename($path),
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -911,7 +1035,7 @@ class PicsiteController extends Controller
 
                         'cover_engine_logbook' => basename($path),
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -924,7 +1048,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'exibitum_dect_logbook' => basename($path),
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -937,7 +1061,7 @@ class PicsiteController extends Controller
 
                         'exibitum_dect_logbook' => basename($path),
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -950,7 +1074,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'exibitum_engine_logbook' => basename($path),
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -963,7 +1087,7 @@ class PicsiteController extends Controller
 
                         'exibitum_engine_logbook' => basename($path),
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -976,7 +1100,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_deck_logbook' => basename($path),
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -989,7 +1113,7 @@ class PicsiteController extends Controller
 
                         'pnbp_deck_logbook' => basename($path),
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1001,7 +1125,7 @@ class PicsiteController extends Controller
                 if (documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status17' => 'on review',
-                        'time_upload17' => date("Y-m-d"),
+                        'time_upload17' => date("Y-m-d h:i:s"),
                         'pnbp_engine_logbook' => basename($path),
                     ]);
                 }else {
@@ -1014,7 +1138,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
     
                         'status17' => 'on review',
-                        'time_upload17' => date("Y-m-d"),
+                        'time_upload17' => date("Y-m-d h:i:s"),
                         'pnbp_engine_logbook' => basename($path),
                     ]);
                 }
@@ -1028,7 +1152,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'biaya_docking' => basename($path),
                         'status18' => 'on review',
-                        'time_upload18' => date("Y-m-d"),
+                        'time_upload18' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentberau::create([
@@ -1041,7 +1165,7 @@ class PicsiteController extends Controller
 
                         'biaya_docking' => basename($path),
                         'status18' => 'on review',
-                        'time_upload18' => date("Y-m-d"),
+                        'time_upload18' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1054,7 +1178,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'lain-lain' => basename($path),
                         'status19' => 'on review',
-                        'time_upload19' => date("Y-m-d"),]); 
+                        'time_upload19' => date("Y-m-d h:i:s"),]); 
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1067,7 +1191,7 @@ class PicsiteController extends Controller
 
                         'lain-lain' => basename($path),
                         'status19' => 'on review',
-                        'time_upload19' => date("Y-m-d"),
+                        'time_upload19' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1080,7 +1204,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'biaya_labuh_tambat' => basename($path),
                         'status20' => 'on review',
-                        'time_upload20' => date("Y-m-d"),]);
+                        'time_upload20' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1093,7 +1217,7 @@ class PicsiteController extends Controller
                         'biaya_labuh_tambat' => basename($path),
    
                         'status20' => 'on review',
-                        'time_upload20' => date("Y-m-d"),
+                        'time_upload20' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1106,7 +1230,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'biaya_rambu' => basename($path),
                         'status21' => 'on review',
-                        'time_upload20' => date("Y-m-d"),]);
+                        'time_upload20' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1118,7 +1242,7 @@ class PicsiteController extends Controller
 
                         'biaya_rambu' => basename($path),
                         'status21' => 'on review',
-                        'time_upload20' => date("Y-m-d"),
+                        'time_upload20' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1131,7 +1255,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnbp_pemeriksaan' => basename($path),
                         'status22' => 'on review',
-                        'time_upload22' => date("Y-m-d"),]);
+                        'time_upload22' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1144,7 +1268,7 @@ class PicsiteController extends Controller
 
                         'pnbp_pemeriksaan' => basename($path),
                         'status22' => 'on review',
-                        'time_upload22' => date("Y-m-d"),
+                        'time_upload22' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1157,7 +1281,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'sertifikat_bebas_sanitasi&p3k' => basename($path),
                         'status23' => 'on review',
-                        'time_upload23' => date("Y-m-d"),]);
+                        'time_upload23' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1170,7 +1294,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_bebas_sanitasi&p3k' => basename($path),
                         'status23' => 'on review',
-                        'time_upload23' => date("Y-m-d"),
+                        'time_upload23' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1183,7 +1307,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'sertifikat_garis_muat' => basename($path),
                         'status24' => 'on review',
-                        'time_upload24' => date("Y-m-d"),]);
+                        'time_upload24' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1195,7 +1319,7 @@ class PicsiteController extends Controller
 
                         'sertifikat_garis_muat' => basename($path),
                         'status24' => 'on review',
-                        'time_upload24' => date("Y-m-d"),
+                        'time_upload24' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1208,7 +1332,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'ijin_sekali_jalan' => basename($path),
                         'status25' => 'on review',
-                        'time_upload25' => date("Y-m-d"),]);
+                        'time_upload25' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1221,7 +1345,7 @@ class PicsiteController extends Controller
 
                         'ijin_sekali_jalan' => basename($path),
                         'status25' => 'on review',
-                        'time_upload25' => date("Y-m-d"),
+                        'time_upload25' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -1234,7 +1358,7 @@ class PicsiteController extends Controller
                 documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'pnpb_sscec' => basename($path),
                         'status26' => 'on review',
-                        'time_upload26' => date("Y-m-d"),]);
+                        'time_upload26' => date("Y-m-d h:i:s"),]);
                 }else {
                     documentberau::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -1247,9 +1371,124 @@ class PicsiteController extends Controller
 
                         'pnpb_sscec' => basename($path),
                         'status26' => 'on review',
-                        'time_upload26' => date("Y-m-d"),
+                        'time_upload26' => date("Y-m-d h:i:s"),
                     ]);
                 }
+            }
+            if ($request->hasFile('beraufile27')) {
+                $file1 = $request->file('beraufile27');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('beraufile27')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status27' => 'on review',
+                        'time_upload27' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                }else{
+                    documentberau::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status27' => 'on review',
+                        'time_upload27' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('beraufile28')) {
+                $file1 = $request->file('beraufile28');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('beraufile28')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status28' => 'on review',
+                        'time_upload28' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                }else{
+                    documentberau::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status28' => 'on review',
+                        'time_upload28' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('beraufile29')) {
+                $file1 = $request->file('beraufile29');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('beraufile29')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status29' => 'on review',
+                        'time_upload29' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                }else{
+                    documentberau::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status29' => 'on review',
+                        'time_upload29' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('beraufile30')) {
+                $file1 = $request->file('beraufile30');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('beraufile30')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status30' => 'on review',
+                        'time_upload30' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                }else{
+                    documentberau::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status30' => 'on review',
+                        'time_upload30' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('beraufile31')) {
+                $file1 = $request->file('beraufile31');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('beraufile31')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentberau::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status31' => 'on review',
+                        'time_upload31' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                }else{
+                    documentberau::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status31' => 'on review',
+                        'time_upload31' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                    }
             }
             return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
@@ -1290,6 +1529,11 @@ class PicsiteController extends Controller
                 'banjarmasinfile29'=> 'mimes:pdf|max:3072' ,
                 'banjarmasinfile30'=> 'mimes:pdf|max:3072' ,
                 'banjarmasinfile31'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile32'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile33'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile34'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile35'=> 'mimes:pdf|max:3072' ,
+                'banjarmasinfile36'=> 'mimes:pdf|max:3072' ,
             ]);
             
             if ($request->hasFile('banjarmasinfile1')) {
@@ -1300,7 +1544,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                         'perjalanan' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1312,7 +1556,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status1' => 'on review',
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                         'perjalanan' => basename($path),
                     ]);
                 }
@@ -1326,7 +1570,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                         'sertifikat_keselamatan' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1338,7 +1582,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                         'sertifikat_keselamatan' => basename($path),
                     ]);
                 }
@@ -1352,7 +1596,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                         'sertifikat_anti_fauling' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1364,7 +1608,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                         'sertifikat_anti_fauling' => basename($path),
                     ]);
                 }
@@ -1378,7 +1622,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),      
+                        'time_upload4' => date("Y-m-d h:i:s"),      
                         'surveyor' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1390,7 +1634,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),      
+                        'time_upload4' => date("Y-m-d h:i:s"),      
                         'surveyor' => basename($path),
                     ]);
                 }
@@ -1404,7 +1648,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),        
+                        'time_upload5' => date("Y-m-d h:i:s"),        
                         'drawing&stability' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1416,7 +1660,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),        
+                        'time_upload5' => date("Y-m-d h:i:s"),        
                         'drawing&stability' => basename($path),
                     ]);
                 }
@@ -1430,7 +1674,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),       
+                        'time_upload6' => date("Y-m-d h:i:s"),       
                         'laporan_pengeringan' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1442,7 +1686,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),       
+                        'time_upload6' => date("Y-m-d h:i:s"),       
                         'laporan_pengeringan' => basename($path),
                     ]);
                 }
@@ -1456,7 +1700,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),   
+                        'time_upload7' => date("Y-m-d h:i:s"),   
                         'laporan_pemeriksaan_nautis' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1468,7 +1712,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),   
+                        'time_upload7' => date("Y-m-d h:i:s"),   
                         'laporan_pemeriksaan_nautis' => basename($path),
                     ]);
                 }
@@ -1482,7 +1726,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),      
+                        'time_upload8' => date("Y-m-d h:i:s"),      
                         'laporan_pemeriksaan_anti_faulin' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1494,7 +1738,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),      
+                        'time_upload8' => date("Y-m-d h:i:s"),      
                         'laporan_pemeriksaan_anti_faulin' => basename($path),
                     ]);
                 }
@@ -1508,7 +1752,7 @@ class PicsiteController extends Controller
                 
                     documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),       
+                        'time_upload9' => date("Y-m-d h:i:s"),       
                         'laporan_pemeriksaan_radio' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1520,7 +1764,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status9' => 'on review',
-                        'time_upload9' => date("Y-m-d"),       
+                        'time_upload9' => date("Y-m-d h:i:s"),       
                         'laporan_pemeriksaan_radio' => basename($path),
                     ]);
                 }
@@ -1533,7 +1777,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                         'berita_acara_lambung' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1545,7 +1789,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                         'berita_acara_lambung' => basename($path),
                     ]);
                 }
@@ -1558,7 +1802,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_snpp' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1570,7 +1814,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_snpp' => basename($path),
                     ]);
                 }
@@ -1583,7 +1827,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                         'bki' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1595,7 +1839,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status12' => 'on review',
-                        'time_upload12' => date("Y-m-d"),
+                        'time_upload12' => date("Y-m-d h:i:s"),
                         'bki' => basename($path),
                     ]);
                 }
@@ -1608,7 +1852,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                         'snpp_permanen' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1620,7 +1864,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status13' => 'on review',
-                        'time_upload13' => date("Y-m-d"),
+                        'time_upload13' => date("Y-m-d h:i:s"),
                         'snpp_permanen' => basename($path),
                     ]);
                 }
@@ -1633,7 +1877,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                         'snpp_endorse' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1645,7 +1889,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status14' => 'on review',
-                        'time_upload14' => date("Y-m-d"),
+                        'time_upload14' => date("Y-m-d h:i:s"),
                         'snpp_endorse' => basename($path),
                     ]);
                 }
@@ -1658,7 +1902,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                         'surat_laut_endorse' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1670,7 +1914,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                         'surat_laut_endorse' => basename($path),
                     ]);
                 }
@@ -1683,7 +1927,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                         'surat_laut_permanen' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1695,7 +1939,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                         'surat_laut_permanen' => basename($path),
                     ]);
                 }
@@ -1708,7 +1952,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status17' => 'on review',
-                        'time_upload17' => date("Y-m-d"),
+                        'time_upload17' => date("Y-m-d h:i:s"),
                         'compas_seren' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1720,7 +1964,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status17' => 'on review',
-                        'time_upload17' => date("Y-m-d"),
+                        'time_upload17' => date("Y-m-d h:i:s"),
                         'compas_seren' => basename($path),
                     ]);
                 }
@@ -1733,7 +1977,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status18' => 'on review',
-                        'time_upload18' => date("Y-m-d"),
+                        'time_upload18' => date("Y-m-d h:i:s"),
                         'keselamatan_(tahunan)' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1745,7 +1989,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status18' => 'on review',
-                        'time_upload18' => date("Y-m-d"),
+                        'time_upload18' => date("Y-m-d h:i:s"),
                         'keselamatan_(tahunan)' => basename($path),
                     ]);
                 }
@@ -1758,7 +2002,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status19' => 'on review',
-                        'time_upload19' => date("Y-m-d"),
+                        'time_upload19' => date("Y-m-d h:i:s"),
                         'keselamatan_(pengaturan_dok)' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1770,7 +2014,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status19' => 'on review',
-                        'time_upload19' => date("Y-m-d"),
+                        'time_upload19' => date("Y-m-d h:i:s"),
                         'keselamatan_(pengaturan_dok)' => basename($path),
                     ]);
                 }
@@ -1783,7 +2027,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status20' => 'on review',
-                        'time_upload20' => date("Y-m-d"),
+                        'time_upload20' => date("Y-m-d h:i:s"),
                         'keselamatan_(dok)' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1795,7 +2039,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status20' => 'on review',
-                        'time_upload20' => date("Y-m-d"),
+                        'time_upload20' => date("Y-m-d h:i:s"),
                         'keselamatan_(dok)' => basename($path),
                     ]);
                 }
@@ -1808,7 +2052,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status21' => 'on review',
-                        'time_upload21' => date("Y-m-d"),
+                        'time_upload21' => date("Y-m-d h:i:s"),
                         'garis_muat' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1820,7 +2064,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status21' => 'on review',
-                        'time_upload21' => date("Y-m-d"),
+                        'time_upload21' => date("Y-m-d h:i:s"),
                         'garis_muat' => basename($path),
                     ]);
                 }
@@ -1833,7 +2077,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status22' => 'on review',
-                        'time_upload22' => date("Y-m-d"),
+                        'time_upload22' => date("Y-m-d h:i:s"),
                         'dispensasi_isr' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1845,7 +2089,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status22' => 'on review',
-                        'time_upload22' => date("Y-m-d"),
+                        'time_upload22' => date("Y-m-d h:i:s"),
                         'dispensasi_isr' => basename($path),
                     ]);
                 }
@@ -1858,7 +2102,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status23' => 'on review',
-                        'time_upload23' => date("Y-m-d"),
+                        'time_upload23' => date("Y-m-d h:i:s"),
                         'life_raft_1_2_pemadam' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1870,7 +2114,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status23' => 'on review',
-                        'time_upload23' => date("Y-m-d"),
+                        'time_upload23' => date("Y-m-d h:i:s"),
                         'life_raft_1_2_pemadam' => basename($path),
                     ]);
                 }
@@ -1883,7 +2127,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status24' => 'on review',
-                        'time_upload24' => date("Y-m-d"),
+                        'time_upload24' => date("Y-m-d h:i:s"),
                         'sscec' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1895,7 +2139,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status24' => 'on review',
-                        'time_upload24' => date("Y-m-d"),
+                        'time_upload24' => date("Y-m-d h:i:s"),
                         'sscec' => basename($path),
                     ]);
                 }
@@ -1908,7 +2152,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status25' => 'on review',
-                        'time_upload25' => date("Y-m-d"),
+                        'time_upload25' => date("Y-m-d h:i:s"),
                         'seatrail' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1920,7 +2164,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status25' => 'on review',
-                        'time_upload25' => date("Y-m-d"),
+                        'time_upload25' => date("Y-m-d h:i:s"),
                         'seatrail' => basename($path),
                     ]);
                 }
@@ -1933,7 +2177,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status26' => 'on review',
-                        'time_upload26' => date("Y-m-d"),
+                        'time_upload26' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_umum' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1945,7 +2189,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status26' => 'on review',
-                        'time_upload26' => date("Y-m-d"),
+                        'time_upload26' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_umum' => basename($path),
                     ]);
                 }
@@ -1958,7 +2202,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status27' => 'on review',
-                        'time_upload27' => date("Y-m-d"),
+                        'time_upload27' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_mesin' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1970,7 +2214,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status27' => 'on review',
-                        'time_upload27' => date("Y-m-d"),
+                        'time_upload27' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_mesin' => basename($path),
                     ]);
                 }
@@ -1983,7 +2227,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status28' => 'on review',
-                        'time_upload28' => date("Y-m-d"),
+                        'time_upload28' => date("Y-m-d h:i:s"),
                         'nota_dinas_perubahan_kawasan' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -1995,7 +2239,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status28' => 'on review',
-                        'time_upload28' => date("Y-m-d"),
+                        'time_upload28' => date("Y-m-d h:i:s"),
                         'nota_dinas_perubahan_kawasan' => basename($path),
                     ]);
                 }
@@ -2008,7 +2252,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status29' => 'on review',
-                        'time_upload29' => date("Y-m-d"),
+                        'time_upload29' => date("Y-m-d h:i:s"),
                         'PAS' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -2020,7 +2264,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status29' => 'on review',
-                        'time_upload29' => date("Y-m-d"),
+                        'time_upload29' => date("Y-m-d h:i:s"),
                         'PAS' => basename($path),
                     ]);
                 }
@@ -2033,7 +2277,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status30' => 'on review',
-                        'time_upload30' => date("Y-m-d"),
+                        'time_upload30' => date("Y-m-d h:i:s"),
                         'invoice_bki' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -2045,7 +2289,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status30' => 'on review',
-                        'time_upload30' => date("Y-m-d"),
+                        'time_upload30' => date("Y-m-d h:i:s"),
                         'invoice_bki' => basename($path),
                     ]);
                 }
@@ -2058,7 +2302,7 @@ class PicsiteController extends Controller
                 if (documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status31' => 'on review',
-                        'time_upload31' => date("Y-m-d"),
+                        'time_upload31' => date("Y-m-d h:i:s"),
                         'safe_manning' => basename($path),]);
                     }else{
                         documentbanjarmasin::create([
@@ -2070,10 +2314,125 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status31' => 'on review',
-                        'time_upload31' => date("Y-m-d"),
+                        'time_upload31' => date("Y-m-d h:i:s"),
                         'safe_manning' => basename($path),
                     ]);
                 }
+            }
+            if ($request->hasFile('banjarmasinfile32')) {
+                $file1 = $request->file('banjarmasinfile32');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('banjarmasinfile32')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status32' => 'on review',
+                        'time_upload32' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                }else{
+                    documentbanjarmasin::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status32' => 'on review',
+                        'time_upload32' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('banjarmasinfile33')) {
+                $file1 = $request->file('banjarmasinfile33');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('banjarmasinfile33')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status33' => 'on review',
+                        'time_upload33' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                }else{
+                    documentbanjarmasin::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status33' => 'on review',
+                        'time_upload33' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('banjarmasinfile34')) {
+                $file1 = $request->file('banjarmasinfile34');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('banjarmasinfile34')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status34' => 'on review',
+                        'time_upload34' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                }else{
+                    documentbanjarmasin::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status34' => 'on review',
+                        'time_upload34' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('banjarmasinfile35')) {
+                $file1 = $request->file('banjarmasinfile35');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('banjarmasinfile35')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status35' => 'on review',
+                        'time_upload35' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                }else{
+                    documentbanjarmasin::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status35' => 'on review',
+                        'time_upload35' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('banjarmasinfile36')) {
+                $file1 = $request->file('banjarmasinfile36');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('banjarmasinfile36')->storeas('berau/'. $year . "/". $month , $name1, 's3');
+                if(documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status36' => 'on review',
+                        'time_upload36' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                }else{
+                    documentbanjarmasin::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status36' => 'on review',
+                        'time_upload36' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                    }
             }
             return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
@@ -2121,6 +2480,12 @@ class PicsiteController extends Controller
                 'samarindafile36'=> 'mimes:pdf|max:3072' ,
                 'samarindafile37'=> 'mimes:pdf|max:3072' ,
                 'samarindafile38'=> 'mimes:pdf|max:3072' ,
+                'samarindafile39'=> 'mimes:pdf|max:3072' ,
+                'samarindafile40'=> 'mimes:pdf|max:3072' ,
+                'samarindafile41'=> 'mimes:pdf|max:3072' ,
+                'samarindafile42'=> 'mimes:pdf|max:3072' ,
+                'samarindafile43'=> 'mimes:pdf|max:3072' ,
+                'samarindafile44'=> 'mimes:pdf|max:3072' ,
             ]);
             if ($request->hasFile('samarindafile1')) {
                 $file1 = $request->file('samarindafile1');
@@ -2130,7 +2495,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()) {
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                         'sertifikat_keselamatan(perpanjangan)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2142,7 +2507,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status1' => 'on review',
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                         'sertifikat_keselamatan(perpanjangan)' => basename($path),]);
                 }
             }
@@ -2154,7 +2519,7 @@ class PicsiteController extends Controller
             if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                         'perubahan_ok_13_ke_ok_1' => basename($path),]);
             }else{
                 documentsamarinda::create([
@@ -2166,7 +2531,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
                             
                     'status2' => 'on review',
-                    'time_upload2' => date("Y-m-d"),
+                    'time_upload2' => date("Y-m-d h:i:s"),
                     'perubahan_ok_13_ke_ok_1' => basename($path),]);
             }
             }
@@ -2178,7 +2543,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                         'keselamatan_(tahunan)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2190,7 +2555,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status3' => 'on review',
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                         'keselamatan_(tahunan)' => basename($path),]);
                 }
             }
@@ -2202,7 +2567,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                             'status4' => 'on review',
-                            'time_upload4' => date("Y-m-d"),
+                            'time_upload4' => date("Y-m-d h:i:s"),
                             'keselamatan_(dok)' => basename($path),]);
                             
                 }else{
@@ -2215,7 +2580,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status4' => 'on review',
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                         'keselamatan_(dok)' => basename($path),]);
                 }
             }
@@ -2227,7 +2592,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                         'keselamatan_(pengaturan_dok)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2239,7 +2604,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status5' => 'on review',
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                         'keselamatan_(pengaturan_dok)' => basename($path),]);
                 }
             }
@@ -2251,7 +2616,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                         'keselamatan_(penundaan_dok)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2263,7 +2628,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status6' => 'on review',
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                         'keselamatan_(penundaan_dok)' => basename($path),]);
                 }
             }
@@ -2275,7 +2640,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'sertifikat_garis_muat' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2287,7 +2652,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'sertifikat_garis_muat' => basename($path),]);
                 }
             }
@@ -2299,7 +2664,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_garis_muat' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2311,7 +2676,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
                             
                         'status8' => 'on review',
-                        'time_upload8' => date("Y-m-d"),
+                        'time_upload8' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_garis_muat' => basename($path),]);
                 }
             }
@@ -2323,7 +2688,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                             'status9' => 'on review',
-                            'time_upload9' => date("Y-m-d"),
+                            'time_upload9' => date("Y-m-d h:i:s"),
                             'sertifikat_anti_fauling' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2335,7 +2700,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
 
                             'status9' => 'on review',
-                            'time_upload9' => date("Y-m-d"),
+                            'time_upload9' => date("Y-m-d h:i:s"),
                             'sertifikat_anti_fauling' => basename($path),]);
                     }
             }
@@ -2347,7 +2712,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                         'surat_laut_permanen' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2359,7 +2724,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status10' => 'on review',
-                        'time_upload10' => date("Y-m-d"),
+                        'time_upload10' => date("Y-m-d h:i:s"),
                         'surat_laut_permanen' => basename($path),]);
                     }
             }
@@ -2371,7 +2736,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status11' => 'on review',
-                        'time_upload11' => date("Y-m-d"),
+                        'time_upload11' => date("Y-m-d h:i:s"),
                         'surat_laut_endorse' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2383,7 +2748,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status11' => 'on review',
-                    'time_upload11' => date("Y-m-d"),
+                    'time_upload11' => date("Y-m-d h:i:s"),
                     'surat_laut_endorse' => basename($path),]);
                 }
             }
@@ -2395,7 +2760,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                             'status12' => 'on review',
-                            'time_upload12' => date("Y-m-d"),
+                            'time_upload12' => date("Y-m-d h:i:s"),
                             'call_sign' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2407,7 +2772,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
                             
                             'status12' => 'on review',
-                            'time_upload12' => date("Y-m-d"),
+                            'time_upload12' => date("Y-m-d h:i:s"),
                             'call_sign' => basename($path),]);
                         }
             }
@@ -2419,7 +2784,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                             'status13' => 'on review',
-                            'time_upload13' => date("Y-m-d"),
+                            'time_upload13' => date("Y-m-d h:i:s"),
                             'perubahan_sertifikat_keselamatan' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2431,7 +2796,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
 
                             'status13' => 'on review',
-                            'time_upload13' => date("Y-m-d"),
+                            'time_upload13' => date("Y-m-d h:i:s"),
                             'perubahan_sertifikat_keselamatan' => basename($path),]);
                         }
             }
@@ -2443,7 +2808,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                             'status14' => 'on review',
-                            'time_upload14' => date("Y-m-d"),
+                            'time_upload14' => date("Y-m-d h:i:s"),
                             'perubahan_kawasan_tanpa_notadin' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2455,7 +2820,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
 
                             'status14' => 'on review',
-                            'time_upload14' => date("Y-m-d"),
+                            'time_upload14' => date("Y-m-d h:i:s"),
                             'perubahan_kawasan_tanpa_notadin' => basename($path),]);
                         }
             }
@@ -2467,7 +2832,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status15' => 'on review',
-                        'time_upload15' => date("Y-m-d"),
+                        'time_upload15' => date("Y-m-d h:i:s"),
                         'snpp_permanen' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2479,7 +2844,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
 
                             'status15' => 'on review',
-                            'time_upload15' => date("Y-m-d"),
+                            'time_upload15' => date("Y-m-d h:i:s"),
                             'snpp_permanen' => basename($path),]);
                         }
             }
@@ -2491,7 +2856,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status16' => 'on review',
-                        'time_upload16' => date("Y-m-d"),
+                        'time_upload16' => date("Y-m-d h:i:s"),
                         'snpp_endorse' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2503,7 +2868,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status16' => 'on review',
-                    'time_upload16' => date("Y-m-d"),
+                    'time_upload16' => date("Y-m-d h:i:s"),
                     'snpp_endorse' => basename($path),]);
                 }
             }
@@ -2515,7 +2880,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status17' => 'on review',
-                        'time_upload17' => date("Y-m-d"),
+                        'time_upload17' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_snpp' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2527,7 +2892,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status17' => 'on review',
-                    'time_upload17' => date("Y-m-d"),
+                    'time_upload17' => date("Y-m-d h:i:s"),
                     'laporan_pemeriksaan_snpp' => basename($path),]);
                 }
             }
@@ -2539,7 +2904,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status18' => 'on review',
-                        'time_upload18' => date("Y-m-d"),
+                        'time_upload18' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_keselamatan' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2551,7 +2916,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status18' => 'on review',
-                    'time_upload18' => date("Y-m-d"),
+                    'time_upload18' => date("Y-m-d h:i:s"),
                     'laporan_pemeriksaan_keselamatan' => basename($path),]);
                 }
             }
@@ -2563,7 +2928,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status19' => 'on review',
-                        'time_upload19' => date("Y-m-d"),
+                        'time_upload19' => date("Y-m-d h:i:s"),
                         'buku_kesehatan' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2575,7 +2940,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status19' => 'on review',
-                    'time_upload19' => date("Y-m-d"),
+                    'time_upload19' => date("Y-m-d h:i:s"),
                     'buku_kesehatan' => basename($path),]);
                 }
             }
@@ -2587,7 +2952,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status20' => 'on review',
-                        'time_upload20' => date("Y-m-d"),
+                        'time_upload20' => date("Y-m-d h:i:s"),
                         'sertifikat_sanitasi_water&p3k' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2599,7 +2964,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status20' => 'on review',
-                    'time_upload20' => date("Y-m-d"),
+                    'time_upload20' => date("Y-m-d h:i:s"),
                     'sertifikat_sanitasi_water&p3k' => basename($path),]);
                 }
             }
@@ -2611,7 +2976,7 @@ class PicsiteController extends Controller
             if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
             documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                     'status21' => 'on review',
-                    'time_upload21' => date("Y-m-d"),
+                    'time_upload21' => date("Y-m-d h:i:s"),
                     'pengaturan_non_ke_klas_bki' => basename($path),]);
             }else{
                 documentsamarinda::create([
@@ -2623,7 +2988,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status21' => 'on review',
-                    'time_upload21' => date("Y-m-d"),
+                    'time_upload21' => date("Y-m-d h:i:s"),
                     'pengaturan_non_ke_klas_bki' => basename($path),]);
                 }
             }
@@ -2635,7 +3000,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status22' => 'on review',
-                        'time_upload22' => date("Y-m-d"),
+                        'time_upload22' => date("Y-m-d h:i:s"),
                         'pengaturan_klas_bki_(dok_ss)' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2647,7 +3012,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status22' => 'on review',
-                    'time_upload22' => date("Y-m-d"),
+                    'time_upload22' => date("Y-m-d h:i:s"),
                     'pengaturan_klas_bki_(dok_ss)' => basename($path),]);
                 }
             }
@@ -2659,7 +3024,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status23' => 'on review',
-                        'time_upload23' => date("Y-m-d"),
+                        'time_upload23' => date("Y-m-d h:i:s"),
                         'surveyor_endorse_tahunan_bki' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2671,7 +3036,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status23' => 'on review',
-                    'time_upload23' => date("Y-m-d"),
+                    'time_upload23' => date("Y-m-d h:i:s"),
                     'surveyor_endorse_tahunan_bki' => basename($path),]);
                 }
             }
@@ -2683,7 +3048,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status24' => 'on review',
-                        'time_upload24' => date("Y-m-d"),
+                        'time_upload24' => date("Y-m-d h:i:s"),
                         'pr_supplier_bki' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2695,7 +3060,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status24' => 'on review',
-                    'time_upload24' => date("Y-m-d"),
+                    'time_upload24' => date("Y-m-d h:i:s"),
                     'pr_supplier_bki' => basename($path),]);
                 }
             }
@@ -2707,7 +3072,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status25' => 'on review',
-                        'time_upload25' => date("Y-m-d"),
+                        'time_upload25' => date("Y-m-d h:i:s"),
                         'balik_nama_grosse' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2719,7 +3084,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status25' => 'on review',
-                    'time_upload25' => date("Y-m-d"),
+                    'time_upload25' => date("Y-m-d h:i:s"),
                     'balik_nama_grosse' => basename($path),]);
                 }
             }
@@ -2731,7 +3096,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status26' => 'on review',
-                        'time_upload26' => date("Y-m-d"),
+                        'time_upload26' => date("Y-m-d h:i:s"),
                         'kapal_baru_body_(set_dokumen)' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2743,7 +3108,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status26' => 'on review',
-                    'time_upload26' => date("Y-m-d"),
+                    'time_upload26' => date("Y-m-d h:i:s"),
                     'kapal_baru_body_(set_dokumen)' => basename($path),]);
                 }
             }
@@ -2755,7 +3120,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status27' => 'on review',
-                        'time_upload27' => date("Y-m-d"),
+                        'time_upload27' => date("Y-m-d h:i:s"),
                         'halaman_tambahan_grosse' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2767,7 +3132,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status27' => 'on review',
-                        'time_upload27' => date("Y-m-d"),
+                        'time_upload27' => date("Y-m-d h:i:s"),
                         'halaman_tambahan_grosse' => basename($path),]);
                     }
             }
@@ -2779,7 +3144,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status28' => 'on review',
-                        'time_upload28' => date("Y-m-d"),
+                        'time_upload28' => date("Y-m-d h:i:s"),
                         'pnbp&pup' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2791,7 +3156,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status28' => 'on review',
-                    'time_upload28' => date("Y-m-d"),
+                    'time_upload28' => date("Y-m-d h:i:s"),
                     'pnbp&pup' => basename($path),]);
                 }
             }
@@ -2803,7 +3168,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status29' => 'on review',
-                        'time_upload29' => date("Y-m-d"),
+                        'time_upload29' => date("Y-m-d h:i:s"),
                         'laporan_pemeriksaan_anti_teriti' => basename($path),]);
                 }else{
                 documentsamarinda::create([
@@ -2815,7 +3180,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
 
                     'status29' => 'on review',
-                    'time_upload29' => date("Y-m-d"),
+                    'time_upload29' => date("Y-m-d h:i:s"),
                     'laporan_pemeriksaan_anti_teriti' => basename($path),]);
                 }
             }
@@ -2827,7 +3192,7 @@ class PicsiteController extends Controller
             if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
             documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status30' => 'on review',
-                        'time_upload30' => date("Y-m-d"),
+                        'time_upload30' => date("Y-m-d h:i:s"),
                         'surveyor_pengedokan' => basename($path),]);
                         
             }else{
@@ -2840,7 +3205,7 @@ class PicsiteController extends Controller
                     'user_id' => Auth::user()->id,
                     
                     'status30' => 'on review',
-                    'time_upload30' => date("Y-m-d"),
+                    'time_upload30' => date("Y-m-d h:i:s"),
                     'surveyor_pengedokan' => basename($path),]);
                 }
             }
@@ -2852,7 +3217,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status31' => 'on review',
-                        'time_upload31' => date("Y-m-d"),
+                        'time_upload31' => date("Y-m-d h:i:s"),
                         'surveyor_penerimaan_klas_bki' => basename($path),]);   
                 }else{
                     documentsamarinda::create([
@@ -2864,7 +3229,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status31' => 'on review',
-                        'time_upload31' => date("Y-m-d"),
+                        'time_upload31' => date("Y-m-d h:i:s"),
                         'surveyor_penerimaan_klas_bki' => basename($path),]);
                     }
             }
@@ -2876,7 +3241,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                     documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status32' => 'on review',
-                        'time_upload32' => date("Y-m-d"),
+                        'time_upload32' => date("Y-m-d h:i:s"),
                         'nota_tagihan_jasa_perkapalan' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2888,7 +3253,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status32' => 'on review',
-                        'time_upload32' => date("Y-m-d"),
+                        'time_upload32' => date("Y-m-d h:i:s"),
                         'nota_tagihan_jasa_perkapalan' => basename($path),]);
                     }
             }
@@ -2900,7 +3265,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status33' => 'on review',
-                        'time_upload33' => date("Y-m-d"),
+                        'time_upload33' => date("Y-m-d h:i:s"),
                         'gambar_kapal_baru_(bki)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2912,7 +3277,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status33' => 'on review',
-                        'time_upload33' => date("Y-m-d"),
+                        'time_upload33' => date("Y-m-d h:i:s"),
                         'gambar_kapal_baru_(bki)' => basename($path),]);
                     }
             }
@@ -2924,7 +3289,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status34' => 'on review',
-                        'time_upload34' => date("Y-m-d"),
+                        'time_upload34' => date("Y-m-d h:i:s"),
                         'samarinda_jam1nan_(clc)' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2936,7 +3301,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status34' => 'on review',
-                        'time_upload34' => date("Y-m-d"),
+                        'time_upload34' => date("Y-m-d h:i:s"),
                         'samarinda_jam1nan_(clc)' => basename($path),]);
                     }
             }
@@ -2948,7 +3313,7 @@ class PicsiteController extends Controller
                     if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                         documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                                 'status35' => 'on review',
-                                'time_upload35' => date("Y-m-d"),
+                                'time_upload35' => date("Y-m-d h:i:s"),
                                 'surat_ukur_dalam_negeri' => basename($path),]);
                     }else{
                         documentsamarinda::create([
@@ -2960,7 +3325,7 @@ class PicsiteController extends Controller
                             'user_id' => Auth::user()->id,
 
                             'status35' => 'on review',
-                            'time_upload35' => date("Y-m-d"),
+                            'time_upload35' => date("Y-m-d h:i:s"),
                             'surat_ukur_dalam_negeri' => basename($path),]);
                         }
             }
@@ -2972,7 +3337,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status36' => 'on review',
-                        'time_upload36' => date("Y-m-d"),
+                        'time_upload36' => date("Y-m-d h:i:s"),
                         'penerbitan_sertifikat_kapal_baru' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -2984,7 +3349,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status36' => 'on review',
-                        'time_upload36' => date("Y-m-d"),
+                        'time_upload36' => date("Y-m-d h:i:s"),
                         'penerbitan_sertifikat_kapal_baru' => basename($path),]);
                     }
             }
@@ -2996,7 +3361,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status37' => 'on review',
-                        'time_upload37' => date("Y-m-d"),
+                        'time_upload37' => date("Y-m-d h:i:s"),
                         'buku_stabilitas' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -3008,7 +3373,7 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status37' => 'on review',
-                        'time_upload37' => date("Y-m-d"),
+                        'time_upload37' => date("Y-m-d h:i:s"),
                         'buku_stabilitas' => basename($path),]);
                     }
             }
@@ -3020,7 +3385,7 @@ class PicsiteController extends Controller
                 if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
                 documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status38' => 'on review',
-                        'time_upload38' => date("Y-m-d"),
+                        'time_upload38' => date("Y-m-d h:i:s"),
                         'grosse_akta' => basename($path),]);
                 }else{
                     documentsamarinda::create([
@@ -3032,11 +3397,1193 @@ class PicsiteController extends Controller
                         'user_id' => Auth::user()->id,
 
                         'status38' => 'on review',
-                        'time_upload38' => date("Y-m-d"),
+                        'time_upload38' => date("Y-m-d h:i:s"),
                         'grosse_akta' => basename($path),]);
                     }
             }
-        return redirect('/picsite/upload')->with('success', 'Upload success!');
+            if ($request->hasFile('samarindafile39')) {
+                $file1 = $request->file('samarindafile39');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile39')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status39' => 'on review',
+                        'time_upload39' => date("Y-m-d h:i:s"),
+                        'penerbitan_nota_dinas_kedua' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+
+                        'status39' => 'on review',
+                        'time_upload39' => date("Y-m-d h:i:s"),
+                        'penerbitan_nota_dinas_kedua' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('samarindafile40')) {
+                $file1 = $request->file('samarindafile40');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile40')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status40' => 'on review',
+                        'time_upload40' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status40' => 'on review',
+                        'time_upload40' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('samarindafile41')) {
+                $file1 = $request->file('samarindafile41');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile41')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status41' => 'on review',
+                        'time_upload41' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status41' => 'on review',
+                        'time_upload41' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('samarindafile42')) {
+                $file1 = $request->file('samarindafile42');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile42')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status42' => 'on review',
+                        'time_upload42' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status42' => 'on review',
+                        'time_upload42' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('samarindafile43')) {
+                $file1 = $request->file('samarindafile43');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile43')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status43' => 'on review',
+                        'time_upload43' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status43' => 'on review',
+                        'time_upload43' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('samarindafile44')) {
+                $file1 = $request->file('samarindafile44');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('samarindafile44')->storeas('samarinda/'. $year . "/". $month , $name1, 's3');
+                if(documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentsamarinda::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status44' => 'on review',
+                        'time_upload44' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                }else{
+                    documentsamarinda::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status44' => 'on review',
+                        'time_upload44' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                    }
+            }
+            
+            return redirect('/picsite/upload')->with('success', 'Upload success!');
+        }
+
+        if (Auth::user()->cabang == "Jakarta") {
+            $year = date('Y');
+            $month = date('m');
+          
+            //jakarta
+            $request->validate([
+                'jktfile1' => 'mimes:pdf|max:3072' , 
+                'jktfile2' => 'mimes:pdf|max:3072' ,
+                'jktfile3' => 'mimes:pdf|max:3072' ,
+                'jktfile4' => 'mimes:pdf|max:3072' ,
+                'jktfile5' => 'mimes:pdf|max:3072' ,
+                'jktfile6' => 'mimes:pdf|max:3072' ,
+                'jktfile7' => 'mimes:pdf|max:3072' ,
+                'jktfile8' => 'mimes:pdf|max:3072' ,
+                'jktfile9' => 'mimes:pdf|max:3072' ,
+                'jktfile10'=> 'mimes:pdf|max:3072' ,
+                'jktfile11'=> 'mimes:pdf|max:3072' ,
+                'jktfile12'=> 'mimes:pdf|max:3072' ,
+                'jktfile13'=> 'mimes:pdf|max:3072' ,
+                'jktfile14'=> 'mimes:pdf|max:3072' ,
+                'jktfile15'=> 'mimes:pdf|max:3072' ,
+                'jktfile16'=> 'mimes:pdf|max:3072' ,
+                'jktfile17'=> 'mimes:pdf|max:3072' ,
+                'jktfile18'=> 'mimes:pdf|max:3072' ,
+                'jktfile19'=> 'mimes:pdf|max:3072' ,
+                'jktfile20'=> 'mimes:pdf|max:3072' ,
+                'jktfile21'=> 'mimes:pdf|max:3072' ,
+                'jktfile22'=> 'mimes:pdf|max:3072' ,
+                'jktfile23'=> 'mimes:pdf|max:3072' ,
+                'jktfile24'=> 'mimes:pdf|max:3072' ,
+                'jktfile25'=> 'mimes:pdf|max:3072' ,
+                'jktfile26'=> 'mimes:pdf|max:3072' ,
+                'jktfile27'=> 'mimes:pdf|max:3072' ,
+                'jktfile28'=> 'mimes:pdf|max:3072' ,
+                'jktfile29'=> 'mimes:pdf|max:3072' ,
+                'jktfile30'=> 'mimes:pdf|max:3072' ,
+                'jktfile31'=> 'mimes:pdf|max:3072' ,
+                'jktfile32'=> 'mimes:pdf|max:3072' ,
+                'jktfile33'=> 'mimes:pdf|max:3072' ,
+                'jktfile34'=> 'mimes:pdf|max:3072' ,
+                'jktfile35'=> 'mimes:pdf|max:3072' ,
+                'jktfile36'=> 'mimes:pdf|max:3072' ,
+                'jktfile37'=> 'mimes:pdf|max:3072' ,
+                'jktfile38'=> 'mimes:pdf|max:3072' ,
+                'jktfile39'=> 'mimes:pdf|max:3072' ,
+                'jktfile40'=> 'mimes:pdf|max:3072' ,
+                'jktfile41'=> 'mimes:pdf|max:3072' ,
+                'jktfile42'=> 'mimes:pdf|max:3072' ,
+                'jktfile43'=> 'mimes:pdf|max:3072' ,
+            ]);
+            if ($request->hasFile('jktfile1')) {
+                $file1 = $request->file('jktfile1');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile1')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()) {
+                        documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                        'status1' => 'on review',
+                        'time_upload1' => date("Y-m-d h:i:s"),
+                        'pnbp_rpt' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status1' => 'on review',
+                        'time_upload1' => date("Y-m-d h:i:s"),
+                        'pnbp_rpt' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile2')) {
+                $file1 = $request->file('jktfile2');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                    $path = $request->file('jktfile2')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                            'status2' => 'on review',
+                            'time_upload2' => date("Y-m-d h:i:s"),
+                            'pps' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                                
+                        'status2' => 'on review',
+                        'time_upload2' => date("Y-m-d h:i:s"),
+                        'pps' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile3')) {
+                $file1 = $request->file('jktfile3');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile3')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status3' => 'on review',
+                        'time_upload3' => date("Y-m-d h:i:s"),
+                        'pnbp_spesifikasi_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status3' => 'on review',
+                        'time_upload3' => date("Y-m-d h:i:s"),
+                        'pnbp_spesifikasi_kapal' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile4')) {
+                $file1 = $request->file('jktfile4');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile4')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status4' => 'on review',
+                        'time_upload4' => date("Y-m-d h:i:s"),
+                        'anti_fauling_permanen' => basename($path),]);
+                            
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status4' => 'on review',
+                        'time_upload4' => date("Y-m-d h:i:s"),
+                        'anti_fauling_permanen' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile5')) {
+                $file1 = $request->file('jktfile5');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile5')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status5' => 'on review',
+                        'time_upload5' => date("Y-m-d h:i:s"),
+                        'pnbp_pemeriksaan_anti_fauling' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status5' => 'on review',
+                        'time_upload5' => date("Y-m-d h:i:s"),
+                        'pnbp_pemeriksaan_anti_fauling' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile6')) {
+                $file1 = $request->file('jktfile6');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile6')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status6' => 'on review',
+                        'time_upload6' => date("Y-m-d h:i:s"),
+                        'call_sign' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status6' => 'on review',
+                        'time_upload6' => date("Y-m-d h:i:s"),
+                        'call_sign' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile7')) {
+                $file1 = $request->file('jktfile7');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile7')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status7' => 'on review',
+                        'time_upload7' => date("Y-m-d h:i:s"),
+                        'pengesahan_gambar' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status7' => 'on review',
+                        'time_upload7' => date("Y-m-d h:i:s"),
+                        'pengesahan_gambar' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile8')) {
+                $file1 = $request->file('jktfile8');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile8')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status8' => 'on review',
+                        'time_upload8' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                            
+                        'status8' => 'on review',
+                        'time_upload8' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile9')) {
+                $file1 = $request->file('jktfile9');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile9')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status9' => 'on review',
+                        'time_upload9' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status9' => 'on review',
+                        'time_upload9' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile10')) {
+                $file1 = $request->file('jktfile10');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile10')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status10' => 'on review',
+                        'time_upload10' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status10' => 'on review',
+                        'time_upload10' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile11')) {
+                $file1 = $request->file('jktfile11');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile11')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status11' => 'on review',
+                        'time_upload11' => date("Y-m-d h:i:s"),
+                        'clc_bunker' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status11' => 'on review',
+                        'time_upload11' => date("Y-m-d h:i:s"),
+                        'clc_bunker' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile12')) {
+                $file1 = $request->file('jktfile12');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile12')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                    if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                        documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                            'status12' => 'on review',
+                            'time_upload12' => date("Y-m-d h:i:s"),
+                            'nota_dinas_penundaan_dok_i' => basename($path),]);
+                    }else{
+                        documentJakarta::create([
+                            'nama_kapal' => $request->nama_kapal,
+                            'periode_awal' => $request->tgl_awal,
+                            'periode_akhir' => $request->tgl_akhir,
+            
+                            'cabang' => Auth::user()->cabang ,
+                            'user_id' => Auth::user()->id,
+                            
+                            'status12' => 'on review',
+                            'time_upload12' => date("Y-m-d h:i:s"),
+                            'nota_dinas_penundaan_dok_i' => basename($path),]);
+                        }
+            }
+            if ($request->hasFile('jktfile13')) {
+                $file1 = $request->file('jktfile13');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile13')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                    if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                        documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                            'status13' => 'on review',
+                            'time_upload13' => date("Y-m-d h:i:s"),
+                            'nota_dinas_penundaan_dok_ii' => basename($path),]);
+                    }else{
+                        documentJakarta::create([
+                            'nama_kapal' => $request->nama_kapal,
+                            'periode_awal' => $request->tgl_awal,
+                            'periode_akhir' => $request->tgl_akhir,
+            
+                            'cabang' => Auth::user()->cabang ,
+                            'user_id' => Auth::user()->id,
+            
+                            'status13' => 'on review',
+                            'time_upload13' => date("Y-m-d h:i:s"),
+                            'nota_dinas_penundaan_dok_ii' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile14')) {
+                $file1 = $request->file('jktfile14');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile14')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                    if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                        documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                            'status14' => 'on review',
+                            'time_upload14' => date("Y-m-d h:i:s"),
+                            'nota_dinas_perubahan_kawasan' => basename($path),]);
+                    }else{
+                        documentJakarta::create([
+                            'nama_kapal' => $request->nama_kapal,
+                            'periode_awal' => $request->tgl_awal,
+                            'periode_akhir' => $request->tgl_akhir,
+            
+                            'cabang' => Auth::user()->cabang ,
+                            'user_id' => Auth::user()->id,
+            
+                            'status14' => 'on review',
+                            'time_upload14' => date("Y-m-d h:i:s"),
+                            'nota_dinas_perubahan_kawasan' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile15')) {
+                $file1 = $request->file('jktfile15');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile15')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                    if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status15' => 'on review',
+                        'time_upload15' => date("Y-m-d h:i:s"),
+                        'call_sign' => basename($path),]);
+                    }else{
+                        documentJakarta::create([
+                            'nama_kapal' => $request->nama_kapal,
+                            'periode_awal' => $request->tgl_awal,
+                            'periode_akhir' => $request->tgl_akhir,
+            
+                            'cabang' => Auth::user()->cabang ,
+                            'user_id' => Auth::user()->id,
+            
+                            'status15' => 'on review',
+                            'time_upload15' => date("Y-m-d h:i:s"),
+                            'call_sign' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile16')) {
+                $file1 = $request->file('jktfile16');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile16')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status16' => 'on review',
+                        'time_upload16' => date("Y-m-d h:i:s"),
+                        'perubahan_kepemilikan_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status16' => 'on review',
+                        'time_upload16' => date("Y-m-d h:i:s"),
+                        'perubahan_kepemilikan_kapal' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile17')) {
+                $file1 = $request->file('jktfile17');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile17')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status17' => 'on review',
+                        'time_upload17' => date("Y-m-d h:i:s"),
+                        'nota_dinas_bendera_(baru)' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status17' => 'on review',
+                        'time_upload17' => date("Y-m-d h:i:s"),
+                        'nota_dinas_bendera_(baru)' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile18')) {
+                $file1 = $request->file('jktfile18');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile18')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status18' => 'on review',
+                        'time_upload18' => date("Y-m-d h:i:s"),
+                        'pup_safe_manning' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status18' => 'on review',
+                        'time_upload18' => date("Y-m-d h:i:s"),
+                        'pup_safe_manning' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile19')) {
+                $file1 = $request->file('jktfile19');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile19')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status19' => 'on review',
+                        'time_upload19' => date("Y-m-d h:i:s"),
+                        'corporate' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status19' => 'on review',
+                        'time_upload19' => date("Y-m-d h:i:s"),
+                        'corporate' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile20')) {
+                $file1 = $request->file('jktfile20');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile20')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status20' => 'on review',
+                        'time_upload20' => date("Y-m-d h:i:s"),
+                        'dokumen_kapal_asing_(baru)' => basename($path),]);
+                }else{
+                documentJakarta::create([
+                    'nama_kapal' => $request->nama_kapal,
+                    'periode_awal' => $request->tgl_awal,
+                    'periode_akhir' => $request->tgl_akhir,
+            
+                    'cabang' => Auth::user()->cabang ,
+                    'user_id' => Auth::user()->id,
+            
+                    'status20' => 'on review',
+                    'time_upload20' => date("Y-m-d h:i:s"),
+                    'dokumen_kapal_asing_(baru)' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile21')) {
+                $file1 = $request->file('jktfile21');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile21')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status21' => 'on review',
+                        'time_upload21' => date("Y-m-d h:i:s"),
+                        'rekomendasi_radio_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status21' => 'on review',
+                        'time_upload21' => date("Y-m-d h:i:s"),
+                        'rekomendasi_radio_kapal' => basename($path),]);
+                }
+            }
+            if ($request->hasFile('jktfile22')) {
+                $file1 = $request->file('jktfile22');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile22')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status22' => 'on review',
+                        'time_upload22' => date("Y-m-d h:i:s"),
+                        'izin_stasiun_radio_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status22' => 'on review',
+                        'time_upload22' => date("Y-m-d h:i:s"),
+                        'izin_stasiun_radio_kapal' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile23')) {
+                $file1 = $request->file('jktfile23');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile23')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status23' => 'on review',
+                        'time_upload23' => date("Y-m-d h:i:s"),
+                        'mmsi' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status23' => 'on review',
+                        'time_upload23' => date("Y-m-d h:i:s"),
+                        'mmsi' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile24')) {
+                $file1 = $request->file('jktfile24');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile24')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status24' => 'on review',
+                        'time_upload24' => date("Y-m-d h:i:s"),
+                        'pnbp_pemeriksaan_konstruksi' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status24' => 'on review',
+                        'time_upload24' => date("Y-m-d h:i:s"),
+                        'pnbp_pemeriksaan_konstruksi' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile25')) {
+                $file1 = $request->file('jktfile25');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile25')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status25' => 'on review',
+                        'time_upload25' => date("Y-m-d h:i:s"),
+                        'ok_1_skb' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status25' => 'on review',
+                        'time_upload25' => date("Y-m-d h:i:s"),
+                        'ok_1_skb' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile26')) {
+                $file1 = $request->file('jktfile26');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile26')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status26' => 'on review',
+                        'time_upload26' => date("Y-m-d h:i:s"),
+                        'ok_1_skp' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status26' => 'on review',
+                        'time_upload26' => date("Y-m-d h:i:s"),
+                        'ok_1_skp' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile27')) {
+                $file1 = $request->file('jktfile27');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile27')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status27' => 'on review',
+                        'time_upload27' => date("Y-m-d h:i:s"),
+                        'ok_1_skr' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status27' => 'on review',
+                        'time_upload27' => date("Y-m-d h:i:s"),
+                        'ok_1_skr' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile28')) {
+                $file1 = $request->file('jktfile28');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile28')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status28' => 'on review',
+                        'time_upload28' => date("Y-m-d h:i:s"),
+                        'status_hukum_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status28' => 'on review',
+                        'time_upload28' => date("Y-m-d h:i:s"),
+                        'status_hukum_kapal' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile29')) {
+                $file1 = $request->file('jktfile29');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile29')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status29' => 'on review',
+                        'time_upload29' => date("Y-m-d h:i:s"),
+                        'autorization_garis_muat' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status29' => 'on review',
+                        'time_upload29' => date("Y-m-d h:i:s"),
+                        'autorization_garis_muat' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile30')) {
+                $file1 = $request->file('jktfile30');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile30')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                    'status30' => 'on review',
+                    'time_upload30' => date("Y-m-d h:i:s"),
+                    'otorisasi_klas' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+                        
+                        'status30' => 'on review',
+                        'time_upload30' => date("Y-m-d h:i:s"),
+                        'otorisasi_klas' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile31')) {
+                $file1 = $request->file('jktfile31');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile31')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status31' => 'on review',
+                        'time_upload31' => date("Y-m-d h:i:s"),
+                        'pnbp_otorisasi(all)' => basename($path),]);   
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status31' => 'on review',
+                        'time_upload31' => date("Y-m-d h:i:s"),
+                        'pnbp_otorisasi(all)' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile32')) {
+                $file1 = $request->file('jktfile32');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile32')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status32' => 'on review',
+                        'time_upload32' => date("Y-m-d h:i:s"),
+                        'halaman_tambah_grosse_akta' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status32' => 'on review',
+                        'time_upload32' => date("Y-m-d h:i:s"),
+                        'halaman_tambah_grosse_akta' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile33')) {
+                $file1 = $request->file('jktfile33');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile33')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status33' => 'on review',
+                        'time_upload33' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_ukur' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status33' => 'on review',
+                        'time_upload33' => date("Y-m-d h:i:s"),
+                        'pnbp_surat_ukur' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile34')) {
+                $file1 = $request->file('jktfile34');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile34')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status34' => 'on review',
+                        'time_upload34' => date("Y-m-d h:i:s"),
+                        'nota_dinas_penundaan_klas_bki_ss' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status34' => 'on review',
+                        'time_upload34' => date("Y-m-d h:i:s"),
+                        'nota_dinas_penundaan_klas_bki_ss' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile35')) {
+                $file1 = $request->file('jktfile35');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile35')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                            'status35' => 'on review',
+                            'time_upload35' => date("Y-m-d h:i:s"),
+                            'uwild_pengganti_doking' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status35' => 'on review',
+                        'time_upload35' => date("Y-m-d h:i:s"),
+                        'uwild_pengganti_doking' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile36')) {
+                $file1 = $request->file('jktfile36');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile36')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status36' => 'on review',
+                        'time_upload36' => date("Y-m-d h:i:s"),
+                        'update_nomor_call_sign' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status36' => 'on review',
+                        'time_upload36' => date("Y-m-d h:i:s"),
+                        'update_nomor_call_sign' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile37')) {
+                $file1 = $request->file('jktfile37');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile37')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status37' => 'on review',
+                        'time_upload37' => date("Y-m-d h:i:s"),
+                        'clc_badan_kapal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status37' => 'on review',
+                        'time_upload37' => date("Y-m-d h:i:s"),
+                        'clc_badan_kapal' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile38')) {
+                $file1 = $request->file('jktfile38');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile38')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status38' => 'on review',
+                        'time_upload38' => date("Y-m-d h:i:s"),
+                        'wreck_removal' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status38' => 'on review',
+                        'time_upload38' => date("Y-m-d h:i:s"),
+                        'wreck_removal' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile39')) {
+                $file1 = $request->file('jktfile39');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile39')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status39' => 'on review',
+                        'time_upload39' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status39' => 'on review',
+                        'time_upload39' => date("Y-m-d h:i:s"),
+                        'Lain_Lain1' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile40')) {
+                $file1 = $request->file('jktfile40');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile40')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status40' => 'on review',
+                        'time_upload40' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status40' => 'on review',
+                        'time_upload40' => date("Y-m-d h:i:s"),
+                        'Lain_Lain2' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile41')) {
+                $file1 = $request->file('jktfile41');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile41')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status41' => 'on review',
+                        'time_upload41' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status41' => 'on review',
+                        'time_upload41' => date("Y-m-d h:i:s"),
+                        'Lain_Lain3' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile42')) {
+                $file1 = $request->file('jktfile42');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile42')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status42' => 'on review',
+                        'time_upload42' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status42' => 'on review',
+                        'time_upload42' => date("Y-m-d h:i:s"),
+                        'Lain_Lain4' => basename($path),]);
+                    }
+            }
+            if ($request->hasFile('jktfile43')) {
+                $file1 = $request->file('jktfile43');
+                $name1 =  'Picsite-'. Auth::user()->cabang . $file1->getClientOriginalName();
+                $path = $request->file('jktfile43')->storeas('jakarta/'. $year . "/". $month , $name1, 's3');
+                if(documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
+                        'status43' => 'on review',
+                        'time_upload43' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                }else{
+                    documentJakarta::create([
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+            
+                        'cabang' => Auth::user()->cabang ,
+                        'user_id' => Auth::user()->id,
+            
+                        'status43' => 'on review',
+                        'time_upload43' => date("Y-m-d h:i:s"),
+                        'Lain_Lain5' => basename($path),]);
+                    }
+            }
+            return redirect('/picsite/upload')->with('success', 'Upload success!');
         }
         
 //email to user
@@ -3047,7 +4594,7 @@ class PicsiteController extends Controller
         
     //     Mail::to('stanlytong@gmail.com')->send(new Gmail($details));
 
-        return view('picsite.upload',compact('document', 'documentberau' , 'documentsamarinda' , 'documentbanjarmasin'));
+        return view('picsite.upload');
     }
     
 }

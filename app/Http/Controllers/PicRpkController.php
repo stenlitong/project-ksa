@@ -53,7 +53,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -66,7 +66,7 @@ class PicRpkController extends Controller
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -80,7 +80,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([      
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -93,7 +93,7 @@ class PicRpkController extends Controller
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }      
@@ -107,7 +107,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -120,7 +120,7 @@ class PicRpkController extends Controller
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -134,7 +134,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -147,7 +147,7 @@ class PicRpkController extends Controller
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -161,7 +161,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([                   
@@ -174,7 +174,7 @@ class PicRpkController extends Controller
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -188,7 +188,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                  
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([      
@@ -201,7 +201,7 @@ class PicRpkController extends Controller
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -214,7 +214,7 @@ class PicRpkController extends Controller
                     
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Babelan')->whereColumn('created_at' , '<=', 'periode_akhir')->update([              
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);  
                 }else{
@@ -227,7 +227,7 @@ class PicRpkController extends Controller
                         'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }
@@ -258,7 +258,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -271,7 +271,7 @@ class PicRpkController extends Controller
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -285,7 +285,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -298,7 +298,7 @@ class PicRpkController extends Controller
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }      
@@ -312,7 +312,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -325,7 +325,7 @@ class PicRpkController extends Controller
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -339,7 +339,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -352,7 +352,7 @@ class PicRpkController extends Controller
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -366,7 +366,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([    
@@ -379,7 +379,7 @@ class PicRpkController extends Controller
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -393,7 +393,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([    
@@ -406,7 +406,7 @@ class PicRpkController extends Controller
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -419,7 +419,7 @@ class PicRpkController extends Controller
                     
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Berau')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }else{
@@ -432,7 +432,7 @@ class PicRpkController extends Controller
                         'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }  
@@ -463,7 +463,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -476,7 +476,7 @@ class PicRpkController extends Controller
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -490,7 +490,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -503,7 +503,7 @@ class PicRpkController extends Controller
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }      
@@ -517,7 +517,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -530,7 +530,7 @@ class PicRpkController extends Controller
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -544,7 +544,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -557,7 +557,7 @@ class PicRpkController extends Controller
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
 
@@ -572,7 +572,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([       
@@ -585,7 +585,7 @@ class PicRpkController extends Controller
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -599,7 +599,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([         
@@ -612,7 +612,7 @@ class PicRpkController extends Controller
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -625,7 +625,7 @@ class PicRpkController extends Controller
                     
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Banjarmasin')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }else {
@@ -638,7 +638,7 @@ class PicRpkController extends Controller
                         'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }
@@ -669,7 +669,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -682,7 +682,7 @@ class PicRpkController extends Controller
                         
                         'status1' => 'on review',
                         'surat_barang' => basename($path),
-                        'time_upload1' => date("Y-m-d"),
+                        'time_upload1' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -696,7 +696,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                       
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([    
@@ -709,7 +709,7 @@ class PicRpkController extends Controller
                         
                         'status2' => 'on review',
                         'cargo_manifest'=> basename($path) ,
-                        'time_upload2' => date("Y-m-d"),
+                        'time_upload2' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }      
@@ -723,7 +723,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([
@@ -736,7 +736,7 @@ class PicRpkController extends Controller
                         
                         'status3' => 'on review',
                         'voyage' => basename($path),
-                        'time_upload3' => date("Y-m-d"),
+                        'time_upload3' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -750,7 +750,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([
@@ -763,7 +763,7 @@ class PicRpkController extends Controller
                         
                         'status4' => 'on review',
                         'bill_lading' => basename($path),
-                        'time_upload4' => date("Y-m-d"),
+                        'time_upload4' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -777,7 +777,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }else{
                     documentrpk::create([    
@@ -790,7 +790,7 @@ class PicRpkController extends Controller
                         
                         'status5' => 'on review',
                         'gerak_kapal'=> basename($path) ,
-                        'time_upload5' => date("Y-m-d"),
+                        'time_upload5' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -804,7 +804,7 @@ class PicRpkController extends Controller
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }else {
                     documentrpk::create([     
@@ -817,7 +817,7 @@ class PicRpkController extends Controller
                         
                         'status6' => 'on review',
                         'docking' => basename($path),
-                        'time_upload6' => date("Y-m-d"),
+                        'time_upload6' => date("Y-m-d h:i:s"),
                     ]);
                 }
             }
@@ -830,7 +830,7 @@ class PicRpkController extends Controller
                     
                     documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Samarinda')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                 
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }else {
@@ -843,12 +843,218 @@ class PicRpkController extends Controller
                         'periode_akhir' => $request->tgl_akhir,
                         
                         'status7' => 'on review',
-                        'time_upload7' => date("Y-m-d"),
+                        'time_upload7' => date("Y-m-d h:i:s"),
                         'surat_kapal' => basename($path),
                     ]);
                 }
             }
-            return redirect('picsite/rpk')->with('message', 'Upload success!');
+        }
+        
+        if(Auth::user()->cabang == 'Jakarta'){
+            // dd($request);
+            $year = date('Y');
+            $month = date('m');
+            $request->validate([
+                'jktfile1' => 'mimes:pdf|max:1024' ,
+                'jktfile2' => 'mimes:pdf|max:1024' ,
+                'jktfile3' => 'mimes:pdf|max:1024' ,
+                'jktfile4' => 'mimes:pdf|max:1024' ,
+                'jktfile5' => 'mimes:pdf|max:1024' ,
+                'jktfile6' => 'mimes:pdf|max:1024' ,
+                'jktfile7' => 'mimes:pdf|max:1024' 
+            ]);
+            if ($request->hasFile('jktfile1')) {
+                //dd($request);
+                $file = $request->file('jktfile1');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/surat_barang';
+                $path = $request->file('jktfile1')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                        'status1' => 'on review',
+                        'surat_barang' => basename($path),
+                        'time_upload1' => date("Y-m-d h:i:s"),
+                    ]);
+                }else {
+                    documentrpk::create([
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status1' => 'on review',
+                        'surat_barang' => basename($path),
+                        'time_upload1' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }
+            if ($request->hasFile('jktfile2')){
+                $file = $request->file('jktfile2');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/cargo_manifest';
+                $path = $request->file('jktfile2')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                       
+                        'status2' => 'on review',
+                        'cargo_manifest'=> basename($path) ,
+                        'time_upload2' => date("Y-m-d h:i:s"),
+                    ]);
+                }else {
+                    documentrpk::create([    
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status2' => 'on review',
+                        'cargo_manifest'=> basename($path) ,
+                        'time_upload2' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }      
+            if ($request->hasFile('jktfile3')){
+                $file = $request->file('jktfile3');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/voyage';
+                $path = $request->file('jktfile3')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                        'status3' => 'on review',
+                        'voyage' => basename($path),
+                        'time_upload3' => date("Y-m-d h:i:s"),
+                    ]);
+                }else{
+                    documentrpk::create([
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status3' => 'on review',
+                        'voyage' => basename($path),
+                        'time_upload3' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }
+            if ($request->hasFile('jktfile4')){
+                $file = $request->file('jktfile4');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/bill_lading';
+                $path = $request->file('jktfile4')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                        'status4' => 'on review',
+                        'bill_lading' => basename($path),
+                        'time_upload4' => date("Y-m-d h:i:s"),
+                    ]);
+                }else {
+                    documentrpk::create([
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status4' => 'on review',
+                        'bill_lading' => basename($path),
+                        'time_upload4' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }
+            if ($request->hasFile('jktfile5')){
+                $file = $request->file('jktfile5');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/gerak_kapal';
+                $path = $request->file('jktfile5')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                   
+                        'status5' => 'on review',
+                        'gerak_kapal'=> basename($path) ,
+                        'time_upload5' => date("Y-m-d h:i:s"),
+                    ]);
+                }else{
+                    documentrpk::create([    
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status5' => 'on review',
+                        'gerak_kapal'=> basename($path) ,
+                        'time_upload5' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }
+            if ($request->hasFile('jktfile6')){
+                $file = $request->file('jktfile6');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/docking';
+                $path = $request->file('jktfile6')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                
+                        'status6' => 'on review',
+                        'docking' => basename($path),
+                        'time_upload6' => date("Y-m-d h:i:s"),
+                    ]);
+                }else {
+                    documentrpk::create([     
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status6' => 'on review',
+                        'docking' => basename($path),
+                        'time_upload6' => date("Y-m-d h:i:s"),
+                    ]);
+                }
+            }
+            if ($request->hasFile('jktfile7')){
+                $file = $request->file('jktfile7');
+                $name1 = 'Picsite-'. Auth::user()->cabang . $file->getClientOriginalName();
+                $tujuan_upload = 'RPK/surat_kapal';
+                $path = $request->file('jktfile7')->storeas('jakarta/'. $year . "/". $month . '/RPK' , $name1, 's3');
+                if(documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->exists()){
+                    Storage::disk('s3')->delete($path."/".$name1);
+                    documentrpk::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->where('cabang' , 'Jakarta')->whereColumn('created_at' , '<=', 'periode_akhir')->update([                 
+                        'status7' => 'on review',
+                        'time_upload7' => date("Y-m-d h:i:s"),
+                        'surat_kapal' => basename($path),
+                    ]);
+                }else {
+                    documentrpk::create([     
+                        'user_id' => Auth::user()->id,
+                        'cabang' => Auth::user()->cabang ,
+            
+                        'nama_kapal' => $request->nama_kapal,
+                        'periode_awal' => $request->tgl_awal,
+                        'periode_akhir' => $request->tgl_akhir,
+                        
+                        'status7' => 'on review',
+                        'time_upload7' => date("Y-m-d h:i:s"),
+                        'surat_kapal' => basename($path),
+                    ]);
+                }
+            }
+
+        return redirect('picsite/rpk')->with('message', 'Upload success!');
         }
 
         //email to user
