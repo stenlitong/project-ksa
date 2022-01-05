@@ -664,7 +664,7 @@
                                 <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
                                 <td class="table-warning" id="status">{{$jkt->$stats}}</td>                                      
-                                <td class="table-warning" id="reason">{{$jkt ->$reason}}</td>   
+                                <td class="table-warning" id="reason">{{$jkt->$reason}}</td>   
                                 <td class="table-warning">
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
@@ -677,7 +677,7 @@
                                     </form>
                                 </td>                                                                   
                             </tr>
-                        @elseif($s->$stats == 'approved')
+                        @elseif($jkt->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $jkt->$time_upload }}</strong></td>
                                 <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
@@ -690,9 +690,9 @@
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
-                                        <input type="hidden" name = 'kapal_nama' value={{$sjkt->nama_kapal}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
-                                        <input type="hidden" name='result' value={{$jkt>$scan}} />
+                                        <input type="hidden" name='result' value={{$jkt->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>

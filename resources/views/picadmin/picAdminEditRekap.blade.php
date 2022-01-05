@@ -5,7 +5,7 @@
 @section('container')
 <x-guest-layout>
 <div class="row">
-    @include('picincident.sidebarincident')
+    @include('picadmin.picAdminsidebar')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >

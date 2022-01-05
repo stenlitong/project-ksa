@@ -145,7 +145,7 @@
                     var dropdown = document.getElementById("role_id");
                     dropdown.onchange = function(event){
                         
-                        if(dropdown.value=="picAdmin" || dropdown.value=="insurance"){
+                        if(dropdown.value=="picAdmin" || dropdown.value=="InsuranceManager"){
                             selectopt('Jakarta');
                             document.getElementById("Samarinda").disabled = true;
                             document.getElementById("Banjarmasin").disabled = true;

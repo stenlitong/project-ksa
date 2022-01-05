@@ -111,7 +111,7 @@
                                             <form action="/picadmin/RekapulasiDana/destroy/{{$rekap->id}}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <a class="btn btn-outline-primary" href="/picadmin//editRekapulasiDana/{{$rekap->id}}">Edit</a>
+                                                <a class="btn btn-outline-primary" href="/picadmin/editRekapulasiDana/{{$rekap->id}}">Edit</a>
                                                 <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</button>
                                             </form>
                                         </div>

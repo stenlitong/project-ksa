@@ -21,6 +21,7 @@
                             <option value="/picadmin/rpk?search=Berau">Berau</option>
                             <option value="/picadmin/rpk?search=Samarinda">Samarinda</option>
                             <option value="/picadmin/rpk?search=Banjarmasin">Banjarmasin</option>
+                            <option value="/picadmin/dana?search=Jakarta">Jakarta</option>
                         </select>
                     </div>
                     {{-- search bar --}}

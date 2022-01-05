@@ -3722,7 +3722,7 @@ class PicsiteController extends Controller
                     documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d h:i:s"),
-                        'call_sign' => basename($path),]);
+                        'snpp_permanen' => basename($path),]);
                 }else{
                     documentJakarta::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -3734,7 +3734,7 @@ class PicsiteController extends Controller
                             
                         'status6' => 'on review',
                         'time_upload6' => date("Y-m-d h:i:s"),
-                        'call_sign' => basename($path),]);
+                        'snpp_permanen' => basename($path),]);
                 }
             }
             if ($request->hasFile('jktfile7')) {
@@ -3768,7 +3768,7 @@ class PicsiteController extends Controller
                     documentJakarta::where('nama_kapal', 'Like', '%' . $request->nama_kapal . '%')->whereColumn('created_at' , '<=', 'periode_akhir')->update([  
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d h:i:s"),
-                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                        'surat_laut_permanen' => basename($path),]);
                 }else{
                     documentJakarta::create([
                         'nama_kapal' => $request->nama_kapal,
@@ -3780,7 +3780,7 @@ class PicsiteController extends Controller
                             
                         'status8' => 'on review',
                         'time_upload8' => date("Y-m-d h:i:s"),
-                        'pnbp_surat_laut_(ubah_pemilik)' => basename($path),]);
+                        'surat_laut_permanen' => basename($path),]);
                 }
             }
             if ($request->hasFile('jktfile9')) {
