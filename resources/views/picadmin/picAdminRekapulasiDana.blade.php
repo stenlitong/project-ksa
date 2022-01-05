@@ -10,7 +10,7 @@
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >
                 <div class="container">
-                  <h1 class="display-4"><strong>Rekapulasi Dana</strong></h1>
+                  <h1 class="display-4"><strong>Rekapitulasi Dana</strong></h1>
                     
                     <div class="text-md-right">
                         <button class="btn btn-outline-info"  id="top" style=" width: 20%;" data-toggle="modal" data-target="#Addspgrnote">Add List</button>

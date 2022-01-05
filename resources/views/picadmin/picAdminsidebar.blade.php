@@ -15,7 +15,7 @@
                     Review RPK Documents
                 </a>
                 <a class="nav-link" aria-current="page" href="/picadmin/RekapulasiDana">
-                    Rekapulasi Dana
+                    Rekapitulasi Dana
                 </a>
             </li>
         </ul>

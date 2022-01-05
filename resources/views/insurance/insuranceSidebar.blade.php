@@ -21,7 +21,7 @@
                 </a>
                 <a class="nav-link" aria-current="" href="/insurance/HistoryRekapulasiDana">
                     <span data-feather="file-plus" style="color: black"></span>
-                    History Rekapulasi Dana
+                    History Rekapitulasi Dana
                 </a>
             </li>
         </ul>
