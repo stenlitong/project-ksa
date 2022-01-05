@@ -212,7 +212,8 @@ class picincidentController extends Controller
             'spgrfile4' => 'mimes:pdf|max:3072', 
             'spgrfile5' => 'mimes:pdf|max:3072', 
             'spgrfile6' => 'mimes:pdf|max:3072', 
-            'spgrfile7' => 'mimes:pdf|max:3072' 
+            'spgrfile7' => 'mimes:pdf|max:3072' ,
+            'no_formclaim' => 'required'
         ]);
         
         if ($request->hasFile('spgrfile1')) {

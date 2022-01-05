@@ -36,15 +36,15 @@
                             <div class="form-row">
                                 <div class="col-md-4">
                                     <label>Nama Kapal</label>
-                                    <input type="text" style="text-transform: uppercase;" name="nama_kapal" class="form-control" placeholder="Nama Kapal">
+                                    <input type="text" style="text-transform: uppercase;" name="nama_kapal" required class="form-control" placeholder="Nama Kapal">
                                 </div>
                                 <div class="col-md-4">
                                     <label>from</label>
-                                    <input type="date" class="form-control" name="tgl_awal" placeholder="Periode Awal">
+                                    <input type="date" class="form-control" name="tgl_awal"  required placeholder="Periode Awal">
                                 </div>
                                 <div class="col-md-4">
                                     <label>to</label>
-                                    <input type="date" class="form-control" name="tgl_akhir" placeholder="Periode Akhir">
+                                    <input type="date" class="form-control" name="tgl_akhir" required placeholder="Periode Akhir">
                                 </div>
                         
                         <table class="table"style="margin-top: 1%">

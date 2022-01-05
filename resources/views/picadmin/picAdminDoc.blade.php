@@ -410,7 +410,7 @@
                       @endforelse
 {{-- Banjarmasin------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
                     @forelse($documentbanjarmasin as $b )
-                       @for ( $a = 1 ; $a <= 31 ; $a++)
+                       @for ( $a = 1 ; $a <= 36 ; $a++)
                        @php
                         $BANJARMASIN = array('perjalanan','sertifikat_keselamatan','sertifikat_anti_fauling','surveyor',
                                             'drawing&stability','laporan_pengeringan','berita_acara_lambung',
@@ -672,7 +672,7 @@
                                             <input type="hidden" name='status' value={{$stats}}>
                                             <input type="hidden" name = 'cabang' value={{$s->cabang}}>
                                             <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
-                                            <button type="submit" class="btn btn-outline-success">approve</button>
+                                            {{-- <button type="submit" class="btn btn-outline-success">approve</button> --}}
                                             <div class="form-group">
                                               <label for="reason">Reason</label>
                                               <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
@@ -731,7 +731,7 @@
                         @endforelse
 {{-- Jakarta---------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                         @forelse($documentjakarta as $jkt )
-                        @for ( $a = 1 ; $a <= 38 ; $a++)
+                        @for ( $a = 1 ; $a <= 43 ; $a++)
                         @php
                             $JAKARTA = array('pnbp_rpt','pps','pnbp_spesifikasi_kapal'
                                                 ,'anti_fauling_permanen','pnbp_pemeriksaan_anti_fauling','snpp_permanen'
@@ -752,7 +752,7 @@
                                             ,'PNBP Surat Laut (Ubah Pemilik)','CLC Bunker','Nota Dinas Penundaan Dok I'
                                             ,'Nota Dinas Penundaan Dok II','Nota Dinas Perubahan Kawasan','Call Sign'
                                             ,'Perubahan Kepemilikan Kapal','Nota Dinas Bendera (Baru)','PUP Safe Manning'
-                                            ,'Corporate','Dokumen Kapal Asing (Baru)',Lain-'Lain'
+                                            ,'Corporate','Dokumen Kapal Asing (Baru)'
                                             ,'Rekomendasi Radio Kapal','Izin Stasiun Radio Kapal','MMSI'
                                             ,'PNBP Pemeriksaan Konstruksi','OK 1 SKB','OK 1 SKP','OK 1 SKR'
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
@@ -775,14 +775,15 @@
                             @elseif ($jkt->$stats == 'on review')
                             <tr>
                                 {{-- hasil on review --}}
-                                <td class="table-info"><strong>{{ $jkt->$time_upload }}</strong></td>
-                                <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
-                                <td class="table-info" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
-                                <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
+                                <td class="table-warning"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-warning"><strong>{{ $jkt->cabang }}</strong></td>
+                                <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
+                                <td class="table-warning" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
+                                <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                                <td class="table-info" id="status">{{$jkt->$stats}}</td>                                      
-                                <td class="table-info" id="reason">{{$jkt ->$reason}}</td>   
-                                <td class="table-info">
+                                <td class="table-warning" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-warning" id="reason">{{$jkt ->$reason}}</td>   
+                                <td class="table-light">
                                   <div class="form-row">
                                     {{-- approve button --}}
                                       <div class="col-md-auto">
@@ -831,7 +832,7 @@
                                                 <input type="hidden" name = 'tipefile' value='DANA'>
                                                 <input type="hidden" name='reason' value={{$reason}}>
                                                 <input type="hidden" name='status' value={{$stats}}>
-                                                <button type="submit" class="btn btn-outline-success">approve</button>
+                                                {{-- <button type="submit" class="btn btn-outline-success">approve</button> --}}
                                                 <div class="form-group">
                                                   <label for="reason">Reason</label>
                                                   <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
@@ -878,47 +879,27 @@
                                   </div>
                                 </td>                                                                   
                             </tr>
-                        @elseif($s->$stats == 'approved')
+                        @elseif($jkt->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-success"><strong>{{ $jkt->cabang }}</strong></td>
                                 <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
                                 <td class="table-success" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
                                 <td class="table-success" id="status">{{$jkt->$stats}}</td>                                      
-                                <td class="table-success" id="reason">{{$jkt->$reason}}</td>    
-                                <td class="table-info">
-                                    <form method="post" action="/dashboard/dana/view" target="_blank">
-                                        @csrf
-                                        <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
-                                        <input type="hidden" name = 'kapal_nama' value={{$sjkt->nama_kapal}}>
-                                        <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
-                                        <input type="hidden" name='result' value={{$jkt>$scan}} />
-                                        <input type="hidden" name = 'tipefile' value='DANA'>
-                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                    </form>
-                                </td>                                                      
+                                <td class="table-success" id="reason">{{$jkt->$reason}}</td>
                             </tr>
                         @else
                             <tr>
                                 <td class="table-danger"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-danger"><strong>{{ $jkt->cabang }}</strong></td>
                                 <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
                                 <td class="table-danger" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
                                 <td class="table-danger" id="status">{{$jkt->$stats}}</td>                                      
                                 <td class="table-danger" id="reason">{{$jkt->$reason}}</td>    
-                                <td class="table-info">
-                                    <form method="post" action="/dashboard/dana/view" target="_blank">
-                                        @csrf
-                                        <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
-                                        <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
-                                        <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
-                                        <input type="hidden" name='result' value={{$jkt->$scan}} />
-                                        <input type="hidden" name = 'tipefile' value='DANA'>
-                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                    </form>
-                                </td>                  
                             </tr>
                         @endif
                         @endfor

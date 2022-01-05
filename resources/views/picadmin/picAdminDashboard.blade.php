@@ -532,7 +532,7 @@
                                         'halaman_tambahan_grosse','pnbp&pup','laporan_pemeriksaan_anti_teriti',
                                         'surveyor_pengedokan','surveyor_penerimaan_klas_bki','nota_tagihan_jasa_perkapalan',
                                         'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
-                                        'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta', 'penerbitan_nota_dinas_kedua'
+                                        'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta', 'penerbitan_nota_dinas_kedua',
                                         'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                     $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                 "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
@@ -658,7 +658,7 @@
                                             ,'PNBP Surat Laut (Ubah Pemilik)','CLC Bunker','Nota Dinas Penundaan Dok I'
                                             ,'Nota Dinas Penundaan Dok II','Nota Dinas Perubahan Kawasan','Call Sign'
                                             ,'Perubahan Kepemilikan Kapal','Nota Dinas Bendera (Baru)','PUP Safe Manning'
-                                            ,'Corporate','Dokumen Kapal Asing (Baru)',Lain-'Lain'
+                                            ,'Corporate','Dokumen Kapal Asing (Baru)'
                                             ,'Rekomendasi Radio Kapal','Izin Stasiun Radio Kapal','MMSI'
                                             ,'PNBP Pemeriksaan Konstruksi','OK 1 SKB','OK 1 SKP','OK 1 SKR'
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
@@ -682,6 +682,7 @@
                             <tr>
                                 {{-- hasil on review --}}
                                 <td class="table-warning"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-warning"><strong>{{ $jkt->cabang }}</strong></td>
                                 <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
                                 <td class="table-warning" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
@@ -691,7 +692,7 @@
                                 <td class="table-warning">
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
-                                        <input type="hidden" name = 'cabang' value={{$s->cabang}}>
+                                        <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
                                         <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
                                         <input type="hidden" name='result' value={{$jkt->$scan}} />
@@ -700,22 +701,23 @@
                                     </form>
                                 </td>                                                                   
                             </tr>
-                        @elseif($s->$stats == 'approved')
+                        @elseif($jkt->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-success"><strong>{{ $jkt->cabang }}</strong></td>
                                 <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
                                 <td class="table-success" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
                                 <td class="table-success" id="status">{{$jkt->$stats}}</td>                                      
                                 <td class="table-success" id="reason">{{$jkt->$reason}}</td>    
-                                <td class="table-info">
+                                <td class="table-success">
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>
-                                        <input type="hidden" name = 'kapal_nama' value={{$sjkt->nama_kapal}}>
+                                        <input type="hidden" name = 'kapal_nama' value={{$jkt->nama_kapal}}>
                                         <input type="hidden" name='viewdoc' value={{$JAKARTA[$a-1]}} />
-                                        <input type="hidden" name='result' value={{$jkt>$scan}} />
+                                        <input type="hidden" name='result' value={{$jkt->$scan}} />
                                         <input type="hidden" name = 'tipefile' value='DANA'>
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
@@ -724,13 +726,14 @@
                         @else
                             <tr>
                                 <td class="table-danger"><strong>{{ $jkt->$time_upload }}</strong></td>
+                                <td class="table-danger"><strong>{{ $jkt->cabang }}</strong></td>
                                 <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$jkt->nama_kapal}}</td>                                        
                                 <td class="table-danger" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
                                 <td class="table-danger" id="status">{{$jkt->$stats}}</td>                                      
                                 <td class="table-danger" id="reason">{{$jkt->$reason}}</td>    
-                                <td class="table-info">
+                                <td class="table-danger">
                                     <form method="post" action="/dashboard/dana/view" target="_blank">
                                         @csrf
                                         <input type="hidden" name = 'cabang' value={{$jkt->cabang}}>

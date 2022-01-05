@@ -636,7 +636,7 @@
                                             ,'PNBP Surat Laut (Ubah Pemilik)','CLC Bunker','Nota Dinas Penundaan Dok I'
                                             ,'Nota Dinas Penundaan Dok II','Nota Dinas Perubahan Kawasan','Call Sign'
                                             ,'Perubahan Kepemilikan Kapal','Nota Dinas Bendera (Baru)','PUP Safe Manning'
-                                            ,'Corporate','Dokumen Kapal Asing (Baru)',Lain-'Lain'
+                                            ,'Corporate','Dokumen Kapal Asing (Baru)'
                                             ,'Rekomendasi Radio Kapal','Izin Stasiun Radio Kapal','MMSI'
                                             ,'PNBP Pemeriksaan Konstruksi','OK 1 SKB','OK 1 SKP','OK 1 SKR'
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'

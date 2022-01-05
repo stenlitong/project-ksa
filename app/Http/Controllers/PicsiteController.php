@@ -78,6 +78,7 @@ class PicsiteController extends Controller
                 'ufile19' => 'mimes:pdf|max:3072' ,
                 'ufile20' => 'mimes:pdf|max:3072' ,
                 'ufile21' => 'mimes:pdf|max:3072' ,
+                'nama_kapal' => 'required'
             ]);
 
             if ($request->hasFile('ufile1')) {
@@ -701,6 +702,7 @@ class PicsiteController extends Controller
                 'beraufile29'=> 'mimes:pdf|max:3072' ,
                 'beraufile30'=> 'mimes:pdf|max:3072' ,
                 'beraufile31'=> 'mimes:pdf|max:3072' ,
+                'nama_kapal' => 'required'
             ]);
             if ($request->hasFile('beraufile1')) {
                 $file1 = $request->file('beraufile1');
@@ -1534,6 +1536,7 @@ class PicsiteController extends Controller
                 'banjarmasinfile34'=> 'mimes:pdf|max:3072' ,
                 'banjarmasinfile35'=> 'mimes:pdf|max:3072' ,
                 'banjarmasinfile36'=> 'mimes:pdf|max:3072' ,
+                'nama_kapal' => 'required'
             ]);
             
             if ($request->hasFile('banjarmasinfile1')) {
@@ -2486,6 +2489,7 @@ class PicsiteController extends Controller
                 'samarindafile42'=> 'mimes:pdf|max:3072' ,
                 'samarindafile43'=> 'mimes:pdf|max:3072' ,
                 'samarindafile44'=> 'mimes:pdf|max:3072' ,
+                'nama_kapal' => 'required'
             ]);
             if ($request->hasFile('samarindafile1')) {
                 $file1 = $request->file('samarindafile1');
@@ -3592,6 +3596,7 @@ class PicsiteController extends Controller
                 'jktfile41'=> 'mimes:pdf|max:3072' ,
                 'jktfile42'=> 'mimes:pdf|max:3072' ,
                 'jktfile43'=> 'mimes:pdf|max:3072' ,
+                'nama_kapal' => 'required'
             ]);
             if ($request->hasFile('jktfile1')) {
                 $file1 = $request->file('jktfile1');

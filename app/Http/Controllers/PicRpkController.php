@@ -656,7 +656,8 @@ class PicRpkController extends Controller
                 'smrfile4' => 'mimes:pdf|max:1024' ,
                 'smrfile5' => 'mimes:pdf|max:1024' ,
                 'smrfile6' => 'mimes:pdf|max:1024' ,
-                'smrfile7' => 'mimes:pdf|max:1024' 
+                'smrfile7' => 'mimes:pdf|max:1024' ,
+                'nama_kapal' => 'required'
             ]);
             if ($request->hasFile('smrfile1')) {
                 //dd($request);
@@ -848,6 +849,7 @@ class PicRpkController extends Controller
                     ]);
                 }
             }
+            return redirect('picsite/rpk')->with('message', 'Upload success!');
         }
         
         if(Auth::user()->cabang == 'Jakarta'){
@@ -1054,7 +1056,7 @@ class PicRpkController extends Controller
                 }
             }
 
-        return redirect('picsite/rpk')->with('message', 'Upload success!');
+            return redirect('picsite/rpk')->with('message', 'Upload success!');
         }
 
         //email to user

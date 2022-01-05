@@ -13,6 +13,7 @@ use App\Models\Rekapdana;
 use App\Models\documentrpk;
 use Illuminate\Http\Request;
 use App\Models\documentberau;
+use App\Models\documentJakarta;
 use App\Models\documentsamarinda;
 use Illuminate\Support\Facades\DB;
 use App\Models\documentbanjarmasin;
@@ -39,7 +40,7 @@ class picAdminController extends Controller
             $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
             $documentsamarinda = DB::table('samarindadb')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
             $documentjakarta = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', $request->search)->latest()->get();
-            return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda'));
+            return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda' ,'documentjakarta'));
         }
         else{{
             $document = DB::table('documents')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
@@ -412,7 +413,7 @@ class picAdminController extends Controller
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->pluck($filename)[0];
                 // dd($viewer);
-                return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/" . $viewer);
+                return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/" . $viewer);
             }
         }
     }
@@ -486,7 +487,7 @@ class picAdminController extends Controller
                 ->whereColumn('created_at' , '<=', 'periode_akhir')
                 ->pluck($filenameRPK)[0]; 
                 // dd($viewer);
-                return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+                return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/RPK" . "/" . $viewer);
             }
         }
         

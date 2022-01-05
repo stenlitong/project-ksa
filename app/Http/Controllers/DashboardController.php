@@ -539,7 +539,8 @@ class DashboardController extends Controller
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->pluck($filename)[0];
                     // dd($viewer);
-                    return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/" . $viewer);
+                    // dd($request);
+                    return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/" . $viewer);
                 }
             }
              // RPK view ----------------------------------------------------------
@@ -607,7 +608,7 @@ class DashboardController extends Controller
                     ->whereColumn('created_at' , '<=', 'periode_akhir')
                     ->pluck($filenameRPK)[0]; 
                     // dd($viewer);
-                    return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/RPK" . "/" . $viewer);
+                    return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/RPK" . "/" . $viewer);
                 }
             }
 
