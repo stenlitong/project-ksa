@@ -6,99 +6,134 @@ use App\Models\FCIexports;
 use App\Models\formclaims;
 use App\Models\headerformclaim;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Events\BeforeExport;
-use Maatwebsite\Excel\Concerns\Fromview;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class FCIexport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents 
+class FCIexport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents , WithHeadingRow
+// , WithCustomStartCell
 {
     use Exportable;
     /**
     * @return \Illuminate\Support\Collection
     */
+
+    public function headingRow(): int
+    {
+        return 1;
+    }
+
+    // public function startCell(): string
+    // {
+    //     return 'A12';
+    // }
+
+    public function __construct($identify)
+    {
+        $this->file_id = $identify;
+        $this->created_at = formclaims::where('header_id', $identify)->pluck('created_at')[0];
+        $this->name = formclaims::where('header_id', $identify)->pluck('name')[0];
+        $this->no_FormClaim = formclaims::where('header_id', $identify)->pluck('no_FormClaim')[0];
+        $this->tgl_formclaim = formclaims::where('header_id', $identify)->pluck('tgl_formclaim')[0];
+        $this->tgl_insiden = formclaims::where('header_id', $identify)->pluck('tgl_insiden')[0];
+        $this->incident = formclaims::where('header_id', $identify)->pluck('incident')[0];
+        $this->surveyor = formclaims::where('header_id', $identify)->pluck('surveyor')[0];
+        $this->TSI_Tugboat = formclaims::where('header_id', $identify)->pluck('TSI_Tugboat')[0];
+        $this->TSI_barge = formclaims::where('header_id', $identify)->pluck('TSI_barge')[0];
+        $this->mata_uang_TSI = formclaims::where('header_id', $identify)->pluck('mata_uang_TSI')[0];
+        $this->barge = formclaims::where('header_id', $identify)->pluck('barge')[0];
+        $this->tugBoat = formclaims::where('header_id', $identify)->pluck('tugBoat')[0];
+    }
+
     public function headings(): array
     {
-        return [
+        return[
+            //title
+            [
+               'FORM CLAIM INSURANCE'
+            ],
+            [
+            // table data
             'No.',
-            'name', 
-            'no_FormClaim',
-            'tgl_formclaim',
-            'tgl_insiden',
             'jenis_incident',
-            'incident',
-            'surveyor',
-            'TSI_Tugboat',
-            'TSI_barge',
-            'mata_uang_TSI',
-            'barge',
-            'tugBoat',
             'item' ,
+            'description',
             'deductible',
             'amount',
-            'mata_uang_amount',
-            'description'
-            ];
+            'mata_uang_amount'
+            ]
+        ];
+    }
+    
+
+    public function query()
+    {
+        $formclaim = formclaims::where('header_id', $this->file_id);
+        return $formclaim;
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event){
-                $event->sheet->getStyle('A1:R1')->applyFromArray([
+                $event->sheet->mergeCells('A1:G1');
+                $event->sheet->getStyle('A1:G1')->applyFromArray([
                     'font' => [
                         'bold' => true ,
-                        'color' => ['argb' => 'FFFFFFFF']
+                        // 'color' => ['argb' => 'ffffffff']
+                    ]
+                ]);
+                $event->sheet->getStyle('A2:G2')->applyFromArray([
+                    'font' => [
+                        'bold' => true ,
+                        // 'color' => ['argb' => 'ffffffff']
                     ],
                     'fill' => [
                         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                        'color' => ['argb' => 'FF8B0000'],
+                        'color' => ['argb' => 'FFFF8080']
                     ],
                     'borders' => [
                         'outline' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                            'color' => ['argb' => 'FFFF0000']],
-                    ]
+                            'color' => ['argb' => 'FF000000'],
+                    ]]
                 ]);
-                // $event->sheet->appendRows(array(
-                //     array(' '),
-                //     array('Nomor PR', $this->noPr),
-                //     array('Nomor PO', $this->noPo),
-                //     array('Nama Kapal', $this->boatName),
-                //     array('Tipe PPN', $this->ppn . ' %'),
-                //     array('Diskon', $this->discount . ' %'),
-                //     array('Total Harga', 'Rp. ' . number_format($this->price, 2, ",", ".")),
-                //     array('Alamat Pengiriman Invoice', $this->invoiceAddress),
-                //     array('Alamat Pengiriman Barang', $this->itemAddress),
-                //     array('Cabang', $this->cabang),
-                // ), $event);
-                $event->sheet->getDelegate()->getStyle('A:R')
+                // Append row as very last
+                $event->sheet->appendRows(array(
+                    array(' ',' ',' ',' ','Total:' , ' '),
+                    array(' '),
+                    array('No FormClaim :', $this->no_FormClaim),
+                    array('tgl FormClaim :', $this->tgl_formclaim),
+                    array('tgl Insiden :', $this->tgl_insiden),
+                    array('Incident :', $this->incident),
+                    array('Surveyor :', $this->surveyor),
+                    array('TSI Tugboat :', $this->mata_uang_TSI . ' . ' . $this->TSI_Tugboat),
+                    array('TSI barge :', $this->mata_uang_TSI . ' . ' . $this->TSI_barge),
+                    array('Barge :', $this->barge),
+                    array('TugBoat :', $this->tugBoat),
+                    array(' '),
+                    array(' '),
+                    array('Created At :', $this->created_at),
+                    array(' '),
+                    array(' '),
+                    array('Prepared by:' , ' ' , ' ' , ' ' ,' ' ,'Checked by :'),
+                    array(' '),
+                    array(' '),
+                    array(' '),
+                    array($this->name, ' ' , ' ' , ' ' ,' ' , 'Yusmiati'),
+                ), $event);
+                
+                $event->sheet->getDelegate()->getStyle('A:G')
                 ->getAlignment()
-                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER); 
-                $event->sheet->getDelegate()->getStyle('A:R')
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT); 
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
         ];
     }
-
-    public function __construct($identify)
-    {
-        $this->file_id = $identify;
-    }
-
-    public function query()
-    {
-
-        $formclaim = formclaims::where('header_id', $this->file_id);
-        return $formclaim;
-    }
-
 }

@@ -52,7 +52,7 @@
                                             <form method="POST" action="/picincident/history/destroy/{{$claims->id}}">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px" id="deleteexcel">Delete</button>
+                                                <button class="btn btn-outline-danger" type="submit" onClick="return confirm('Are you sure?')" style="font-size: 16px" id="deleteexcel">Delete</button>
                                             </form>
                                         </div>
                                     </div>

@@ -15,12 +15,9 @@ class formclaims extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    Protected $hidden =['header_id','user_id','created_at','updated_at'];
-    // Protected $fillable = ['tgl_insiden', 'tgl_formclaim' , 'name', 'item' ,
-    // 'jenis_incident','no_FormClaim',
-    // 'barge','TSI_barge','TSI_Tugboat',
-    // 'deductible','amount','surveyor',
-    // 'tugBoat','incident','description'];
+    Protected $hidden =['header_id','user_id','created_at','updated_at','tgl_insiden', 'tgl_formclaim' 
+    ,'name', 'no_FormClaim','barge', 'tugBoat' ,'TSI_barge','TSI_TugBoat','incident','surveyor' , 'mata_uang_TSI'];
+   
     
 }
  
