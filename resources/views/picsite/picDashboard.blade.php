@@ -101,28 +101,28 @@
                         <tr>
                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
-                        {{-- @elseif ($d->$stats == 'on review')
-                        <tr>
-                        hasil on review
-                            <td class="table-info"><strong>{{ $d->$time_upload }}</strong></td>
-                            <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
-                            <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
-                            <td class="table-info" id="namafile">{{$names[$r-1]}}</td>     
-                            <td class="table-secondary" id="jenisfile"><strong>RPK</strong></td>     
-                            <td class="table-info" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
-                            <td class="table-info" id="reason">{{$d ->$reason}}</td>       
-                            <td class="table-info" >
-                                <form method="post" action="/dashboard/rpk/view" target="_blank">
-                                    @csrf
-                                    <input type="hidden" name = 'cabang' value={{$d->cabang}}>
-                                    <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
-                                    <input type="hidden" name = 'tipefile' value='RPK'>
-                                    <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
-                                    <input type="hidden" name='result' value={{$d->$scan}} />
-                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                </form>
-                            </td>                                 
-                        </tr> --}}
+                    @elseif ($d->$stats == 'on review')
+                    <tr>
+                    hasil on review
+                        <td class="table-info"><strong>{{ $d->$time_upload }}</strong></td>
+                        <td class="table-info" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
+                        <td class="table-info" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
+                        <td class="table-info" id="namafile">{{$names[$r-1]}}</td>     
+                        <td class="table-secondary" id="jenisfile"><strong>RPK</strong></td>     
+                        <td class="table-info" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
+                        <td class="table-info" id="reason">{{$d ->$reason}}</td>       
+                        <td class="table-info" >
+                            <form method="post" action="/dashboard/rpk/view" target="_blank">
+                                @csrf
+                                <input type="hidden" name = 'cabang' value={{$d->cabang}}>
+                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
+                                <input type="hidden" name = 'tipefile' value='RPK'>
+                                <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
+                                <input type="hidden" name='result' value={{$d->$scan}} />
+                                <button type="submit" name="views3" class="btn btn-dark">view</button>
+                            </form>
+                        </td>                                 
+                    </tr>
                     @elseif($d->$stats == 'approved')
                         <tr>
                             <td class="table-success">{{ $d->$time_upload }}</td>
@@ -201,7 +201,7 @@
                             <tr>
                                 {{-- agar tidak keluar hasil kosong --}}
                             </tr>
-                        {{-- @elseif ($doc->$stats == 'on review')
+                        @elseif ($doc->$stats == 'on review')
                             <tr>
                                 hasil on review
                                 <td class="table-info"><strong>{{ $doc->$time_upload }}</strong></td>
@@ -222,7 +222,7 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </td>                                     
-                            </tr> --}}
+                            </tr>
                         @elseif($doc->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $doc->$time_upload }}</strong></td>
@@ -310,7 +310,7 @@
                         <tr>
                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
-                        {{-- @elseif ($d->$stats == 'on review')
+                        @elseif ($d->$stats == 'on review')
                             <tr>
                                 hasil on review
                                 <td class="table-info"><strong>{{ $d->$time_upload }}</strong></td>
@@ -331,7 +331,7 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </td>    
-                            </tr> --}}
+                            </tr>
                         @elseif($d->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $d->$time_upload }}</strong></td>
@@ -422,7 +422,7 @@
                         <tr>
                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
-                        {{-- @elseif ($b->$stats == 'on review')
+                        @elseif ($b->$stats == 'on review')
                             <tr>
                                 hasil on review
                                 <td class="table-info"><strong>{{ $b->$time_upload }}</strong></td>
@@ -443,7 +443,7 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </td>                                          
-                            </tr> --}}
+                            </tr>
                         @elseif($b->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $b->$time_upload }}</strong></td>
@@ -539,7 +539,7 @@
                             <tr>
                                 {{-- agar tidak keluar hasil kosong --}}
                             </tr>
-                            {{-- @elseif ($s->$stats == 'on review')
+                            @elseif ($s->$stats == 'on review')
                             <tr>
                                 hasil on review
                                 <td class="table-info"><strong>{{ $s->$time_upload }}</strong></td>
@@ -560,7 +560,7 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </td>                                                                   
-                            </tr> --}}
+                            </tr>
                         @elseif($s->$stats == 'approved')
                             <tr>
                                 <td class="table-success"><strong>{{ $s->$time_upload }}</strong></td>

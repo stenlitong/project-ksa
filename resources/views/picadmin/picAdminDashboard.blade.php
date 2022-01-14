@@ -165,7 +165,7 @@
                             </form>
                         </td>                                        
                     </tr>
-                @else
+                @elseif($d->$stats == 'approved')
                     <tr>
                         <td class="table-danger">{{ $d->$time_upload }}</td>
                         <td class="table-danger"><strong>{{ $d->cabang }}</strong></td>
@@ -266,7 +266,7 @@
                                 </form>
                             </td>
                         </tr>
-                    @else
+                    @elseif($doc->$stats == 'rejected')
                         <tr>
                             <td class="table-danger"><strong>{{ $doc->$time_upload }}</strong></td>
                             <td class="table-danger"><strong>{{ $doc->cabang }}</strong></td>
@@ -376,7 +376,7 @@
                             </form>
                         </td>                                        
                     </tr>
-                @else
+                @elseif($d->$stats == 'rejected')
                     <tr>
                         <td class="table-danger"><strong>{{ $d->$time_upload }}</strong></td>
                         <td class="table-danger"><strong>{{ $d->cabang }}</strong></td>
@@ -487,7 +487,7 @@
                             </form>
                         </td>                                          
                     </tr>
-                @else
+                @elseif($b->$stats == 'rejected')
                     <tr>
                         <td class="table-danger"><strong>{{ $b->$time_upload }}</strong></td>
                         <td class="table-danger"><strong>{{ $b->cabang }}</strong></td>
@@ -605,7 +605,7 @@
                                 </form>
                             </td>                                                      
                         </tr>
-                    @else
+                    @elseif($s->$stats == 'rejected')
                         <tr>
                             <td class="table-danger"><strong>{{ $s->$time_upload }}</strong></td>
                             <td class="table-danger"><strong>{{ $s->cabang }}</strong></td>
@@ -723,7 +723,7 @@
                                     </form>
                                 </td>                                                      
                             </tr>
-                        @else
+                        @elseif($jkt->$stats == 'rejected')
                             <tr>
                                 <td class="table-danger"><strong>{{ $jkt->$time_upload }}</strong></td>
                                 <td class="table-danger"><strong>{{ $jkt->cabang }}</strong></td>
