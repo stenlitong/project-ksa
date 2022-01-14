@@ -537,12 +537,13 @@ class picAdminController extends Controller
     //create RekapulasiDana
     public function uploadrekap(Request $request){
         // dd($request);
-        // $request->validate([
-        //     'Cabang'=> 'required|max:255',
-        //     'NamaKapal'=> 'required|max:255',
-        //     'NilaiClaim'=> 'required',
-        //     'DateNote'=> 'required',
-        // ]);
+        $request->validate([
+            'Cabang'=> 'required|max:255',
+            'NamaKapal'=> 'required|max:255',
+            'NilaiClaim'=> 'required',
+            'status_pembayaran'=> 'required',
+            'Nilai'=> 'required',
+        ]);
 
         Rekapdana::create([
             'user_id'=> Auth::user()->id,

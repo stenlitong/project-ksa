@@ -81,7 +81,7 @@
                         </tr>
                     @elseif ($upspgr->$stats == 'on review')
                         <tr>
-                            <td class="table-warning" id="time">{{$upspgr->$time_upload}}</td>                                        
+                            {{-- <td class="table-warning" id="time">{{$upspgr->$time_upload}}</td>                                        
                             <td class="table-warning">{{$upspgr->no_formclaim}}</td>
                             <td class="table-warning" id="nama">{{$name[$r-1]}}</td>                                        
                             <td class="table-warning" id="status">{{$upspgr->$stats}}</td>                                      
@@ -98,7 +98,7 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </div>
-                            </td>
+                            </td> --}}
                         </tr>
                     @elseif ($upspgr->$stats == 'approved')
                         <tr>

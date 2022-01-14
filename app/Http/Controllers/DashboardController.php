@@ -729,7 +729,7 @@ class DashboardController extends Controller
         elseif(Auth::user()->hasRole('InsuranceManager')){
             $year = date('Y');
             $month = date('m');
-            $uploadspgr = spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->latest()->get();
+            $uploadspgr = spgrfile::whereMonth('created_at', date('y'))->latest()->get();
             
             //Search bar
             //check if search-bar is filled or not

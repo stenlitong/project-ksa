@@ -31,7 +31,18 @@
                         }
                     @endphp" href="{{ Route("logistic.makeOrder") }}">
                     <span data-feather="plus-circle"></span>
-                    Make Order
+                    Make Order Goods
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['REQUEST_URI']) == 'make-Job'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.makeJob") }}">
+                    <span data-feather="plus-square"></span>
+                    Make Order Job
                 </a>
             </li>
             <li class="nav-item">

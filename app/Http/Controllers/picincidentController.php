@@ -33,6 +33,12 @@ class picincidentController extends Controller
    
     // addtoCart 
     public function submitformclaim(Request $request){
+        $request->validate([
+            'Item_name'=> 'required|max:255',
+            'incident'=> 'required',
+            'description'=> 'required',
+            'amount'=> 'required',
+        ]);
         tempcart::create([
             'user_id' => Auth::user()->id,
             'tgl_insiden' => $request->dateincident ,
@@ -42,6 +48,7 @@ class picincidentController extends Controller
             'item' => $request->Item_name ,
             'no_FormClaim'=> $request->FormClaim , 
             'barge'=> $request->barge ,
+            'tugBoat'=> $request->TugBoat,
             'TSI_barge'=> $request->TSI_barge,
             'TSI_TugBoat'=> $request->TSI_TugBoat,
             'deductible'=>$request->Deductible ,
@@ -49,7 +56,6 @@ class picincidentController extends Controller
             'mata_uang_TSI'=>$request-> mata_uang_TSI,
             'amount'=> $request->Amount,
             'surveyor'=> $request->Surveyor,
-            'tugBoat'=> $request->TugBoat,
             'incident'=> $request->Incident ,
             'description'=> $request->reasonbox ,
         ]);
@@ -142,8 +148,10 @@ class picincidentController extends Controller
     public function uploadnotespgr(Request $request){
         // dd($request);
         $request->validate([
-            'No_SPGR'=> 'required|max:255',
-            'NamaKapal'=> 'required|max:255',
+            'No_SPGR'=> 'required',
+            'NamaKapal'=> 'required',
+            'No_FormClaim'=> 'required',
+            'status_pembayaran'=> 'required',
             'NilaiClaim'=> 'required',
             // 'DateNote'=> 'required',
         ]);

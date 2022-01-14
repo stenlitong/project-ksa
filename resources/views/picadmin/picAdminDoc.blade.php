@@ -115,7 +115,7 @@
                           <td class="table-danger" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
                           <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>  
                           <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                          <td class="table-danger" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$doc->$stats}}</td>                                      
                           <td class="table-danger" id="reason">{{$doc ->$reason}}</td>
                         @elseif($doc->$stats == "approved")
                           <td class="table-success"><strong>{{ $doc->$time_upload }}</strong></td>
@@ -124,7 +124,7 @@
                           <td class="table-success" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
                           <td class="table-success" id="namafile">{{$names[$a-1]}}</td>  
                           <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                          <td class="table-success" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$doc->$stats}}</td>                                      
                           <td class="table-success" id="reason">{{$doc ->$reason}}</td>
                         @endif
                         @if ($doc->$stats == "on review")
@@ -134,7 +134,7 @@
                           <td class="table-info" id="periode"><strong>{{$doc->periode_awal}} To {{$doc->periode_akhir}}</strong></td>                                   
                           <td class="table-info" id="namafile">{{$names[$a-1]}}</td>  
                           <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                          <td class="table-info" id="status">{{$doc->$stats}}</td>                                      
+                          <td class="table-info" style="text-transform: uppercase;" id="status"><strong>{{$doc->$stats}}</td>                                      
                           <td class="table-info" id="reason">{{$doc ->$reason}}</td>
                           <td scope="col">
                             <div class="form-row">
@@ -284,7 +284,7 @@
                             <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                             <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
-                            <td class="table-success" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
                             <td class="table-success" id="reason">{{$d->$reason}}</td>    
                           @elseif($d->$stats == "rejected")
                             <td class="table-danger"><strong>{{$d->$time_upload }}</strong></td>
@@ -293,7 +293,7 @@
                             <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                             <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>       
-                            <td class="table-danger" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
                             <td class="table-danger" id="reason">{{$d->$reason}}</td>   
                           @endif
                           @if ($d->$stats == "on review")
@@ -303,7 +303,7 @@
                             <td class="table-warning" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                             <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                            <td class="table-warning" id="status">{{$d->$stats}}</td>                                      
+                            <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
                             <td class="table-warning" id="reason">{{$d ->$reason}}</td>
                             <td scope="col">
                                 <div class="form-row">
@@ -453,7 +453,7 @@
                             <td class="table-success" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
                             <td class="table-success" id="namafile">{{$names[$a-1]}}</td> 
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>      
-                            <td class="table-success" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$b->$stats}}</td>                                      
                             <td class="table-success" id="reason">{{$b->$reason}}</td>
                           @elseif ($b->$stats == "rejected")
                             <td class="table-danger"><strong>{{ $b->$time_upload }}</strong></td>
@@ -462,7 +462,7 @@
                             <td class="table-danger" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
                             <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
-                            <td class="table-danger" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$b->$stats}}</td>                                      
                             <td class="table-danger" id="reason">{{$b->$reason}}</td>
                           @endif
                           @if ($b->$stats == "on review")
@@ -472,7 +472,7 @@
                             <td class="table-warning" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
                             <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                            <td class="table-warning" id="status">{{$b->$stats}}</td>                                      
+                            <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$b->$stats}}</td>                                      
                             <td class="table-warning" id="reason">{{$b ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
@@ -553,7 +553,7 @@
                     @endforelse
 {{-- Samarinda-------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                       @forelse($documentsamarinda as $s )
-                      @for ( $a = 1 ; $a <= 44 ; $a++)
+                      @for ( $a = 1 ; $a <= 45 ; $a++)
                       @php
                         $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
                                           'keselamatan_(tahunan)','keselamatan_(dok)','keselamatan_(pengaturan_dok)',
@@ -567,7 +567,7 @@
                                           'halaman_tambahan_grosse','pnbp&pup','laporan_pemeriksaan_anti_teriti',
                                           'surveyor_pengedokan','surveyor_penerimaan_klas_bki','nota_tagihan_jasa_perkapalan',
                                           'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
-                                          'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta', 'penerbitan_nota_dinas_kedua',
+                                          'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta', 'penerbitan_nota_dinas_pertama' , 'penerbitan_nota_dinas_kedua',
                                           'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                         $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
@@ -582,7 +582,7 @@
                                       'Halaman Tambahan Grosse','PNBP & PUP','Laporan Pemeriksaan Anti Teriti',
                                       'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
                                       'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
-                                      'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta', 'Penerbitan Nota Dinas Kedua',
+                                      'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta', 'Penerbitan Nota Dinas Pertama', 'Penerbitan Nota Dinas Kedua',
                                       'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                         $time_upload ="time_upload".$a;
                         $stats ="status".$a;
@@ -603,7 +603,7 @@
                             <td class="table-success" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
                             <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
-                            <td class="table-success" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$s->$stats}}</td>                                      
                             <td class="table-success" id="reason">{{$s->$reason}}</td>
                           @elseif ($s->$stats == "rejected")
                             <td class="table-danger"><strong>{{ $s->$time_upload }}</strong></td>
@@ -612,7 +612,7 @@
                             <td class="table-danger" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
                             <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
                             <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
-                            <td class="table-danger" id="status">{{$s->$stats}}</td>                                      
+                            <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$s->$stats}}</td>                                      
                             <td class="table-danger" id="reason">{{$s->$reason}}</td>
                           @endif
                           @if ($s->$stats == "on review")
@@ -622,7 +622,7 @@
                           <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
                           <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                           <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                          <td class="table-warning" id="status">{{$s->$stats}}</td>                                      
+                          <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$s->$stats}}</td>                                      
                           <td class="table-warning" id="reason">{{$s ->$reason}}</td>
                             <td scope="col">
                               <div class="form-row">
@@ -731,7 +731,7 @@
                         @endforelse
 {{-- Jakarta---------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                         @forelse($documentjakarta as $jkt )
-                        @for ( $a = 1 ; $a <= 43 ; $a++)
+                        @for ( $a = 1 ; $a <= 44 ; $a++)
                         @php
                             $JAKARTA = array('pnbp_rpt','pps','pnbp_spesifikasi_kapal'
                                                 ,'anti_fauling_permanen','pnbp_pemeriksaan_anti_fauling','snpp_permanen'
@@ -744,8 +744,9 @@
                                                 ,'ok_1_skb','ok_1_skp','ok_1_skr'
                                                 ,'status_hukum_kapal','autorization_garis_muat','otorisasi_klas'
                                                 ,'pnbp_otorisasi(all)','halaman_tambah_grosse_akta','pnbp_surat_ukur'
-                                                ,'nota_dinas_penundaan_klas_bki_ss','uwild_pengganti_doking','update_nomor_call_sign'
-                                                ,'clc_badan_kapal','wreck_removal','Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
+                                                ,'nota_dinas_penundaan_klas_bki_ss','uwild_pengganti_doking','update_nomor_call_sign '
+                                                ,'clc_badan_kapal','wreck_removal' , 'biaya_percepatan_proses'
+                                                ,'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                             $names = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
                                             ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
                                             ,'Pengesahan Gambar','Surat Laut Permanen','PNBP Surat Laut'
@@ -758,7 +759,7 @@
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
                                             ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
                                             ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
-                                            ,'CLC Badan Kapal','Wreck Removal',
+                                            ,'CLC Badan Kapal','Wreck Removal', 'Biaya Percepatan Proses' ,
                                             'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
                                             );
                             $time_upload ="time_upload".$a;
@@ -781,7 +782,7 @@
                                 <td class="table-warning" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>     
-                                <td class="table-warning" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$jkt->$stats}}</td>                                      
                                 <td class="table-warning" id="reason">{{$jkt ->$reason}}</td>   
                                 <td class="table-light">
                                   <div class="form-row">
@@ -887,7 +888,7 @@
                                 <td class="table-success" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>  
-                                <td class="table-success" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$jkt->$stats}}</td>                                      
                                 <td class="table-success" id="reason">{{$jkt->$reason}}</td>
                             </tr>
                         @else
@@ -898,7 +899,7 @@
                                 <td class="table-danger" id="periode"><strong>{{$jkt->periode_awal}} To {{$jkt->periode_akhir}}</strong></td>                                   
                                 <td class="table-danger" id="namafile">{{$names[$a-1]}}</td>   
                                 <td class="table-secondary" id="jenisfile"><strong>DANA</strong></td>    
-                                <td class="table-danger" id="status">{{$jkt->$stats}}</td>                                      
+                                <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$jkt->$stats}}</td>                                      
                                 <td class="table-danger" id="reason">{{$jkt->$reason}}</td>    
                             </tr>
                         @endif

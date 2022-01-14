@@ -748,6 +748,152 @@ class LogisticController extends Controller
     }
 
     // ============================ Testing Playgrounds ===================================
+    public function makeJobPage() {
+        $items = Item::where('cabang', Auth::user()->cabang)->where('itemState', 'like', 'Available')->get();
+
+        // Get all the tugs, barges, and cart of the following user
+        $barges = Barge::all();
+        $tugs = Tug::all();
+        $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
+
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticMakeJobs', compact('items', 'carts', 'tugs', 'barges', 'items_below_stock'));
+    }
+
+    public function addjasaToCart(Request $request){
+        // Validate Cart Request
+        $validated = $request->validate([
+            'item_id' => 'required',
+            'tgl_request' => 'required',
+            'lokasi' => 'required',
+            'note' => 'required'
+        ]);
+
+        // Check if the item state is on hold, then return error
+        $check_item_state = Item::where('id', $request -> item_id)->pluck('itemState')[0];
+        if($check_item_state == 'Hold'){
+            return redirect('/logistic/make-order')->with('error', 'Item is Unavailable');
+        }
+
+        // Check if the cart within the user is already > 12 items, then cart is full & return with message
+        $counts = Cart::where('user_id', Auth::user()->id)->count();
+        if($counts ==  12){
+            return redirect('/logistic/make-order')->with('error', 'Cart is Full');
+        }
+
+        // Find if the same configuration of item is already exist in cart or no
+        $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->where('golongan', $request->golongan)->first();
+
+        if($itemExistInCart){
+            Cart::find($itemExistInCart->id)->increment('quantity', $request->quantity);
+            Cart::find($itemExistInCart->id)->update([
+                'note' => $request -> note
+            ]);
+        }else{
+            // Add cabang to the cart
+            $validated['cabang'] = Auth::user()->cabang;
+            // Then add item to the cart
+            $validated['user_id'] = Auth::user()->id;
+            Cart::create($validated);
+        }
+
+        return redirect('/logistic/make-order')->with('status', 'Add Item Success');
+    }
+
+    public function deleteJasaFromCart(Cart $cart){
+        // Delete item from cart of the following user
+        Cart::destroy($cart->id);
+
+        return redirect('/logistic/make-order')->with('status', 'Delete Item Success');
+    }
+
+    public function submitJasa(Request $request){
+        $request -> validate([
+            'tugName' => 'required',
+            'bargeName' => 'nullable',
+            'company' => 'required',
+            'descriptions' => 'nullable'
+        ]);
+
+        // Find the cart of the following user
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+        // Double check the item state, if there are items that is on 'Hold' status, then return error
+        foreach($carts as $c){
+            if($c -> item -> itemState == 'Hold'){
+                return redirect('/logistic/make-order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
+            }
+        }
+
+        // Validate cart size
+        if(count($carts) == 0){
+            return redirect('/logistic/make-order')->with('errorCart', 'Cart is Empty');
+        }
+
+        // String formatting for boatName with tugName + bargeName
+        $boatName = $request->tugName . '/' . $request->bargeName;
+        
+        // Create Order Head
+        $orderHead = OrderHead::create([
+            'created_by' => Auth::user()->name,
+            'user_id' => Auth::user()->id,
+            'cabang' => Auth::user()->cabang,
+            'boatName' => $boatName,
+            'orderType' => $request -> orderType,
+            'order_tracker' => 2,
+            'status' => 'Order In Progress By Supervisor',
+            'descriptions' => $request -> descriptions
+        ]);
+        
+        // Formatting the PR format requirements
+        $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+        $cabang_arr = [
+            'Jakarta' => 'JKT',
+            'Banjarmasin' => 'BNJ',
+            'Samarinda' => 'SMD',
+            'Bunati' => 'BNT',
+            'Babelan' => 'BBL',
+            'Berau' => 'BER'
+        ];
+
+        $pr_id = $orderHead -> id;
+        $first_char_name = strtoupper(Auth::user()->name[0]);
+        $location = $cabang_arr[Auth::user()->cabang];
+        $month = date('n');
+        $month_to_roman = $month_arr_in_roman[$month - 1];
+        $year = date('Y');
+
+        // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
+        $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
+
+        OrderHead::find($orderHead->id)->update([
+            'order_id' => 'LOID#' . $orderHead->id,
+            'noPr' => $pr_number,
+            'company' => $request->company,
+            'prDate' => date("d/m/Y")
+        ]);
+
+        // Then fill the Order Detail with the cart items
+        foreach($carts as $c){
+            OrderDetail::create([
+                'orders_id' => $orderHead -> id,
+                'item_id' => $c -> item_id,
+                'quantity' => $c -> quantity,
+                'acceptedQuantity' => $c -> quantity,
+                'unit' => $c -> item -> unit,
+                'serialNo' => $c -> item->serialNo,
+                'department' => $c -> department,
+                'note' => $c -> note
+            ]);
+        }
+
+        // Emptying the cart items
+        Cart::where('user_id', Auth::user()->id)->delete();
+
+        return redirect('/dashboard')->with('status', 'Submit Order Success');
+    }
 
     public function uploadItem(Request $request){
         // Testing upload to S3 function

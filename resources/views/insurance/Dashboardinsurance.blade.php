@@ -78,12 +78,12 @@
                         <tr>
                             <td> </td> {{-- agar tidak keluar hasil kosong --}}
                         </tr>
-                    @elseif ($upspgr->$stats == 'on review')
+                    {{-- @elseif ($upspgr->$stats == 'on review')
                         <tr>
                             <td class="table-warning" id="time">{{$upspgr->$time_upload}}</td>                                        
                             <td class="table-warning">{{$upspgr->no_formclaim}}</td>
                             <td class="table-warning" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-warning" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-warning" id="reason">{{$upspgr->$reason}}</td>
                             <td>
                                 <div class="col-md-auto">
@@ -98,13 +98,13 @@
                                     </form>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                     @elseif ($upspgr->$stats == 'approved')
                         <tr>
                             <td class="table-success" id="time">{{$upspgr->$time_upload}}</td>                                        
                             <td class="table-success">{{$upspgr->no_formclaim}}</td>
                             <td class="table-success" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-success" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-success" id="reason">{{$upspgr->$reason}}</td>
                             <td>
                                 <div class="col-md-auto">
@@ -125,7 +125,7 @@
                             <td class="table-danger" id="time">{{$upspgr->$time_upload}}</td>                                        
                             <td class="table-danger">{{$upspgr->no_formclaim}}</td>
                             <td class="table-danger" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-danger" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-danger" id="reason">{{$upspgr->$reason}}</td>
                             <td>
                                 <div class="col-md-auto">

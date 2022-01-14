@@ -190,7 +190,7 @@
                             @endif
 {{--Samarinda ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Samarinda')
-                                    @for ($a = 1 ; $a <= 44 ; $a++)
+                                    @for ($a = 1 ; $a <= 45 ; $a++)
                                     @php
                                         $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                                         "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
@@ -204,7 +204,7 @@
                                                         'Halaman Tambahan Grosse','PNBP & PUP','Laporan Pemeriksaan Anti Teriti',
                                                         'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
                                                         'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
-                                                        'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta' , 'Penerbitan Nota Dinas Kedua',
+                                                        'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta' , 'Penerbitan Nota Dinas Pertama' , 'Penerbitan Nota Dinas Kedua',
                                                         'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                                         $samarindafile = 'samarindafile'.$a;
                                         $time_upload ="time_upload".$a;
@@ -236,7 +236,7 @@
                                     @endif
 {{-- jakarta--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Jakarta')
-                                    @for ($a = 1 ; $a <= 43 ; $a++)
+                                    @for ($a = 1 ; $a <= 44 ; $a++)
                                         @php
                                             $name = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
                                             ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
@@ -250,8 +250,8 @@
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
                                             ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
                                             ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
-                                            ,'CLC Badan Kapal','Wreck Removal' , 
-                                            'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
+                                            ,'CLC Badan Kapal','Wreck Removal' , 'Biaya Percepatan Proses'
+                                            ,'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
                                             );
                                             $jktfile = 'jktfile'.$a;
                                             $time_upload ="time_upload".$a;

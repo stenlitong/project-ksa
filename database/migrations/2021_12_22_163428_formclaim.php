@@ -36,8 +36,8 @@ class Formclaim extends Migration
             $table->id();
             $table->string('jenis_incident', 2 )->nullable();
             $table->string('item')->nullable();
-            $table->decimal('deductible', 14, 2)->nullable();
             $table->longText('description')->nullable();
+            $table->decimal('deductible', 14, 2)->nullable();
             $table->decimal('amount', 14, 2)->nullable();
             $table->string('mata_uang_amount', 10)->nullable();
             $table->timestamps();

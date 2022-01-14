@@ -42,7 +42,7 @@
                     }
                 @endphp" href="/purchasing/supplier">
                     <span data-feather="user-plus"></span>
-                    Add More Contact
+                    Add Supplier Contact
                 </a>
             </li>
         </ul>

@@ -54,6 +54,13 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/{user}/add-cart', [CrewController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
+
+        //Make jobs
+        Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJob');
+        Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
+        Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
+        Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
+
     });
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
@@ -88,6 +95,7 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/{orderHeads}/download-pr', [LogisticController::class, 'downloadPr']);
         Route::get('/stock-order/{orderHeads}/accept-order', [LogisticController::class, 'acceptStockOrder']);
 
+        
         // Report Page
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/download-report', [LogisticController::class, 'downloadReport'])->name('downloadReport');

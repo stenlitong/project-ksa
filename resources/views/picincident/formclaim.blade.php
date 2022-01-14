@@ -47,13 +47,13 @@
                                         <x-label for="TugBoat" :value="__('TugBoat : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="TugBoat" class="block mt-1 w-full" type="text" name="TugBoat" placeholder="Enter TugBoat Name" :value="old('TugBoat')"  autofocus />
 
-                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
                                           <div class="input-group mb-1">
                                               <select class="btn btn-outline-secondary" name="mata_uang_TSI">
                                                   <option selected value="USD" id="">USD</option>
                                                   <option value="IDR" id="">IDR</option>
                                               </select>
-                                              <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat" value="{{ old('TSI_TugBoat') }}"   autofocus>
+                                              <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat Barge" value="{{ old('TSI_TugBoat') }}"   autofocus>
                                               {{-- <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  /> --}}
                                               <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
                                           </div>
@@ -77,7 +77,7 @@
                                     
                                     <div class="col-lg-3" style="margin-right:2%">
                                         <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" required autofocus />
+                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')"  autofocus />
     
                                         <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
                                         {{-- <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus /> --}}
