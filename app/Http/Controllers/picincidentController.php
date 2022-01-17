@@ -33,12 +33,24 @@ class picincidentController extends Controller
    
     // addtoCart 
     public function submitformclaim(Request $request){
-        $request->validate([
-            'Item_name'=> 'required|max:255',
-            'incident'=> 'required',
-            'description'=> 'required',
-            'amount'=> 'required',
-        ]);
+        // dd($request);
+        // $request->validate([
+        //     'name'  => 'nullable|alpha_num',
+        //     'dateincident' => 'nullable|date',
+        //     'dateclaim' => 'nullable|date', 
+        //     'FormClaim' => 'nullable|alpha_num', 
+        //     'barge' => 'nullable|alpha_num',
+        //     'TugBoat' => 'nullable|alpha_num',
+        //     'TSI_barge' => 'numeric|nullable',
+        //     'TSI_TugBoat' => 'numeric|nullable',
+        //     'surveyor' => 'nullable|alpha_num',
+
+        //     'Item_name'=> 'required|alpha_num',
+        //     'incident'=> 'required|alpha_num',
+        //     'description'=> 'required|alpha_num',
+        //     'deductible' => 'nullable|numeric',
+        //     'amount'=> 'required|numeric',
+        // ]);
         tempcart::create([
             'user_id' => Auth::user()->id,
             'tgl_insiden' => $request->dateincident ,
@@ -75,14 +87,16 @@ class picincidentController extends Controller
     public function createformclaim(Request $request){
         // tempcart::truncate();
         $temp = tempcart::where('user_id', Auth::user()->id)->get();
+        $temphead = tempcart::where('user_id', Auth::user()->id)->pluck('no_FormClaim')[0];
 
         if (count($temp) == 0){
             return redirect()->back()->with('ERR' , "Cart is empty , Please ADD to list" );
         }
 
+        
         $headerid = headerformclaim::create([
             'user_id' => Auth::user()->id,
-            'nama_file'=> $request->nama_file ,
+            'nama_file'=> $temphead ,
         ]);
 
         foreach( $temp as $temp){

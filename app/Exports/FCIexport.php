@@ -50,6 +50,13 @@ class FCIexport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvent
         $this->mata_uang_TSI = formclaims::where('header_id', $identify)->pluck('mata_uang_TSI')[0];
         $this->barge = formclaims::where('header_id', $identify)->pluck('barge')[0];
         $this->tugBoat = formclaims::where('header_id', $identify)->pluck('tugBoat')[0];
+
+        $this->jenis_incident = formclaims::where('header_id', $identify)->pluck('jenis_incident')->all();
+        $this->item = formclaims::where('header_id', $identify)->pluck('item')->all();
+        $this->description = formclaims::where('header_id', $identify)->pluck('description')->all();
+        $this->deductible = formclaims::where('header_id', $identify)->pluck('deductible')->all();
+        $this->amount = formclaims::where('header_id', $identify)->pluck('amount')->all();
+        $this->mata_uang_amount = formclaims::where('header_id', $identify)->pluck('mata_uang_amount')->all();
     }
 
     public function headings(): array
@@ -107,7 +114,6 @@ class FCIexport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvent
                 ]);
                 // Append row as very last
                 $event->sheet->appendRows(array(
-                    array(' ',' ',' ',' ','Total:' , ' '),
                     array(' '),
                     array('No FormClaim :', $this->no_FormClaim),
                     array('tgl FormClaim :', $this->tgl_formclaim),
@@ -119,7 +125,10 @@ class FCIexport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvent
                     array('Barge :', $this->barge),
                     array('TugBoat :', $this->tugBoat),
                     array(' '),
-                    array(' '),
+                    // array(' '),
+                    // array('No.','jenis_incident','item' ,'description','deductible','amount'),
+                    // array(' ', $this->jenis_incident , $this->item, $this->description,$this->deductible , $this->amount . '-' . $this->mata_uang_amount),
+                    array(' ',' ',' ',' ','Total:' , ' '),
                     array('Created At :', $this->created_at),
                     array(' '),
                     array(' '),

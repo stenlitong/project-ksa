@@ -104,30 +104,35 @@ class CreateDocumentsTable extends Migration
             $table->string('reason16')->nullable();
             $table->string('status16' , 25)->nullable();
             $table->string('pnpb_sscec')->nullable();
-
+            
             $table->dateTime('time_upload17')->nullable();
             $table->string('reason17')->nullable();
             $table->string('status17' , 25)->nullable();
-            $table->string('Lain_Lain1')->nullable();
-            
+            $table->string('BKI')->nullable();
+
             $table->dateTime('time_upload18')->nullable();
             $table->string('reason18')->nullable();
             $table->string('status18' , 25)->nullable();
-            $table->string('Lain_Lain2')->nullable();
-
+            $table->string('Lain_Lain1')->nullable();
+            
             $table->dateTime('time_upload19')->nullable();
             $table->string('reason19')->nullable();
             $table->string('status19' , 25)->nullable();
-            $table->string('Lain_Lain3')->nullable();
-            
+            $table->string('Lain_Lain2')->nullable();
+
             $table->dateTime('time_upload20')->nullable();
             $table->string('reason20')->nullable();
             $table->string('status20' , 25)->nullable();
-            $table->string('Lain_Lain4')->nullable();
+            $table->string('Lain_Lain3')->nullable();
             
             $table->dateTime('time_upload21')->nullable();
             $table->string('reason21')->nullable();
             $table->string('status21' , 25)->nullable();
+            $table->string('Lain_Lain4')->nullable();
+            
+            $table->dateTime('time_upload22')->nullable();
+            $table->string('reason22')->nullable();
+            $table->string('status22' , 25)->nullable();
             $table->string('Lain_Lain5')->nullable();
 
             $table->timestamps();

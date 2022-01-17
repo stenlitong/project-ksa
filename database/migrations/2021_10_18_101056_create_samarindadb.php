@@ -211,40 +211,56 @@ class CreateSamarindadb extends Migration
             $table->string('status38', 10)->nullable();
             $table->string('reason38', 160)->nullable();
             $table->string('grosse_akta', 160)->nullable();
-
+            
+            
             $table->dateTime('time_upload39') ->nullable();
             $table->string('status39', 10)->nullable();
             $table->string('reason39', 160)->nullable();
             $table->string('penerbitan_nota_dinas_pertama', 160)->nullable();
-
+            
             $table->dateTime('time_upload40') ->nullable();
             $table->string('status40', 10)->nullable();
             $table->string('reason40', 160)->nullable();
             $table->string('penerbitan_nota_dinas_kedua', 160)->nullable();
-
+            
             $table->dateTime('time_upload41') ->nullable();
             $table->string('status41', 10)->nullable();
             $table->string('reason41', 160)->nullable();
-            $table->string('Lain_Lain1', 160)->nullable();
-
+            $table->string('BKI_Lambung', 160)->nullable();
+            
             $table->dateTime('time_upload42') ->nullable();
             $table->string('status42', 10)->nullable();
             $table->string('reason42', 160)->nullable();
-            $table->string('Lain_Lain2', 160)->nullable();
-            
+            $table->string('BKI_Mesin', 160)->nullable();
+
             $table->dateTime('time_upload43') ->nullable();
             $table->string('status43', 10)->nullable();
             $table->string('reason43', 160)->nullable();
-            $table->string('Lain_Lain3', 160)->nullable();
-
+            $table->string('BKI_Garis_Muat', 160)->nullable();
+            
             $table->dateTime('time_upload44') ->nullable();
             $table->string('status44', 10)->nullable();
             $table->string('reason44', 160)->nullable();
-            $table->string('Lain_Lain4', 160)->nullable();
+            $table->string('Lain_Lain1', 160)->nullable();
 
             $table->dateTime('time_upload45') ->nullable();
             $table->string('status45', 10)->nullable();
             $table->string('reason45', 160)->nullable();
+            $table->string('Lain_Lain2', 160)->nullable();
+            
+            $table->dateTime('time_upload46') ->nullable();
+            $table->string('status46', 10)->nullable();
+            $table->string('reason46', 160)->nullable();
+            $table->string('Lain_Lain3', 160)->nullable();
+
+            $table->dateTime('time_upload47') ->nullable();
+            $table->string('status47', 10)->nullable();
+            $table->string('reason47', 160)->nullable();
+            $table->string('Lain_Lain4', 160)->nullable();
+
+            $table->dateTime('time_upload48') ->nullable();
+            $table->string('status48', 10)->nullable();
+            $table->string('reason48', 160)->nullable();
             $table->string('Lain_Lain5', 160)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

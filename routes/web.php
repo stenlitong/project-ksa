@@ -55,11 +55,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
 
-        //Make jobs
-        Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJob');
-        Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
-        Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
-        Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
+        // //Make jobs
+        // Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJob');
+        // Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
+        // Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
+        // Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
 
     });
 

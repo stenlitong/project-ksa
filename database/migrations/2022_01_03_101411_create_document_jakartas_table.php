@@ -224,26 +224,31 @@ class CreateDocumentJakartasTable extends Migration
             $table->dateTime('time_upload40') ->nullable();
             $table->string('status40', 10)->nullable();
             $table->string('reason40', 170)->nullable();
-            $table->string('Lain_Lain1', 170)->nullable();
+            $table->string('BKI', 170)->nullable();
 
             $table->dateTime('time_upload41') ->nullable();
             $table->string('status41', 10)->nullable();
             $table->string('reason41', 170)->nullable();
-            $table->string('Lain_Lain2', 170)->nullable();
+            $table->string('Lain_Lain1', 170)->nullable();
 
             $table->dateTime('time_upload42') ->nullable();
             $table->string('status42', 10)->nullable();
             $table->string('reason42', 170)->nullable();
-            $table->string('Lain_Lain3', 170)->nullable();
+            $table->string('Lain_Lain2', 170)->nullable();
 
             $table->dateTime('time_upload43') ->nullable();
             $table->string('status43', 10)->nullable();
             $table->string('reason43', 170)->nullable();
-            $table->string('Lain_Lain4', 170)->nullable();
+            $table->string('Lain_Lain3', 170)->nullable();
 
             $table->dateTime('time_upload44') ->nullable();
             $table->string('status44', 10)->nullable();
             $table->string('reason44', 170)->nullable();
+            $table->string('Lain_Lain4', 170)->nullable();
+
+            $table->dateTime('time_upload45') ->nullable();
+            $table->string('status45', 10)->nullable();
+            $table->string('reason45', 170)->nullable();
             $table->string('Lain_Lain5', 170)->nullable();
             $table->timestamps();
         });

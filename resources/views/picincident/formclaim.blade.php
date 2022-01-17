@@ -24,7 +24,7 @@
                                         <x-input id="name" class="block mt-1 w-full" type="text" name="name" placeholder="Enter Name" :value="old('name')"  autofocus />
                                         
                                         <x-label for="FormClaim" :value="__('No. FormClaim : ')" style="margin-top: 2%; margin-left: 1%"  />
-                                        <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')"  autofocus />
+                                        <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')" required autofocus />
 
                                         <x-label for="Incident" :value="__('Incident : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="Incident" class="block mt-1 w-full" type="text" name="Incident" placeholder="Enter Incident" :value="old('Incident')" required autofocus />
@@ -67,8 +67,8 @@
                                     <div class="col-lg-3">
                                         <x-label for="jenisincident" :value="__('Jenis Incident : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <select name="jenisincident" id="jenisincident" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required autofocus>
-                                            <option selected value="TP" id="picAdmin">TP</option>
-                                            <option value="HM" id="picIncident">HM</option>
+                                            <option selected value="TP" >TP</option>
+                                            <option value="HM" >HM</option>
                                         </select>
                                         
                                         <x-label for="Item_name" :value="__('Item : ')" style="margin-top: 2%; margin-left: 1%" />
@@ -77,7 +77,7 @@
                                     
                                     <div class="col-lg-3" style="margin-right:2%">
                                         <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')"  autofocus />
+                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" onfocus="this.value=''" autofocus />
     
                                         <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
                                         {{-- <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus /> --}}
@@ -103,12 +103,12 @@
 
                             <form method="POST" action="/picincident/create-history">
                                 @csrf
-                                @php
+                                {{-- @php
                                     $date = date('Y-m-d');
                                     $spc = rand(1,100);
                                     $name = 'file FCI-'. $spc . ' - ' . $date;
                                 @endphp
-                                    <input type="hidden" name ="nama_file" value ="{{$name}}" />
+                                    <input type="hidden" name ="nama_file" value ="{{$name}}" /> --}}
                                     <div class="text-md-right">
                                     <button class="btn btn-outline-danger" type="submit" id="createform" name="createform"  style="margin-left: 80%; width: 20%;">Create Form</button>
                                 </div>
