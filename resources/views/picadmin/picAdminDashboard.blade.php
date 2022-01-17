@@ -519,7 +519,7 @@
                 @endforelse
 {{-- Samarinda------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
                 @forelse($documentsamarinda as $s )
-                @for ( $a = 1 ; $a <= 46 ; $a++)
+                @for ( $a = 1 ; $a <= 48 ; $a++)
                 @php
                     $SAMARINDA = array('sertifikat_keselamatan(perpanjangan)','perubahan_ok_13_ke_ok_1',
                                         'keselamatan_(tahunan)','keselamatan_(dok)','keselamatan_(pengaturan_dok)',
@@ -534,7 +534,7 @@
                                         'surveyor_pengedokan','surveyor_penerimaan_klas_bki','nota_tagihan_jasa_perkapalan',
                                         'gambar_kapal_baru_(bki)','dana_jaminan_(clc)','surat_ukur_dalam_negeri',
                                         'penerbitan_sertifikat_kapal_baru','buku_stabilitas','grosse_akta',
-                                        'penerbitan_nota_dinas_pertama' , 'penerbitan_nota_dinas_kedua', 'BKI' ,
+                                        'penerbitan_nota_dinas_pertama' , 'penerbitan_nota_dinas_kedua', 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat',
                                         'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                     $names = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
                                 "Keselamatan (Dok)","Keselamatan (Pengaturan Dok)","Keselamatan (Penundaan Dok)",
@@ -549,7 +549,7 @@
                                 'Surveyor Pengedokan','Surveyor Penerimaan Klas BKI','Nota Tagihan Jasa Perkapalan',
                                 'Gambar Kapal Baru (BKI)','Dana Jaminan (CLC)','Surat Ukur Dalam Negeri',
                                 'Penerbitan Sertifikat Kapal Baru','Buku Stabilitas','Grosse Akta', 
-                                ' Penerbitan Nota Dinas Pertama' , 'Penerbitan Nota Dinas Kedua' , 'BKI' ,
+                                ' Penerbitan Nota Dinas Pertama' , 'Penerbitan Nota Dinas Kedua' , 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat',
                                 'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                     $time_upload ="time_upload".$a;
                     $stats ="status".$a;
