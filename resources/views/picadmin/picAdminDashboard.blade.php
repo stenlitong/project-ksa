@@ -653,7 +653,7 @@
                                                 ,'status_hukum_kapal','autorization_garis_muat','otorisasi_klas'
                                                 ,'pnbp_otorisasi(all)','halaman_tambah_grosse_akta','pnbp_surat_ukur'
                                                 ,'nota_dinas_penundaan_klas_bki_ss','uwild_pengganti_doking','update_nomor_call_sign'
-                                                ,'clc_badan_kapal','wreck_removal' , 'biaya_percepatan_proses' , 'BKI' ,
+                                                ,'clc_badan_kapal','wreck_removal' , 'biaya_percepatan_proses' , 'BKI'
                                                 ,'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                             $names = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
                                             ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
@@ -667,7 +667,7 @@
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
                                             ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
                                             ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
-                                            ,'CLC Badan Kapal','Wreck Removal' , 'Biaya Percepatan Proses' , 'BKI' ,
+                                            ,'CLC Badan Kapal','Wreck Removal' , 'Biaya Percepatan Proses' , 'BKI'
                                             ,'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
                                             );
                             $time_upload ="time_upload".$a;
