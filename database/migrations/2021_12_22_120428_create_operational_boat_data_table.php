@@ -38,6 +38,7 @@ class CreateOperationalBoatDataTable extends Migration
             $table->string('condition', 50)->nullable();
             $table->string('estimatedTime', 30)->nullable();
             $table->double('cargoAmountEnd')->nullable();
+            $table->double('cargoAmountEndCargo')->nullable();
             $table->longText('description')->nullable();
 
             // Calculation Data
@@ -116,6 +117,13 @@ class CreateOperationalBoatDataTable extends Migration
             $table->double('cycleTime')->nullable();
             $table->double('document')->nullable();
             $table->string('totalTime', 50)->nullable();
+
+            // Additional Calculation Data For Return Cargo
+            $table->double('sailingToMVCargo')->nullable();
+            $table->double('maneuverCargo')->nullable();
+            $table->double('dischTimeCargo')->nullable();
+            $table->double('dischRateCargo')->nullable();
+            $table->double('cycleTimeCargo')->nullable();
 
             // Validation Data
             $table->integer('task_tracker')->default(0);

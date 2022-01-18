@@ -42,14 +42,22 @@
                                         <div class="form-group row">
                                             <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
+                                                <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required
+                                                @if($ot -> taskType == 'Return Cargo')
+                                                    {{ 'disabled' }}
+                                                @endif
+                                                >
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="text-danger font-weight-bold" for="to" class="col-sm-2 col-form-label text-danger font-weight-bold">To</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
+                                                <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required
+                                                @if($ot -> taskType == 'Return Cargo')
+                                                    {{ 'disabled' }}
+                                                @endif
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +150,7 @@
                                                     <h5 class="card-title text-center text-danger font-weight-bold">Arrival (POD)</h5>
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
-                                                        <input class="form-control" type="datetime-local" name="arrivalPOD" id="arrivalPOD" value="{{ $ot -> arrivalPOD != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPOD)) : '' }}">
+                                                        <input class="form-control" type="datetime-local" name="arrivalPODGeneral" id="arrivalPODGeneral" value="{{ $ot -> arrivalPOD != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPOD)) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -465,12 +473,21 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}" required>
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Ton</div>
+                                            @if($ot -> taskType != 'Return Cargo')
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}" required>
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">Ton</div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @elseif($ot -> taskType == 'Return Cargo')
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}" required>
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">Ton</div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     @if($ot -> taskType == 'Operational Shipment')

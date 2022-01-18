@@ -292,56 +292,66 @@ class CrewController extends Controller
     }
 
     public function updateOngoingTask(Request $request){
-        // Validate All The Fields
-        $validated = $request -> validate([
-            'from' => 'required|alpha',
-            'to' => 'required|alpha',
-            'condition' => 'required|alpha',
-            'customer' => 'nullable',
-            'estimatedTime' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            'cargoAmountEnd' => 'required|numeric|min:1',
-            'description' => 'nullable',
-
-            // Operational Shipment
-            'arrivalTime' => 'nullable|date',
-            'departureTime' => 'nullable|date',
-            'startAsideL' => 'nullable|date',
-            'asideL' => 'nullable|date',
-            'commenceLoadL' => 'nullable|date',
-            'completedLoadingL' => 'nullable|date',
-            'cOffL' => 'nullable|date',
-            'DOH' => 'nullable|date',
-            'DOB' => 'nullable|date',
-            'departurePOD' => 'nullable|date',
-            'arrivalPODGeneral' => 'nullable|date',
-            'startAsidePOD' => 'nullable|date',
-            'asidePOD' => 'nullable|date',
-            'commenceLoadPOD' => 'nullable|date',
-            'completedLoadingPOD' => 'nullable|date',
-            'cOffPOD' => 'nullable|date',
-            'DOBPOD' => 'nullable|date',
-
-            // Operational Transhipment
-            'faVessel' => 'nullable|date',
-            'arrivalPOL' => 'nullable|date',
-            'startAsideMVTranshipment' => 'nullable|date',
-            'asideMVTranshipment' => 'nullable|date',
-            'commMVTranshipment' => 'nullable|date',
-            'compMVTranshipment' => 'nullable|date',
-            'cOffMVTranshipment' => 'nullable|date',
-            'departureJetty' => 'nullable|date',
-
-            // Return Cargo
-            'arrivalPODCargo' => 'nullable|date',
-            'startAsideMVCargo' => 'nullable|date',
-            'asideMVCargo' => 'nullable|date',
-            'commMVCargo' => 'nullable|date',
-            'compMVCargo' => 'nullable|date',
-            'cOffMVCargo' => 'nullable|date',
-
-        ]);
-
         $operationalData = OperationalBoatData::where('id', $request -> taskId)->first();
+
+        if($operationalData -> taskType == 'Return Cargo'){
+            // Validate All The Return Cargo Fields
+            $validated = $request -> validate([
+                'condition' => 'required|alpha',
+                'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
+                'cargoAmountEndCargo' => 'required|numeric|min:1',
+                'description' => 'nullable',
+
+                // Return Cargo
+                'arrivalPODCargo' => 'nullable|date',
+                'startAsideMVCargo' => 'nullable|date',
+                'asideMVCargo' => 'nullable|date',
+                'commMVCargo' => 'nullable|date',
+                'compMVCargo' => 'nullable|date',
+                'cOffMVCargo' => 'nullable|date',
+
+            ]);
+        }else{
+            // Validate All The Fields
+            $validated = $request -> validate([
+                'from' => 'required|alpha',
+                'to' => 'required|alpha',
+                'condition' => 'required|alpha',
+                'customer' => 'nullable',
+                'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
+                'cargoAmountEnd' => 'nullable|numeric|min:1',
+                'description' => 'nullable',
+    
+                // Operational Shipment
+                'arrivalTime' => 'nullable|date',
+                'departureTime' => 'nullable|date',
+                'startAsideL' => 'nullable|date',
+                'asideL' => 'nullable|date',
+                'commenceLoadL' => 'nullable|date',
+                'completedLoadingL' => 'nullable|date',
+                'cOffL' => 'nullable|date',
+                'DOH' => 'nullable|date',
+                'DOB' => 'nullable|date',
+                'departurePOD' => 'nullable|date',
+                'arrivalPODGeneral' => 'nullable|date',
+                'startAsidePOD' => 'nullable|date',
+                'asidePOD' => 'nullable|date',
+                'commenceLoadPOD' => 'nullable|date',
+                'completedLoadingPOD' => 'nullable|date',
+                'cOffPOD' => 'nullable|date',
+                'DOBPOD' => 'nullable|date',
+    
+                // Operational Transhipment
+                'faVessel' => 'nullable|date',
+                'arrivalPOL' => 'nullable|date',
+                'startAsideMVTranshipment' => 'nullable|date',
+                'asideMVTranshipment' => 'nullable|date',
+                'commMVTranshipment' => 'nullable|date',
+                'compMVTranshipment' => 'nullable|date',
+                'cOffMVTranshipment' => 'nullable|date',
+                'departureJetty' => 'nullable|date',
+            ]);
+        }
 
         // Validation Of CargoAmountEnd, Max 2 Updates
         if($operationalData -> cargoChangeTracker < 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
@@ -367,9 +377,9 @@ class CrewController extends Controller
 
         if($operationalData -> taskType == 'Operational Shipment'){
             // Total Time = Arrival Time - Departure time
-            $totalTime = !empty($operationalData -> arrivalTime) && !empty($operationalData -> departureTime) ? date_diff(new DateTime($operationalData -> arrivalTime), new DateTime($operationalData -> departureTime))->format('%D Days %H Minutes') : 'n/a';
+            $totalTime = !empty($operationalData -> arrivalTime) && !empty($operationalData -> departureTime) ? date_diff(new DateTime($operationalData -> arrivalTime), new DateTime($operationalData -> departureTime))->format('%D Days %H Hours') : 'n/a';
 
-            $calculation['totalTime'] = (double) $totalTime;
+            $calculation['totalTime'] = $totalTime;
         }elseif($operationalData -> taskType == 'Operational Transhipment'){
             // Sailing To Jetty = (Arrival POL - F/A Vessel)
             $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : 0;
@@ -419,16 +429,16 @@ class CrewController extends Controller
             $calculation['cycleTime'] = (double) $cycleTime;
         }elseif($operationalData -> taskType == 'Return Cargo'){
             // Sailing to MV = (Arrival POD - Departure POD)
-            $sailingToMV = !empty($operationalData -> arrivalPODCargo) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODCargo), new DateTime($operationalData -> departurePOD))->format('%h.%i') : 0;
+            $sailingToMVCargo = !empty($operationalData -> arrivalPODCargo) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODCargo), new DateTime($operationalData -> departurePOD))->format('%h.%i') : 0;
 
             // Manuever = (Aside (MV) - Start Aside (MV))
-            $maneuver = !empty($operationalData -> asideMVCargo) && !empty($operationalData -> startAsideMVCargo) ? date_diff(new DateTime($operationalData -> asideMVCargo), new DateTime($operationalData -> startAsideMVCargo))->format('%h.%i') : 0;
+            $maneuverCargo = !empty($operationalData -> asideMVCargo) && !empty($operationalData -> startAsideMVCargo) ? date_diff(new DateTime($operationalData -> asideMVCargo), new DateTime($operationalData -> startAsideMVCargo))->format('%h.%i') : 0;
 
             // Disch Time = (Comp (MV) - Comm (MV))
-            $dischTime = !empty($operationalData -> compMVCargo) && !empty($operationalData -> commMVCargo) ? date_diff(new DateTime($operationalData -> compMVCargo), new DateTime($operationalData -> commMVCargo))->format('%h.%i') : 0;
+            $dischTimeCargo = !empty($operationalData -> compMVCargo) && !empty($operationalData -> commMVCargo) ? date_diff(new DateTime($operationalData -> compMVCargo), new DateTime($operationalData -> commMVCargo))->format('%h.%i') : 0;
 
             // Disch Rate / day = (Quantity - Actual Disch Time)
-            $dischRate = $operationalData -> cargoAmountEnd != 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEnd - (double) $dischTime : 0;
+            $dischRateCargo = $operationalData -> cargoAmountEndCargo != 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEndCargo - (double) $dischTime : 0;
 
             // Unberthing = DOH - C/OFF (L)
             $unberthing = !empty($operationalData -> DOH) && !empty($operationalData -> cOffL) ? date_diff(new DateTime($operationalData -> DOH), new DateTime($operationalData -> cOffL))->format('%h.%i') : 0;
@@ -446,8 +456,8 @@ class CrewController extends Controller
             $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : 0;
 
             // Cycle Time = Disch Time + Manuever + Sailing to MV + Unberthing + Ldg Time + Prepare Ldg + Berthing + Sailing to Jetty
-            $cycleTime = !empty($dischTime) && !empty($maneuver) && !empty($sailingToMV) && !empty($unberthing) && !empty($ldgTime) && !empty($prepareLdg) && !empty($berthing) && !empty($sailingToJetty) ? 
-            (double) $dischTime + (double) $maneuver + (double) $sailingToMV + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
+            $cycleTimeCargo = !empty($dischTimeCargo) && !empty($maneuverCargo) && !empty($sailingToMVCargo) && !empty($unberthing) && !empty($ldgTime) && !empty($prepareLdg) && !empty($berthing) && !empty($sailingToJetty) ? 
+            (double) $dischTimeCargo + (double) $maneuverCargo + (double) $sailingToMVCargo + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
             0;
 
             $calculation['sailingToJetty'] = (double) $sailingToJetty;
@@ -455,11 +465,11 @@ class CrewController extends Controller
             $calculation['ldgTime'] = (double) $ldgTime;
             $calculation['berthing'] = (double) $berthing;
             $calculation['unberthing'] = (double) $unberthing;
-            $calculation['sailingToMV'] = (double) $sailingToMV;
-            $calculation['dischTime'] = (double) $dischTime;
-            $calculation['dischRate'] = $dischRate;
-            $calculation['maneuver'] = (double) $maneuver;
-            $calculation['cycleTime'] = (double) $cycleTime;
+            $calculation['sailingToMVCargo'] = (double) $sailingToMVCargo;
+            $calculation['dischTimeCargo'] = (double) $dischTimeCargo;
+            $calculation['dischRateCargo'] = $dischRateCargo;
+            $calculation['maneuverCargo'] = (double) $maneuverCargo;
+            $calculation['cycleTimeCargo'] = (double) $cycleTimeCargo;
         }
         // Update The Following Task Id
         OperationalBoatData::where('id', $request -> taskId)->update($calculation);
@@ -477,7 +487,7 @@ class CrewController extends Controller
 
         $operationTranshipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'faVessel', 'arrivalPOL', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsideMVTranshipment', 'asideMVTranshipment', 'commMVTranshipment', 'compMVTranshipment', 'cOffMVTranshipment', 'departureJetty'];
 
-        $returnCargo_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'arrivalPODCargo', 'startAsideMVCargo', 'asideMVCargo', 'commMVCargo', 'compMVCargo', 'cOffMVCargo', 'departureTime'];
+        $returnCargo_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'cargoAmountEndCargo', 'arrivalPODCargo', 'startAsideMVCargo', 'asideMVCargo', 'commMVCargo', 'compMVCargo', 'cOffMVCargo', 'departureTime'];
 
         if($data -> taskType == 'Operational Shipment'){
             foreach($operationShipment_loops as $os){

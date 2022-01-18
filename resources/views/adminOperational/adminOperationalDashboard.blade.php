@@ -17,89 +17,64 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            {{-- <img src="/images/tool.svg" class="mt-3" alt=""> --}}
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h5 class="text-white mt-3 display-2">{{ $dok_days }}</h5>
                             <h5 class="text-white mt-3">DOK</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $dok_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h5 class="text-white mt-3 display-2">{{ $perbaikan_days }}</h5>
                             <h5 class="text-white mt-3">Perbaikan</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $perbaikan_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $kandas_days }}</h1>
                             <h5 class="text-white mt-3">Kandas</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $kandas_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $tungguDOK_days }}</h1>
                             <h5 class="text-white mt-3">Tunggu DOK</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguDOK_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $tungguTug_days }}</h1>
                             <h5 class="text-white mt-3">Tunggu Tug Boat</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguTug_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $tungguDokumen_days }}</h1>
                             <h5 class="text-white mt-3">Tunggu Dokumen</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguDokumen_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $standbyDOK_days }}</h1>
                             <h5 class="text-white mt-3">Standby DOK</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $standbyDOK_days }}</h1>
-                          </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
+                            <h1 class="text-white mt-3 display-2">{{ $bocor_days }}</h1>
                             <h5 class="text-white mt-3">Bocor</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $bocor_days }}</h1>
                           </div>
                         </div>
                     </div>
@@ -176,34 +151,22 @@
             transform-style: preserve-3d;
         }
 
-        /* Do an horizontal flip when you move the mouse over the flip box container */
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
         /* Position the front and back side */
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* Safari */
-            backface-visibility: hidden;
+        .flip-card-front{
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden; /* Safari */
+          backface-visibility: hidden;
         }
 
         /* Style the front side (fallback if image is missing) */
         .flip-card-front {
-            background-color: #A01D23;            
+          background-color: #A01D23;            
         }
 
-        /* Style the back side */
-        .flip-card-back {
-            border-radius: 10px;
-            background-color: beige;
-            color: black;
-            transform: rotateY(180deg);
-        }
-        .text-card-back{
-            font-size: 64px;
+        .text-white mt-3 display-2{
+          font-size: 64px;
         }
         @media only screen and (max-width: 960px) {
             .smaller-size {

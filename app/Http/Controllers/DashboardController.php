@@ -250,7 +250,10 @@ class DashboardController extends Controller
             
             // formula => percentage ship's activity :
             // Aktif / (31*total barge) * 100
-            $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
+            $percentage_ship_activity = 0;
+            if($total_barge > 0){
+                $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
+            }
 
             return view('adminOperational.adminOperationalDashboard', compact('dok_days', 'perbaikan_days', 'kandas_days', 'tungguDOK_days', 'tungguTug_days', 'tungguDokumen_days', 'standbyDOK_days', 'bocor_days', 'total_lost_time', 'percentage_ship_activity'));
         }elseif(Auth::user()->hasRole('picSite')){

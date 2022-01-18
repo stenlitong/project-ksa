@@ -271,31 +271,31 @@
                             <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 12vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Sailing To MV</h5>
-                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> sailingToMV != NULL ? $operationalData -> sailingToMV . ' Hours' : 'n/a' }}</h6>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> sailingToMVCargo != NULL ? $operationalData -> sailingToMVCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                             <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 12vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Maneuver</h5>
-                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> maneuver != NULL ? $operationalData -> maneuver . ' Hours' : 'n/a' }}</h6>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> maneuverCargo != NULL ? $operationalData -> maneuverCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                             <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 12vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Time</h5>
-                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischTime != NULL ? $operationalData -> dischTime . ' Hours' : 'n/a' }}</h6>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischTimeCargo != NULL ? $operationalData -> dischTimeCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                             <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 12vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Rate</h5>
-                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischRate != NULL ? $operationalData -> dischRate . ' Hours' : 'n/a' }}</h6>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischRateCargo != NULL ? $operationalData -> dischRateCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                             <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 12vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Cycle Time</h5>
-                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> cycleTime != NULL ? $operationalData -> cycleTime . ' Hours' : 'n/a' }}</h6>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> cycleTimeCargo != NULL ? $operationalData -> cycleTimeCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                         @endif

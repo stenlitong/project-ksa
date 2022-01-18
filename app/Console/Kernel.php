@@ -33,7 +33,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {   
         $schedule->job(new DailyReportItemBelowStockJob)->dailyAt('10:00')->onOneServer()->runInBackground();
-        $schedule->job(new CalculateDailyOperationalBoatData)->daily()->onOneServer()->runInBackground();
+        // $schedule->job(new CalculateDailyOperationalBoatData)->daily()->onOneServer()->runInBackground();
+        $schedule->job(new CalculateDailyOperationalBoatData)->everyFiveMinutes()->onOneServer()->runInBackground();
         // $schedule->job(new SendItemBelowStockReportJob('Jakarta'))->fridays()->at('10:00')->onOneServer()->runInBackground();
 
         // $schedule->command('inspire')->hourly();
