@@ -15,6 +15,9 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+
+        <link rel="icon" href="{{ URL::asset('favicon.ico') }}" type="image/x-icon"/>
+        <link rel="manifest" href="/site.webmanifest">
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

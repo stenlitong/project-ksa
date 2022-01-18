@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminOperationalController;
 use App\Http\Controllers\AdminPurchasingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -40,8 +41,16 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
 
         // Task Page
+        Route::post('/create-task', [CrewController::class, 'createTaskPost']);
         Route::get('/create-task', [CrewController::class, 'taskPage'])->name('createTask');
         Route::get('/create-task/detail', [CrewController::class, 'createTaskDetailPage'])->name('taskDetail');
+
+        // Ongoing Task Page
+        Route::post('/ongoing-task', [CrewController::class, 'updateOngoingTask']);
+        Route::patch('/ongoing-task', [CrewController::class, 'finalizeOngoingTask']);
+        Route::patch('/ongoing-task/return-cargo', [CrewController::class, 'continueReturnCargo']);
+        Route::delete('/ongoing-task', [CrewController::class, 'cancelOngoingTask']);
+        Route::get('/ongoing-task', [CrewController::class, 'ongoingTaskPage'])->name('ongoingTaskPage');
 
         // Order Page
         Route::get('/order', [CrewController::class, 'orderPage'])->name('order');
@@ -49,6 +58,32 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/{user}/add-cart', [CrewController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
+    });
+
+    Route::prefix('admin-operational')->name('adminOperational.')->group(function(){
+        // Report Transhipment Page
+        Route::get('/daily-reports', [AdminOperationalController::class, 'reportTranshipmentPage'])->name('reportTranshipment');
+        Route::post('/daily-reports', [AdminOperationalController::class, 'searchDailyReports'])->name('searchDailyReports');
+        Route::post('/daily-reports/download', [AdminOperationalController::class, 'downloadDailyReports']);
+
+        // Monitoring Page
+        Route::get('/monitoring', [AdminOperationalController::class, 'monitoringPage'])->name('monitoring');
+        Route::post('/search-monitoring', [AdminOperationalController::class, 'searchMonitoring'])->name('searchMonitoring');
+
+        // Add Tugboat Page
+        Route::get('/add-tugboat', [AdminOperationalController::class, 'addTugboatPage'])->name('addTugboat');
+        Route::post('/add-tugboat', [AdminOperationalController::class, 'searchTugboat'])->name('searchTugboat');
+        Route::patch('/add-tugboat', [AdminOperationalController::class, 'paginationTugBoat'])->name('paginationTugboat');
+        Route::post('/add-newtugboat', [AdminOperationalController::class, 'addNewTugboat'])->name('addNewTugboat');
+        Route::delete('/delete-tugboat', [AdminOperationalController::class, 'deleteTugboat']);
+
+        // Add Barge Page
+        Route::get('/add-barge', [AdminOperationalController::class, 'addBargePage'])->name('addBarge');
+        Route::post('/add-barge', [AdminOperationalController::class, 'searchBarge'])->name('searchBarge');
+        Route::patch('/add-barge', [AdminOperationalController::class, 'paginationBarge'])->name('paginationBarge');
+        Route::post('/add-newbarge', [AdminOperationalController::class, 'addNewBarge'])->name('addNewBarge');
+        Route::delete('/delete-barge', [AdminOperationalController::class, 'deleteBarge']);
+
     });
 
     Route::prefix('logistic')->name('logistic.')->group(function(){
@@ -277,19 +312,19 @@ Route::get('/', function () {
 Route::get('/add-boat', function(){
     Tug::create([
         'tugName' => 'Tug A',
-        // 'areaOperations' => 'Jakarta',
-        // 'classification' => 'Kapal',
-        // 'yearModel' => '2021',
-        // 'status' => 'operational'
+        'areaOperations' => 'Jakarta',
+        'classification' => 'Kapal',
+        'yearModel' => '2021',
+        'status' => 'operational'
     ]);
 
     Barge::create([
         'bargeName' => 'Barge A',
-        // 'size' => 300,
-        // 'type' => 'Barge',
-        // 'areaOperation' => 'Jakarta',
-        // 'bargeYear' => '2021',
-        // 'status' => 'operational'
+        'size' => 300,
+        'type' => 'Barge',
+        'areaOperation' => 'Jakarta',
+        'bargeYear' => '2021',
+        'status' => 'operational'
     ]);
 
     return redirect('/dashboard');

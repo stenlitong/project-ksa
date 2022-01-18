@@ -26,8 +26,10 @@ class CreateOperationalBoatDataTable extends Migration
             $table->unsignedBigInteger('barge_id')->nullable();
             $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->bigInteger('jetty');
+            $table->string('jetty', 50);
             $table->string('taskType', 30);
+            $table->double('cargoAmountStart');
+            $table->string('customer')->nullable();
             $table->string('status', 15)->default('On Going');
 
             // Secondary Data
@@ -35,15 +37,13 @@ class CreateOperationalBoatDataTable extends Migration
             $table->string('to', 30)->nullable();
             $table->string('condition', 50)->nullable();
             $table->string('estimatedTime', 30)->nullable();
-            $table->bigInteger('cargoAmount')->nullable();
+            $table->double('cargoAmountEnd')->nullable();
             $table->longText('description')->nullable();
 
             // Calculation Data
-            $table->dateTime('faJetty')->nullable();
-            $table->dateTime('departureJetty')->nullable();
-
-            $table->dateTime('arrivalPOL')->nullable();
-            $table->dateTime('departurePOL')->nullable();
+            // Operational Shipment
+            $table->dateTime('arrivalTime')->nullable();
+            $table->datetime('departureTime')->nullable();
 
             $table->dateTime('startAsideL')->nullable();
             $table->dateTime('asideL')->nullable();
@@ -55,31 +55,71 @@ class CreateOperationalBoatDataTable extends Migration
             $table->dateTime('DOB')->nullable();
 
             $table->dateTime('departurePOD')->nullable();
-            $table->dateTime('arrivalPOD')->nullable();
+            $table->dateTime('arrivalPODGeneral')->nullable();
             $table->dateTime('startAsidePOD')->nullable();
             $table->dateTime('asidePOD')->nullable();
             $table->dateTime('commenceLoadPOD')->nullable();
             $table->dateTime('completedLoadingPOD')->nullable();
             $table->dateTime('cOffPOD')->nullable();
-            $table->dateTime('DOHPOD')->nullable();
             $table->dateTime('DOBPOD')->nullable();
 
-            $table->dateTime('startAsideMV')->nullable();
-            $table->dateTime('asideMV')->nullable();
-            $table->dateTime('commMV')->nullable();
-            $table->dateTime('compMV')->nullable();
-            $table->dateTime('departureMV')->nullable();
-            $table->time('MV')->nullable();
+            // Operational Transhipment
+            $table->dateTime('faVessel')->nullable();
+            $table->dateTime('arrivalPOL')->nullable();
+            // => startAsideL
+            // => asideL
+            // => commenceLoadL
+            // => completedLoadingL
+            // => cOffL
+            // => DOH
+            // => DOB
+            // => departurePOD
+            // => arrivalPODGeneral
+            $table->dateTime('startAsideMVTranshipment')->nullable();
+            $table->dateTime('asideMVTranshipment')->nullable();
+            $table->dateTime('commMVTranshipment')->nullable();
+            $table->dateTime('compMVTranshipment')->nullable();
+            $table->dateTime('cOffMVTranshipment')->nullable();
 
-            // Days calculation
-            $table->bigInteger('DOKDays')->nullable();
-            $table->bigInteger('perbaikanDays')->nullable();
-            $table->bigInteger('kandasDays')->nullable();
-            $table->bigInteger('tungguDOKDays')->nullable();
-            $table->bigInteger('tungguTugDays')->nullable();
-            $table->bigInteger('tungguDokumenDays')->nullable();
-            $table->bigInteger('standbyDOKDays')->nullable();
-            $table->bigInteger('bocor')->nullable();
+            $table->dateTime('departureJetty')->nullable();
+
+            // Return Cargo
+            $table->dateTime('arrivalPODCargo')->nullable();
+            $table->dateTime('startAsideMVCargo')->nullable();
+            $table->dateTime('asideMVCargo')->nullable();
+            $table->dateTime('commMVCargo')->nullable();
+            $table->dateTime('compMVCargo')->nullable();
+            $table->dateTime('cOffMVCargo')->nullable();
+            // => departureTime
+
+            // Days Calculation
+            $table->bigInteger('DOKDays')->default(0);
+            $table->bigInteger('perbaikanDays')->default(0);
+            $table->bigInteger('kandasDays')->default(0);
+            $table->bigInteger('tungguDOKDays')->default(0);
+            $table->bigInteger('tungguTugDays')->default(0);
+            $table->bigInteger('tungguDokumenDays')->default(0);
+            $table->bigInteger('standbyDOKDays')->default(0);
+            $table->bigInteger('bocor')->default(0);
+
+            // Calculation Data
+            $table->double('sailingToMV')->nullable();
+            $table->double('sailingToJetty')->nullable();
+            $table->double('maneuver')->nullable();
+            $table->double('dischTime')->nullable();
+            $table->double('dischRate')->nullable();
+            $table->double('berthing')->nullable();
+            $table->double('unberthing')->nullable();
+            $table->double('ldgTime')->nullable();
+            $table->double('ldgRate')->nullable();
+            $table->double('prepareLdg')->nullable();
+            $table->double('cycleTime')->nullable();
+            $table->double('document')->nullable();
+            $table->string('totalTime', 50)->nullable();
+
+            // Validation Data
+            $table->integer('task_tracker')->default(0);
+            $table->integer('cargoChangeTracker')->default(0);
 
             $table->timestamps();
         });

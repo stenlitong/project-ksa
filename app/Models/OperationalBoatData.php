@@ -17,4 +17,12 @@ class OperationalBoatData extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tug(){
+        return $this->belongsTo(Tug::class);
+    }
+
+    public function barge(){
+        return $this->belongsTo(Barge::class);
+    }
 }

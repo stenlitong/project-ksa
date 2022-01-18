@@ -140,10 +140,9 @@
                     if (dropdown.value=="picSite") {
                         document.getElementById("jakarta").disabled = true;
                         selectopt('samarinda');
-    
                     } else {
-                            document.getElementById("jakarta").disabled = false;
-                        }
+                        document.getElementById("jakarta").disabled = false;
+                    }
                 }
             </script>
             <!-- Password -->
@@ -200,15 +199,26 @@
                 }
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function (event) {
-                    if (dropdown.value == "picSite") {
-                        document.getElementById("Jakarta").disabled = true;
-                        document.getElementById("Berau").disabled = true;
-                        selectopt('samarinda');
-                    }else {
-                        document.getElementById("Jakarta").disabled = false;
-                    }
-                    
                     if(dropdown.value == "purchasing"){
+                        selectopt('Jakarta');
+                        document.getElementById("Banjarmasin").disabled = true;
+                        document.getElementById("Samarinda").disabled = true;
+                        document.getElementById("Bunati").disabled = true;
+                        document.getElementById("Babelan").disabled = true;
+                        document.getElementById("Berau").disabled = true;
+                        document.getElementById("Kendari").disabled = false;
+                    }else{
+                        document.getElementById("Jakarta").disabled = false;
+                        document.getElementById("Samarinda").disabled = false;
+                        document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("Bunati").disabled = false;
+                        document.getElementById("Babelan").disabled = false;
+                        document.getElementById("Berau").disabled = false;
+                        document.getElementById("Kendari").disabled = false;
+                    }
+
+                    if (dropdown.value === "picSite") {
+                        console.log('clicked')
                         selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;

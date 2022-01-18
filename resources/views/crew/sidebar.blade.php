@@ -39,11 +39,11 @@
             <li class="nav-item">
                 <a class="nav-link
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'detail'){
+                    if(basename($_SERVER['REQUEST_URI']) == 'ongoing-task'){
                     echo('active');
                 }
                 @endphp
-                " href="{{ Route('crew.taskDetail') }}">
+                " href="{{ Route('crew.ongoingTaskPage') }}">
                     <span data-feather="clock"></span>
                     Ongoing Task
                 </a>

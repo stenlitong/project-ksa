@@ -8,6 +8,7 @@ use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\ApList;
+use App\Models\OperationalBoatData;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
@@ -16,6 +17,7 @@ use Response;
 use validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Gmail;
+use App\Models\Barge;
 use App\Models\documents;
 use App\Models\documentberau;
 use App\Models\documentbanjarmasin;
@@ -225,11 +227,35 @@ class DashboardController extends Controller
             $suppliers = Supplier::latest()->get();
 
             return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'default_branch', 'completed', 'in_progress'));
-        }
-        elseif(Auth::user()->hasRole('picSite')){
+        }elseif(Auth::user()->hasRole('adminOperational')){
+
+            // Sum The DAYS Of Each Condition, Not The Count Of The Ship
+            $dok_days = OperationalBoatData::where('status', 'On Going')->sum('DOKDays');
+            $perbaikan_days = OperationalBoatData::where('status', 'On GOing')->sum('perbaikanDays');
+            $kandas_days = OperationalBoatData::where('status', 'On GOing')->sum('kandasDays');
+            $tungguDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDOKDays');
+            $tungguTug_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguTugDays');
+            $tungguDokumen_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDokumenDays');
+            $standbyDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('standbyDOKDays');
+            $bocor_days = OperationalBoatData::where('status', 'On GOing')->sum('bocor');
+
+            // formula => Total lost time : 
+            // DOK - standby belum DOK
+            $total_lost_time = $dok_days - $standbyDOK_days;
+
+            // formula => AKTIF : 
+            //  (31*total barge)-Total lost time:
+            $total_barge = Barge::count();
+            $aktif = (31 * $total_barge) - $total_lost_time;
+            
+            // formula => percentage ship's activity :
+            // Aktif / (31*total barge) * 100
+            $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
+
+            return view('adminOperational.adminOperationalDashboard', compact('dok_days', 'perbaikan_days', 'kandas_days', 'tungguDOK_days', 'tungguTug_days', 'tungguDokumen_days', 'standbyDOK_days', 'bocor_days', 'total_lost_time', 'percentage_ship_activity'));
+        }elseif(Auth::user()->hasRole('picSite')){
             return view('picsite.picDashboard');
-        }
-        elseif(Auth::user()->hasRole('picAdmin')){
+        }elseif(Auth::user()->hasRole('picAdmin')){
             if (request('search1') == 'All') {
                 $document = DB::table('documents')->get();
                 $documentberau = DB::table('beraudb')->get();
@@ -252,12 +278,10 @@ class DashboardController extends Controller
                 $docrpk = DB::table('rpkdocuments')->get();
             }
             return view('picadmin.picAdminDashboard' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda', 'docrpk'));
-        }
-        elseif(Auth::user()->hasRole('picIncident')){
+        }elseif(Auth::user()->hasRole('picIncident')){
             
             return view('picincident.dashboardincident' );
-        }
-        elseif(Auth::user()->hasRole('insurance')){
+        }elseif(Auth::user()->hasRole('insurance')){
             $spgrfile = spgrfile::where('cabang', 'Jakarta')->get();
             return view('insurance.Dashboardinsurance', compact('spgrfile'));
         }

@@ -13,13 +13,13 @@
             <h1 class="mt-3 mb-3" style="text-align: center">Order List</h1>
 
             @if(session('status'))
-                <div class="alert alert-success" style="width: 40%; margin-left: 30%">
+                <div class="alert alert-success text-center" style="width: 40%; margin-left: 30%">
                     {{ session('status') }}
                 </div>
             @endif
 
             @if(session('error'))
-                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                <div class="alert alert-danger text-center" style="width: 40%; margin-left: 30%">
                     {{ session('error') }}
                 </div>
             @endif
@@ -137,44 +137,44 @@
         </main>
         
         @foreach($orderHeads as $o)
-                <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-danger">
-                                <div class="d-flex-column">
-                                    <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
-                                    <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
-                                </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+            <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <div class="d-flex-column">
+                                <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
+                                <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
                             </div>
-                            <div class="modal-body">
-                                <table class="table">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col">Item Barang</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Department</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $o -> id)
-                                                <tr>
-                                                    <td>{{ $od -> item -> itemName }}</td>
-                                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                    <td>{{ $od -> department }}</td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Item Barang</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Department</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orderDetails as $od)
+                                        @if($od -> orders_id == $o -> id)
+                                            <tr>
+                                                <td>{{ $od -> item -> itemName }}</td>
+                                                <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
+                                                <td>{{ $od -> department }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+            </div>
         @endforeach
     </div>
 
