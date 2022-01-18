@@ -10,17 +10,18 @@
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >
                 <div class="container">
-                  <h1 class="display-4"><strong>Rekapitulasi Dana</strong></h1>
+                    <h1 class="display-4"><strong>Rekapitulasi Dana</strong></h1>
                     
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Tahun/Bulan/Tanggal</th>
+                                <th scope="col">Periode</th>
                                 <th scope="col">Cabang</th>
-                                <th scope="col">Nama Kapal</th>
-                                <th scope="col">Status pembayaran</th>
-                                <th scope="col">Nilai Jumlah Di Bayar</th>
+                                <th scope="col">Nama Tug</th>
+                                <th scope="col">Nama Barge</th>
+                                <th scope="col">status pembayaran</th>
+                                <th scope="col">Nilai Jumlah Di setujui</th>
                                 {{-- <th scope="col">Action</th> --}}
                             </tr>
                         </thead>
@@ -31,96 +32,12 @@
                             @endphp
                             <tr>
                                 <td class="table-info">{{$loop->index+1}}</td>
-                                <td class="table-info">{{$rekap->DateNote}}</td>
+                                <td class="table-info" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
                                 <td class="table-info">{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->Nama_Kapal}}</td>
+                                <td class="table-info">{{$rekap->NamaTug}}</td>
+                                <td class="table-info">{{$rekap->NamaBarge}}</td>
                                 <td class="table-info">{{$rekap->status_pembayaran}}</td>
                                 <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
-                                {{-- <td scope="col">
-                                    <div class="row">
-                                        <div class="col-md-auto">
-                                            <form action="/insurance/destroy/{{$rekap->id}}" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" id="realsub" onClick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</button>
-                                            </form>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <form action="/insurance/update/{{$rekap->id}}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                    <button class="btn btn-outline-primary"   data-toggle="modal" data-target="#Updatespgrnote">Update</button>
-                                                Modal 
-                                                <div class="modal fade" id="Updatespgrnote" tabindex="-1" role="dialog" aria-labelledby="Updatespgrnote" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="Updatespgrnote">Add Note ?</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="Datebox">Date</label>
-                                                        <input type="date" class="form-control" name="Datebox" required id="Datebox" >
-                
-                                                        <br>
-                                                        <label for="Cabang">Cabang</label>
-                                                        <select name="Cabang" class="form-control" required id="Cabang" >
-                                                            <option value="Babelan">Babelan</option>
-                                                            <option value="Berau">Berau</option>
-                                                            <option value="Banjarmasin">Banjarmasin</option>
-                                                            <option value="Samarinda">Samarinda</option>
-                                                            <option value="Kendari">Kendari</option>
-                                                        </select>
-                
-                                                        <br>
-                                                        <label for="No_FormClaim">No Form Claim</label>
-                                                        <input type="text" class="form-control" name="No_FormClaim" required id="No_FormClaim" >
-                
-                                                        <br>
-                                                        <label for="NamaKapal">Nama Kapal</label>
-                                                        <input type="text" class="form-control" name="NamaKapal" required id="NamaKapal" >
-                                                        
-                                                        <br>
-                                                        <label for="status_pembayaran">status pembayaran</label>
-                                                        <select name="status_pembayaran" id="status_pembayaran" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required autofocus>
-                                                            <option selected disabled value="">Please Choose...</option>
-                                                            <option value="Paid" >Paid</option>
-                                                            <option value="unpaid" >unpaid</option>
-                                                            <option value="partial" >partial</option>
-                                                        </select>
-                
-                                                        <br>
-                                                        <label for="Nilai">Nilai</label>
-                                                        <div class="input-group mb-1">
-                                                            <select class="btn btn-outline-secondary" name="mata_uang_nilai">
-                                                                <option selected value="USD" id="">USD</option>
-                                                                <option value="IDR" id="">IDR</option>
-                                                            </select>
-                                                            <input type="number" class="form-control" name="Nilai" required id="Nilai" >
-                                                        </div>
-
-                                                        <br>
-                                                        <label for="NilaiClaim">Nilai Claim yang di setujui</label>
-                                                        <div class="input-group mb-1">
-                                                            <select class="btn btn-outline-secondary" name="mata_uang_claim">
-                                                                <option selected value="USD" id="">USD</option>
-                                                                <option value="IDR" id="">IDR</option>
-                                                            </select>
-                                                            <input type="number" class="form-control" name="NilaiClaim" required id="Nilai_Claim" >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" id="submitreject2" class="btn btn-outline-dark">Add Note</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td> --}}
                             </tr>
                             @empty
                             <tr>

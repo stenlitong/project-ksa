@@ -155,32 +155,42 @@ class CreateBeraudb extends Migration
 
             $table->dateTime('time_upload27') ->nullable();
             $table->string('status27', 10)->nullable();
-            $table->string('reason27',180)->nullable();
-            $table->string('BKI')->nullable();
+            $table->string('reason27' , 170)->nullable();
+            $table->string('bki_lambung', 170)->nullable();
 
             $table->dateTime('time_upload28') ->nullable();
             $table->string('status28', 10)->nullable();
-            $table->string('reason28', 180)->nullable();
-            $table->string('Lain_Lain1', 180)->nullable();
+            $table->string('reason28' , 170)->nullable();
+            $table->string('bki_mesin', 170)->nullable();
 
             $table->dateTime('time_upload29') ->nullable();
             $table->string('status29', 10)->nullable();
-            $table->string('reason29', 180)->nullable();
-            $table->string('Lain_Lain2', 180)->nullable();
-
+            $table->string('reason29' , 170)->nullable();
+            $table->string('bki_Garis_muat', 170)->nullable();
+            
             $table->dateTime('time_upload30') ->nullable();
             $table->string('status30', 10)->nullable();
-            $table->string('reason30',180, 180)->nullable();
-            $table->string('Lain_Lain3', 180)->nullable();
+            $table->string('reason30', 180)->nullable();
+            $table->string('Lain_Lain1', 180)->nullable();
 
             $table->dateTime('time_upload31') ->nullable();
             $table->string('status31', 10)->nullable();
             $table->string('reason31', 180)->nullable();
-            $table->string('Lain_Lain4', 180)->nullable();
+            $table->string('Lain_Lain2', 180)->nullable();
 
             $table->dateTime('time_upload32') ->nullable();
             $table->string('status32', 10)->nullable();
-            $table->string('reason32', 180)->nullable();
+            $table->string('reason32',180, 180)->nullable();
+            $table->string('Lain_Lain3', 180)->nullable();
+
+            $table->dateTime('time_upload33') ->nullable();
+            $table->string('status33', 10)->nullable();
+            $table->string('reason33', 180)->nullable();
+            $table->string('Lain_Lain4', 180)->nullable();
+
+            $table->dateTime('time_upload34') ->nullable();
+            $table->string('status34', 10)->nullable();
+            $table->string('reason34', 180)->nullable();
             $table->string('Lain_Lain5', 180)->nullable();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

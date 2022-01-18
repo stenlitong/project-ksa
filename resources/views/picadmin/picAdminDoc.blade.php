@@ -81,20 +81,20 @@
                   <tbody> 
 {{-- Babelan----------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($document as $doc )
-                      @for ( $a = 1 ; $a <= 22 ; $a++)
+                      @for ( $a = 1 ; $a <= 24 ; $a++)
                       @php
                           $BABELAN = array('sertifikat_keselamatan',
                             'sertifikat_garis_muat','penerbitan_sekali_jalan','sertifikat_safe_manning',
                             'endorse_surat_laut','perpanjangan_sertifikat_sscec','perpanjangan_sertifikat_p3k' ,
                             'biaya_laporan_dok','pnpb_sertifikat_keselamatan','pnpb_sertifikat_garis_muat',
                             'pnpb_surat_laut','sertifikat_snpp','sertifikat_anti_teritip',    
-                            'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec', 'BKI' ,
+                            'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec', 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat',
                             'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                           $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,
                             'Endorse Surat Laut' , 'Perpanjangan Sertifikat SSCEC' , 'Perpanjangan Sertifikat P3K' , 'Biaya Laporan Dok' , 
                             'PNPB Sertifikat Keselamatan' , 'PNPB Sertifikat Garis Muat' , 'PNPB Surat Laut'  , 'Sertifikat SNPP' ,
-                            'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC', 'BKI' ,
+                            'Sertifikat Anti Teritip' , 'PNBP SNPP & SNAT', 'Biaya Survey' , 'PNPB SSCEC', 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat',
                             'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                           $time_upload ="time_upload".$a;
                           $stats ="status".$a;
@@ -235,6 +235,11 @@
                       </tr>
                       @endif
                       @endfor
+                        <tr>
+                          <td>
+                              {{-- pisah beda nama kapal --}}
+                          </td>
+                        </tr>
                       @empty
                         <tr>
                             
@@ -242,7 +247,7 @@
                       @endforelse
 {{-- Berau------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                     @forelse($documentberau as $d )
-                       @for ( $a = 1 ; $a <= 32 ; $a++)
+                       @for ( $a = 1 ; $a <= 34 ; $a++)
                        @php
                        $BERAU = array('pnbp_sertifikat_konstruksi','jasa_urus_sertifikat',
                         'pnbp_sertifikat_perlengkapan','pnbp_sertifikat_radio','pnbp_sertifikat_ows',
@@ -252,7 +257,7 @@
                         'exibitum_engine_logbook','pnbp_deck_logbook','pnbp_engine_logbook',
                         'biaya_docking','lain-lain','biaya_labuh_tambat',
                         'biaya_rambu','pnbp_pemeriksaan','sertifikat_bebas_sanitasi&p3k',
-                        'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan', 'BKI' ,
+                        'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan', 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat',
                         'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                         $names = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
@@ -263,7 +268,7 @@
                                         'PNBP Deck Logbook','PNBP Engine Logbook','Biaya Docking',
                                         'Lain-lain','Biaya Labuh Tambat','Biaya Rambu',
                                         'PNBP Pemeriksaan','Sertifikat Bebas Sanitasi & P3K','Sertifikat Garis Muat',
-                                        'PNBP SSCEC','Ijin Sekali Jalan', 'BKI' ,
+                                        'PNBP SSCEC','Ijin Sekali Jalan', 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat',
                                         'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                             $time_upload ="time_upload".$a;
                             $stats ="status".$a;
@@ -403,10 +408,13 @@
                       </tr>
                       @endif
                       @endfor
+                        <tr>
+                          <td>
+                              {{-- pisah beda nama kapal --}}
+                          </td>
+                        </tr>
                       @empty
-                      <tr>
-                        
-                      </tr>
+                     
                       @endforelse
 {{-- Banjarmasin------------------------------------------------------------------------------------------------------------------------------------------------------ --}}
                     @forelse($documentbanjarmasin as $b )
@@ -548,10 +556,13 @@
                     </tr>
                     @endif
                     @endfor
-                    @empty
                       <tr>
-                        
+                        <td>
+                            {{-- pisah beda nama kapal --}}
+                        </td>
                       </tr>
+                    @empty
+                      
                     @endforelse
 {{-- Samarinda-------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                       @forelse($documentsamarinda as $s )
@@ -728,14 +739,17 @@
                         </tr>
                         @endif
                         @endfor
-                        @empty
-                          <tr> 
-                            
+                          <tr>
+                            <td>
+                                {{-- pisah beda nama kapal --}}
+                            </td>
                           </tr>
+                        @empty
+                          
                         @endforelse
 {{-- Jakarta---------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                         @forelse($documentjakarta as $jkt )
-                        @for ( $a = 1 ; $a <= 45 ; $a++)
+                        @for ( $a = 1 ; $a <= 47 ; $a++)
                         @php
                             $JAKARTA = array('pnbp_rpt','pps','pnbp_spesifikasi_kapal'
                                                 ,'anti_fauling_permanen','pnbp_pemeriksaan_anti_fauling','snpp_permanen'
@@ -749,7 +763,7 @@
                                                 ,'status_hukum_kapal','autorization_garis_muat','otorisasi_klas'
                                                 ,'pnbp_otorisasi(all)','halaman_tambah_grosse_akta','pnbp_surat_ukur'
                                                 ,'nota_dinas_penundaan_klas_bki_ss','uwild_pengganti_doking','update_nomor_call_sign '
-                                                ,'clc_badan_kapal','wreck_removal' , 'biaya_percepatan_proses' , 'BKI'
+                                                ,'clc_badan_kapal','wreck_removal' , 'biaya_percepatan_proses' , 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat'
                                                 ,'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                             $names = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
                                             ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
@@ -763,7 +777,7 @@
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
                                             ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
                                             ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
-                                            ,'CLC Badan Kapal','Wreck Removal', 'Biaya Percepatan Proses' , 'BKI' ,
+                                            ,'CLC Badan Kapal','Wreck Removal', 'Biaya Percepatan Proses' , 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat',
                                             'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
                                             );
                             $time_upload ="time_upload".$a;
@@ -908,10 +922,13 @@
                             </tr>
                         @endif
                         @endfor
+                          <tr>
+                            <td>
+                                {{-- pisah beda nama kapal --}}
+                            </td>
+                          </tr>
                         @empty
-                            <tr>
-                                
-                            </tr>
+                            
                         @endforelse
                   </tbody>
                 </table>

@@ -64,13 +64,13 @@
                                 {{-- <form action="/picsite/upload" method="post" enctype="multipart/form-data" name="formUpload" id="formUpload"> --}}
 {{--Babelan ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Babelan')
-                                    @for ($a = 1 ; $a <= 22 ; $a++)
+                                    @for ($a = 1 ; $a <= 24 ; $a++)
                                         @php
                                             $name = array('Sertifikat Keselamatan','Sertifikat Garis Muat' ,'Penerbitan 1 Kali Jalan','Sertifikat Safe Manning',
                                                         'Endorse Surat Laut','Perpanjangan Sertifikat SSCEC','Perpanjangan Sertifikat P3K',
                                                         'Biaya Laporan Dok','PNPB Sertifikat Keselamatan','PNPB Sertifikat Garis Muat',
                                                         'PNPB Surat Laut','Sertifikat SNPP','Sertifikat Anti Teritip',
-                                                        'PNBP SNPP & SNAT','Biaya Survey','PNPB SSCEC' , 'BKI' ,
+                                                        'PNBP SNPP & SNAT','Biaya Survey','PNPB SSCEC' , 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat' ,
                                                         'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                                             $ufile = 'ufile'.$a;
                                             $time_upload ="time_upload".$a;
@@ -103,7 +103,7 @@
                                     @endif
 {{--Berau ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Berau')
-                                    @for ($a = 1 ; $a <= 32 ; $a++)    
+                                    @for ($a = 1 ; $a <= 34 ; $a++)    
                                     @php
                                         $name = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
                                         'PNBP Sertifikat Radio','PNBP Sertifikat OWS','PNBP Garis Muat',
@@ -113,7 +113,7 @@
                                         'PNBP Deck Logbook','PNBP Engine Logbook','Biaya Docking',
                                         'Lain-lain','Biaya Labuh Tambat','Biaya Rambu',
                                         'PNBP Pemeriksaan','Sertifikat Bebas Sanitasi & P3K','Sertifikat Garis Muat',
-                                        'PNBP SSCEC','Ijin Sekali Jalan' , 'BKI' ,
+                                        'PNBP SSCEC','Ijin Sekali Jalan' , 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat' ,
                                         'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5');
                                         $beraufile = 'beraufile'.$a;
                                         $time_upload ="time_upload".$a;
@@ -145,7 +145,7 @@
                                     @endfor
                                     @endif
 {{--Banjarmasin --------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
-                            @if (Auth::user()->cabang == 'Banjarmasin')
+                            @if (Auth::user()->cabang == 'Banjarmasin' or Auth::user()->cabang == 'Bunati')
                                 @for ($a = 1 ; $a <= 39 ; $a++)
                                     @php
                                         $name = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
@@ -190,7 +190,7 @@
                                 @endfor
                             @endif
 {{--Samarinda ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
-                                    @if (Auth::user()->cabang == 'Samarinda')
+                                    @if (Auth::user()->cabang == 'Samarinda' or Auth::user()->cabang == 'Kendari' or Auth::user()->cabang == 'Morosi')
                                     @for ($a = 1 ; $a <= 48 ; $a++)
                                     @php
                                         $name = array("Sertifikat Keselamatan (Perpanjangan)","Perubahan OK 13 ke OK 1","Keselamatan (Tahunan)",
@@ -238,7 +238,7 @@
                                     @endif
 {{-- jakarta--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --}}
                                     @if (Auth::user()->cabang == 'Jakarta')
-                                    @for ($a = 1 ; $a <= 45 ; $a++)
+                                    @for ($a = 1 ; $a <= 47 ; $a++)
                                         @php
                                             $name = array('PNBP RPT','PPS','PNBP Spesifikasi Kapal'
                                             ,'Anti Fauling Permanen','PNBP Pemeriksaan Anti Fauling','SNPP Permanen'
@@ -252,7 +252,7 @@
                                             ,'Status Hukum Kapal','Autorization Garis Muat','Otorisasi Klas'
                                             ,'PNBP Otorisasi (AII)','Halaman Tambah Grosse Akta','PNBP Surat Ukur'
                                             ,'Nota Dinas Penundaan Klas BKI SS','UWILD Pengganti Doking','Update Nomor Call Sign'
-                                            ,'CLC Badan Kapal','Wreck Removal' , 'Biaya Percepatan Proses','BKI' ,
+                                            ,'CLC Badan Kapal','Wreck Removal' , 'Biaya Percepatan Proses','BKI Lambung', 'BKI Mesin', 'BKI Garis Muat' ,
                                             'File extra 1' , 'File extra 2' , 'File extra 3' , 'File extra 4' , 'File extra 5'
                                             );
                                             $jktfile = 'jktfile'.$a;

@@ -258,24 +258,26 @@ class DashboardController extends Controller
                         // dd($viewer);
                         return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/" . $viewer);
                     }
-                    if ($request->cabang == 'Banjarmasin'){
+                    if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                         $filename = $request->viewdoc;
                         $kapal_id = $request->kapal_nama;
                         $result = $request->result;
                         $viewer = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')
                         ->whereNotNull ($filename)
+                        ->where('cabang' , $request->cabang)
                         ->where($filename, 'Like', '%' . $result . '%')
                         ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                         ->pluck($filename)[0];
                         // dd($viewer);
                         return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/" . $viewer);
                     }
-                    if ($request->cabang == 'Samarinda'){
+                    if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                         $filename = $request->viewdoc;
                         $kapal_id = $request->kapal_nama;
                         $result = $request->result;
                         $viewer = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')
                         ->whereNotNull ($filename)
+                        ->where('cabang' , $request->cabang)
                         ->where($filename, 'Like', '%' . $result . '%')
                         ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                         ->pluck($filename)[0];
@@ -323,7 +325,7 @@ class DashboardController extends Controller
                         // dd($viewer);
                         return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
                     }
-                    if ($request->cabang == 'Banjarmasin'){
+                    if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                         $filenameRPK = $request->viewdocrpk;
                         $kapal_id = $request->kapal_nama;
                         $result = $request->result;
@@ -336,7 +338,7 @@ class DashboardController extends Controller
                         // dd($viewer);
                         return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
                     }
-                    if ($request->cabang == 'Samarinda'){
+                    if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                         $filenameRPK = $request->viewdocrpk;
                         $kapal_id = $request->kapal_nama;
                         $result = $request->result;
@@ -411,11 +413,11 @@ class DashboardController extends Controller
                         return view('picsite.picDashboard', compact('documentberau','docrpk'));
                     }
                 }
-                if(Auth::user()->cabang == "Banjarmasin"){
-                    if (Auth::user()->cabang == "Banjarmasin" and $request->filled('search_kapal')) {
+                if(Auth::user()->cabang == "Banjarmasin" or Auth::user()->cabang == "Bunati"){
+                    if ($request->filled('search_kapal')) {
                         //banjarmasin search bar
                         $documentbanjarmasin = documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-                        ->whereColumn('created_at' , '<=', 'periode_akhir')
+                        ->whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', Auth::user()->cabang)
                         ->orderBy('id', 'DESC')
                         ->latest()->get();
         
@@ -428,15 +430,15 @@ class DashboardController extends Controller
                         return view('picsite.picDashboard', compact('documentbanjarmasin','docrpk'));
                     }else{
                         $docrpk = DB::table('rpkdocuments')->where('cabang', Auth::user()->cabang)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-                        $documentbanjarmasin = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+                        $documentbanjarmasin = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', Auth::user()->cabang)->latest()->get();
                         return view('picsite.picDashboard', compact('documentbanjarmasin','docrpk'));
                     }
                 }
-                if(Auth::user()->cabang == "Samarinda"){
-                    if (Auth::user()->cabang == "Samarinda" and $request->filled('search_kapal')) {
+                if(Auth::user()->cabang == "Samarinda" or Auth::user()->cabang == "Kendari" or Auth::user()->cabang == "Morosi"){
+                    if ($request->filled('search_kapal')) {
                         //samarinda search bar
                         $documentsamarinda = documentsamarinda::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-                        ->whereColumn('created_at' , '<=', 'periode_akhir')
+                        ->whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', Auth::user()->cabang)
                         ->orderBy('id', 'DESC')
                         ->latest()->get();
         
@@ -449,7 +451,7 @@ class DashboardController extends Controller
                         return view('picsite.picDashboard', compact('documentsamarinda','docrpk'));
                     }else{
                         $docrpk = DB::table('rpkdocuments')->where('cabang', Auth::user()->cabang)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-                        $documentsamarinda = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+                        $documentsamarinda = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', Auth::user()->cabang)->latest()->get();
                         return view('picsite.picDashboard', compact('documentsamarinda', 'docrpk'));
                     }
                 }
@@ -505,24 +507,26 @@ class DashboardController extends Controller
                     // dd($viewer);
                     return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/" . $viewer);
                 }
-                if ($request->cabang == 'Banjarmasin'){
+                if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                     $filename = $request->viewdoc;
                     $kapal_id = $request->kapal_nama;
                     $result = $request->result;
                     $viewer = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')
                     ->whereNotNull ($filename)
+                    ->where('cabang', $request->cabang)
                     ->where($filename, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->pluck($filename)[0];
                     // dd($viewer);
                     return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/" . $viewer);
                 }
-                if ($request->cabang == 'Samarinda'){
+                if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                     $filename = $request->viewdoc;
                     $kapal_id = $request->kapal_nama;
                     $result = $request->result;
                     $viewer = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')
                     ->whereNotNull ($filename)
+                    ->where('cabang', $request->cabang)
                     ->where($filename, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->pluck($filename)[0];
@@ -571,12 +575,13 @@ class DashboardController extends Controller
                     // dd($viewer);
                     return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
                 }
-                if ($request->cabang == 'Banjarmasin'){
+                if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                     $filenameRPK = $request->viewdocrpk;
                     $kapal_id = $request->kapal_nama;
                     $result = $request->result;
                     $viewer = documentrpk::where('cabang' , $request->cabang)
                     ->whereNotNull ($filenameRPK)
+                    ->where('cabang', Auth::user()->cabang)
                     ->where($filenameRPK, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->whereColumn('created_at' , '<=', 'periode_akhir')
@@ -584,12 +589,13 @@ class DashboardController extends Controller
                     // dd($viewer);
                     return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
                 }
-                if ($request->cabang == 'Samarinda'){
+                if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                     $filenameRPK = $request->viewdocrpk;
                     $kapal_id = $request->kapal_nama;
                     $result = $request->result;
                     $viewer = documentrpk::where('cabang' , $request->cabang)
                     ->whereNotNull ($filenameRPK)
+                    ->where('cabang', Auth::user()->cabang)
                     ->where($filenameRPK, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->whereColumn('created_at' , '<=', 'periode_akhir')

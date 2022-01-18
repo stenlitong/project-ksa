@@ -29,7 +29,10 @@
             'Samarinda' => 'SMD',
             'Bunati' => 'BNT',
             'Babelan' => 'BBL',
-            'Berau' => 'BER'
+            'Berau' => 'BER' ,
+            'Bunati' => 'BUN' ,
+            'Kendari' => 'KDR' ,
+            'Morosi' => 'MRS' ,
         ];
     @endphp
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">

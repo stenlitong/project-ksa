@@ -211,10 +211,11 @@ class picAdminController extends Controller
     public function approve(Request $request){
         // dd($request);
         //no reason needed for banjarmasin
-        if ($request->cabang == 'Banjarmasin'){
+        if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
             $filename = $request->viewdoc;
             $result = $request->result;
             $kapal_id = $request->kapal_nama;
+            $cabang = $request->cabang;
             
             documentbanjarmasin::where($filename, 'Like', '%' . $result . '%')
             ->where('cabang', $request->cabang)
@@ -234,7 +235,6 @@ class picAdminController extends Controller
                 $kapal_id = $request->kapal_nama;
                 
                 documents::where($filename, 'Like', '%' . $result . '%')
-                ->where('cabang', $request->cabang)
                 ->whereNotNull($filename)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
@@ -248,7 +248,6 @@ class picAdminController extends Controller
                 $kapal_id = $request->kapal_nama;
                 
                 documentberau::where($filename, 'Like', '%' . $result . '%')
-                ->where('cabang', $request->cabang)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
                 ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
@@ -256,15 +255,17 @@ class picAdminController extends Controller
                     $request->reason => $request->reasonbox ,
                 ]);
             }
-            if ($request->cabang == 'Samarinda'){
+            if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                 $filename = $request->viewdoc;
                 $result = $request->result;
                 $kapal_id = $request->kapal_nama;
+                $cabang = $request->cabang;
 
                 documentsamarinda::where($filename, 'Like', '%' . $result . '%')
                 ->where('cabang', $request->cabang)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
+                ->where('cabang' , $cabang)
                 ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
@@ -379,24 +380,26 @@ class picAdminController extends Controller
                 // dd($viewer);
                 return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/" . $viewer);
             }
-            if ($request->cabang == 'Banjarmasin'){
+            if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
                 $viewer = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')
                 ->whereNotNull ($filename)
+                ->where('cabang' , $request->cabang)
                 ->where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->pluck($filename)[0];
                 // dd($viewer);
                 return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/" . $viewer);
             }
-            if ($request->cabang == 'Samarinda'){
+            if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
                 $viewer = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')
                 ->whereNotNull ($filename)
+                ->where('cabang' , $request->cabang)
                 ->where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->pluck($filename)[0];
@@ -490,79 +493,17 @@ class picAdminController extends Controller
                 return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/RPK" . "/" . $viewer);
             }
         }
-        
-    // if ($request->cabang == 'Babelan'){
-        //     $viewer = documentrpk::where('cabang' , $request->cabang)->whereMonth('updated_at', $month)->pluck($filename)[0];
-        //     // dd($viewer);
-        //     return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/RPK" . "/" . $viewer);
-        // }
-        // if ($request->cabang == 'Berau'){
-        //     $viewer = documentrpk::where('cabang' , $request->cabang)->whereMonth('updated_at', $month)->pluck($filename)[0];
-        //     // dd($viewer);
-        //     return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
-        // }
-        // if ($request->cabang == 'Banjarmasin'){
-        //     $viewer = documentrpk::where('cabang' , $request->cabang)->whereMonth('updated_at', $month)->pluck($filename)[0];
-        //     // dd($viewer);
-        //     return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
-        // }
-        // if ($request->cabang == 'Samarinda'){
-        //     $viewer = documentrpk::where('cabang' , $request->cabang)->whereMonth('updated_at', $month)->pluck($filename)[0];
-        //     // dd($viewer);
-        //     return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/RPK" . "/" . $viewer);
-        // }
     }
-   
-    // RekapulasiDana edit
-    public function editrekap(Rekapdana $rekap){
-        return view('picadmin.picAdminEditRekap', compact('rekap'));
-    }
-    //update RekapulasiDana
-    public function updaterekap(Request $request,Rekapdana $rekap){
-        $rekap = Rekapdana::find($rekap->id);
-        $rekap->DateNote = $request->Datebox;
-        $rekap->Cabang = $request->Cabang;
-        $rekap->Nama_Kapal = $request->NamaKapal;
-        $rekap->status_pembayaran = $request->status_pembayaran;
-        $rekap->Nilai = $request->Nilai;
-        $rekap->mata_uang_nilai = $request->mata_uang_nilai;
-        $rekap->update();
-        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah terupdate.'); 
-    }
-    // RekapulasiDana delete
-    public function destroyrekap(Rekapdana $rekap){
-        Rekapdana::destroy($rekap->id); 
-        return redirect('/picadmin/RekapulasiDana')->with('success', 'post telah dihapus.'); 
-    }
-    //create RekapulasiDana
-    public function uploadrekap(Request $request){
-        // dd($request);
-        $request->validate([
-            'Cabang'=> 'required|max:255',
-            'NamaKapal'=> 'required|max:255',
-            'NilaiClaim'=> 'required',
-            'status_pembayaran'=> 'required',
-            'Nilai'=> 'required',
-        ]);
-
-        Rekapdana::create([
-            'user_id'=> Auth::user()->id,
-            'DateNote' => $request->Datebox ,
-            'Cabang' => $request->Cabang ,
-            // 'No_FormClaim' => $request->No_FormClaim ,
-            'Nama_Kapal' => $request->NamaKapal ,
-            'status_pembayaran' => $request->status_pembayaran ,
-            'Nilai' => $request->Nilai ,
-            'mata_uang_nilai' => $request->mata_uang_nilai ,
-            // 'Nilai_Claim' => $request->NilaiClaim ,
-            // 'mata_uang_claim' => $request->mata_uang_claim ,
-            
-        ]);
-        return redirect('/picadmin/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
-    }
+    
     // RekapulasiDana page
     public function RekapulasiDana(){
-        $rekapdana= Rekapdana::all();
+        // $last_three_month = Carbon::now()->startOfMonth()->subMonth(3);
+        // $this_month = Carbon::now()->startOfMonth(); 
+    
+       
+        $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
+        ->latest()
+        ->get();
         return view('picadmin.picAdminRekapulasiDana', compact('rekapdana'));
     }
     

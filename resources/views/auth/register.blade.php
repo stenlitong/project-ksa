@@ -72,8 +72,8 @@
                     class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     required>
                     <option selected value="">Choose...</option>
-                    <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
                     <option value="AsuransiIncident" id="picIncident" @if (old('role_id') == 'AsuransiIncident') selected="selected" @endif>Asuransi Incident</option>
+                    <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
                     <option value="purchasing"  @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
                     <option value="logistic"  @if (old('role_id') == 'logistic') selected="selected" @endif>Logistic</option>
                     <option value="supervisorLogistic"  @if (old('role_id') == 'supervisorLogistic') selected="selected" @endif>Supervisor Logistic</option>
@@ -81,14 +81,15 @@
                 </select>
             </div>
             <br>
-
+            
+            
             <!-- Select Option Cabang -->
             <div>
                 <x-label for="cabang" :value="__('Cabang:')" />
-
+                
                 <select name="cabang" id="cabang"
-                    class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                    required>
+                class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                required>
                     <option selected disabled="">Choose...</option>
                     <option value="Jakarta" id="Jakarta" @if (old('cabang') == 'Jakarta') selected="selected" @endif>Jakarta</option>
                     <option value="Banjarmasin" id="Banjarmasin" @if (old('cabang') == 'Banjarmasin') selected="selected" @endif>Banjarmasin</option>
@@ -97,46 +98,10 @@
                     <option value="Babelan" id="Babelan" @if (old('cabang') == 'Babelan') selected="selected" @endif>Babelan</option>
                     <option value="Berau" id="Berau" @if (old('cabang') == 'Berau') selected="selected" @endif>Berau</option>
                     <option value="Kendari" id="Kendari" @if (old('cabang') == 'Kendari') selected="selected" @endif>Kendari</option>
+                    <option value="Morosi" id="Morosi" @if (old('cabang') == 'Morosi') selected="selected" @endif>Morosi</option>
                 </select>
             </div>
             
-            <script>
-                 
-                function myFunction() {
-                    var x = document.getElementById("password");
-                    var y = document.getElementById("password_confirmation");
-                    if (x.type === "password") {
-                        x.type = "text";
-                    } else {
-                        x.type = "password";
-                    }
-                    if (y.type === "password") {
-                        y.type = "text";
-                    } else {
-                        y.type = "password";
-                    }
-                }
-                
-                function selectopt(id)
-                {
-                    var e = document.getElementById("cabang");
-                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
-                }
-                var dropdown = document.getElementById("role_id");
-                dropdown.onchange = function(event){
-                    
-                    // if(dropdown.value=="picAdmin"){
-                    //     selectopt('jakarta');
-                    //     document.getElementById("samarinda").disabled = true;
-                    //     document.getElementById("Banjarmasin").disabled = true;
-                    //     document.getElementById("bunati").disabled = true; 
-                    // }else{
-                    //     document.getElementById("samarinda").disabled = false;
-                    //     document.getElementById("Banjarmasin").disabled = false;
-                    //     document.getElementById("bunati").disabled = false;   
-                    // }
-                }
-            </script>
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
@@ -191,47 +156,38 @@
                 }
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function (event) {
-                    if (dropdown.value == "picSite") {
-                        document.getElementById("Kendari").disabled = true;
-                        document.getElementById("Bunati").disabled = true;
-                    }
-                    
-                    if(dropdown.value == "purchasing"){
-                        selectopt('Jakarta');
-                        document.getElementById("Banjarmasin").disabled = true;
-                        document.getElementById("Samarinda").disabled = true;
-                        document.getElementById("Bunati").disabled = true;
-                        document.getElementById("Babelan").disabled = true;
-                        document.getElementById("Berau").disabled = true;
-                        document.getElementById("Kendari").disabled = false;
-                    }else{
-                        document.getElementById("Jakarta").disabled = false;
-                        document.getElementById("Samarinda").disabled = false;
-                        document.getElementById("Banjarmasin").disabled = false;
-                        document.getElementById("Bunati").disabled = false;
-                        document.getElementById("Babelan").disabled = false;
-                        document.getElementById("Berau").disabled = false;
-                        document.getElementById("Kendari").disabled = false;
-                    }
-                    if(dropdown.value == "AsuransiIncident"){
-                        selectopt('Jakarta');
-                        document.getElementById("Banjarmasin").disabled = true;
-                        document.getElementById("Samarinda").disabled = true;
-                        document.getElementById("Bunati").disabled = true;
-                        document.getElementById("Babelan").disabled = true;
-                        document.getElementById("Berau").disabled = true;
-                        document.getElementById("Kendari").disabled = true;
-                    }else{
-                        document.getElementById("Jakarta").disabled = false;
-                        document.getElementById("Samarinda").disabled = false;
-                        document.getElementById("Banjarmasin").disabled = false;
-                        document.getElementById("Bunati").disabled = false;
-                        document.getElementById("Babelan").disabled = false;
-                        document.getElementById("Berau").disabled = false;
-                        document.getElementById("Kendari").disabled = false;
-                    }
+                if(dropdown.value == "purchasing"){
+                    selectopt('Jakarta');
+                    document.getElementById("Banjarmasin").disabled = true;
+                    document.getElementById("Samarinda").disabled = true;
+                    document.getElementById("Bunati").disabled = true;
+                    document.getElementById("Babelan").disabled = true;
+                    document.getElementById("Berau").disabled = true;
+                    document.getElementById("Kendari").disabled = false;
                 }
-            
+                // else if(dropdown.value == "picSite"){
+                //     selectopt('Jakarta');                 
+                //     document.getElementById("Bunati").disabled = true;
+                //     document.getElementById("Kendari").disabled = true;
+                // }
+                else if(dropdown.value == "AsuransiIncident"){
+                    selectopt('Jakarta');
+                    document.getElementById("Banjarmasin").disabled = true;
+                    document.getElementById("Samarinda").disabled = true;
+                    document.getElementById("Bunati").disabled = true;
+                    document.getElementById("Babelan").disabled = true;
+                    document.getElementById("Berau").disabled = true;
+                    document.getElementById("Kendari").disabled = true;
+                }else{
+                    document.getElementById("Jakarta").disabled = false;
+                    document.getElementById("Samarinda").disabled = false;
+                    document.getElementById("Banjarmasin").disabled = false;
+                    document.getElementById("Bunati").disabled = false;
+                    document.getElementById("Babelan").disabled = false;
+                    document.getElementById("Berau").disabled = false;
+                    document.getElementById("Kendari").disabled = false;
+                }
+            }
             </script>
         </form>
     </x-auth-card>

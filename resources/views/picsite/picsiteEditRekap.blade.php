@@ -5,7 +5,7 @@
 @section('container')
 <x-guest-layout>
 <div class="row">
-    @include('picadmin.picAdminsidebar')
+    @include('picsite.sidebarpic')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="col" style="margin-top: 15px">
             <div class="jumbotron jumbotron-fluid" >
@@ -25,7 +25,7 @@
                 </div>
             @endif
 
-            <form action="/picadmin/RekapulasiDana/update/{{$rekap->id}}" method="POST">
+            <form action="/picsite/RekapulasiDana/update/{{$rekap->id}}" method="POST">
                 @csrf
                 @method('PUT')
                 
@@ -34,22 +34,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="Datebox">Date</label>
-                    <input type="date" class="form-control" value="{{$rekap->DateNote}}" name="Datebox" required id="Datebox" >
+                    <label for="Datebox1">Periode Awal</label>
+                    <input type="date" class="form-control" value="{{$rekap->DateNote1}}" name="Datebox1" required id="Datebox1" >
 
                     <br>
-                    <label for="Cabang">Cabang</label>
-                    <select name="Cabang" class="form-control" required id="Cabang" >
-                        <option value="Babelan">Babelan</option>
-                        <option value="Berau">Berau</option>
-                        <option value="Banjarmasin">Banjarmasin</option>
-                        <option value="Samarinda">Samarinda</option>
-                        <option value="Kendari">Kendari</option>
-                    </select>
+
+                    <label for="Datebox2">Periode Akhir</label>
+                    <input type="date" class="form-control" value="{{$rekap->DateNote2}}" name="Datebox2" required id="Datebox2" >
 
                     <br>
-                    <label for="NamaKapal">Nama Kapal</label>
-                    <input type="text" class="form-control" value="{{$rekap->Nama_Kapal}}" name="NamaKapal" required id="NamaKapal" >
+                    <label for="NamaTug">Nama Tug</label>
+                    <input type="text" class="form-control" value="{{$rekap->NamaTug}}" name="NamaTug" required id="NamaTug" >
+
+                    <br>
+                    <label for="NamaBarge">Nama Barge</label>
+                    <input type="text" class="form-control" value="{{$rekap->NamaBarge}}" name="NamaBarge" required id="NamaBarge" >
                     
                     <br>
                     <label for="status_pembayaran">status pembayaran</label>
@@ -61,7 +60,7 @@
                     </select>
 
                     <br>
-                    <label for="Nilai">Nilai Jumlah Di Bayar</label>
+                    <label for="Nilai">Nilai Jumlah Di setujui</label>
                     <div class="input-group mb-1">
                         <select class="btn btn-outline-secondary" name="mata_uang_nilai">
                             <option selected value="IDR" id="">RP</option>

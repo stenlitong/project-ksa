@@ -132,7 +132,7 @@
                                 @endfor
                                 @endif
                     {{-- Banjarmasin --}}
-                                @if (Auth::user()->cabang == 'Banjarmasin')
+                                @if (Auth::user()->cabang == 'Banjarmasin' or Auth::user()->cabang == 'Bunati')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
                                     $name = array('Surat Keterangan Asal Barang','Cargo Manifest','Voyage Report/ Term Sheet'
@@ -167,7 +167,7 @@
                                 @endfor
                                 @endif
                     {{-- Samarinda --}}
-                                @if (Auth::user()->cabang == 'Samarinda')
+                                @if (Auth::user()->cabang == 'Samarinda' or Auth::user()->cabang == 'Kendari' or Auth::user()->cabang == 'Morosi')
                                 @for ($a = 1 ; $a <= 7 ; $a++)
                                 @php
                                     $name = array('Surat Keterangan Asal Barang','Cargo Manifest','Voyage Report/ Term Sheet'

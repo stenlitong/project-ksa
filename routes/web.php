@@ -233,6 +233,13 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         //Fund Request page
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
         Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
+
+         //rekapdana page
+         Route::get('/RekapulasiDana',[PicsiteController::class, 'RekapulasiDana']);
+         Route::get('/editRekapulasiDana/{rekap}',[PicsiteController::class, 'editrekap']);
+         Route::put('/RekapulasiDana/update/{rekap}',[PicsiteController::class, 'updaterekap']);
+         Route::delete('/RekapulasiDana/destroy/{rekap}',[PicsiteController::class, 'destroyrekap']);
+         Route::post('/uploadrekap',[PicsiteController::class, 'uploadrekap']);
     });
 
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
@@ -251,12 +258,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/RPK/search', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
         Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);
+
         //rekapdana page
         Route::get('/RekapulasiDana',[picAdminController::class, 'RekapulasiDana']);
-        Route::get('/editRekapulasiDana/{rekap}',[picAdminController::class, 'editrekap']);
-        Route::put('/RekapulasiDana/update/{rekap}',[picAdminController::class, 'updaterekap']);
-        Route::delete('/RekapulasiDana/destroy/{rekap}',[picAdminController::class, 'destroyrekap']);
-        Route::post('/uploadrekap',[picAdminController::class, 'uploadrekap']);
     });
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
