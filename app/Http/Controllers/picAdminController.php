@@ -130,7 +130,7 @@ class picAdminController extends Controller
         ]);
 
         if ($request->cabang == 'Babelan'){
-        //  dd($request);
+            //  dd($request);
             $filename = $request->viewdoc;
             $result = $request->result;
             $kapal_id = $request->kapal_nama;
@@ -159,7 +159,7 @@ class picAdminController extends Controller
                 $request->reason => $request->reasonbox ,
             ]);
         }
-        if ($request->cabang == 'Banjarmasin'){
+        if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
             //  dd($request);
             $filename = $request->viewdoc;
             $result = $request->result;
@@ -174,8 +174,8 @@ class picAdminController extends Controller
                 $request->reason => $request->reasonbox ,
             ]);
         }
-        if ($request->cabang == 'Samarinda'){
-            //  dd($request);
+        if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
+            // dd($request);
             $filename = $request->viewdoc;
             $result = $request->result;
             $kapal_id = $request->kapal_nama;
@@ -262,10 +262,9 @@ class picAdminController extends Controller
                 $cabang = $request->cabang;
 
                 documentsamarinda::where($filename, 'Like', '%' . $result . '%')
-                ->where('cabang', $request->cabang)
+                ->where('cabang', $cabang)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
-                ->where('cabang' , $cabang)
                 ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
@@ -453,7 +452,7 @@ class picAdminController extends Controller
                 // dd($viewer);
                 return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
             }
-            if ($request->cabang == 'Banjarmasin'){
+            if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
                 $filenameRPK = $request->viewdocrpk;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
@@ -466,7 +465,7 @@ class picAdminController extends Controller
                 // dd($viewer);
                 return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
             }
-            if ($request->cabang == 'Samarinda'){
+            if ($request->cabang == 'Samarinda' or $request->cabang == 'Kendari' or $request->cabang == 'Morosi'){
                 $filenameRPK = $request->viewdocrpk;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;

@@ -22,6 +22,9 @@
                             <option value="/picadmin/rpk?search=Samarinda">Samarinda</option>
                             <option value="/picadmin/rpk?search=Banjarmasin">Banjarmasin</option>
                             <option value="/picadmin/dana?search=Jakarta">Jakarta</option>
+                            <option value="/picadmin/dana?search=Bunati">Bunati</option>
+                            <option value="/picadmin/dana?search=Kendari">Kendari</option>
+                            <option value="/picadmin/dana?search=Morosi">Morosi</option>
                         </select>
                     </div>
                     {{-- search bar --}}
@@ -127,7 +130,7 @@
                             <div class="form-row">
                                 {{-- approve button --}}
                                 {{-- check if cabang is banjarmasin --}}
-                                @if($d->cabang == 'Banjarmasin')
+                                @if($d->cabang == 'Banjarmasin' or $d->cabang == 'Bunati')
                                 <div class="col-md-auto">
                                     <form method="POST" action="/picadmin/rpk/update-status">
                                         @csrf
@@ -146,23 +149,23 @@
                                     </div>
                                 @endif
                                 {{-- reject button --}}
-                                <div class="col-md-auto">
-                                    <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
-                                        Reject File
-                                    </button>
-                                </div>
+                                    <div class="col-md-auto">
+                                        <button type="button" class="btn btn-outline-danger"  data-toggle="modal" data-target="#rejectTitle-{{$reason}}">
+                                            Reject File
+                                        </button>
+                                    </div>
                                 {{-- View button --}}
-                                <div class="col-md-auto">
-                                    <form method="post" action="/picadmin/rpk/view" target="_blank">
-                                        @csrf
-                                        <input type="hidden" name ='tipefile' value='RPK'>
-                                        <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
-                                        <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
-                                        <input type="hidden" name='result' value={{$d->$scan}} />
-                                        <input type="hidden" name='cabang' value={{$d->cabang}}>
-                                        <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                    </form>
-                                </div>
+                                    <div class="col-md-auto">
+                                        <form method="post" action="/picadmin/rpk/view" target="_blank">
+                                            @csrf
+                                            <input type="hidden" name ='tipefile' value='RPK'>
+                                            <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
+                                            <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
+                                            <input type="hidden" name='result' value={{$d->$scan}} />
+                                            <input type="hidden" name='cabang' value={{$d->cabang}}>
+                                            <button type="submit" name="views3" class="btn btn-dark">view</button>
+                                        </form>
+                                    </div>
                             </div>
 
                         <!-- Modal Approve-->
@@ -233,10 +236,10 @@
                         </tr>
                         @endif
                         @endfor
+                            <tr>
+                                <td> </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td>Data not found</td>
-                        </tr>
                         @endforelse
                     </tbody>
                 </table>

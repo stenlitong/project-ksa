@@ -530,7 +530,7 @@ class DashboardController extends Controller
                     ->where($filename, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->pluck($filename)[0];
-                    // dd($viewer);
+                    dd($viewer);
                     return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/" . $viewer);
                 }
                 if ($request->cabang == 'Jakarta'){
@@ -581,7 +581,6 @@ class DashboardController extends Controller
                     $result = $request->result;
                     $viewer = documentrpk::where('cabang' , $request->cabang)
                     ->whereNotNull ($filenameRPK)
-                    ->where('cabang', Auth::user()->cabang)
                     ->where($filenameRPK, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->whereColumn('created_at' , '<=', 'periode_akhir')
@@ -595,7 +594,6 @@ class DashboardController extends Controller
                     $result = $request->result;
                     $viewer = documentrpk::where('cabang' , $request->cabang)
                     ->whereNotNull ($filenameRPK)
-                    ->where('cabang', Auth::user()->cabang)
                     ->where($filenameRPK, 'Like', '%' . $result . '%')
                     ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                     ->whereColumn('created_at' , '<=', 'periode_akhir')

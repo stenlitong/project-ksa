@@ -63,6 +63,9 @@
                         <option value="/dashboard?search=Samarinda">Samarinda</option>
                         <option value="/dashboard?search=Banjarmasin">Banjarmasin</option>
                         <option value="/picadmin/dana?search=Jakarta">Jakarta</option>
+                        <option value="/picadmin/dana?search=Bunati">Bunati</option>
+                        <option value="/picadmin/dana?search=Kendari">Kendari</option>
+                        <option value="/picadmin/dana?search=Morosi">Morosi</option>
                     </select>
                 </div>
 
@@ -120,29 +123,6 @@
                     <tr>
                         {{-- agar tidak keluar hasil kosong --}}
                     </tr>
-                    {{-- @elseif ($d->$stats == 'on review')
-                    <tr>
-                        hasil on review
-                        <td class="table-warning"><strong>{{ $d->$time_upload }}</strong></td>
-                        <td class="table-warning"><strong>{{ $d->cabang }}</strong></td>
-                        <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
-                        <td class="table-warning" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
-                        <td class="table-warning" id="namafile">{{$names[$r-1]}}</td>     
-                        <td class="table-secondary" id="jenisfile"><strong>RPK</strong></td>     
-                        <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
-                        <td class="table-warning" id="reason">{{$d ->$reason}}</td>       
-                        <td class="table-warning" >
-                            <form method="post" action="/dashboard/rpk/view" target="_blank">
-                                @csrf
-                                <input type="hidden" name = 'cabang' value={{$d->cabang}}>
-                                <input type="hidden" name = 'tipefile' value='RPK'>
-                                <input type="hidden" name = 'kapal_nama' value={{$d->nama_kapal}}>
-                                <input type="hidden" name='viewdocrpk' value={{$RPK[$r-1]}} />
-                                <input type="hidden" name='result' value={{$d->$scan}} />
-                                <button type="submit" name="views3" class="btn btn-dark">view</button>
-                            </form>
-                        </td>                                 
-                    </tr> --}}
                 @elseif($d->$stats == 'approved')
                     <tr>
                         <td class="table-success">{{ $d->$time_upload }}</td>
@@ -150,7 +130,7 @@
                         <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-success" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                         <td class="table-success" id="namafile">{{$names[$r-1]}}</td>     
-                        <td class="table-secondary" id="jenisfile"><strong>RPK</strong></td>     
+                        <td class="table-dark" id="jenisfile"><strong>RPK</strong></td>     
                         <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
                         <td class="table-success" id="reason">{{$d->$reason}}</td>
                         <td class="table-success" >
@@ -177,7 +157,7 @@
                         <td class="table-danger" style="text-transform: uppercase;" id="namakapal">{{$d->nama_kapal}}</td>                                        
                         <td class="table-danger" id="periode"><strong>{{$d->periode_awal}} To {{$d->periode_akhir}}</strong></td>                                   
                         <td class="table-danger" id="namafile">{{$names[$r-1]}}</td>   
-                        <td class="table-secondary" id="jenisfile"><strong>RPK</strong></td>    
+                        <td class="table-dark" id="jenisfile"><strong>RPK</strong></td>    
                         <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$d->$stats}}</td>                                      
                         <td class="table-danger" id="reason">{{$d->$reason}}</td>
                         <td class="table-danger" >
@@ -200,9 +180,7 @@
                         </td>
                     </tr>
                 @empty
-                <tr>
-                    <td> No RPK Data Found </td>
-                </tr>
+                
                 @endforelse
 {{-- Babelan------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ --}} 
                     @forelse($document as $doc )
@@ -453,29 +431,6 @@
                 <tr>
                     {{-- agar tidak keluar hasil kosong --}}
                 </tr>
-                {{-- @elseif ($b->$stats == 'on review')
-                    <tr>
-                        hasil on review
-                        <td class="table-warning"><strong>{{ $b->$time_upload }}</strong></td>
-                        <td class="table-warning"><strong>{{ $b->cabang }}</strong></td>
-                        <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$b->nama_kapal}}</td>                                        
-                        <td class="table-warning" id="periode"><strong>{{$b->periode_awal}} To {{$b->periode_akhir}}</strong></td>                                   
-                        <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
-                        <td class="table-dark" id="jenisfile"><strong>DANA</strong></td>     
-                        <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$b->$stats}}</td>                                      
-                        <td class="table-warning" id="reason">{{$b ->$reason}}</td>
-                        <td class="table-warning">
-                            <form method="post" action="/dashboard/dana/view" target="_blank">
-                                @csrf
-                                <input type="hidden" name = 'cabang' value={{$b->cabang}}>
-                                <input type="hidden" name='viewdoc' value={{$BANJARMASIN[$a-1]}} />
-                                <input type="hidden" name='result' value={{$b->$scan}} />
-                                <input type="hidden" name = 'tipefile' value='DANA'>
-                                <input type="hidden" name = 'kapal_nama' value={{$b->nama_kapal}}>
-                                <button type="submit" name="views3" class="btn btn-dark">view</button>
-                            </form>
-                        </td>                                          
-                    </tr> --}}
                 @elseif($b->$stats == 'approved')
                     <tr>
                         <td class="table-success"><strong>{{ $b->$time_upload }}</strong></td>
@@ -573,34 +528,10 @@
                     <tr>
                         {{-- agar tidak keluar hasil kosong --}}
                     </tr>
-                    {{-- @elseif ($s->$stats == 'on review')
-                        <tr>
-                            hasil on review
-                            <td class="table-warning"><strong>{{ $s->$time_upload }}</strong></td>
-                            <td class="table-warning"><strong>{{ $s->cabang }}</strong></td>
-                            <td class="table-warning" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
-                            <td class="table-warning" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
-                            <td class="table-warning" id="namafile">{{$names[$a-1]}}</td>  
-                            <td class="table-dark" id="jenisfile"><strong>DANA</strong></td>     
-                            <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$s->$stats}}</td>                                      
-                            <td class="table-warning" id="reason">{{$s ->$reason}}</td>   
-                            <td class="table-warning">
-                                <form method="post" action="/dashboard/dana/view" target="_blank">
-                                    @csrf
-                                    <input type="hidden" name = 'cabang' value={{$s->cabang}}>
-                                    <input type="hidden" name='viewdoc' value={{$SAMARINDA[$a-1]}} />
-                                    <input type="hidden" name='result' value={{$s->$scan}} />
-                                    <input type="hidden" name = 'tipefile' value='DANA'>
-                                    <input type="hidden" name = 'kapal_nama' value={{$s->nama_kapal}}>
-                                    <button type="submit" name="views3" class="btn btn-dark">view</button>
-                                </form>
-                            </td>                                                                   
-                        </tr> --}}
                     @elseif($s->$stats == 'approved')
                         <tr>
                             <td class="table-success"><strong>{{ $s->$time_upload }}</strong></td>
                             <td class="table-success"><strong>{{ $s->cabang }}</strong></td>
-                            <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
                             <td class="table-success" style="text-transform: uppercase;" id="namakapal">{{$s->nama_kapal}}</td>                                        
                             <td class="table-success" id="periode"><strong>{{$s->periode_awal}} To {{$s->periode_akhir}}</strong></td>                                   
                             <td class="table-success" id="namafile">{{$names[$a-1]}}</td>     

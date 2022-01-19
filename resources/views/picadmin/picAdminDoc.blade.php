@@ -22,6 +22,9 @@
                         <option value="/picadmin/dana?search=Samarinda">Samarinda</option>
                         <option value="/picadmin/dana?search=Banjarmasin">Banjarmasin</option>
                         <option value="/picadmin/dana?search=Jakarta">Jakarta</option>
+                        <option value="/picadmin/dana?search=Bunati">Bunati</option>
+                        <option value="/picadmin/dana?search=Kendari">Kendari</option>
+                        <option value="/picadmin/dana?search=Morosi">Morosi</option>
                     </select>
                   </div>
 

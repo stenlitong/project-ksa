@@ -77,10 +77,14 @@ class PicsiteController extends Controller
         public function RekapulasiDana(){
             // $last_three_month = Carbon::now()->startOfMonth()->subMonth(3);
             // $this_month = Carbon::now()->startOfMonth(); 
-       
+            // dd(Auth::user()->cabang);
+            
             $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
+            ->where('Cabang', Auth::user()->cabang)
             ->latest()
             ->get();
+
+            // dd($rekapdana);
             return view('picsite.picsiteRekapulasiDana', compact('rekapdana'));
         }
     
