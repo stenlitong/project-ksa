@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="jetty">Jetty</label>
-                                    <input name="jetty" type="text" class="form-control" id="jetty" maxlength="50" pattern="[A-Za-z]{2,}" placeholder="Input Jetty (min. 2 alpha)..."
+                                    <input name="jetty" type="text" class="form-control" id="jetty" maxlength="50" placeholder="Input Jetty (min. 2 alpha)..."
                                         style=" height: 50px" required>
                                 </div>
                                 <div class="form-group col-md-4">

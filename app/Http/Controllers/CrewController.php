@@ -293,11 +293,13 @@ class CrewController extends Controller
 
     public function updateOngoingTask(Request $request){
         $operationalData = OperationalBoatData::where('id', $request -> taskId)->first();
-
+        dd($request);
         if($operationalData -> taskType == 'Return Cargo'){
             // Validate All The Return Cargo Fields
             $validated = $request -> validate([
-                'condition' => 'required|alpha',
+                'from' => 'required|string',
+                'to' => 'required|string',
+                'condition' => 'nullable|alpha',
                 'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
                 'cargoAmountEndCargo' => 'nullable|numeric|min:1',
                 'description' => 'nullable',
