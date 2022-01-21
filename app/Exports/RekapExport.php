@@ -77,7 +77,7 @@ class RekapExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEve
                             'color' => ['argb' => 'FF000000'],
                     ]]
                 ]);
-                $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                // $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
                 
                 $event->sheet->getDelegate()->getStyle('A:G')
                 ->getAlignment()
