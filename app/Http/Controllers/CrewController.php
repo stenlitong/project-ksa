@@ -298,7 +298,7 @@ class CrewController extends Controller
             $validated = $request -> validate([
                 'from' => 'required|string',
                 'to' => 'required|string',
-                'condition' => 'nullable|alpha',
+                'condition' => 'nullable|string',
                 'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
                 'cargoAmountEndCargo' => 'nullable|numeric|min:1',
                 'description' => 'nullable',
