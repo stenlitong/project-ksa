@@ -20,10 +20,10 @@ class CreateOperationalBoatDataTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('tugName');
+            $table->string('tugName');
             // $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('bargeName')->nullable();
+            $table->string('bargeName');
             // $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
             $table->string('jetty', 50);

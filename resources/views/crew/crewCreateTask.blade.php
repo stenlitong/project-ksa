@@ -37,7 +37,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label>Tug</label>
-                                    <select class="form-control" name="tug_id" id="tug_id" style=" height:50px;" required>
+                                    <select class="form-control" name="tugName" id="tugName" style=" height:50px;" required>
                                         @foreach($tugs as $t)
                                             <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                         @endforeach
@@ -45,9 +45,10 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Barge (Optional)</label>
-                                    <select class="form-control" name="barge_id" id="barge_id" style=" height:50px;" required>
+                                    <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;" required>
+
                                         @foreach($barges as $b)
-                                            <option value="{{ $b -> tugName }}">{{ $b -> bargeName }}</option>
+                                            <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
