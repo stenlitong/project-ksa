@@ -396,10 +396,10 @@ class CrewController extends Controller
             $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : 0;
 
             // Ldg Time = (C/Off (L) - Commence Load (L))
-            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : null;
+            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : 0;
 
             // Ldg Rate = Quantity : Actual Ldg Time
-            $ldgRate = $operationalData -> cargoAmountEnd != 0 && !empty($ldgTime) ? (double) $operationalData -> cargoAmountEnd / (double) $ldgTime : 0;
+            $ldgRate = $operationalData -> cargoAmountEnd != 0 && (double) $ldgTime > 0 ? (double) $operationalData -> cargoAmountEnd / (double) $ldgTime : 0;
 
             // Berthing = (Aside (L) - Start Aside (L))
             $berthing = !empty($operationalData -> asideL) && !empty($operationalData -> startAsideL) ? date_diff(new DateTime($operationalData -> asideL), new DateTime($operationalData -> startAsideL))->format('%h.%i') : 0;
