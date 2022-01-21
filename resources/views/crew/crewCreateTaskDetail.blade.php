@@ -462,7 +462,7 @@
                                     <div class="d-flex justify-content-center mt-3">
                                         <div class="form-group col-md-6">
                                             <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
-                                            <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}" required>
+                                            <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
