@@ -310,7 +310,8 @@ class CrewController extends Controller
                 'commMVCargo' => 'nullable|date',
                 'compMVCargo' => 'nullable|date',
                 'cOffMVCargo' => 'nullable|date',
-
+                
+                'departureTime' => 'nullable|date'
             ]);
         }else{
             // Validate All The Fields
