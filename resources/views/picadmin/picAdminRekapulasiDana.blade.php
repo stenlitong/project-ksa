@@ -11,17 +11,56 @@
             <div class="jumbotron jumbotron-fluid" >
                 <div class="container">
                     <h1 class="display-4"><strong>Rekapitulasi Dana</strong></h1>
-                    
+
+                    <br>
+
+                    <div class="col">
+                        <div class="text-md-center">
+                            <button class="btn btn-outline-success"  id="top" style=" width: 100%;" data-toggle="modal" data-target="#Download">Download</button>
+                        </div>
+                    </div>
+    
+                    {{-- Modal download --}}
+                        <div class="modal fade" id="Download" tabindex="-1" role="dialog" aria-labelledby="Download" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="Download">Download Options</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <form method="POST" action="/picadmin/exportPDF">
+                                            @csrf
+                                            <label for="downloadPDF">Download As PDF :</label>
+                                            <button  name='downloadPDF' id="downloadPDF" class="btn btn-outline-dark">Download PDF</button>
+                                        </form>
+                                        
+                                        <br>
+                                        <br>
+                                        
+                                        <form method="POST" action="/picadmin/exportExcel">
+                                            @csrf
+                                            <label for="downloadExcel">Download As Excel :</label>
+                                            <button  name='downloadExcel' id="downloadExcel" class="btn btn-outline-dark">Download Excel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    {{-- table data --}}
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">No.</th>
                                 <th scope="col">Periode</th>
                                 <th scope="col">Cabang</th>
-                                <th scope="col">Nama Tug</th>
-                                <th scope="col">Nama Barge</th>
-                                <th scope="col">status pembayaran</th>
-                                <th scope="col">Nilai Jumlah Di setujui</th>
+                                <th scope="col">Nama TugBoat/Barge</th>
+                                <th scope="col">Nama File</th>
+                                <th scope="col">Nilai Jumlah Di Ajukan</th>
                                 {{-- <th scope="col">Action</th> --}}
                             </tr>
                         </thead>
@@ -32,11 +71,10 @@
                             @endphp
                             <tr>
                                 <td class="table-info">{{$loop->index+1}}</td>
+                                <td class="table-info">{{$rekap->Nama_File}}</td>
+                                <td class="table-info" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
+                                <td class="table-info">{{$rekap->NamaTug_Barge}}</td>
                                 <td class="table-info" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
-                                <td class="table-info">{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->NamaTug}}</td>
-                                <td class="table-info">{{$rekap->NamaBarge}}</td>
-                                <td class="table-info">{{$rekap->status_pembayaran}}</td>
                                 <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
                             </tr>
                             @empty

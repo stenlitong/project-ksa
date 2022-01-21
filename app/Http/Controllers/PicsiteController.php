@@ -10,24 +10,29 @@ use App\Mail\Gmail;
 use App\Models\User;
 use App\Models\documents;
 use App\Models\Rekapdana;
-use Illuminate\Http\Request;
 use App\Models\documentberau;
 use App\Models\documentJakarta;
 use App\Models\documentsamarinda;
-use Illuminate\Support\Facades\DB;
 use App\Models\documentbanjarmasin;
+
+use App\Exports\RekapExport;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Google\Cloud\Storage\StorageClient;
 
 class PicsiteController extends Controller
 {
+    // upload dana page
     public function uploadform(Request $request){
         return view('picsite.upload');
     }
 
-    // RekapulasiDana edit
+    //RekapulasiDana edit
         public function editrekap(Rekapdana $rekap){
             return view('picsite.picsiteEditRekap', compact('rekap'));
         }
@@ -36,16 +41,14 @@ class PicsiteController extends Controller
             $rekap = Rekapdana::find($rekap->id);
             $rekap->DateNote1 = $request->Datebox1;
             $rekap->DateNote2 = $request->Datebox2;
-            $rekap->Cabang = $request->Cabang;
-            $rekap->NamaTug = $request->NamaTug;
-            $rekap->NamaBarge = $request->NamaBarge;
-            $rekap->status_pembayaran = $request->status_pembayaran;
+            $rekap->NamaTug_Barge = $request->NamaTug_Barge;
+            $rekap->Nama_File = $request->Nama_File;
             $rekap->Nilai = $request->Nilai;
             $rekap->mata_uang_nilai = $request->mata_uang_nilai;
             $rekap->update();
             return redirect('/picsite/RekapulasiDana')->with('success', 'post telah terupdate.'); 
         }
-    // RekapulasiDana delete
+    //RekapulasiDana delete
         public function destroyrekap(Rekapdana $rekap){
             Rekapdana::destroy($rekap->id); 
             return redirect('/picsite/RekapulasiDana')->with('success', 'post telah dihapus.'); 
@@ -54,9 +57,8 @@ class PicsiteController extends Controller
         public function uploadrekap(Request $request){
             // dd($request);
             $request->validate([
-                'NamaBarge'=> 'required',
-                'NamaTug'=> 'required',
-                'status_pembayaran'=> 'required',
+                'NamaTug_Barge'=> 'required',
+                'Nama_File'=> 'required',
                 'Nilai'=> 'required|numeric',
             ]);
 
@@ -65,30 +67,47 @@ class PicsiteController extends Controller
                 'DateNote1' => $request->Datebox1 ,
                 'DateNote2' => $request->Datebox2 ,
                 'Cabang' => Auth::user()->cabang ,
-                'NamaBarge' => $request->NamaBarge ,
-                'NamaTug' => $request->NamaTug ,
-                'status_pembayaran' => $request->status_pembayaran ,
+                'NamaTug_Barge' => $request->NamaTug_Barge ,
+                'Nama_File' => $request->Nama_File ,
                 'Nilai' => $request->Nilai ,
                 'mata_uang_nilai' => $request->mata_uang_nilai ,
             ]);
             return redirect('/picsite/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
         }
-    // RekapulasiDana page
-        public function RekapulasiDana(){
-            // $last_three_month = Carbon::now()->startOfMonth()->subMonth(3);
-            // $this_month = Carbon::now()->startOfMonth(); 
-            // dd(Auth::user()->cabang);
-            
-            $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
-            ->where('Cabang', Auth::user()->cabang)
-            ->latest()
-            ->get();
+    //RekapulasiDana page
+        public function RekapulasiDana()
+            {
+                $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
+                ->where('Cabang', Auth::user()->cabang)
+                ->latest()
+                ->get();
 
-            // dd($rekapdana);
-            return view('picsite.picsiteRekapulasiDana', compact('rekapdana'));
+                // dd($rekapdana);
+                return view('picsite.picsiteRekapulasiDana', compact('rekapdana'));
+            }
+    private $excel;
+    public function __construct(Excel $excel){
+        $this->excel = $excel;
+    }
+    //export Rekap PDF page
+        public function exportPDF() 
+        {
+            $date = Carbon::now();
+            $monthName = $date->format('F');
+            
+            return (new RekapExport)->download('RekapulasiDana'. '-' . $monthName . '-' .'.pdf' , \Maatwebsite\Excel\Excel::DOMPDF);
         }
-    
-    public function uploadfile(Request $request){
+
+    //export Rekap Excel page
+        public function exportEXCEL() 
+        {
+            $date = Carbon::now();
+            $monthName = $date->format('F');
+            return Excel::download(new RekapExport, 'RekapulasiDana'. '-' . $monthName . '-' . '.xlsx');
+        }
+
+    //upload files
+        public function uploadfile(Request $request){
 
         $document = documents::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();
         $documentberau = documentberau::with('user')->where('cabang',Auth::user()->cabang)->latest()->get();

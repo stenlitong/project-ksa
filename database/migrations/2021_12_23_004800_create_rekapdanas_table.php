@@ -17,12 +17,11 @@ class CreateRekapdanasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('Nama_File')->nullable();
+            $table->string('Cabang')->nullable();
+            $table->string('NamaTug_Barge')->nullable();
             $table->date('DateNote1')->nullable();
             $table->date('DateNote2')->nullable();
-            $table->string('Cabang')->nullable();
-            $table->string('NamaTug')->nullable();
-            $table->string('NamaBarge')->nullable();
-            $table->string('status_pembayaran')->nullable();
             $table->decimal('Nilai', 14, 2)->nullable();
             $table->string('mata_uang_nilai')->nullable();
             $table->timestamps();

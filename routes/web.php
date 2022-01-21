@@ -234,12 +234,14 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
         Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
 
-         //rekapdana page
-         Route::get('/RekapulasiDana',[PicsiteController::class, 'RekapulasiDana']);
-         Route::get('/editRekapulasiDana/{rekap}',[PicsiteController::class, 'editrekap']);
-         Route::put('/RekapulasiDana/update/{rekap}',[PicsiteController::class, 'updaterekap']);
-         Route::delete('/RekapulasiDana/destroy/{rekap}',[PicsiteController::class, 'destroyrekap']);
-         Route::post('/uploadrekap',[PicsiteController::class, 'uploadrekap']);
+        //rekapdana page
+        Route::get('/RekapulasiDana',[PicsiteController::class, 'RekapulasiDana']);
+        Route::get('/editRekapulasiDana/{rekap}',[PicsiteController::class, 'editrekap']);
+        Route::put('/RekapulasiDana/update/{rekap}',[PicsiteController::class, 'updaterekap']);
+        Route::delete('/RekapulasiDana/destroy/{rekap}',[PicsiteController::class, 'destroyrekap']);
+        Route::post('/uploadrekap',[PicsiteController::class, 'uploadrekap']);
+        Route::post('/exportExcel', [PicsiteController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [PicsiteController::class, 'exportPDF']);
     });
 
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
@@ -261,6 +263,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         //rekapdana page
         Route::get('/RekapulasiDana',[picAdminController::class, 'RekapulasiDana']);
+        Route::post('/exportExcel', [picAdminController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [picAdminController::class, 'exportPDF']);
     });
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
@@ -306,8 +310,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         //Rekapulasi Dana history page
         Route::get('/HistoryRekapulasiDana', 'InsuranceController@historyRekapulasiDana');
-        Route::delete('/destroy/{rekap}', [InsuranceController::class , 'DestroyHistoryRekap']);
-        Route::put('/update/{rekap}', [InsuranceController::class, 'UpdateHistoryRekap']);
+        Route::post('/exportExcel', [InsuranceController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [InsuranceController::class, 'exportPDF']);
     });
 });
 

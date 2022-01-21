@@ -13,6 +13,7 @@ use App\Models\spgrfile;
 use App\Models\tempcart;
 use App\Models\Rekapdana;
 use App\Exports\FCIexport;
+use App\Exports\RekapAdminExport;
 use App\Models\formclaims;
 use Illuminate\Http\Request;
 use App\Models\headerformclaim;
@@ -32,6 +33,7 @@ class InsuranceController extends Controller
         //check if search-bar is filled or not
         if ($request->filled('search_no_formclaim')) {
             $uploadspgr = spgrfile::where('no_formclaim', 'Like', '%' . $request->search_no_formclaim . '%')
+            ->whereMonth('created_at', date('m'))
             ->orderBy('id', 'DESC')
             ->latest()->get();
         }
@@ -126,6 +128,23 @@ class InsuranceController extends Controller
         $name = $request->file_name;
         $identify = $request->file_id;
         return $this->excel::download(new FCIexport($identify), 'FCI'.$name.'.xlsx');
+    }
+    
+    //export Rekap page
+    public function exportPDF() 
+    {
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+
+        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' .'.pdf' , Excel::DOMPDF);
+    }
+
+    //export Rekap page
+    public function exportEXCEL() 
+    {
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' . '.xlsx');
     }
 
     //History Rekapulsi Dana page

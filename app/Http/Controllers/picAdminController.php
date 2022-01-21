@@ -14,12 +14,14 @@ use App\Models\documentrpk;
 use Illuminate\Http\Request;
 use App\Models\documentberau;
 use App\Models\documentJakarta;
+use App\Exports\RekapAdminExport;
 use App\Models\documentsamarinda;
 use Illuminate\Support\Facades\DB;
 use App\Models\documentbanjarmasin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class picAdminController extends Controller
 {
@@ -494,12 +496,31 @@ class picAdminController extends Controller
         }
     }
     
+    private $excel;
+    public function __construct(Excel $excel){
+        $this->excel = $excel;
+    }
+    
+    //export Rekap PDF page
+    public function exportPDF() 
+    {
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+
+        return (new RekapAdminExport)->download('RekapulasiDana'. '-' . $monthName . '-' .'.pdf' , \Maatwebsite\Excel\Excel::DOMPDF);
+    }
+
+    //export Rekap Excel page
+    public function exportEXCEL() 
+    {
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' . '.xlsx');
+    }
+
     // RekapulasiDana page
     public function RekapulasiDana(){
-        // $last_three_month = Carbon::now()->startOfMonth()->subMonth(3);
-        // $this_month = Carbon::now()->startOfMonth(); 
     
-       
         $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
         ->latest()
         ->get();

@@ -15,5 +15,6 @@ class Rekapdana extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    Protected $hidden =['user_id','created_at','updated_at'];
 
 }
