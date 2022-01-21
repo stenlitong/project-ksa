@@ -17,7 +17,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $dok_days }}</h5>
+                            <h5 class="text-white mt-3 display-2">{{ $dok_ship_count }}</h5>
                             <h5 class="text-white mt-3">DOK</h5>
                           </div>
                         </div>
@@ -25,7 +25,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $perbaikan_days }}</h5>
+                            <h5 class="text-white mt-3 display-2">{{ $perbaikan_ship_count }}</h5>
                             <h5 class="text-white mt-3">Perbaikan</h5>
                           </div>
                         </div>
@@ -33,7 +33,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $kandas_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $kandas_ship_count }}</h1>
                             <h5 class="text-white mt-3">Kandas</h5>
                           </div>
                         </div>
@@ -41,7 +41,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguDOK_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $tungguDOK_ship_count }}</h1>
                             <h5 class="text-white mt-3">Tunggu DOK</h5>
                           </div>
                         </div>
@@ -49,7 +49,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguTug_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $tungguTugboat_ship_count }}</h1>
                             <h5 class="text-white mt-3">Tunggu Tug Boat</h5>
                           </div>
                         </div>
@@ -57,7 +57,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguDokumen_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $tungguDokumen_ship_count }}</h1>
                             <h5 class="text-white mt-3">Tunggu Dokumen</h5>
                           </div>
                         </div>
@@ -65,7 +65,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $standbyDOK_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $standbyDOK_ship_count }}</h1>
                             <h5 class="text-white mt-3">Standby DOK</h5>
                           </div>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $bocor_days }}</h1>
+                            <h1 class="text-white mt-3 display-2">{{ $bocor_ship_count }}</h1>
                             <h5 class="text-white mt-3">Bocor</h5>
                           </div>
                         </div>

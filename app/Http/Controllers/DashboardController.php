@@ -26,6 +26,7 @@ use App\Models\documentsamarinda;
 use App\Models\spgrfile;
 use App\Models\NoteSpgr;
 use Illuminate\Http\Request;
+use Matrix\Operators\Operator;
 
 class DashboardController extends Controller
 {
@@ -230,14 +231,26 @@ class DashboardController extends Controller
         }elseif(Auth::user()->hasRole('adminOperational')){
 
             // Sum The DAYS Of Each Condition, Not The Count Of The Ship
-            $dok_days = OperationalBoatData::where('status', 'On Going')->sum('DOKDays');
-            $perbaikan_days = OperationalBoatData::where('status', 'On GOing')->sum('perbaikanDays');
-            $kandas_days = OperationalBoatData::where('status', 'On GOing')->sum('kandasDays');
-            $tungguDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDOKDays');
-            $tungguTug_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguTugDays');
-            $tungguDokumen_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDokumenDays');
-            $standbyDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('standbyDOKDays');
-            $bocor_days = OperationalBoatData::where('status', 'On GOing')->sum('bocor');
+            $dok_days = OperationalBoatData::where('status', 'On Going')->sum('DOKDays'); // 
+            $standbyDOK_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDOKDays'); //
+
+            // Ship Count
+            $dok_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'DOK')->count();
+            $perbaikan_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Perbaikan')->count();
+            $kandas_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Kandas')->count();
+            $tungguDOK_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu DOK')->count();
+            $tungguTugboat_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu Tugboat atau Barge')->count();
+            $tungguDokumen_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu Dokumen')->count();
+            $standbyDOK_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby DOK')->count();
+            $bocor_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Bocor')->count();
+
+
+            // $perbaikan_days = OperationalBoatData::where('status', 'On Going')->sum('perbaikanDays');
+            // $kandas_days = OperationalBoatData::where('status', 'On Going')->sum('kandasDays');
+            // $tungguDOK_days = OperationalBoatData::where('status', 'On Going')->sum('tungguDOKDays');
+            // $tungguTug_days = OperationalBoatData::where('status', 'On Going')->sum('tungguTugDays');
+            // $tungguDokumen_days = OperationalBoatData::where('status', 'On Going')->sum('tungguDokumenDays');
+            // $bocor_days = OperationalBoatData::where('status', 'On Going')->sum('bocor');
 
             // formula => Total lost time : 
             // DOK - standby belum DOK
@@ -255,7 +268,7 @@ class DashboardController extends Controller
                 $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
             }
 
-            return view('adminOperational.adminOperationalDashboard', compact('dok_days', 'perbaikan_days', 'kandas_days', 'tungguDOK_days', 'tungguTug_days', 'tungguDokumen_days', 'standbyDOK_days', 'bocor_days', 'total_lost_time', 'percentage_ship_activity'));
+            return view('adminOperational.adminOperationalDashboard', compact('dok_ship_count', 'perbaikan_ship_count', 'kandas_ship_count', 'tungguDOK_ship_count', 'tungguTugboat_ship_count', 'tungguDokumen_ship_count', 'standbyDOK_ship_count', 'bocor_ship_count', 'total_lost_time', 'percentage_ship_activity'));
         }elseif(Auth::user()->hasRole('picSite')){
             return view('picsite.picDashboard');
         }elseif(Auth::user()->hasRole('picAdmin')){

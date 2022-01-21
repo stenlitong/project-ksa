@@ -150,7 +150,7 @@
                                                     <h5 class="card-title text-center text-danger font-weight-bold">Arrival (POD)</h5>
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
-                                                        <input class="form-control" type="datetime-local" name="arrivalPODGeneral" id="arrivalPODGeneral" value="{{ $ot -> arrivalPOD != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPOD)) : '' }}">
+                                                        <input class="form-control" type="datetime-local" name="arrivalPODGeneral" id="arrivalPODGeneral" value="{{ $ot -> arrivalPODGeneral != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPODGeneral)) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -502,7 +502,7 @@
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="description">Deskripsi : </label>
                                             <br>
-                                            <textarea name="description" id="" cols="102" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
+                                            <textarea name="description" id="" style="width: 100%" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-around mt-5">

@@ -8,7 +8,7 @@
         @include('adminOperational.sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1 class="mt-5 mb-3 text-center">Daily Report Transhipment</h1>
+            <h1 class="mt-5 mb-3 text-center">Monitoring Shipment</h1>
 
             <div class="mb-3" style="margin-top: 10vh">
                 <form action="" method="POST">
@@ -16,19 +16,19 @@
                     <div class="form-row">
                         <div class="form-group col-md-2 mx-3">
                             <label class="font-weight-bold" for="">Search Tug</label>
-                            <select class="custom-select" id="tug_id">
+                            <select class="custom-select" id="tugName">
                                 <option disabled>Choose</option>
                                 @foreach($tugs as $t)
-                                    <option value="{{ $t -> id }}">{{ $t -> tugName }}</option>
+                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-2 mx-3">
                             <label class="font-weight-bold" for="">Search Barge</label>
-                            <select class="custom-select" id="barge_id">
+                            <select class="custom-select" id="bargeName">
                                 <option disabled>Choose</option>
                                 @foreach($barges as $b)
-                                    <option value="{{ $b -> id }}">{{ $b -> bargeName }}</option>
+                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,8 +86,8 @@
 
         function search(){
             event.preventDefault();
-            let tug_id = document.getElementById('tug_id').value;
-            let barge_id = document.getElementById('barge_id').value;
+            let tugName = document.getElementById('tugName').value;
+            let bargeName = document.getElementById('bargeName').value;
             let from = document.getElementById('from').value;
             let to = document.getElementById('to').value;
             let taskType = document.getElementById('taskType').value;
@@ -99,8 +99,8 @@
                 method: "POST",
                 data: {
                     _token,
-                    tug_id,
-                    barge_id,
+                    tugName,
+                    bargeName,
                     from,
                     to,
                     taskType

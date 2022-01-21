@@ -20,11 +20,11 @@ class CreateOperationalBoatDataTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('tug_id');
-            $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('tugName');
+            // $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('barge_id')->nullable();
-            $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('bargeName')->nullable();
+            // $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
             $table->string('jetty', 50);
             $table->string('taskType', 30);
@@ -128,6 +128,7 @@ class CreateOperationalBoatDataTable extends Migration
             // Validation Data
             $table->integer('task_tracker')->default(0);
             $table->integer('cargoChangeTracker')->default(0);
+            $table->integer('cargo2ChangeTracker')->default(0);
 
             $table->timestamps();
         });

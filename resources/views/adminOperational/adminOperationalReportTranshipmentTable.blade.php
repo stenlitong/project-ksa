@@ -48,8 +48,8 @@
             <form action="/admin-operational/daily-reports/download" method="POST">
                 @csrf
 
-                <input type="hidden" name="tugId" value="{{ $tug_id }}">
-                <input type="hidden" name="bargeId" value="{{ $barge_id }}">
+                <input type="hidden" name="tugName" value="{{ $tugName }}">
+                <input type="hidden" name="bargeName" value="{{ $bargeName }}">
                 <input type="hidden" name="taskType" value="{{ $taskType }}">
                 <input type="hidden" name="month" value="{{ $month }}">
                 <input type="hidden" name="year" value="{{ $year }}">

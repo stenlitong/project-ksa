@@ -254,9 +254,9 @@ class CrewController extends Controller
     public function createTaskPost(Request $request){
         // Validate Request
         $validated = $request -> validate([
-            'tug_id' => 'required|exists:tugs,id',
-            'barge_id' => 'required|exists:barges,id',
-            'jetty' => 'required|alpha',
+            'tugName' => 'required|exists:tugs,tugName',
+            'bargeName' => 'required|exists:barges,bargeName',
+            'jetty' => 'required|string',
             'cargoAmountStart' => 'required|numeric|min:1',
             // 'customer' => 'required|alpha',
             'taskType' => 'required|in:Operational Shipment,Operational Transhipment'
@@ -299,7 +299,7 @@ class CrewController extends Controller
             $validated = $request -> validate([
                 'condition' => 'required|alpha',
                 'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
-                'cargoAmountEndCargo' => 'required|numeric|min:1',
+                'cargoAmountEndCargo' => 'nullable|numeric|min:1',
                 'description' => 'nullable',
 
                 // Return Cargo
@@ -314,9 +314,9 @@ class CrewController extends Controller
         }else{
             // Validate All The Fields
             $validated = $request -> validate([
-                'from' => 'required|alpha',
-                'to' => 'required|alpha',
-                'condition' => 'required|alpha',
+                'from' => 'required|string',
+                'to' => 'required|string',
+                'condition' => 'required|string',
                 'customer' => 'nullable',
                 'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
                 'cargoAmountEnd' => 'nullable|numeric|min:1',
@@ -353,11 +353,19 @@ class CrewController extends Controller
             ]);
         }
 
-        // Validation Of CargoAmountEnd, Max 2 Updates
-        if($operationalData -> cargoChangeTracker < 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
-            $validated['cargoChangeTracker'] = $operationalData -> cargoChangeTracker + 1;
-        }elseif($operationalData -> cargoChangeTracker == 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
-            return redirect()->back()->with('error', 'Has Reached The Maximum Amount Of Jumlah Kargo Update');
+        // Validation Of CargoAmountEnd, Max 2 Updates => Crew can only update twice of cargo amount, Operational Transhipment and Return Cargo does not share the updates
+        if($operationalData -> taskType == 'Return Cargo'){
+            if($operationalData -> cargo2ChangeTracker < 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+                $validated['cargo2ChangeTracker'] = $operationalData -> cargo2ChangeTracker + 1;
+            }elseif($operationalData -> cargo2ChangeTracker == 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+                return redirect()->back()->with('error', 'Has Reached The Maximum Amount Of Jumlah Kargo Update');
+            }
+        }else{
+            if($operationalData -> cargoChangeTracker < 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+                $validated['cargoChangeTracker'] = $operationalData -> cargoChangeTracker + 1;
+            }elseif($operationalData -> cargoChangeTracker == 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+                return redirect()->back()->with('error', 'Has Reached The Maximum Amount Of Jumlah Kargo Update');
+            }
         }
 
         $validated['from'] = strtolower($request -> from);
@@ -388,7 +396,7 @@ class CrewController extends Controller
             $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : 0;
 
             // Ldg Time = (C/Off (L) - Commence Load (L))
-            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : 0;
+            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : null;
 
             // Ldg Rate = Quantity : Actual Ldg Time
             $ldgRate = $operationalData -> cargoAmountEnd != 0 && !empty($ldgTime) ? (double) $operationalData -> cargoAmountEnd / (double) $ldgTime : 0;

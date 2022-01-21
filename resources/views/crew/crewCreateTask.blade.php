@@ -39,7 +39,7 @@
                                     <label>Tug</label>
                                     <select class="form-control" name="tug_id" id="tug_id" style=" height:50px;" required>
                                         @foreach($tugs as $t)
-                                            <option value="{{ $t -> id }}">{{ $t -> tugName }}</option>
+                                            <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -47,7 +47,7 @@
                                     <label>Barge (Optional)</label>
                                     <select class="form-control" name="barge_id" id="barge_id" style=" height:50px;" required>
                                         @foreach($barges as $b)
-                                            <option value="{{ $b -> id }}">{{ $b -> bargeName }}</option>
+                                            <option value="{{ $b -> tugName }}">{{ $b -> bargeName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
