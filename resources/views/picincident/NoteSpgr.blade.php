@@ -16,38 +16,41 @@
                             <strong>{{ $success }}</strong>
                         </div>
                     @endif
-                  <div class="row">
-                      <div class="col">
-                          <div class="text-md-left">
-                              @forelse($UploadNotes as $UpNotes )
-                                @if ($loop->index > 0)
-                                    <form action="/picincident/NoteSpgr/destroyall" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                            <button type="submit" onClick="return confirm('Are you sure to delete all the notes?')" class="btn btn-outline-danger">
-                                                Delete All Note
-                                            </button>
+                    <div class="row">
+                        @forelse($UploadNotes as $UpNotes )
+                        @if ($loop->index == 0)
+                        {{-- kosong --}}
+                        @elseif ($loop->index == 1)
+                            <div class="col">
+                                <div class="text-md-left">
+                                <form action="/picincident/NoteSpgr/destroyall" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                        <button type="submit" onClick="return confirm('Are you sure to delete all the notes?')" class="btn btn-outline-danger">
+                                            Delete All Note
+                                        </button>
                                     </form>
-                                @endif
-                                @empty
-                                {{-- kosong / hilangkan tombol --}}
-                                @endforelse
-                          </div>
-                      </div>
-                      <div class="col">
-                        <div class="text-md-center">
-                            <button class="btn btn-outline-primary"  id="top" style=" width: 70%;" data-toggle="modal" data-target="#downloadspgrnote">
-                                Download
-                            </button>
-                             
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="text-md-center">
+                                    <button class="btn btn-outline-primary"  id="top" style=" width: 70%;" data-toggle="modal" data-target="#downloadspgrnote">
+                                        Download
+                                    </button>
+                                </div>
+                                </div>
+                            @elseif ($loop->index > 1)
+
+                            @endif
+                            @empty
+                            {{-- kosong / hilangkan tombol --}}
+                            @endforelse
+                        <div class="col">
+                            <div class="text-md-right">
+                                <button class="btn btn-outline-info"  id="top" style=" width: 40%;" data-toggle="modal" data-target="#Addspgrnote">+ Add List</button>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col">
-                          <div class="text-md-right">
-                              <button class="btn btn-outline-info"  id="top" style=" width: 70%;" data-toggle="modal" data-target="#Addspgrnote">+ Add List</button>
-                          </div>
-                      </div>
-                  </div>
+                    </div>
 
                     
                     {{-- Modal download --}}

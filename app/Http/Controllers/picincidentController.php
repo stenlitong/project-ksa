@@ -54,7 +54,7 @@ class picincidentController extends Controller
         //     'amount'=> 'required|numeric',
         // ]);
         $mergeamount=  $request->mata_uang_amount .' - '. $request->Amount;
-        $mergeTSI_Barge= $request->TSI_barge .' - '. $request-> mata_uang_TSI;
+        $mergeTSI_Barge= $request->TSI_barge .' - '. $request-> mata_uang_TSI_barge;
         $mergeTSI_Tugboat= $request->TSI_TugBoat .' - '. $request-> mata_uang_TSI;
         tempcart::create([
             'user_id' => Auth::user()->id,
@@ -165,7 +165,7 @@ class picincidentController extends Controller
    //Notes spgr page  
     public function notespgr(){
         $datetime = date('Y-m-d');
-        $UploadNotes =  DB::table('note_spgrs')->whereDate('DateNote2', '>=', $datetime)->get();
+        $UploadNotes =  DB::table('note_spgrs')->get();
         return view('picincident.NoteSpgr', compact('UploadNotes'));
     }
 
@@ -217,16 +217,17 @@ class picincidentController extends Controller
 
     //update notes
     public function updatenote(Request $request, NoteSpgr $UpNotes){
+        $noteNilai = $request->mata_uang_nilai . '-' .  $request->Nilai;
+        $noteNilai_Claim =  $request->mata_uang_claim. '-' . $request->NilaiClaim;
+
         $UpNotes = NoteSpgr::find($UpNotes->id);
         $UpNotes->DateNote = $request->Datebox;
         $UpNotes->No_SPGR = $request->No_SPGR;
         $UpNotes->No_FormClaim = $request->No_FormClaim;
         $UpNotes->Nama_Kapal = $request->NamaKapal;
         $UpNotes->status_pembayaran = $request->status_pembayaran;
-        $UpNotes->mata_uang_nilai = $request->mata_uang_nilai;
-        $UpNotes->Nilai = $request->Nilai;
-        $UpNotes->mata_uang_claim = $request->mata_uang_claim;
-        $UpNotes->Nilai_Claim = $request->NilaiClaim;
+        $UpNotes->Nilai = $noteNilai;
+        $UpNotes->Nilai_Claim = $noteNilai_Claim;
         $UpNotes->update();
         // dd($request);
         return redirect('/picincident/NoteSpgr')->with('success', 'post telah terupdate.'); 

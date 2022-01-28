@@ -53,10 +53,17 @@
                                                   <option selected value="USD" id="">USD</option>
                                                   <option value="IDR" id="">IDR</option>
                                               </select>
-                                              <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat Barge" value="{{ old('TSI_TugBoat') }}"   autofocus>
+                                              <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat" value="{{ old('TSI_TugBoat') }}"   autofocus>
+                                            </div>
+                                        <x-label for="TSI_barge" :value="__('TSI Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                          <div class="input-group mb-1">
+                                              <select class="btn btn-outline-secondary" name="mata_uang_TSI_barge">
+                                                  <option selected value="USD" id="">USD</option>
+                                                  <option value="IDR" id="">IDR</option>
+                                              </select>
+                                              <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
                                             </div>
                                             {{-- <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  /> --}}
-                                            <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
                                     </div>
                                 </div>
 
