@@ -43,11 +43,11 @@
 
                     <br>
                     <label for="NamaTug_Barge">Nama Tug</label>
-                    <input type="text" class="form-control" value="{{$rekap->NamaTug_Barge}}" name="NamaTug_Barge" required id="NamaTug_Barge" >
+                    <input type="text" class="form-control" value="{{$rekap->NamaTug_Barge}}" name="NamaTug_Barge" disabled id="NamaTug_Barge" >
 
                     <br>
                     <label for="Nama_File">Nama File</label>
-                    <input list="Nama_Files" name="Nama_File" id="Nama_File" class="col-lg-full custom-select custom-select-md">
+                    <input list="Nama_Files" name="Nama_File" value="{{$rekap->Nama_File}}" id="Nama_File" class="col-lg-full custom-select custom-select-md">
                     <datalist id="Nama_Files">
                         @if(Auth::user()->cabang == 'Babelan')
                             <option value='Sertifikat Keselamatan'>Sertifikat Keselamatan</option>
@@ -264,7 +264,7 @@
                         <select class="btn btn-outline-secondary" name="mata_uang_nilai">
                             <option selected value="IDR" id="">RP</option>
                         </select>
-                        <input type="number" class="form-control" value="{{$rekap->Nilai}}" name="Nilai" required id="Nilai" >
+                        <input type="number" class="form-control" min="0" max="999999999999" value="{{$rekap->Nilai}}" name="Nilai" required id="Nilai" >
                     </div>
                 </div>
             </form>
