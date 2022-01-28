@@ -1,54 +1,51 @@
-@if(Auth::user()->hasRole('logistic'))
+@if(Auth::user()->hasRole('crew'))
     @extends('../layouts.base')
 
-    @section('title', 'Logistic Make Jobs')
+    @section('title', 'crew Make Jobs')
 
     @section('container')
     <div class="row">
         @include('crew.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
-                <h1 class="mt-3" style="text-align: center">Create Job</h1>
+                <h1 class="mt-3" style="text-align: center">Create Job Request</h1> 
                 <br>
                 
-                @error('item_id')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Nama Jasa Salah
-                    </div>
-                @enderror
+                @if ($success = Session::get('success'))
+                        <div class="alert alert-success alert-block" id="success">
+                            <strong>{{ $success }}</strong>
+                        </div>
+                    @endif
 
-                @error('quantity')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Quantity Invalid
-                    </div>
-                @enderror
-
-                @error('Lokasi')
-                    <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
-                        Lokasi is Invalid
-                    </div>
-                @enderror
-            
                 <div class="row">
                     {{-- <div> --}}
                     <div class="col">
-                        <form method="POST" action="/logistic/{{ Auth::user()->id }}/add-cart">
+                        <form method="POST" action="/crew/{{ Auth::user()->id }}/add-cart-jasa">
                             @csrf
                             <div class="form-group p-2">
-                                <label for="item_id" class="mt-3 mb-3">Jasa</label>
-                                <br>
-                                <input type="text"class="form-control" name="item_id" id="item_id" style="height:50px;" placeholder="Input nama Jasa" required>
+                                <label for="tugName" class="mt-3 mb-3">Nama TugBoat</label>
+                                <input list=tugNames type="text" class="col-sm-full custom-select custom-select-sm" name="tugName" id="tugName" style="height:50px;" placeholder="Ketik nama TugBoat" required>
+                                <datalist id="tugNames">
+                                    @foreach($tugs as $t)
+                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                    @endforeach
+                                </datalist>
                             </div>
                             <div class="form-group p-2">
-                                <label for="tgl_request" class="mb-3">Tanggal Permintaan</label>
-                                <input name="tgl_request" type="date" class="form-control" id="tgl_request" placeholder="Input Tanggal Permintaan..."
-                                    style="height: 50px" required>
+                                <label for="bargeName" class="mt-3 mb-3">Nama Barge (optional)</label>
+                                <input list = "bargeNames" type="text" class="col-sm-full custom-select custom-select-sm" name="bargeName" id="bargeName" style="height:50px;" placeholder="Ketik nama Barge">
+                                <datalist id="bargeNames">
+                                    @foreach($barges as $b)
+                                        <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                    @endforeach
+                                </datalist>
                             </div>
                             <div class="form-group p-2">
-                                <label for="Lokasi" class="mb-3">Lokasi</label>
+                                <label for="lokasi" class="mb-3">Lokasi</label>
                                 <br>
-                                <select class="form-control" name="Lokasi" id="Lokasi" style="height:50px;" required>
-                                    <option value="None" disabled selected>Pilih Cabang</option>
+                                <input list = "lokasi_list" type="text" class="col-sm-full custom-select custom-select-sm" name="lokasi" id="lokasi" style="height:50px;" placeholder="Ketik Lokasi Job">
+                                <datalist id="lokasi_list">
+                                    <option value="None" disabled selected>Pilih lokasi</option>
                                     <option value="Jakarta" id="Jakarta">Jakarta</option>
                                     <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
                                     <option value="Samarinda" id="Samarinda">Samarinda</option>
@@ -56,48 +53,55 @@
                                     <option value="Babelan" id="Babelan">Babelan</option>
                                     <option value="Berau" id="Berau">Berau</option>
                                     <option value="Kendari" id="Kendari">Kendari</option>
-                                </select>
+                                    <option value="Morosi" id="Morosi">Morosi</option>
+                                </datalist>
                             </div>
                             <div class="form-group p-2">
-                                <label for="note">Note</label>
+                                <label for="quantity" class="mb-3">Quantity</label>
+                                <input type="range" class="form-control-range" id="rangebar" min="0" max="100" oninput="updateInput(this.value);">
+                                <input class="col-md-full form-control" type="number" name="quantity" id="quantity" value ="" placeholder="Masukan Quantity">
+                            </div>
+                            <div class="form-group p-2">
+                                <label for="note">Description</label>
                                 <br>
                                 <textarea class="form-control" name="note" Note="3"
-                                    placeholder="Input Deskripsi Jasa" style="height: 100px" required autofocus></textarea>
+                                    placeholder="Ketik Deskripsi Job" style="height: 100px" required autofocus></textarea>
                             </div>
 
                             <br>
                             <div class="d-flex ml-3 justify-content-center">
                                 {{-- Add Item To Cart --}}
                                 <button type="submit" class="btn btn-success mr-3" style="">Add To Cart</button>
-                                
-                                {{-- Modal --}}
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submit-order">Submit Order</button>
-
-                            </div>
                         </form>
+                        {{-- Submit Data--}}
+                            <form method="POST" action="/crew/{{Auth::user()->id}}/submit-jasa">
+                                @csrf
+                                <button class="btn btn-primary">Submit Request</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="col mt-5 mr-3 table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table">
                             <thead class="thead bg-danger">
                                 <tr>
-                                    <th scope="col">Nomor</th>
-                                    <th scope="col">Nama Jasa</th>
-                                    <th scope="col">Tanggal Permintaan</th>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Nama Tugboat / barge</th>
                                     <th scope="col">Lokasi Perbaikan</th>
-                                    <th scope="col">Note</th>
+                                    <th scope="col">description</th>
+                                    <th scope="col">quantity</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($carts as $key => $c)
+                                @foreach($carts as $c)
                                     <tr>
-                                        <td class="bg-white">{{ $key + 1 }}</td>
-                                        <td class="bg-white">{{ $c -> item -> itemName }}</td>
-                                        <td class="bg-white">{{ $c -> quantity }} {{ $c -> item -> unit }}</td>
-                                        <td class="bg-white">{{ $c -> department }}</td>
-                                        <td class="bg-white">{{ $c -> note }}</td>
+                                        <td class="bg-white">{{ $loop->index+1 }}</td>
+                                        <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
+                                        <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
+                                        <td class="bg-white">{{ $c ->note }}</td>
+                                        <td class="bg-white">{{ $c ->quantity }}</td>
                                         {{-- Delete Item --}}
-                                        <form method="POST" action="/logistic/{{ $c -> id }}/deletejasa">
+                                        <form method="POST" action="/crew/{{ $c -> id }}/deletejasa">
                                             @csrf
                                             @method('delete')
                                             <td class="bg-white"><button class="btn btn-warning btn-sm">Delete Item</button></td>
@@ -111,69 +115,21 @@
                 </div>
             </div>
         </main>
-
-        <div class="modal fade" id="submit-order" tabindex="-1" role="dialog" aria-labelledby="submit-orderTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <h5 class="modal-title ml-3" id="submitTitle" style="color: white">Input PR Requirements</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" action="/logistic/{{ Auth::user()->id }}/submit-order">
-                    @csrf
-                    <div class="modal-body"> 
-                        <div class="form-group p-2">
-                            <label for="tugs">Pilih Tug:</label>
-                            <select class="form-control" name="tugName" id="tugName">
-                                @foreach($tugs as $t)
-                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="bargeName">Pilih Barge (optional):</label>
-                            <select class="form-control" name="bargeName" id="bargeName">
-                                <option value="">None</option>
-                                @foreach($barges as $b)
-                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="company" class="mb-3">Perusahaan</label>
-                            <select class="form-control" name="company" id="company">
-                                <option value="KSA">KSA</option>
-                                <option value="ISA">ISA</option>
-                                <option value="KSAO">KSA OFFSHORE</option>
-                                <option value="KSAM">KSA MARITIME</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group p-2">
-                            <label for="descriptions" class="mb-3">Deskripsi (optional)</label>
-                            <textarea class="form-control" name="descriptions" id="descriptions" placeholder="Input Deskripsi..." rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary mr-3">Submit</button>
-                    </div>
-                </form>
-            </div>
-            </div>
-        </div>
     </div>
 
     <script>
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000); 
+
+        function updateInput(val) {
+          document.getElementById('quantity').value=val; 
+        }
     </script>
 
     <style>
         body{
-            /* background-image: url('/images/logistic-background.png'); */
+            /* background-image: url('/images/crew-background.png'); */
             background-repeat: no-repeat;
             background-size: cover;
         }

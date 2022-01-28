@@ -38,13 +38,13 @@ class PicsiteController extends Controller
         }
     //update RekapulasiDana
         public function updaterekap(Request $request,Rekapdana $rekap){
+            $mergeNilai= $request->mata_uang_nilai . ' - ' . $request->Nilai;
             $rekap = Rekapdana::find($rekap->id);
             $rekap->DateNote1 = $request->Datebox1;
             $rekap->DateNote2 = $request->Datebox2;
             $rekap->NamaTug_Barge = $request->NamaTug_Barge;
             $rekap->Nama_File = $request->Nama_File;
-            $rekap->Nilai = $request->Nilai;
-            $rekap->mata_uang_nilai = $request->mata_uang_nilai;
+            $rekap->Nilai = $mergeNilai;
             $rekap->update();
             return redirect('/picsite/RekapulasiDana')->with('success', 'post telah terupdate.'); 
         }
@@ -62,6 +62,8 @@ class PicsiteController extends Controller
                 'Nilai'=> 'required|numeric',
             ]);
 
+            $mergeNilai= $request->mata_uang_nilai . ' - ' . $request->Nilai;
+
             Rekapdana::create([
                 'user_id'=> Auth::user()->id,
                 'DateNote1' => $request->Datebox1 ,
@@ -69,20 +71,21 @@ class PicsiteController extends Controller
                 'Cabang' => Auth::user()->cabang ,
                 'NamaTug_Barge' => $request->NamaTug_Barge ,
                 'Nama_File' => $request->Nama_File ,
-                'Nilai' => $request->Nilai ,
-                'mata_uang_nilai' => $request->mata_uang_nilai ,
+                'Nilai' => $mergeNilai ,
             ]);
             return redirect('/picsite/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
         }
     //RekapulasiDana page
         public function RekapulasiDana()
             {
-                $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
-                ->where('Cabang', Auth::user()->cabang)
+                $datetime = date('Y-m-d');
+                $rekapdana= Rekapdana::where('Cabang', Auth::user()->cabang)
+                ->whereDate('DateNote2', '>=', $datetime)
                 ->latest()
                 ->get();
 
                 // dd($rekapdana);
+                // dd($datetime);
                 return view('picsite.picsiteRekapulasiDana', compact('rekapdana'));
             }
     private $excel;

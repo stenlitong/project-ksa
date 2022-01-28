@@ -47,7 +47,7 @@
 
                     <br>
                     <label for="Nama_File">Nama File</label>
-                    <input list="Nama_Files" name="Nama_File" id="Nama_File" class="col-sm-6 custom-select custom-select-sm">
+                    <input list="Nama_Files" name="Nama_File" id="Nama_File" class="col-lg-full custom-select custom-select-md">
                     <datalist id="Nama_Files">
                         @if(Auth::user()->cabang == 'Babelan')
                             <option value='Sertifikat Keselamatan'>Sertifikat Keselamatan</option>
@@ -257,6 +257,7 @@
                             <option value='File extra 5'>File extra 5</option>
                         @endif
                     </datalist>
+                    <br>
                     <br>
                     <label for="Nilai">Nilai Jumlah Di Ajukan</label>
                     <div class="input-group mb-1">

@@ -46,6 +46,8 @@
                 <div>
                     <a href="{{ Route('logistic.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
                     <a href="{{ Route('logistic.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
+                    <button class="btn btn-outline-success mr-3">Job Request completed({{  $job_completed }})</button>
+                    <button class="btn btn-outline-primary mr-3">Job Request In Progress({{ $job_in_progress }})</button>
                 </div>
             </div>
 
@@ -105,12 +107,101 @@
                                     <a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a>
                                 @endif
                             </td>
-
                         </tr>
                         @endforeach
+                        {{-- job dashboard Details --}}
+                        @forelse ($JobRequestHeads as $jr )
+                        <tr>
+                            <td><strong>{{ $jr -> Headjasa_id}}</strong></td>
+                            @if(strpos($jr -> status, 'Job Request Rejected By Logistics') !== false)
+                            <td style="color: red; font-weight: bold">{{ $jr -> status}}</td>
+                            @elseif(strpos($jr -> status, 'Job Request Approved By Logistics') !== false)
+                                <td style="color: green; font-weight: bold">{{ $jr -> status}}</td>
+                            @elseif($jr -> status == 'Job Request In Progress By Logistics')
+                                <td style="color: blue; font-weight: bold">{{ $jr -> status}}</td>
+                            @else
+                                <td>{{ $jr -> status}}</td>
+                            @endif
+                            
+                            @if(strpos($jr -> status, 'Rejected') !== false)
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $jr -> reason}}</td>
+                            @elseif(strpos($jr -> status, 'Approved') !== false)
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is now on Progress</td>
+                            @else
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is Awaiting for Review</td>
+                            @endif
+
+                            @if($jr -> status == 'Job Request In Progress By Logistics')
+                                <td>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editJob-{{ $jr -> id }}">
+                                        Detail
+                                    </button>
+                                </td>
+                            @elseif(strpos($jr -> status, 'Rejected') !== false)
+                                <td>
+                                    {{-- show nothing --}}
+                                </td>
+                                <td>
+                                    {{-- show nothing --}}
+                                </td>
+                            @else
+                                <td>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editJob-{{ $jr -> id }}">
+                                        Detail
+                                    </button>
+                                </td>
+                                <td>
+                                    <a href="/logistic/{{ $jr -> id }}/download-JR" style="color: white" class="btn btn-warning" target="_blank">Download JR</a>
+                                </td>
+                            @endif
+                        </tr>
+                        @empty
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+            {{-- modal job details --}}
+                @foreach ($JobRequestHeads as $jr)
+                    <div class="modal fade" id="editJob-{{ $jr->id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger">
+                                    <div class="d-flex-column">
+                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Detail Job Request</strong></h5>
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Nama Tugboat / barge</th>
+                                                <th scope="col">Lokasi Perbaikan</th>
+                                                <th scope="col">description</th>
+                                                <th scope="col">quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($jobDetails as $c)
+                                                @if($c -> jasa_id == $jr -> id)
+                                                    <tr>
+                                                        <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
+                                                        <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
+                                                        <td class="bg-white">{{ $c ->note }}</td>
+                                                        <td class="bg-white">{{ $c ->quantity }}</td>
+                                                    </tr>
+                                                @endif
+                                            @empty
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
 
             {{-- Modal detail --}}
             @foreach($orderHeads as $oh)

@@ -2,9 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Rekapdana;
+use App\Models\NoteSpgr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -18,51 +17,54 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class RekapAdminExport implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
+class ExportNoteSPGR implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
 {
     use Exportable;
     /**
     * @return \Illuminate\Support\Collection
     */
+
     public function headings(): array
     {
         return[
             //title
             [
-               'Rekapulasi Dana'
+               'Note SPGR'
             ],
             [
             // table data
-            'No' ,
-            'Nama File',
-            'Cabang',
-            'Nama TugBoat/Barge',
-            'Periode Awal',
-            'Periode Akhir',
-            'Nilai Jumlah Di Ajukan'
+            'No.',
+            'Tahun/Bulan/Tanggal',
+            'No SPGR',
+            'No Form Claim',
+            'Nama Kapal',
+            'Status pembayaran',
+            'Nilai',
+            'Nilai Claim yang di setujui',
             ]
         ];
     }
+
     public function Collection()
     {
-        $datetime = date('Y-m-d');
         DB::statement(DB::raw('set @row:=0'));
-        $RekapExpo = Rekapdana::whereDate('DateNote2', '>=', $datetime)
-        ->selectRaw('*, @row:=@row+1 as id')->get();
-        return $RekapExpo;
+        // returns all Notespgr with ordinal 'row'
+        // as default ordered by id ascending
+        $exportnote = NoteSpgr::selectRaw('*, @row:=@row+1 as id')->get();
+        return $exportnote;
     }
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event){
-                $event->sheet->mergeCells('A1:G1');
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->mergeCells('A1:H1');
+                $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'bold' => true ,
                         // 'color' => ['argb' => 'ffffffff']
                     ]
                 ]);
-                $event->sheet->getStyle('A2:G2')->applyFromArray([
+                $event->sheet->getStyle('A2:H2')->applyFromArray([
                     'font' => [
                         'bold' => true ,
                         // 'color' => ['argb' => 'ffffffff']
@@ -78,7 +80,7 @@ class RekapAdminExport implements FromCollection , ShouldAutoSize , WithHeadings
                     ]]
                 ]);
                 
-                $event->sheet->getDelegate()->getStyle('A:G')
+                $event->sheet->getDelegate()->getStyle('A:H')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }

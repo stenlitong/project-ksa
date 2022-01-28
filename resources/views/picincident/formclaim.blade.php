@@ -47,16 +47,16 @@
                                         <x-label for="TugBoat" :value="__('TugBoat : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="TugBoat" class="block mt-1 w-full" type="text" name="TugBoat" placeholder="Enter TugBoat Name" :value="old('TugBoat')"  autofocus />
 
-                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat & Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
                                           <div class="input-group mb-1">
                                               <select class="btn btn-outline-secondary" name="mata_uang_TSI">
                                                   <option selected value="USD" id="">USD</option>
                                                   <option value="IDR" id="">IDR</option>
                                               </select>
                                               <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat Barge" value="{{ old('TSI_TugBoat') }}"   autofocus>
-                                              {{-- <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  /> --}}
-                                              <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
-                                          </div>
+                                            </div>
+                                            {{-- <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  /> --}}
+                                            <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
                                     </div>
                                 </div>
 

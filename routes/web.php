@@ -43,6 +43,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/change-branch', [CrewController::class, 'changeBranch'])->name('changeBranch');
         Route::get('/completed-order', [CrewController::class, 'completedOrder'])->name('completed-order');
         Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-job', [CrewController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [CrewController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
 
         // Task Page
         Route::get('/create-task', [CrewController::class, 'taskPage'])->name('createTask');
@@ -55,11 +57,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
 
-        // //Make jobs
-        // Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJob');
-        // Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
-        // Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
-        // Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
+        //Make jobs
+        Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJobRequest');
+        Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
+        Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
+        Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
 
     });
 
@@ -67,6 +69,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         // Dashboard Page
         Route::get('/in-progress-order', [LogisticController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/completed-order', [LogisticController::class, 'completedOrder'])->name('completed-order');
+        Route::get('/completed-job', [LogisticController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [LogisticController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::patch('/order/{orderHeads}/edit/{orderDetails}', [LogisticController::class, 'editAcceptedQuantity']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
@@ -94,19 +98,26 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/{user}/submit-order', [LogisticController::class, 'submitOrder']);
         Route::get('/{orderHeads}/download-pr', [LogisticController::class, 'downloadPr']);
         Route::get('/stock-order/{orderHeads}/accept-order', [LogisticController::class, 'acceptStockOrder']);
-
         
         // Report Page
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/download-report', [LogisticController::class, 'downloadReport'])->name('downloadReport');
-
-        // Route::post('/upload', [LogisticController::class, 'uploadItem']);
+        
+        //review job page
+        Route::get('/Review-Job', [LogisticController::class, 'ReviewJobPage'])->name('ReviewJobPage');
+        Route::post('/Review-Job-Approved', [LogisticController::class, 'ApproveJobPage']);
+        Route::post('/Review-Job-Rejected', [LogisticController::class, 'RejectJobPage']);
+        Route::get('/download_Jr', [LogisticController::class, 'Download_JR_report'])->name('downloadReportJR');
+        Route::get('/{JobRequestHeads}/download-JR', [LogisticController::class, 'Download_JR'])->name('downloadJR');
+        Route::get('/report_JR', [LogisticController::class, 'report_JR_Page'])->name('report_JR_Page');
     });
 
     Route::prefix('supervisor')->name('supervisor.')->group(function(){
         // Dashboard Page
         Route::get('/completed-order', [SupervisorController::class, 'completedOrder'])->name('completed-order');
         Route::get('/in-progress-order', [SupervisorController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-job', [SupervisorController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [SupervisorController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
         Route::get('/{orderHeads}/approve-order', [SupervisorController::class, 'approveOrder']);
         Route::put('/{orderHeads}/reject-order', [SupervisorController::class, 'rejectOrder']);
         Route::get('/{orderHeads}/download-pr', [SupervisorController::class, 'downloadPr']);
@@ -114,6 +125,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         // Report Page
         Route::get('/report', [SupervisorController::class, 'reportsPage'])->name('report');
         Route::get('/report/download', [SupervisorController::class, 'downloadReport'])->name('downloadReport');
+
+        //job Request
+        Route::get('/download_Jr-JR', [SupervisorController::class, 'downloadReport'])->name('Download_JR');
 
         // Goods In/Out Page
         Route::get('/goods-out', [SupervisorController::class, 'historyOut'])->name('historyOut');
@@ -289,6 +303,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/EditNoteSpgr/{UpNotes}', 'picincidentController@editnotespgr');
         Route::put('/NoteSpgr/update/{UpNotes}', [picincidentController::class, 'updatenote']);
         Route::delete('/NoteSpgr/destroy/{UpNotes}', [picincidentController::class , 'destroynote']);
+        Route::delete('/NoteSpgr/destroyall', [picincidentController::class , 'destroyallnote']);
+        Route::post('/exportExcel', [picincidentController::class, 'exportNotes']);
 
     });
 

@@ -85,7 +85,7 @@
                                         <br>
 
                                         <label for="Nama_File">Nama File</label>
-                                        <input list="Nama_Files" name="Nama_File" id="Nama_File" class="col-sm-6 custom-select custom-select-sm">
+                                        <input list="Nama_Files" name="Nama_File" id="Nama_File" class="col-lg-full custom-select custom-select-md">
                                         <datalist id="Nama_Files">
                                             @if(Auth::user()->cabang == 'Babelan')
                                                 <option value='Sertifikat Keselamatan'>Sertifikat Keselamatan</option>
@@ -295,8 +295,9 @@
                                                 <option value='File extra 5'>File extra 5</option>
                                             @endif
                                         </datalist>
-                                        <br>
                                         
+                                        <br>
+                                        <br>
                                         <label for="Nilai">Nilai Jumlah Di Ajukan</label>
                                         <div class="input-group mb-1">
                                             <select class="btn btn-outline-secondary" name="mata_uang_nilai">
@@ -323,13 +324,13 @@
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Nama File</th>
-                                <th scope="col">Cabang</th>
-                                <th scope="col">Nama TugBoat/Barge</th>
-                                <th scope="col">Periode</th>
-                                <th scope="col">Nilai Jumlah Di Ajukan</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="text-align: center">No.</th>
+                                <th scope="col" style="text-align: center">Nama File</th>
+                                <th scope="col" style="text-align: center">Cabang</th>
+                                <th scope="col" style="text-align: center">Nama TugBoat/Barge</th>
+                                <th scope="col" style="text-align: center">Periode</th>
+                                <th scope="col" style="text-align: center">Nilai Jumlah Di Ajukan</th>
+                                <th scope="col" style="text-align: center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -338,12 +339,12 @@
                                 $date = date('Y-m-28');
                             @endphp
                             <tr>
-                                <td class="table-info">{{$loop->index+1}}</td>
-                                <td class="table-info">{{$rekap->Nama_File}}</td>
-                                <td class="table-info" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->NamaTug_Barge}}</td>
-                                <td class="table-info" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
-                                <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
+                                <td class="table-info" style="text-align: center">{{$loop->index+1}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->Nama_File}}</td>
+                                <td class="table-info" style="text-align: center" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->NamaTug_Barge}}</td>
+                                <td class="table-info" style="text-align: center" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->Nilai}}</td>
                                 <td scope="col">
                                     <div class="row">
                                         <div class="col-md-auto">

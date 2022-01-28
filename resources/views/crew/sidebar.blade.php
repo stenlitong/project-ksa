@@ -37,6 +37,18 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'makeJobRequest'){
+                        echo('active');
+                    }
+                @endphp
+                href="{{ Route('crew.makeJobRequest') }}">
+                    <span data-feather="layout"></span>
+                    Create Job Request
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link
                 @php
                     if(basename($_SERVER['REQUEST_URI']) == 'detail'){

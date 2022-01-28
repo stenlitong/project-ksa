@@ -109,7 +109,6 @@ class InsuranceController extends Controller
         return view('insurance.insuranceHistoryNotes', compact('UploadNotes'));
     }
     
-
     //History form claim page
     public function historyFormclaim(){
         $Headclaim = headerformclaim::all();
@@ -131,20 +130,18 @@ class InsuranceController extends Controller
     }
     
     //export Rekap page
-    public function exportPDF() 
-    {
+    public function exportPDF(){
         $date = Carbon::now();
         $monthName = $date->format('F');
 
-        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' .'.pdf' , Excel::DOMPDF);
+        return Excel::download(new RekapAdminExport, 'RekapDanaInsuranceManager'. '-' . $monthName . '-' .'.pdf' , Excel::DOMPDF);
     }
 
     //export Rekap page
-    public function exportEXCEL() 
-    {
+    public function exportEXCEL(){
         $date = Carbon::now();
         $monthName = $date->format('F');
-        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' . '.xlsx');
+        return Excel::download(new RekapAdminExport, 'RekapDanaInsuranceManager'. '-' . $monthName . '-' . '.xlsx');
     }
 
     //History Rekapulsi Dana page

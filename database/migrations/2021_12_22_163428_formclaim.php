@@ -27,19 +27,18 @@ class Formclaim extends Migration
             $table->date('tgl_insiden') ->nullable();
             $table->string('incident')->nullable();
             $table->string('surveyor')->nullable();
-            $table->decimal('TSI_TugBoat', 14, 2)->nullable();
-            $table->decimal('TSI_barge', 14, 2)->nullable();
-            $table->string('mata_uang_TSI', 10)->nullable();
+            $table->string('TSI_TugBoat', 25)->nullable();
+            $table->string('TSI_barge', 25)->nullable();
             $table->string('barge')->nullable();
             $table->string('tugBoat')->nullable();
+            
             
             $table->id();
             $table->string('jenis_incident', 2 )->nullable();
             $table->string('item')->nullable();
             $table->longText('description')->nullable();
             $table->decimal('deductible', 14, 2)->nullable();
-            $table->decimal('amount', 14, 2)->nullable();
-            $table->string('mata_uang_amount', 10)->nullable();
+            $table->string('amount', 25)->nullable();
             $table->timestamps();
         });
     }

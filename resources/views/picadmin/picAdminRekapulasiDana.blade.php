@@ -55,12 +55,12 @@
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Periode</th>
-                                <th scope="col">Cabang</th>
-                                <th scope="col">Nama TugBoat/Barge</th>
-                                <th scope="col">Nama File</th>
-                                <th scope="col">Nilai Jumlah Di Ajukan</th>
+                                <th scope="col" style="text-align: center">No.</th>
+                                <th scope="col" style="text-align: center">Periode</th>
+                                <th scope="col" style="text-align: center">Cabang</th>
+                                <th scope="col" style="text-align: center">Nama TugBoat/Barge</th>
+                                <th scope="col" style="text-align: center">Nama File</th>
+                                <th scope="col" style="text-align: center">Nilai Jumlah Di Ajukan</th>
                                 {{-- <th scope="col">Action</th> --}}
                             </tr>
                         </thead>
@@ -70,12 +70,12 @@
                                 $date = date('Y-m-28');
                             @endphp
                             <tr>
-                                <td class="table-info">{{$loop->index+1}}</td>
-                                <td class="table-info">{{$rekap->Nama_File}}</td>
-                                <td class="table-info" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
-                                <td class="table-info">{{$rekap->NamaTug_Barge}}</td>
-                                <td class="table-info" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
-                                <td class="table-info">{{$rekap->mata_uang_nilai}} - {{number_format($rekap->Nilai, 2)}}</td>
+                                <td class="table-info" style="text-align: center">{{$loop->index+1}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->Nama_File}}</td>
+                                <td class="table-info" style="text-align: center" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->NamaTug_Barge}}</td>
+                                <td class="table-info" style="text-align: center" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
+                                <td class="table-info" style="text-align: center">{{$rekap->Nilai}}</td>
                             </tr>
                             @empty
                             <tr>

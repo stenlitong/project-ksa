@@ -6,20 +6,22 @@ use Storage;
 use Response;
 use validator;
 use Carbon\Carbon;
+use App\Mail\Gmail;
+use App\Models\User;
+use App\Models\NoteSpgr;
+use App\Models\spgrfile;
+use App\Models\tempcart;
+use App\Exports\FCIexport;
+use App\Models\formclaims;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Exports\ExportNoteSPGR;
+use App\Models\headerformclaim;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Mail\Gmail;
-use App\Models\User;
-use App\Models\spgrfile;
-use App\Models\formclaims;
-use App\Models\headerformclaim;
-use App\Models\tempcart;
-use App\Models\NoteSpgr;
-use App\Exports\FCIexport;
 
 
 class picincidentController extends Controller
@@ -51,6 +53,9 @@ class picincidentController extends Controller
         //     'deductible' => 'nullable|numeric',
         //     'amount'=> 'required|numeric',
         // ]);
+        $mergeamount=  $request->mata_uang_amount .' - '. $request->Amount;
+        $mergeTSI_Barge= $request->TSI_barge .' - '. $request-> mata_uang_TSI;
+        $mergeTSI_Tugboat= $request->TSI_TugBoat .' - '. $request-> mata_uang_TSI;
         tempcart::create([
             'user_id' => Auth::user()->id,
             'tgl_insiden' => $request->dateincident ,
@@ -61,12 +66,10 @@ class picincidentController extends Controller
             'no_FormClaim'=> $request->FormClaim , 
             'barge'=> $request->barge ,
             'tugBoat'=> $request->TugBoat,
-            'TSI_barge'=> $request->TSI_barge,
-            'TSI_TugBoat'=> $request->TSI_TugBoat,
+            'TSI_barge'=> $mergeTSI_Barge,
+            'TSI_TugBoat'=> $mergeTSI_Tugboat,
             'deductible'=>$request->Deductible ,
-            'mata_uang_amount'=>$request->mata_uang_amount,
-            'mata_uang_TSI'=>$request-> mata_uang_TSI,
-            'amount'=> $request->Amount,
+            'amount'=> $mergeamount,
             'surveyor'=> $request->Surveyor,
             'incident'=> $request->Incident ,
             'description'=> $request->reasonbox ,
@@ -110,14 +113,12 @@ class picincidentController extends Controller
                 'item' => $temp->item ,
                 'no_FormClaim'=> $temp->no_FormClaim , 
                 'barge'=> $temp->barge ,
+                'tugBoat'=> $temp->tugBoat,
                 'TSI_barge'=> $temp->TSI_barge,
                 'TSI_TugBoat'=> $temp->TSI_TugBoat,
-                'mata_uang_TSI'=>$temp-> mata_uang_TSI,
                 'deductible'=>$temp->deductible ,
                 'amount'=> $temp->amount,
-                'mata_uang_amount'=>$temp->mata_uang_amount,
                 'surveyor'=> $temp->surveyor,
-                'tugBoat'=> $temp->tugBoat,
                 'incident'=> $temp->incident ,
                 'description'=> $temp->description ,
             ]);
@@ -138,7 +139,7 @@ class picincidentController extends Controller
         return redirect('/picincident/history')->with('success', 'File telah dihapus.'); 
     }
 
-    // export function
+    // export excel FCI
     private $excel;
     public function __construct(Excel $excel){
         $this->excel = $excel;
@@ -147,14 +148,24 @@ class picincidentController extends Controller
     public function export(Request $request) {
         // dd($request);
         $name = $request->file_name;
+        $replaced = Str::replace('/', '_', $name);
         $identify = $request->file_id;
-        return $this->excel::download(new FCIexport($identify), 'FCI'.$name.'.xlsx');
-        // return (new PRExport($orderHeads -> order_id))->download('PR-' . $orderHeads -> order_id . '_' .  date("d-m-Y") . '.pdf', Excel::DOMPDF);
+        return $this->excel::download(new FCIexport($identify), date("d-m-Y"). ' - ' .'FCI'. ' - ' . $replaced . '.xlsx');
+    
+    }
+
+    //export Note SPGR
+    public function exportNotes(Request $request) {
+        // dd($request);
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+        return Excel::download(new ExportNoteSPGR, date("d-m-Y") . 'Note-SPGR'. '-' . $monthName . '-' . '.xlsx');
     }
 
    //Notes spgr page  
     public function notespgr(){
-        $UploadNotes =  DB::table('note_spgrs')->get();
+        $datetime = date('Y-m-d');
+        $UploadNotes =  DB::table('note_spgrs')->whereDate('DateNote2', '>=', $datetime)->get();
         return view('picincident.NoteSpgr', compact('UploadNotes'));
     }
 
@@ -169,7 +180,10 @@ class picincidentController extends Controller
             'NilaiClaim'=> 'required',
             // 'DateNote'=> 'required',
         ]);
-
+        
+        $noteNilai = $request->mata_uang_nilai . '-' .  $request->Nilai;
+        $noteNilai_Claim =  $request->mata_uang_claim. '-' . $request->NilaiClaim;
+                  
         NoteSpgr::create([
             'user_id' => Auth::user()->id,
             'DateNote' => $request->Datebox ,
@@ -177,10 +191,8 @@ class picincidentController extends Controller
             'No_FormClaim' => $request->No_FormClaim ,
             'Nama_Kapal' => $request->NamaKapal ,
             'status_pembayaran' => $request->status_pembayaran ,
-            'Nilai' => $request->Nilai ,
-            'mata_uang_nilai' => $request->mata_uang_nilai ,
-            'Nilai_Claim' => $request->NilaiClaim ,
-            'mata_uang_claim' => $request->mata_uang_claim ,
+            'Nilai' => $noteNilai,
+            'Nilai_Claim' => $noteNilai_Claim ,
         ]);
         return redirect('/picincident/NoteSpgr')->with('success', 'Note telah ditambahkan.');
     }
@@ -189,6 +201,12 @@ class picincidentController extends Controller
     public function destroynote(NoteSpgr $UpNotes){
         NoteSpgr::destroy($UpNotes->id); 
         return redirect('/picincident/NoteSpgr')->with('success', 'post telah dihapus.'); 
+    }
+
+    public function destroyallnote(){
+        // Emptying the whole note spgr
+        NoteSpgr::where('user_id', Auth::user()->id)->delete();
+        return redirect('/picincident/NoteSpgr')->with('success', 'seluruh post telah dihapus.'); 
     }
 
     //edit page

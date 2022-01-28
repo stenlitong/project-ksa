@@ -3,10 +3,12 @@
 namespace App\Exports;
 
 use App\Models\Rekapdana;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -17,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class RekapExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
+class RekapExport implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
 {
     use Exportable;
     /**
@@ -43,10 +45,13 @@ class RekapExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEve
         ];
     }
 
-    public function query()
+    public function Collection()
     {
-        $RekapExpo = Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
-        ->where('Cabang', Auth::user()->cabang);
+        DB::statement(DB::raw('set @row:=0'));
+        $datetime = date('Y-m-d');
+        $RekapExpo = Rekapdana::where('Cabang', Auth::user()->cabang)
+        ->whereDate('DateNote2', '>=', $datetime)
+        ->selectRaw('*, @row:=@row+1 as id')->get();
         // dd($RekapExpo);
         return $RekapExpo;
     }

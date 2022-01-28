@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JasaRequest extends Model
+class JobHead extends Model
 {
     use HasFactory;
     protected $guarded = [
@@ -14,4 +14,6 @@ class JasaRequest extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    // Protected $fillable = ['user_id'];
+    Protected $hidden =['user_id','created_at','updated_at'];
 }

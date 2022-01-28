@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
-use App\Models\OrderHead;
-use App\Models\OrderDetail;
-use App\Models\Cart;
-use App\Models\User;
-use App\Models\Tug;
-use App\Models\Barge;
-use App\Models\OrderDo;
-use App\Models\ItemBelowStock;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Str;
-use App\Exports\OrderOutExport;
-use App\Exports\OrderInExport;
-use App\Jobs\SendItemBelowStockReportJob;
-use App\Exports\PRExport;
-use App\Exports\DOExport;
-use App\Exports\PurchasingReportExport;
-use Maatwebsite\Excel\Excel;
-// Use \Carbon\Carbon;
 use Storage;
+use App\Models\Tug;
+use App\Models\Cart;
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Barge;
+use App\Models\JobHead;
+use App\Models\OrderDo;
+use App\Exports\DOExport;
+use App\Exports\JRExport;
+use App\Exports\PRExport;
+// use Illuminate\Support\Str;
+use App\Models\OrderHead;
+use App\Models\JobDetails;
+use App\Models\OrderDetail;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\OrderInExport;
+use App\Models\ItemBelowStock;
+// Use \Carbon\Carbon;
+use App\Exports\JR_full_Export;
+use App\Exports\OrderOutExport;
+use Illuminate\Support\Facades\Auth;
+use App\Exports\PurchasingReportExport;
+use App\Jobs\SendItemBelowStockReportJob;
 
 class LogisticController extends Controller
 {
@@ -748,151 +752,121 @@ class LogisticController extends Controller
     }
 
     // ============================ Testing Playgrounds ===================================
-    public function makeJobPage() {
-        $items = Item::where('cabang', Auth::user()->cabang)->where('itemState', 'like', 'Available')->get();
+    
+    public function ReviewJobPage() {
+         // Get all job on the cabang
+        $JobRequestHeads = JobHead::where('status','Job Request In Progress By Logistics')
+        ->where('cabang', 'like', Auth::user()->cabang)
+        ->whereYear('created_at', date('Y'))
+        ->get();
 
-        // Get all the tugs, barges, and cart of the following user
         $barges = Barge::all();
         $tugs = Tug::all();
-        $carts = Cart::with('item')->where('user_id', Auth::user()->id)->get();
+        $job_id = $JobRequestHeads->pluck('id');
+
+        $datadetails = JobDetails::where('cabang', 'like', Auth::user()->cabang)
+        ->whereYear('created_at', date('Y'))
+        ->whereIn('jasa_id', $job_id)
+        ->get();
+
+        $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+        return view('logistic.logisticJobRequestReview', compact('datadetails', 'tugs', 'barges' , 'items_below_stock', 'JobRequestHeads'));
+    }
+
+    public function report_JR_Page(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Find order from user/goods in => order created from logistic
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        
+        // Find all the items that has been approved from the logistic | last 6 month
+        // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+
+        $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
+        ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
+        ->whereBetween('job_heads.created_at', [$start_date, $end_date])
+        ->where('job_details.cabang', Auth::user()->cabang)->orderBy('job_heads.updated_at', 'desc')->get();
 
         $items_below_stock = $this -> checkStock();
 
-        return view('logistic.logisticMakeJobs', compact('items', 'carts', 'tugs', 'barges', 'items_below_stock'));
+        return view('logistic.logisticReport_JR', compact('jobs', 'str_month', 'items_below_stock'));
     }
 
-    public function addjasaToCart(Request $request){
-        // Validate Cart Request
-        $validated = $request->validate([
-            'item_id' => 'required',
-            'tgl_request' => 'required',
-            'lokasi' => 'required',
-            'note' => 'required'
+    public function Download_JR_report(JobHead $JobRequestHeads) {
+        // Get all job on the cabang
+        $id = $JobRequestHeads -> id;
+        return Excel::download(new JR_full_Export($id), 'Job_Request_'. $id . '_' . date("d-m-Y") . '.xlsx');
+    }
+
+    public function Download_JR(JobHead $JobRequestHeads) {
+        // Get all job on the cabang
+        $id = $JobRequestHeads -> id;
+        // dd($id);
+        return Excel::download(new JRExport($id), 'Job_Request_'. $id . '_' . date("d-m-Y") . '.xlsx');
+    }
+
+    public function ApproveJobPage(Request $request) {
+        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobhead_id = $request->jobhead_id;
+        $jobhead_name = $request ->jobhead_name;
+
+        JobHead::where('cabang', 'like', Auth::user()->cabang)
+        ->where('Headjasa_id', '=' ,$jobhead_id)
+        ->whereYear('created_at', date('Y'))
+        ->update([
+            'check_by' => Auth::user()->name ,
+            'status' => 'Job Request Approved By Logistics',
+        ]);
+        // dd($request);
+        // dd($jon);
+        return redirect('/logistic/Review-Job')->with('success', 'Job Request Approved.');
+    }
+
+    public function RejectJobPage(Request $request) {
+        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobhead_id = $request->jobhead_id;
+        $jobhead_name = $request ->jobhead_name;
+
+        $request->validate([
+            'reasonbox' => 'required',
         ]);
 
-        // Check if the item state is on hold, then return error
-        $check_item_state = Item::where('id', $request -> item_id)->pluck('itemState')[0];
-        if($check_item_state == 'Hold'){
-            return redirect('/logistic/make-order')->with('error', 'Item is Unavailable');
-        }
-
-        // Check if the cart within the user is already > 12 items, then cart is full & return with message
-        $counts = Cart::where('user_id', Auth::user()->id)->count();
-        if($counts ==  12){
-            return redirect('/logistic/make-order')->with('error', 'Cart is Full');
-        }
-
-        // Find if the same configuration of item is already exist in cart or no
-        $itemExistInCart = Cart::where('user_id', Auth::user()->id)->where('item_id', $request->item_id)->where('department', $request->department)->where('golongan', $request->golongan)->first();
-
-        if($itemExistInCart){
-            Cart::find($itemExistInCart->id)->increment('quantity', $request->quantity);
-            Cart::find($itemExistInCart->id)->update([
-                'note' => $request -> note
-            ]);
-        }else{
-            // Add cabang to the cart
-            $validated['cabang'] = Auth::user()->cabang;
-            // Then add item to the cart
-            $validated['user_id'] = Auth::user()->id;
-            Cart::create($validated);
-        }
-
-        return redirect('/logistic/make-order')->with('status', 'Add Item Success');
-    }
-
-    public function deleteJasaFromCart(Cart $cart){
-        // Delete item from cart of the following user
-        Cart::destroy($cart->id);
-
-        return redirect('/logistic/make-order')->with('status', 'Delete Item Success');
-    }
-
-    public function submitJasa(Request $request){
-        $request -> validate([
-            'tugName' => 'required',
-            'bargeName' => 'nullable',
-            'company' => 'required',
-            'descriptions' => 'nullable'
+        JobHead::where('cabang', 'like', Auth::user()->cabang)
+        ->where('Headjasa_id', '=' ,$jobhead_id)
+        ->whereYear('created_at', date('Y'))
+        ->update([
+            'status' => 'Job Request Rejected By Logistics',
+            'reason' => $request-> reasonbox
         ]);
-
-        // Find the cart of the following user
-        $carts = Cart::where('user_id', Auth::user()->id)->get();
-
-        // Double check the item state, if there are items that is on 'Hold' status, then return error
-        foreach($carts as $c){
-            if($c -> item -> itemState == 'Hold'){
-                return redirect('/logistic/make-order')->with('errorCart', $c -> item -> itemName . ' is Currently Unavailable, Kindly Remove it From the Cart');
-            }
-        }
-
-        // Validate cart size
-        if(count($carts) == 0){
-            return redirect('/logistic/make-order')->with('errorCart', 'Cart is Empty');
-        }
-
-        // String formatting for boatName with tugName + bargeName
-        $boatName = $request->tugName . '/' . $request->bargeName;
+        // dd($request);
+        // dd($jon);
         
-        // Create Order Head
-        $orderHead = OrderHead::create([
-            'created_by' => Auth::user()->name,
-            'user_id' => Auth::user()->id,
-            'cabang' => Auth::user()->cabang,
-            'boatName' => $boatName,
-            'orderType' => $request -> orderType,
-            'order_tracker' => 2,
-            'status' => 'Order In Progress By Supervisor',
-            'descriptions' => $request -> descriptions
-        ]);
-        
-        // Formatting the PR format requirements
-        $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-
-        $cabang_arr = [
-            'Jakarta' => 'JKT',
-            'Banjarmasin' => 'BNJ',
-            'Samarinda' => 'SMD',
-            'Bunati' => 'BNT',
-            'Babelan' => 'BBL',
-            'Berau' => 'BER'
-        ];
-
-        $pr_id = $orderHead -> id;
-        $first_char_name = strtoupper(Auth::user()->name[0]);
-        $location = $cabang_arr[Auth::user()->cabang];
-        $month = date('n');
-        $month_to_roman = $month_arr_in_roman[$month - 1];
-        $year = date('Y');
-
-        // Create the PR Number => 001.A/PR-ISA-SMD/IX/2021
-        $pr_number = $pr_id . '.' . $first_char_name . '/' . 'PR-' . $request->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
-
-        OrderHead::find($orderHead->id)->update([
-            'order_id' => 'LOID#' . $orderHead->id,
-            'noPr' => $pr_number,
-            'company' => $request->company,
-            'prDate' => date("d/m/Y")
-        ]);
-
-        // Then fill the Order Detail with the cart items
-        foreach($carts as $c){
-            OrderDetail::create([
-                'orders_id' => $orderHead -> id,
-                'item_id' => $c -> item_id,
-                'quantity' => $c -> quantity,
-                'acceptedQuantity' => $c -> quantity,
-                'unit' => $c -> item -> unit,
-                'serialNo' => $c -> item->serialNo,
-                'department' => $c -> department,
-                'note' => $c -> note
-            ]);
-        }
-
-        // Emptying the cart items
-        Cart::where('user_id', Auth::user()->id)->delete();
-
-        return redirect('/dashboard')->with('status', 'Submit Order Success');
+        return redirect('/logistic/Review-Job')->with('failed', 'Job Request Rejected.');
     }
 
     public function uploadItem(Request $request){

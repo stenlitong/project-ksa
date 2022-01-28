@@ -22,10 +22,8 @@ class CreateNoteSpgrsTable extends Migration
             $table->string('No_FormClaim')->nullable();
             $table->string('Nama_Kapal')->nullable();
             $table->string('status_pembayaran')->nullable();
-            $table->decimal('Nilai', 14, 2)->nullable();
-            $table->string('mata_uang_nilai')->nullable();
-            $table->decimal('Nilai_Claim', 14, 2)->nullable();
-            $table->string('mata_uang_claim')->nullable();
+            $table->string('Nilai', 25)->nullable();
+            $table->string('Nilai_Claim', 25)->nullable();
             $table->timestamps();
         });
     }

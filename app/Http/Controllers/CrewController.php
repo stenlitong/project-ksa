@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Models\Tug;
 use App\Models\Cart;
 use App\Models\Item;
-use App\Models\Barge;
-use App\Models\Tug;
 use App\Models\User;
+use App\Models\Barge;
+use App\Models\JobHead;
+use App\Models\cartJasa;
 use App\Models\OrderHead;
+use App\Models\JobDetails;
 use App\Models\OrderDetail;
-// Use \Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class CrewController extends Controller
 {
@@ -228,8 +232,7 @@ class CrewController extends Controller
         return redirect('/dashboard')->with('status', 'Request Order Accepted');
     }
 
-    public function taskPage()
-    {
+    public function taskPage(){
         // Get all the tugs and barge
         $tugs = Tug::all();
         $barges = Barge::all();
@@ -244,5 +247,159 @@ class CrewController extends Controller
         $barges = Barge::all();
 
         return view('crew.crewCreateTaskDetail', compact('tugs', 'barges'));
+    }
+
+    //job request
+    public function completedJobRequest(){
+        // Get all the job request within the logged in user within 6 month
+        $JobRequestHeads = JobHead::with('user')->where(function($query){
+            $query->where('status', 'like', 'Job Request Completed (Crew)')
+            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+
+         // Get the jobDetail from jasa_id within the orderHead table 
+        $job_id = JobHead::where('user_id', Auth::user()->id)->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+        // Count the completed & in progress job Requests
+        
+        $job_in_progress = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By Logistic');           
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
+        
+        $completedJR = $JobRequestHeads->count();
+        return view('crew.crewDashboard', compact('job_in_progress','JobRequestHeads' , 'jobDetails', 'completedJR'));
+    }
+
+    public function inProgressJobRequest(){
+        // Get all the order within the logged in user within 6 month
+        $JobRequestHeads = JobHead::with('user')->where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By Logistic');
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->paginate(10);
+
+        // Get the orderDetail from orders_id within the orderHead table 
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+
+        $job_completed = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request Completed (Crew)')
+            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
+        
+        $JR_in_progress = $JobRequestHeads->count();
+
+        return view('crew.crewDashboard', compact('JR_in_progress' ,'jobDetails' ,'JobRequestHeads','job_completed'));
+    }
+
+    public function makeJobPage() {
+        // Get all the tugs, barges, and cart of the following user
+        $barges = Barge::all();
+        $tugs = Tug::all();
+        $carts = cartJasa::where('user_id', Auth::user()->id)->get();
+
+        return view('crew.crewMakejob', compact('carts', 'tugs', 'barges'));
+    }
+
+    public function addjasaToCart(Request $request){
+        // Validate Cart Request
+        $request->validate([
+            'tugName' => 'required',
+            'bargeName' => 'nullable',
+            'quantity' => 'required',
+            'note' => 'required'
+        ]);
+        // dd($request);
+        // Check if the cart within the user is already > 12 items, then cart is full & return with message
+        $counts = cartJasa::where('user_id', Auth::user()->id)->count();
+        if($counts ==  12){
+            return redirect('/crew/make-Job')->with('error', 'Cart is Full');
+        }else{
+            cartJasa::create([
+                'tugName' => $request->tugName ,
+                'bargeName' => $request->bargeName ,
+                'lokasi' => $request->lokasi ,
+                'quantity' => $request->quantity ,
+                'note' => $request->note,
+                // Add cabang & user id to the cart
+               'cabang' => Auth::user()->cabang,
+               'user_id'=> Auth::user()->id
+            ]);
+        }
+ 
+        return redirect('/crew/make-Job')->with('success', 'Add Item Success');
+    }
+
+    public function deleteJasaFromCart(cartJasa $cart){
+        // Delete item from cart of the following user
+        cartJasa::destroy($cart->id);
+
+        return redirect('/crew/make-Job')->with('status', 'Delete Item Success');
+    }
+
+    public function submitJasa(){
+        // Find the cart of the following user
+        $carts = cartJasa::where('user_id', Auth::user()->id)->get();
+
+        // Validate cart size
+        if(count($carts) == 0){
+            return redirect('/crew/make-Job')->with('errorCart', 'Cart is Empty');
+        }
+        
+            // Formatting the PR format requirements
+            $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+            $cabang_arr = [
+                'Jakarta' => 'JKT',
+                'Banjarmasin' => 'BNJ',
+                'Samarinda' => 'SMD',
+                'Bunati' => 'BNT',
+                'Babelan' => 'BBL',
+                'Berau' => 'BER',
+                "Kendari" => 'KDR',
+                "Morosi" => "MRS"
+            ];
+         
+            
+            // Create job request Head
+            $JobHead = JobHead::create([
+                'user_id' => Auth::user()->id,
+                'created_by' => Auth::user()->name,
+                'cabang' => Auth::user()->cabang,
+                'status' => 'Job Request In Progress By Logistics',
+                'jrDate' => date("Y/m/d")
+            ]);
+
+            $Jr_id = $JobHead -> id;
+            $headID = 'JRID#' . $JobHead -> id;
+            $first_char_name = strtoupper(Auth::user()->name[0]);
+            $location = $cabang_arr[Auth::user()->cabang];
+            $month = date('n');
+            $month_to_roman = $month_arr_in_roman[$month - 1];
+            $year = date('Y');
+
+            // Create the JR Number => 001.A/JR-SMD/IX/2021
+            $Jr_number = $Jr_id . '.' . $first_char_name . '/' . 'JR-'. $location . '/' . $month_to_roman . '/' . $year;
+
+            JobHead::find($JobHead->id)->update([
+                'noJr' => $Jr_number,
+                'Headjasa_id' => $headID,
+            ]);
+
+            // Then fill the job Detail with the cart items
+            foreach($carts as $c){
+                JobDetails::create([
+                    'user_id' => Auth::user()->id,
+                    'jasa_id' => $JobHead -> id,
+                    'cabang' => $c->cabang,
+                    'tugName' => $c ->tugName,
+                    'bargeName' => $c ->bargeName,
+                    'quantity' => $c->quantity ,
+                    'lokasi' => $c ->lokasi ,
+                    'note' => $c ->note,
+                ]);
+            }
+    
+            // Emptying the cart items
+            cartJasa::where('user_id', Auth::user()->id)->delete();
+        return redirect('/dashboard')->with('status', 'Submit Order Success');
     }
 }

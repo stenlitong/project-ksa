@@ -22,8 +22,8 @@ class CreateRekapdanasTable extends Migration
             $table->string('NamaTug_Barge')->nullable();
             $table->date('DateNote1')->nullable();
             $table->date('DateNote2')->nullable();
-            $table->decimal('Nilai', 14, 2)->nullable();
-            $table->string('mata_uang_nilai')->nullable();
+            $table->string('Nilai', 25)->nullable();
+            
             $table->timestamps();
         });
     }

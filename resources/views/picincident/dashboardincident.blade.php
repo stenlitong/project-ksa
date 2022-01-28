@@ -77,16 +77,16 @@
                     @endphp
                     @if(empty($upspgr->$stats))
                         <tr>
-                            <td> </td> {{-- agar tidak keluar hasil kosong --}}
+                            {{-- agar tidak keluar hasil kosong --}}
                         </tr>
                     @elseif ($upspgr->$stats == 'on review')
                         <tr>
-                            {{-- <td class="table-warning" id="time">{{$upspgr->$time_upload}}</td>                                        
-                            <td class="table-warning">{{$upspgr->no_formclaim}}</td>
-                            <td class="table-warning" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-warning" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-warning" style="text-transform: uppercase;" id="time"><strong>{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-warning"><strong>{{$upspgr->no_formclaim}}</td>
+                            <td class="table-warning" id="nama"><strong>{{$name[$r-1]}}</td>                                        
+                            <td class="table-warning" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-warning" id="reason">{{$upspgr->$reason}}</td>
-                            <td>
+                            <td class="table-warning">
                                 <div class="col-md-auto">
                                     <form method="post" action="/dashboard/spgr/view" target="_blank">
                                         @csrf
@@ -98,16 +98,16 @@
                                         <button type="submit" name="views3" class="btn btn-dark">view</button>
                                     </form>
                                 </div>
-                            </td> --}}
+                            </td>
                         </tr>
                     @elseif ($upspgr->$stats == 'approved')
                         <tr>
-                            <td class="table-success" id="time">{{$upspgr->$time_upload}}</td>                                        
-                            <td class="table-success">{{$upspgr->no_formclaim}}</td>
-                            <td class="table-success" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-success" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-success" style="text-transform: uppercase;" id="time"><strong>{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-success"><strong>{{$upspgr->no_formclaim}}</td>
+                            <td class="table-success" id="nama"><strong>{{$name[$r-1]}}</td>                                        
+                            <td class="table-success" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-success" id="reason">{{$upspgr->$reason}}</td>
-                            <td>
+                            <td class="table-warning">
                                 <div class="col-md-auto">
                                     <form method="post" action="/dashboard/spgr/view" target="_blank">
                                         @csrf
@@ -123,12 +123,12 @@
                         </tr>
                     @elseif ($upspgr->$stats == 'rejected')
                         <tr>
-                            <td class="table-danger" id="time">{{$upspgr->$time_upload}}</td>                                        
-                            <td class="table-danger">{{$upspgr->no_formclaim}}</td>
-                            <td class="table-danger" id="nama">{{$name[$r-1]}}</td>                                        
-                            <td class="table-danger" id="status">{{$upspgr->$stats}}</td>                                      
+                            <td class="table-danger" style="text-transform: uppercase;" id="time"><strong>{{$upspgr->$time_upload}}</td>                                        
+                            <td class="table-danger"><strong>{{$upspgr->no_formclaim}}</td>
+                            <td class="table-danger" id="nama"><strong>{{$name[$r-1]}}</td>                                        
+                            <td class="table-danger" style="text-transform: uppercase;" id="status"><strong>{{$upspgr->$stats}}</td>                                      
                             <td class="table-danger" id="reason">{{$upspgr->$reason}}</td>
-                            <td>
+                            <td class="table-warning">
                                 <div class="col-md-auto">
                                     <form method="post" action="/dashboard/spgr/view" target="_blank">
                                         @csrf
@@ -144,10 +144,13 @@
                         </tr>
                     @endif
                     @endfor
-                    @empty
-                    <tr>
-                        <td>Data Not Found or Not Uploaded This Month</td>
-                    </tr>
+                        <tr>
+                            <td> </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td class="table-warning">Data Not Found or Not Uploaded This Month</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

@@ -25,70 +25,72 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class picAdminController extends Controller
 {
+    
     //Review Fund Request page for picAdmin
     public function checkform(Request $request){
+        $datetime = date('Y-m-d');
         //cabang filter
         $searchresult = $request->search;
         if ($searchresult == 'All') {
-            $document = DB::table('documents')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentberau = DB::table('beraudb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentbanjarmasin = DB::table('banjarmasindb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentsamarinda = DB::table('samarindadb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentjakarta = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $document = DB::table('documents')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentberau = DB::table('beraudb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentjakarta = documentJakarta::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
         }
         elseif ($request->filled('search')) {
-            $document = DB::table('documents')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentberau = DB::table('beraudb')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentsamarinda = DB::table('samarindadb')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentjakarta = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')->where('cabang', $request->search)->latest()->get();
+            $document = DB::table('documents')->where('cabang', $request->search)->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentberau = DB::table('beraudb')->where('cabang', $request->search)->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->where('cabang', $request->search)->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->where('cabang', $request->search)->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentjakarta = documentJakarta::whereDate('periode_akhir', '>=', $datetime)->where('cabang', $request->search)->latest()->get();
             return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda' ,'documentjakarta'));
         }
         else{{
-            $document = DB::table('documents')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentberau = DB::table('beraudb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentbanjarmasin = DB::table('banjarmasindb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentsamarinda = DB::table('samarindadb')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentjakarta = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $document = DB::table('documents')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentberau = DB::table('beraudb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentbanjarmasin = DB::table('banjarmasindb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentsamarinda = DB::table('samarindadb')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentjakarta = documentJakarta::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
         }};
 
         //Search bar
         //check if search-bar is filled or not
         if ($request->filled('search_kapal')) {
             //search for nama kapal in picsite dashboard page dan show sesuai yang mendekati
-            //pakai whereColumn untuk membandingkan antar 2 value column agar munculkan data dari pembuatan sampai bulan akhir periode
+            //pakai ->whereDate('periode_akhir', '>=', $datetime)umn agar munculkan data dari pembuatan sampai bulan akhir periode
             $document = documents::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
 
             //berau search bar
             $documentberau = documentberau::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
 
             $documentbanjarmasin = documentbanjarmasin::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
 
             $documentsamarinda = documentsamarinda::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
 
             $documentjakarta = documentJakarta::where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
             return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda' , 'documentjakarta'));
         }else{
-            $document = documents::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentberau = documentberau::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentbanjarmasin = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentsamarinda = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
-            $documentjakarta = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $document = documents::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentberau = documentberau::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentbanjarmasin = documentbanjarmasin::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentsamarinda = documentsamarinda::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
+            $documentjakarta = documentJakarta::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
             return view('picadmin.picAdminDoc' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda' , 'documentjakarta')); 
         }
 
@@ -96,37 +98,39 @@ class picAdminController extends Controller
     
     //review RPK page for picAdmin
     public function checkrpk(Request $request){
+        $datetime = date('Y-m-d');
         //filter cabang
         $searchresult = $request->search;
         if ($searchresult == 'All') {
-            $docrpk = DB::table('rpkdocuments')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
         }
         elseif ($request->filled('search')) {
-            $docrpk = DB::table('rpkdocuments')->where('cabang', $request->search)->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->where('cabang', $request->search)->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
             return view('picadmin.picAdminRpk' , compact('docrpk'));
         }
         else{
             //jika gk milih cabang
-            $docrpk = DB::table('rpkdocuments')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
         }
         //search bar kapal rpk
         if ($request->filled('search_kapal')) {
             //get DocRPK Data as long as the periode_akhir and search based (column database)
             $docrpk = DB::table('rpkdocuments')
             ->where('nama_kapal', 'Like', '%' . $request->search_kapal . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')
+            ->whereDate('periode_akhir', '>=', $datetime)
             ->orderBy('id', 'DESC')
             ->latest()->get();
             return view('picadmin.picAdminRpk' , compact('docrpk'));
         }else{
             //get DocRPK Data as long as the periode_akhir(column database)
-            $docrpk = DB::table('rpkdocuments')->whereColumn('created_at' , '<=', 'periode_akhir')->latest()->get();
+            $docrpk = DB::table('rpkdocuments')->whereDate('periode_akhir', '>=', $datetime)->latest()->get();
             return view('picadmin.picAdminRpk' , compact('docrpk'));
         }
     }
 
     //reject for Fund request picAdmin page
     public function reject(Request $request){
+        $datetime = date('Y-m-d');
         $request->validate([
             'reasonbox' => 'required|max:180',
         ]);
@@ -141,7 +145,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -156,7 +160,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -171,7 +175,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -186,7 +190,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -201,7 +205,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'rejected',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -211,6 +215,7 @@ class picAdminController extends Controller
     
     //approval for Fund request picAdmin page
     public function approve(Request $request){
+        $datetime = date('Y-m-d');
         // dd($request);
         //no reason needed for banjarmasin
         if ($request->cabang == 'Banjarmasin' or $request->cabang == 'Bunati'){
@@ -223,7 +228,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->whereNotNull($filename)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'approved',
             ]);
         }else{
@@ -239,7 +244,7 @@ class picAdminController extends Controller
                 documents::where($filename, 'Like', '%' . $result . '%')
                 ->whereNotNull($filename)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                ->whereDate('periode_akhir', '>=', $datetime)->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
                 ]);
@@ -252,7 +257,7 @@ class picAdminController extends Controller
                 documentberau::where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
-                ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                ->whereDate('periode_akhir', '>=', $datetime)->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
                 ]);
@@ -267,7 +272,7 @@ class picAdminController extends Controller
                 ->where('cabang', $cabang)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
-                ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                ->whereDate('periode_akhir', '>=', $datetime)->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
                 ]);
@@ -281,7 +286,7 @@ class picAdminController extends Controller
                 ->where('cabang', $request->cabang)
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
                 ->whereNotNull($filename)
-                ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+                ->whereDate('periode_akhir', '>=', $datetime)->update([
                     $request->status => 'approved',
                     $request->reason => $request->reasonbox ,
                 ]);
@@ -292,6 +297,7 @@ class picAdminController extends Controller
     
     //approval for RPK review picAdmin page
     public function approverpk(Request $request){
+        $datetime = date('Y-m-d');
         // dd($request);
         //check if cabang is banjarmasin
         if ($request->cabang == 'Banjarmasin') {
@@ -303,7 +309,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'approved',
             ]);
         }else{
@@ -319,7 +325,7 @@ class picAdminController extends Controller
             ->where('cabang', $request->cabang)
             ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
             ->whereNotNull($filename)
-            ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+            ->whereDate('periode_akhir', '>=', $datetime)->update([
                 $request->status => 'approved',
                 $request->reason => $request->reasonbox ,
             ]);
@@ -329,6 +335,7 @@ class picAdminController extends Controller
 
     //reject for RPK review picAdmin page
     public function rejectrpk(Request $request){
+        $datetime = date('Y-m-d');
         // dd($request);
         $request->validate([
             'reasonbox' => 'required|max:255',
@@ -342,7 +349,7 @@ class picAdminController extends Controller
         ->where('cabang', $request->cabang)
         ->whereNotNull($filename)
         ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-        ->whereColumn('created_at' , '<=', 'periode_akhir')->update([
+        ->whereDate('periode_akhir', '>=', $datetime)->update([
             $request->status => 'rejected',
             $request->reason => $request->reasonbox ,
         ]);
@@ -352,7 +359,7 @@ class picAdminController extends Controller
     
     //view for dokumen fund at Admin page 
     public function view(Request $request){
-        
+        $datetime = date('Y-m-d');
         $year = date('Y');
         $month = date('m');
         
@@ -361,7 +368,7 @@ class picAdminController extends Controller
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
-                $viewer = documents::whereColumn('created_at' , '<=', 'periode_akhir')
+                $viewer = documents::whereDate('periode_akhir', '>=', $datetime)
                 ->whereNotNull ($filename)
                 ->where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
@@ -373,7 +380,7 @@ class picAdminController extends Controller
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
-                $viewer = documentberau::whereColumn('created_at' , '<=', 'periode_akhir')
+                $viewer = documentberau::whereDate('periode_akhir', '>=', $datetime)
                 ->whereNotNull ($filename)
                 ->where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
@@ -385,7 +392,7 @@ class picAdminController extends Controller
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
-                $viewer = documentbanjarmasin::whereColumn('created_at' , '<=', 'periode_akhir')
+                $viewer = documentbanjarmasin::whereDate('periode_akhir', '>=', $datetime)
                 ->whereNotNull ($filename)
                 ->where('cabang' , $request->cabang)
                 ->where($filename, 'Like', '%' . $result . '%')
@@ -398,7 +405,7 @@ class picAdminController extends Controller
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
-                $viewer = documentsamarinda::whereColumn('created_at' , '<=', 'periode_akhir')
+                $viewer = documentsamarinda::whereDate('periode_akhir', '>=', $datetime)
                 ->whereNotNull ($filename)
                 ->where('cabang' , $request->cabang)
                 ->where($filename, 'Like', '%' . $result . '%')
@@ -411,7 +418,7 @@ class picAdminController extends Controller
                 $filename = $request->viewdoc;
                 $kapal_id = $request->kapal_nama;
                 $result = $request->result;
-                $viewer = documentJakarta::whereColumn('created_at' , '<=', 'periode_akhir')
+                $viewer = documentJakarta::whereDate('periode_akhir', '>=', $datetime)
                 ->whereNotNull ($filename)
                 ->where($filename, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
@@ -424,6 +431,7 @@ class picAdminController extends Controller
 
     //view for rpk at Admin page 
     public function viewrpk(Request $request){ 
+        $datetime = date('Y-m-d');
         $year = date('Y');
         $month = date('m');
 
@@ -436,7 +444,7 @@ class picAdminController extends Controller
                 ->whereNotNull ($filenameRPK)
                 ->where($filenameRPK, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')
+                ->whereDate('periode_akhir', '>=', $datetime)
                 ->pluck($filenameRPK)[0];
                 // dd($viewer);
                 return Storage::disk('s3')->response('babelan/' . $year . "/". $month . "/RPK" . "/" . $viewer);
@@ -449,7 +457,7 @@ class picAdminController extends Controller
                 ->whereNotNull ($filenameRPK)
                 ->where($filenameRPK, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')
+                ->whereDate('periode_akhir', '>=', $datetime)
                 ->pluck($filenameRPK)[0]; 
                 // dd($viewer);
                 return Storage::disk('s3')->response('berau/' . $year . "/". $month . "/RPK" . "/" . $viewer);
@@ -462,7 +470,7 @@ class picAdminController extends Controller
                 ->whereNotNull ($filenameRPK)
                 ->where($filenameRPK, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')
+                ->whereDate('periode_akhir', '>=', $datetime)
                 ->pluck($filenameRPK)[0]; 
                 // dd($viewer);
                 return Storage::disk('s3')->response('banjarmasin/' . $year . "/". $month . "/RPK" . "/" . $viewer);
@@ -475,7 +483,7 @@ class picAdminController extends Controller
                 ->whereNotNull ($filenameRPK)
                 ->where($filenameRPK, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')
+                ->whereDate('periode_akhir', '>=', $datetime)
                 ->pluck($filenameRPK)[0]; 
                 // dd($viewer);
                 return Storage::disk('s3')->response('samarinda/' . $year . "/". $month . "/RPK" . "/" . $viewer);
@@ -488,7 +496,7 @@ class picAdminController extends Controller
                 ->whereNotNull ($filenameRPK)
                 ->where($filenameRPK, 'Like', '%' . $result . '%')
                 ->where('nama_kapal', 'Like', '%' . $kapal_id . '%')
-                ->whereColumn('created_at' , '<=', 'periode_akhir')
+                ->whereDate('periode_akhir', '>=', $datetime)
                 ->pluck($filenameRPK)[0]; 
                 // dd($viewer);
                 return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/RPK" . "/" . $viewer);
@@ -502,26 +510,24 @@ class picAdminController extends Controller
     }
     
     //export Rekap PDF page
-    public function exportPDF() 
-    {
+    public function exportPDF() {
         $date = Carbon::now();
         $monthName = $date->format('F');
 
-        return (new RekapAdminExport)->download('RekapulasiDana'. '-' . $monthName . '-' .'.pdf' , \Maatwebsite\Excel\Excel::DOMPDF);
+        return (new RekapAdminExport)->download('RekapulasiDanaPicAdmin'. '-' . $monthName . '-' .'.pdf' , \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     //export Rekap Excel page
-    public function exportEXCEL() 
-    {
+    public function exportEXCEL() {
         $date = Carbon::now();
         $monthName = $date->format('F');
-        return Excel::download(new RekapAdminExport, 'RekapulasiDana'. '-' . $monthName . '-' . '.xlsx');
+        return Excel::download(new RekapAdminExport, 'RekapulasiDanaPicAdmin'. '-' . $monthName . '-' . '.xlsx');
     }
 
     // RekapulasiDana page
     public function RekapulasiDana(){
-    
-        $rekapdana= Rekapdana::whereColumn('created_at' , '<=', 'DateNote2')
+        $datetime = date('Y-m-d');
+        $rekapdana= Rekapdana::whereDate('DateNote2', '>=', $datetime)
         ->latest()
         ->get();
         return view('picadmin.picAdminRekapulasiDana', compact('rekapdana'));
