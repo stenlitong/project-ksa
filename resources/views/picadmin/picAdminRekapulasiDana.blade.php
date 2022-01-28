@@ -73,7 +73,7 @@
                                 <td class="table-info" style="text-align: center">{{$loop->index+1}}</td>
                                 <td class="table-info" style="text-align: center">{{$rekap->Nama_File}}</td>
                                 <td class="table-info" style="text-align: center" style="text-transform: uppercase;"><strong>{{$rekap->Cabang}}</td>
-                                <td class="table-info" style="text-align: center">{{Str::limit($rekap->NamaTug_Barge, 20))}}</td>
+                                <td class="table-info" style="text-align: center">{{Str::limit($rekap->NamaTug_Barge, 20)}}</td>
                                 <td class="table-info" style="text-align: center" style="text-transform: uppercase;">{{$rekap->DateNote1}} - {{$rekap->DateNote2}}</td>
                                 <td class="table-info" style="text-align: center">{{$rekap->Nilai}}</td>
                             </tr>
