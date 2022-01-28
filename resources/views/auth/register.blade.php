@@ -163,7 +163,8 @@
                     document.getElementById("Bunati").disabled = true;
                     document.getElementById("Babelan").disabled = true;
                     document.getElementById("Berau").disabled = true;
-                    document.getElementById("Kendari").disabled = false;
+                    document.getElementById("Kendari").disabled = true;
+                    document.getElementById("Morosi").disabled = true;
                 }
                 // else if(dropdown.value == "picSite"){
                 //     selectopt('Jakarta');                 
@@ -178,6 +179,7 @@
                     document.getElementById("Babelan").disabled = true;
                     document.getElementById("Berau").disabled = true;
                     document.getElementById("Kendari").disabled = true;
+                    document.getElementById("Morosi").disabled = true;
                 }else{
                     document.getElementById("Jakarta").disabled = false;
                     document.getElementById("Samarinda").disabled = false;
@@ -186,6 +188,7 @@
                     document.getElementById("Babelan").disabled = false;
                     document.getElementById("Berau").disabled = false;
                     document.getElementById("Kendari").disabled = false;
+                    document.getElementById("Morosi").disabled = false;
                 }
             }
             </script>
