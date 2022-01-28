@@ -303,7 +303,7 @@
                                             <select class="btn btn-outline-secondary" name="mata_uang_nilai">
                                                 <option selected value="IDR" id="">RP</option>
                                             </select>
-                                            <input type="number" class="form-control" name="Nilai" required id="Nilai" >
+                                            <input type="number" class="form-control" min="0" max="999999999999" name="Nilai" required id="Nilai" >
                                         </div>
                                     </div>
                                 </div>
