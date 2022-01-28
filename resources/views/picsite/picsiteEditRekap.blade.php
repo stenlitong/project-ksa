@@ -43,7 +43,7 @@
 
                     <br>
                     <label for="NamaTug_Barge">Nama Tug</label>
-                    <input type="text" class="form-control" value="{{$rekap->NamaTug_Barge}}" name="NamaTug_Barge" disabled id="NamaTug_Barge" >
+                    <input type="text" class="form-control" value="{{$rekap->NamaTug_Barge}}" name="NamaTug_Barge" readonly="readonly" id="NamaTug_Barge" >
 
                     <br>
                     <label for="Nama_File">Nama File</label>
