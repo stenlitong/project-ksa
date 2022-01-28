@@ -191,7 +191,7 @@
                             'endorse_surat_laut','perpanjangan_sertifikat_sscec','perpanjangan_sertifikat_p3k' ,
                             'biaya_laporan_dok','pnpb_sertifikat_keselamatan','pnpb_sertifikat_garis_muat',
                             'pnpb_surat_laut','sertifikat_snpp','sertifikat_anti_teritip',    
-                            'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec', 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat',
+                            'pnbp_snpp&snat','biaya_survey' ,'pnpb_sscec', 'bki_lambung', 'bki_mesin', 'bki_Garis_muat',
                             'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                           $names = array('Sertifikat Keselamatan' , 'Sertifikat Garis Muat' , 'Penerbitan 1 Kali Jalan' , 'Sertifikat Safe Manning' ,
@@ -295,7 +295,7 @@
                     'exibitum_engine_logbook','pnbp_deck_logbook','pnbp_engine_logbook',
                     'biaya_docking','lain-lain','biaya_labuh_tambat',
                     'biaya_rambu','pnbp_pemeriksaan','sertifikat_bebas_sanitasi&p3k',
-                    'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan', 'BKI_Lambung', 'BKI_Mesin', 'BKI_Garis_Muat',
+                    'sertifikat_garis_muat','pnpb_sscec','ijin_sekali_jalan', 'bki_lambung', 'bki_mesin', 'bki_Garis_muat'
                     'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
 
                     $names = array('PNBP Sertifikat Konstruksi','Jasa Urus Sertifikat','PNBP Sertifikat Perlengkapan',
@@ -406,7 +406,7 @@
                                     'keselamatan_(dok)','garis_muat','dispensasi_isr',
                                     'life_raft_1_2_pemadam','sscec','seatrail',
                                     'laporan_pemeriksaan_umum','laporan_pemeriksaan_mesin','nota_dinas_perubahan_kawasan',
-                                    'PAS','invoice_bki','safe_manning', 'BKI Lambung', 'BKI Mesin', 'BKI Garis Muat',
+                                    'PAS','invoice_bki','safe_manning', 'bki_lambung', 'bki_mesin', 'bki_Garis_muat',
                                     'Lain_Lain1' , 'Lain_Lain2' , 'Lain_Lain3' , 'Lain_Lain4' , 'Lain_Lain5');
                 $names = array('Perjalanan','Sertifikat Keselamatan','Sertifikat Anti Fauling','Surveyor',
                             'Drawing & Stability','Laporan Pengeringan','Berita Acara Lambung',
