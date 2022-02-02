@@ -37,7 +37,7 @@
                             <select class="custom-select" id="taskType">
                                 <option disabled>Choose</option>
                                 <option value="Operational Shipment">Operational Shipment</option>
-                                <option value="Operational Transhipment">Operational Transhipment + Return Cargo</option>
+                                <option value="Operational Transhipment">Operational Transhipment / Return Cargo</option>
                                 <option value="Non Operational">Non Operational</option>
                             </select>
                         </div>

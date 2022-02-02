@@ -398,7 +398,7 @@ class CrewController extends Controller
         // Data Calculation
 
         // Document = Departure POD - D.O.B
-        $document = !empty($operationalData -> departurePOD) && !empty($operationalData -> DOB) ? date_diff(new DateTime($operationalData -> departurePOD), new DateTime($operationalData -> DOB))->format('%h.%i') : 0;
+        $document = !empty($operationalData -> departurePOD) && !empty($operationalData -> DOB) ? date_diff(new DateTime($operationalData -> departurePOD), new DateTime($operationalData -> DOB))->format('%h.%i') : (double) 0;
 
         $calculation['document'] = (double) $document;
 
@@ -409,39 +409,39 @@ class CrewController extends Controller
             $calculation['totalTime'] = $totalTime;
         }elseif($operationalData -> taskType == 'Operational Transhipment'){
             // Sailing To Jetty = (Arrival POL - F/A Vessel)
-            $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : 0;
+            $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : (double) 0;
 
             // Prepare Ldg = (Commence Load (L) -Aside (L))
-            $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : 0;
+            $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : (double) 0;
 
             // Ldg Time = (C/Off (L) - Commence Load (L))
-            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : 0;
+            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : (double) 0;
 
             // Ldg Rate = Quantity : Actual Ldg Time
-            $ldgRate = $operationalData -> cargoAmountEnd != 0 && (double) $ldgTime > 0 ? (double) $operationalData -> cargoAmountEnd / (double) $ldgTime : 0;
+            $ldgRate = $operationalData -> cargoAmountEnd != (double) 0 && (double) $ldgTime > (double) 0 ? (double) $operationalData -> cargoAmountEnd / (double) $ldgTime : (double) 0;
 
             // Berthing = (Aside (L) - Start Aside (L))
-            $berthing = !empty($operationalData -> asideL) && !empty($operationalData -> startAsideL) ? date_diff(new DateTime($operationalData -> asideL), new DateTime($operationalData -> startAsideL))->format('%h.%i') : 0;
+            $berthing = !empty($operationalData -> asideL) && !empty($operationalData -> startAsideL) ? date_diff(new DateTime($operationalData -> asideL), new DateTime($operationalData -> startAsideL))->format('%h.%i') : (double) 0;
 
             // Unberthing = DOH - C/OFF (L)
-            $unberthing = !empty($operationalData -> DOH) && !empty($operationalData -> cOffL) ? date_diff(new DateTime($operationalData -> DOH), new DateTime($operationalData -> cOffL))->format('%h.%i') : 0;
+            $unberthing = !empty($operationalData -> DOH) && !empty($operationalData -> cOffL) ? date_diff(new DateTime($operationalData -> DOH), new DateTime($operationalData -> cOffL))->format('%h.%i') : (double) 0;
 
             // Sailing to MV = (Arrival POD - Departure POD)
-            $sailingToMV = !empty($operationalData -> arrivalPODGeneral) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODGeneral), new DateTime($operationalData -> departurePOD))->format('%h.%i') : 0;
+            $sailingToMV = !empty($operationalData -> arrivalPODGeneral) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODGeneral), new DateTime($operationalData -> departurePOD))->format('%h.%i') : (double) 0;
 
             // Disch Time = (Comp (MV) - Comm (MV))
-            $dischTime = !empty($operationalData -> compMVTranshipment) && !empty($operationalData -> commMVTranshipment) ? date_diff(new DateTime($operationalData -> compMVTranshipment), new DateTime($operationalData -> commMVTranshipment))->format('%h.%i') : 0;
+            $dischTime = !empty($operationalData -> compMVTranshipment) && !empty($operationalData -> commMVTranshipment) ? date_diff(new DateTime($operationalData -> compMVTranshipment), new DateTime($operationalData -> commMVTranshipment))->format('%h.%i') : (double) 0;
 
             // Disch Rate / day = (Quantity - Actual Disch Time)
-            $dischRate = $operationalData -> cargoAmountEnd != 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEnd - (double) $dischTime : 0;
+            $dischRate = $operationalData -> cargoAmountEnd != (double) 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEnd - (double) $dischTime : (double) 0;
 
             // Manuever = (Aside (MV) - Start Aside (MV))
-            $maneuver = !empty($operationalData -> asideMVTranshipment) && !empty($operationalData -> startAsideMVTranshipment) ? date_diff(new DateTime($operationalData -> asideMVTranshipment), new DateTime($operationalData -> startAsideMVTranshipment))->format('%h.%i') : 0;
+            $maneuver = !empty($operationalData -> asideMVTranshipment) && !empty($operationalData -> startAsideMVTranshipment) ? date_diff(new DateTime($operationalData -> asideMVTranshipment), new DateTime($operationalData -> startAsideMVTranshipment))->format('%h.%i') : (double) 0;
 
             // Cycle Time = Disch Time + Manuever + Sailing to MV + Unberthing + Ldg Time + Prepare Ldg + Berthing + Sailing to Jetty
             $cycleTime = !empty($dischTime) && !empty($maneuver) && !empty($sailingToMV) && !empty($unberthing) && !empty($ldgTime) && !empty($prepareLdg) && !empty($berthing) && !empty($sailingToJetty) ? 
             (double) $dischTime + (double) $maneuver + (double) $sailingToMV + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
-            0;
+            (double) 0;
 
             $calculation['sailingToJetty'] = (double) $sailingToJetty;
             $calculation['prepareLdg'] = (double) $prepareLdg;
@@ -456,36 +456,36 @@ class CrewController extends Controller
             $calculation['cycleTime'] = (double) $cycleTime;
         }elseif($operationalData -> taskType == 'Return Cargo'){
             // Sailing to MV = (Arrival POD - Departure POD)
-            $sailingToMVCargo = !empty($operationalData -> arrivalPODCargo) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODCargo), new DateTime($operationalData -> departurePOD))->format('%h.%i') : 0;
+            $sailingToMVCargo = !empty($operationalData -> arrivalPODCargo) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODCargo), new DateTime($operationalData -> departurePOD))->format('%h.%i') : (double) 0;
 
             // Manuever = (Aside (MV) - Start Aside (MV))
-            $maneuverCargo = !empty($operationalData -> asideMVCargo) && !empty($operationalData -> startAsideMVCargo) ? date_diff(new DateTime($operationalData -> asideMVCargo), new DateTime($operationalData -> startAsideMVCargo))->format('%h.%i') : 0;
+            $maneuverCargo = !empty($operationalData -> asideMVCargo) && !empty($operationalData -> startAsideMVCargo) ? date_diff(new DateTime($operationalData -> asideMVCargo), new DateTime($operationalData -> startAsideMVCargo))->format('%h.%i') : (double) 0;
 
             // Disch Time = (Comp (MV) - Comm (MV))
-            $dischTimeCargo = !empty($operationalData -> compMVCargo) && !empty($operationalData -> commMVCargo) ? date_diff(new DateTime($operationalData -> compMVCargo), new DateTime($operationalData -> commMVCargo))->format('%h.%i') : 0;
+            $dischTimeCargo = !empty($operationalData -> compMVCargo) && !empty($operationalData -> commMVCargo) ? date_diff(new DateTime($operationalData -> compMVCargo), new DateTime($operationalData -> commMVCargo))->format('%h.%i') : (double) 0;
 
             // Disch Rate / day = (Quantity - Actual Disch Time)
-            $dischRateCargo = $operationalData -> cargoAmountEndCargo != 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEndCargo - (double) $dischTime : 0;
+            $dischRateCargo = $operationalData -> cargoAmountEndCargo != (double) 0 && !empty($dischTime) ? (double) $operationalData -> cargoAmountEndCargo - (double) $dischTime : (double) 0;
 
             // Unberthing = DOH - C/OFF (L)
-            $unberthing = !empty($operationalData -> DOH) && !empty($operationalData -> cOffL) ? date_diff(new DateTime($operationalData -> DOH), new DateTime($operationalData -> cOffL))->format('%h.%i') : 0;
+            $unberthing = !empty($operationalData -> DOH) && !empty($operationalData -> cOffL) ? date_diff(new DateTime($operationalData -> DOH), new DateTime($operationalData -> cOffL))->format('%h.%i') : (double) 0;
 
             // Berthing = (Aside (L) - Start Aside (L))
-            $berthing = !empty($operationalData -> asideL) && !empty($operationalData -> startAsideL) ? date_diff(new DateTime($operationalData -> asideL), new DateTime($operationalData -> startAsideL))->format('%h.%i') : 0;
+            $berthing = !empty($operationalData -> asideL) && !empty($operationalData -> startAsideL) ? date_diff(new DateTime($operationalData -> asideL), new DateTime($operationalData -> startAsideL))->format('%h.%i') : (double) 0;
 
             // Ldg Time = (C/Off (L) - Commence Load (L))
-            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : 0;
+            $ldgTime = !empty($operationalData -> cOffL) && !empty($operationalData -> commenceLoadL) ? date_diff(new DateTime($operationalData -> cOffL), new DateTime($operationalData -> commenceLoadL))->format('%h.%i') : (double) 0;
 
             // Prepare Ldg = (Commence Load (L) -Aside (L))
-            $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : 0;
+            $prepareLdg = !empty($operationalData -> commenceLoadL) && !empty($operationalData -> asideL) ? date_diff(new DateTime($operationalData -> commenceLoadL), new DateTime($operationalData -> asideL))->format('%h.%i') : (double) 0;
 
             // Sailing To Jetty = (Arrival POL - F/A Vessel)
-            $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : 0;
+            $sailingToJetty = !empty($operationalData -> arrivalPOL) && !empty($operationalData -> faVessel) ? date_diff(new DateTime($operationalData -> arrivalPOL), new DateTime($operationalData -> faVessel))->format('%h.%i') : (double) 0;
 
             // Cycle Time = Disch Time + Manuever + Sailing to MV + Unberthing + Ldg Time + Prepare Ldg + Berthing + Sailing to Jetty
             $cycleTimeCargo = !empty($dischTimeCargo) && !empty($maneuverCargo) && !empty($sailingToMVCargo) && !empty($unberthing) && !empty($ldgTime) && !empty($prepareLdg) && !empty($berthing) && !empty($sailingToJetty) ? 
             (double) $dischTimeCargo + (double) $maneuverCargo + (double) $sailingToMVCargo + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
-            0;
+            (double) 0;
 
             $calculation['sailingToJetty'] = (double) $sailingToJetty;
             $calculation['prepareLdg'] = (double) $prepareLdg;
