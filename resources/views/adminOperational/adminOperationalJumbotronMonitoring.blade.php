@@ -33,26 +33,41 @@
 @else
     <div class="d-flex justify-content-around">
         <div style="width: 60%;">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-column">
-                    <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
-                    <h3 class="text-center">{{ $operationalData -> taskType }}</h3>
-                </div>
-                <div class="d-flex flex-column">
-                    <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
-                    <h3 class="text-center">{{ $operationalData -> condition }}</h3>
-                </div>
-                <div class="d-flex flex-column mr-5">
-                    <h1 class="text-secondary display-8 font-weight-bold">Jumlah Kargo Akhir</h1>
-                    <h3 class="text-center">{{ $operationalData -> cargoAmountEnd }}</h3>
-                </div>
-                @if($operationalData == 'Operational Shipment')
-                    <div class="d-flex flex-column mr-5">
-                        <h1 class="text-secondary display-8 font-weight-bold">Total Time</h1>
-                        <h3 class="text-center">{{ !empty($operationalData -> totalTime) ? $operationalData -> totalTime : 'n/a' }}</h3>
+
+            @if($operationalData -> taskType != 'Non Operational')
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column">
+                        <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
+                        <h3 class="text-center">{{ $operationalData -> taskType }}</h3>
                     </div>
-                @endif
-            </div>
+                    <div class="d-flex flex-column">
+                        <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
+                        <h3 class="text-center">{{ $operationalData -> condition }}</h3>
+                    </div>
+                    <div class="d-flex flex-column mr-5">
+                        <h1 class="text-secondary display-8 font-weight-bold">Jumlah Kargo Akhir</h1>
+                        <h3 class="text-center">{{ $operationalData -> cargoAmountEnd }}</h3>
+                    </div>
+                    @if($operationalData -> taskType == 'Operational Shipment')
+                        <div class="d-flex flex-column mr-5">
+                            <h1 class="text-secondary display-8 font-weight-bold">Total Time</h1>
+                            <h3 class="text-center">{{ !empty($operationalData -> totalTime) ? $operationalData -> totalTime : 'n/a' }}</h3>
+                        </div>
+                    @endif
+                </div>
+            @else
+                <div class="d-flex justify-content-around">
+                    <div class="d-flex flex-column">
+                        <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
+                        <h3 class="text-center">{{ $operationalData -> taskType }}</h3>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
+                        <h3 class="text-center">{{ $operationalData -> condition }}</h3>
+                    </div>
+                </div>
+            @endif
+            
             <div class="card text-white bg-secondary mt-5 overflow-auto" style="width: 70vw; height: 52vh; border-radius: 10px;">
                 <div class="card-body">
                     <div class="d-flex flex-wrap mt-2">
@@ -296,6 +311,13 @@
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Cycle Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> cycleTimeCargo != NULL ? $operationalData -> cycleTimeCargo . ' Hours' : 'n/a' }}</h6>
+                                </div>
+                            </div>
+                        @elseif($operationalData -> taskType == 'Non Operational')
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">Total Lost Time</h5>
+                                    <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> totalLostDays != NULL ? $operationalData -> totalLostDays . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                         @endif

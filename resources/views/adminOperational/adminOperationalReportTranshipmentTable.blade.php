@@ -11,7 +11,9 @@
                 <th scope="col">Periode</th>
                 <th scope="col">From-To</th>
                 <th scope="col">Jenis Kegiatan</th>
-                <th scope="col">Jumlah Kargo Akhir</th>
+                @if($taskType != 'Non Operational')
+                    <th scope="col">Jumlah Kargo Akhir</th>
+                @endif
                 @if($taskType == 'Operational Shipment')
                     <th scope="col">Customer</th>
                     <th scope="col">Total Days</th>
@@ -29,10 +31,12 @@
                         <td>{{ $od -> created_at -> format('M/Y') }}</td>
                         <td>{{ $od -> from . ' - ' . $od -> to }}</td>
                         <td>{{ $od -> taskType }}</td>
-                        @if($od -> taskType == 'Return Cargo')
-                            <td>{{ $od -> cargoAmountEndCargo }} Ton</td>
-                        @else
-                            <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                        @if($od -> taskType != 'Non Operational')
+                            @if($od -> taskType == 'Return Cargo')
+                                <td>{{ $od -> cargoAmountEndCargo }} Ton</td>
+                            @else
+                                <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                            @endif
                         @endif
                         @if($taskType == 'Operational Shipment')
                             <td>{{ $od -> customer }}</td>

@@ -353,19 +353,19 @@ Route::get('/', function () {
 Route::get('/add-boat', function(){
     Tug::create([
         'tugName' => 'Tug A',
-        'areaOperations' => 'Jakarta',
-        'classification' => 'Kapal',
-        'yearModel' => '2021',
-        'status' => 'operational'
+        'gt' => 'gt',
+        'nt' => 'nt',
+        'master' => 'master',
+        'flag' => 'flag',
+        'IMONumber' => 'IMONumber',
+        'callSign' => 'callSign',
     ]);
 
     Barge::create([
         'bargeName' => 'Barge A',
-        'size' => 300,
-        'type' => 'Barge',
-        'areaOperation' => 'Jakarta',
-        'bargeYear' => '2021',
-        'status' => 'operational'
+        'gt' => 'gt',
+        'nt' => 'nt',
+        'flag' => 'flag',
     ]);
 
     return redirect('/dashboard');

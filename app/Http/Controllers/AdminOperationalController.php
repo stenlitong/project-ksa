@@ -38,6 +38,7 @@ class AdminOperationalController extends Controller
                         ->orWhere('taskType', 'Return Cargo');
                     })->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
                 }else{
+                    // $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
                     $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
                 }
 
@@ -53,6 +54,8 @@ class AdminOperationalController extends Controller
         $nameFormat = '';
         if($request -> taskType == 'Operational Shipment'){
             $nameFormat = 'Daily-Report-Shipment';
+        }elseif($request -> taskType == 'Non Operational'){
+            $nameFormat = 'Daily-Report-Non-Operational';
         }else{
             $nameFormat = 'Daily-Report-Transhipment';
         }

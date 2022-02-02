@@ -73,7 +73,7 @@
                                         <option value="" disabled>Choose Task...</option>
                                         <option value="Operational Shipment">Operational Shipment</option>
                                         <option value="Operational Transhipment">Operational Transhipment</option>
-                                        {{-- <option value="Return Cargo">Return Cargo</option> --}}
+                                        <option value="Non Operational">Non Operational</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">

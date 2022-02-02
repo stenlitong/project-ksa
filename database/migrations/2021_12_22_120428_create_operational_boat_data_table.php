@@ -85,6 +85,12 @@ class CreateOperationalBoatDataTable extends Migration
 
             $table->dateTime('departureJetty')->nullable();
 
+            // Non Operational
+            // $table->dateTime('arrivalTime')->nullable();
+            $table->dateTime('startDocking')->nullable();
+            $table->dateTime('finishDocking')->nullable();
+            $table->dateTime('departurePOL')->nullable();
+
             // Return Cargo
             $table->dateTime('arrivalPODCargo')->nullable();
             $table->dateTime('startAsideMVCargo')->nullable();
@@ -119,6 +125,7 @@ class CreateOperationalBoatDataTable extends Migration
             $table->double('cycleTime')->nullable();
             $table->double('document')->nullable();
             $table->string('totalTime', 50)->nullable();
+            $table->double('totalLostDays')->nullable();
 
             // Additional Calculation Data For Return Cargo
             $table->double('sailingToMVCargo')->nullable();

@@ -81,7 +81,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="Master">Master</label>
-                                <input type="text" class="form-control" id="Master" name="Master"
+                                <input type="text" class="form-control" id="master" name="master"
                                     placeholder="Input Master" required>
                             </div>
                             <div class="form-group">

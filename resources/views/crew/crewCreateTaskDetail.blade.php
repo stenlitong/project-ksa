@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex flex-wrap" style="overflow-y: auto; max-height: 800px">
+                                    <div class="d-flex flex-wrap mt-4" style="overflow-y: auto; max-height: 800px">
                                         @if($ot -> taskType == 'Operational Shipment')
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
@@ -430,6 +430,44 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        @if($ot -> taskType == 'Non Operational')
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Time Arrival</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="arrivalTime" id="arrivalTime" value="{{ $ot -> arrivalTime != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalTime)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Start Docking</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="startDocking" id="startDocking" value="{{ $ot -> startDocking != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> startDocking)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Finish Docking</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="finishDocking" id="finishDocking" value="{{ $ot -> finishDocking != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> finishDocking)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Departure To POL</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="departurePOL" id="departurePOL" value="{{ $ot -> departurePOL != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departurePOL)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="d-flex justify-content-center mt-5 mb-5">
@@ -444,42 +482,54 @@
                                             {{-- <input type="text" class="form-control" name="condition" id="" placeholder="Input Condition ..."> --}}
                                             <select class="form-select" name="condition" id="condition" required>
                                                 <option disabled>Choose</option>
-                                                <option value="On Sailing" {{ $ot -> condition == 'On Sailing' ? 'selected' : '' }}>On Sailing</option>
-                                                <option value="Loading Activity" {{ $ot -> condition == 'Loading Activity' ? 'selected' : '' }}>Loading Activity</option>
-                                                <option value="Discharge Activity" {{ $ot -> condition == 'Discharge Activity' ? 'selected' : '' }}>Discharge Activity</option>
-                                                <option value="Standby" {{ $ot -> condition == 'Standby' ? 'selected' : '' }}>Standby</option>
-                                                <option value="Repair" {{ $ot -> condition == 'Repair' ? 'selected' : '' }}>Repair</option>
-                                                <option value="Docking" {{ $ot -> condition == 'Docking' ? 'selected' : '' }}>Docking</option>
-                                                <option value="Standby Docking" {{ $ot -> condition == 'Standby Docking' ? 'selected' : '' }}>Standby Docking</option>
-                                                <option value="Grounded Barge" {{ $ot -> condition == 'Grounded Barge' ? 'selected' : '' }}>Grounded Barge</option>
-                                                <option value="Waiting Schedule" {{ $ot -> condition == 'Waiting Schedule' ? 'selected' : '' }}>Waiting Schedule</option>
+                                                @if($ot -> taskType == 'Non Operational')
+                                                    <option value="Docking" {{ $ot -> condition == 'Docking' ? 'selected' : '' }}>Docking</option>
+                                                    <option value="Standby Docking" {{ $ot -> condition == 'Standby Docking' ? 'selected' : '' }}>Standby Docking</option>
+                                                @else
+                                                    <option value="On Sailing" {{ $ot -> condition == 'On Sailing' ? 'selected' : '' }}>On Sailing</option>
+                                                    <option value="Loading Activity" {{ $ot -> condition == 'Loading Activity' ? 'selected' : '' }}>Loading Activity</option>
+                                                    <option value="Discharge Activity" {{ $ot -> condition == 'Discharge Activity' ? 'selected' : '' }}>Discharge Activity</option>
+                                                    <option value="Standby" {{ $ot -> condition == 'Standby' ? 'selected' : '' }}>Standby</option>
+                                                    <option value="Repair" {{ $ot -> condition == 'Repair' ? 'selected' : '' }}>Repair</option>
+                                                    <option value="Grounded Barge" {{ $ot -> condition == 'Grounded Barge' ? 'selected' : '' }}>Grounded Barge</option>
+                                                    <option value="Waiting Schedule" {{ $ot -> condition == 'Waiting Schedule' ? 'selected' : '' }}>Waiting Schedule</option>
+                                                @endif
                                             </select>
                                         </div>
+
                                     </div>
-                                    <div class="d-flex justify-content-center mt-3">
+                                    @if($ot -> taskType != 'Non Operational')
+                                        <div class="d-flex justify-content-around mt-3">
+                                            <div class="form-group col-md-6">
+                                                <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
+                                                <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
+                                                @if($ot -> taskType != 'Return Cargo')
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Ton</div>
+                                                        </div>
+                                                    </div>
+                                                @elseif($ot -> taskType == 'Return Cargo')
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Ton</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
                                         <div class="form-group col-md-6">
                                             <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
                                             <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
-                                            @if($ot -> taskType != 'Return Cargo')
-                                                <div class="input-group">
-                                                    <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">Ton</div>
-                                                    </div>
-                                                </div>
-                                            @elseif($ot -> taskType == 'Return Cargo')
-                                                <div class="input-group">
-                                                    <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">Ton</div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    @endif
+
                                     @if($ot -> taskType == 'Operational Shipment')
                                         <div class="d-flex justify-content-center">
                                             <div class="form-group col-md-12">
@@ -488,6 +538,7 @@
                                             </div>
                                         </div>
                                     @endif
+                                    
                                     <div class="d-flex justify-content-center mt-3">
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="description">Deskripsi : </label>
@@ -495,7 +546,7 @@
                                             <textarea name="description" id="" style="width: 100%" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-around mt-5">
+                                    <div class="d-flex justify-content-around mt-5 mb-5">
                                         <div class="d-flex flex-column w-25">
                                             <button class="btn btn-danger" type="button" data-toggle="modal" id="cancel" data-target="#cancel-{{ $ot -> id }}">Cancel Task</button>
                                             @if($ot -> taskType == 'Operational Transhipment')

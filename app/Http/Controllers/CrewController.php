@@ -260,7 +260,7 @@ class CrewController extends Controller
             'portOfDischarge' => 'required|string',
             'cargoAmountStart' => 'required|numeric|min:1',
             // 'customer' => 'required|alpha',
-            'taskType' => 'required|in:Operational Shipment,Operational Transhipment'
+            'taskType' => 'required|in:Operational Shipment,Operational Transhipment,Non Operational'
         ]);
 
         $validated['portOfLoading'] = strtoupper($request -> portOfLoading);
@@ -315,7 +315,7 @@ class CrewController extends Controller
                 
                 'departureTime' => 'nullable|date'
             ]);
-        }else{
+        }elseif($operationalData -> taskType == 'Operational Shipment' || $operationalData -> taskType == 'Operational Transhipment'){
             // Validate All The Fields
             $validated = $request -> validate([
                 'from' => 'required|string',
@@ -354,6 +354,21 @@ class CrewController extends Controller
                 'compMVTranshipment' => 'nullable|date',
                 'cOffMVTranshipment' => 'nullable|date',
                 'departureJetty' => 'nullable|date',
+            ]);
+        }else{
+             // Validate All The Non Operational Fields
+             $validated = $request -> validate([
+                'from' => 'required|string',
+                'to' => 'required|string',
+                'condition' => 'nullable|string',
+                'estimatedTime' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/',
+                'description' => 'nullable',
+
+                // Non Operational
+                'arrivalTime' => 'nullable|date',
+                'startDocking' => 'nullable|date',
+                'finishDocking' => 'nullable|date',
+                'departurePOL' => 'nullable|date',
             ]);
         }
 
@@ -482,7 +497,13 @@ class CrewController extends Controller
             $calculation['dischRateCargo'] = $dischRateCargo;
             $calculation['maneuverCargo'] = (double) $maneuverCargo;
             $calculation['cycleTimeCargo'] = (double) $cycleTimeCargo;
+
+        }elseif($operationalData -> taskType == 'Non Operational'){
+            $totalLostDays = !empty($operationalData -> arrivalTime) && !empty($operationalData -> departurePOL) ? date_diff(new DateTime($operationalData -> arrivalTime), new DateTime($operationalData -> departurePOL))->format('%h.%i') : 0;
+
+            $calculation['totalLostDays'] = (double) $totalLostDays;
         }
+
         // Update The Following Task Id
         OperationalBoatData::where('id', $request -> taskId)->update($calculation);
 
@@ -501,6 +522,8 @@ class CrewController extends Controller
 
         $returnCargo_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'cargoAmountEndCargo', 'arrivalPODCargo', 'startAsideMVCargo', 'asideMVCargo', 'commMVCargo', 'compMVCargo', 'cOffMVCargo', 'departureTime'];
 
+        $nonOperational_loops = ['from', 'to', 'condition', 'estimatedTime', 'arrivalTime', 'startDocking', 'finishDocking', 'departurePOL'];
+
         if($data -> taskType == 'Operational Shipment'){
             foreach($operationShipment_loops as $os){
                 if($data -> $os == NULL){
@@ -513,8 +536,14 @@ class CrewController extends Controller
                     return redirect()->back()->with('error', 'Input Field Must Not Be Empty');
                 }
             }
-        }else{
+        }elseif($data -> taskType == 'Return Cargo'){
             foreach($returnCargo_loops as $ot){
+                if($data -> $ot == NULL){
+                    return redirect()->back()->with('error', 'Input Field Must Not Be Empty');
+                }
+            }
+        }else{
+            foreach($nonOperational_loops as $ot){
                 if($data -> $ot == NULL){
                     return redirect()->back()->with('error', 'Input Field Must Not Be Empty');
                 }
