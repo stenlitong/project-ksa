@@ -256,13 +256,15 @@ class CrewController extends Controller
         $validated = $request -> validate([
             'tugName' => 'required|exists:tugs,tugName',
             'bargeName' => 'required|exists:barges,bargeName',
-            'jetty' => 'required|string',
+            'portOfLoading' => 'required|string',
+            'portOfDischarge' => 'required|string',
             'cargoAmountStart' => 'required|numeric|min:1',
             // 'customer' => 'required|alpha',
             'taskType' => 'required|in:Operational Shipment,Operational Transhipment'
         ]);
 
-        $validated['jetty'] = strtoupper($request -> jetty);
+        $validated['portOfLoading'] = strtoupper($request -> portOfLoading);
+        $validated['portOfDischarge'] = strtoupper($request -> portOfDischarge);
 
         // Add User Id To The Collection
         $validated['user_id'] = Auth::user()->id;

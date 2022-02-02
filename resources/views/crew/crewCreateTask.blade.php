@@ -44,7 +44,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>Barge (Optional)</label>
+                                    <label>Barge</label>
                                     <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;" required>
 
                                         @foreach($barges as $b)
@@ -53,8 +53,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="jetty">Jetty</label>
-                                    <input name="jetty" type="text" class="form-control" id="jetty" maxlength="50" placeholder="Input Jetty (min. 2 alpha)..."
+                                    <label for="portOfLoading">Port Of Loading</label>
+                                    <input name="portOfLoading" type="text" class="form-control" id="portOfLoading" maxlength="50" placeholder="Input Port Of Loading..."
                                         style=" height: 50px" required>
                                 </div>
                                 <div class="form-group col-md-4">
@@ -75,6 +75,11 @@
                                         <option value="Operational Transhipment">Operational Transhipment</option>
                                         {{-- <option value="Return Cargo">Return Cargo</option> --}}
                                     </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="portOfDischarge">Port Of Discharge</label>
+                                    <input name="portOfDischarge" type="text" class="form-control" id="portOfDischarge" maxlength="50" placeholder="Input Port Of Discharge..."
+                                        style=" height: 50px" required>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center">

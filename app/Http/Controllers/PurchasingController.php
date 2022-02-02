@@ -102,13 +102,13 @@ class PurchasingController extends Controller
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
-            return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
         }else{
             $orderHeads = OrderHead::where(function($query){
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6);
     
             $completed = $orderHeads->count();
             
@@ -119,7 +119,7 @@ class PurchasingController extends Controller
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
     
-            return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers', 'default_branch'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'suppliers', 'default_branch'));
         }
     }
 
@@ -170,7 +170,7 @@ class PurchasingController extends Controller
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6);
     
             $in_progress = $orderHeads->count();
     

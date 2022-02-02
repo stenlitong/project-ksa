@@ -25,6 +25,7 @@ use App\Models\documentrpk;
 use App\Models\documentsamarinda;
 use App\Models\spgrfile;
 use App\Models\NoteSpgr;
+use App\Models\Tug;
 use Illuminate\Http\Request;
 use Matrix\Operators\Operator;
 
@@ -101,9 +102,9 @@ class DashboardController extends Controller
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere('order_id', 'like', '%'. request('search') .'%');
-                })->whereYear('created_at', date('Y'))->latest()->paginate(6);
+                })->whereYear('created_at', date('Y'))->latest()->paginate(7);
             }else{
-                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
+                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
             }
 
             // Then find all the order details from the orderHeads
@@ -193,7 +194,7 @@ class DashboardController extends Controller
             // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
             $users = User::whereHas('roles', function($query){
                 $query->where('name', 'logistic');
-            })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -231,44 +232,45 @@ class DashboardController extends Controller
         }elseif(Auth::user()->hasRole('adminOperational')){
 
             // Sum The DAYS Of Each Condition, Not The Count Of The Ship
-            $dok_days = OperationalBoatData::where('status', 'On Going')->sum('DOKDays'); // 
-            $standbyDOK_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDOKDays'); //
+            $docking_days = OperationalBoatData::where('status', 'On Going')->sum('dockingDays');
+            $standby_docking_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDockingDays');
+            $standby_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDays');
+            $grounded_barge_days = OperationalBoatData::where('status', 'On Going')->sum('groundedBargeDays');
+            $repair_days = OperationalBoatData::where('status', 'On Going')->sum('repairDays');
+            $waiting_schedule_days = OperationalBoatData::where('status', 'On Going')->sum('waitingScheduleDays');
 
             // Ship Count
-            $dok_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'DOK')->count();
-            $perbaikan_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Perbaikan')->count();
-            $kandas_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Kandas')->count();
-            $tungguDOK_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu DOK')->count();
-            $tungguTugboat_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu Tugboat atau Barge')->count();
-            $tungguDokumen_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Tunggu Dokumen')->count();
-            $standbyDOK_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby DOK')->count();
-            $bocor_ship_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Bocor')->count();
+            $on_sailing_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'On Sailing')->count();
+            $loading_activity_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Loading Activity')->count();
+            $discharge_activity_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Discharge Activity')->count();
+            $standby_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby')->count();
+            $repair_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Repair')->count();
+            $docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Docking')->count();
+            $standby_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby Docking')->count();
+            $grounded_barge_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Grounded Barge')->count();
+            $waiting_schedule_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Waiting Schedule')->count();
 
-
-            // $perbaikan_days = OperationalBoatData::where('status', 'On Going')->sum('perbaikanDays');
-            // $kandas_days = OperationalBoatData::where('status', 'On Going')->sum('kandasDays');
-            // $tungguDOK_days = OperationalBoatData::where('status', 'On Going')->sum('tungguDOKDays');
-            // $tungguTug_days = OperationalBoatData::where('status', 'On Going')->sum('tungguTugDays');
-            // $tungguDokumen_days = OperationalBoatData::where('status', 'On Going')->sum('tungguDokumenDays');
-            // $bocor_days = OperationalBoatData::where('status', 'On Going')->sum('bocor');
-
-            // formula => Total lost time : 
-            // DOK - standby belum DOK
-            $total_lost_time = $dok_days - $standbyDOK_days;
+            // formula => Total lost time : docking + standby docking + standby + grounded barge + repair + waiting schedule
+            $total_lost_time = $docking_days + $standby_docking_days + $standby_days + $grounded_barge_days + $repair_days + $waiting_schedule_days;
 
             // formula => AKTIF : 
             //  (31*total barge)-Total lost time:
-            $total_barge = Barge::count();
-            $aktif = (31 * $total_barge) - $total_lost_time;
+            $total_barges = Barge::count();
+            $aktif = (31 * $total_barges) - $total_lost_time;
             
             // formula => percentage ship's activity :
             // Aktif / (31*total barge) * 100
             $percentage_ship_activity = 0;
-            if($total_barge > 0){
-                $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
+            if($total_barges > 0){
+                $percentage_ship_activity = $aktif / (31 * $total_barges) * 100;
             }
 
-            return view('adminOperational.adminOperationalDashboard', compact('dok_ship_count', 'perbaikan_ship_count', 'kandas_ship_count', 'tungguDOK_ship_count', 'tungguTugboat_ship_count', 'tungguDokumen_ship_count', 'standbyDOK_ship_count', 'bocor_ship_count', 'total_lost_time', 'percentage_ship_activity'));
+            // Total fleets => all tugs + barges
+            $total_tugs = Tug::count();
+
+            $total_fleets = $total_tugs + $total_barges;
+
+            return view('adminOperational.adminOperationalDashboard', compact('total_fleets', 'on_sailing_count', 'loading_activity_count', 'discharge_activity_count', 'standby_count', 'repair_count', 'docking_count', 'standby_docking_count', 'grounded_barge_count', 'waiting_schedule_count', 'percentage_ship_activity', 'total_lost_time'));
         }elseif(Auth::user()->hasRole('picSite')){
             return view('picsite.picDashboard');
         }elseif(Auth::user()->hasRole('picAdmin')){

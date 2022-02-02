@@ -25,13 +25,21 @@ class AdminOperationalController extends Controller
     public function searchDailyReports(Request $request){
         if($request->ajax()){
             try{
-                $taskType = $request -> taskType;
+                // Helper var
                 $tugName = $request -> tugName;
                 $bargeName = $request -> bargeName;
                 $month = $request -> month;
                 $year = $request -> year;
+                $taskType = $request -> taskType;
 
-                $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                if($request -> taskType == 'Operational Transhipment'){
+                    $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where(function($query){
+                        $query -> where('taskType', 'Operational Transhipment')
+                        ->orWhere('taskType', 'Return Cargo');
+                    })->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                }else{
+                    $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                }
 
                 return view('adminOperational.adminOperationalReportTranshipmentTable', compact('operationalData', 'taskType', 'tugName', 'bargeName', 'month', 'year'))->render();
             }catch(\Throwable $e){
@@ -176,7 +184,13 @@ class AdminOperationalController extends Controller
 
     public function addNewTugboat(Request $request){
         $validated = $request -> validate([
-            'tugName' => 'required|string|unique:tugs'
+            'tugName' => 'required|string|unique:tugs' ,
+            'gt' => 'required|string',
+            'nt' => 'required|string',
+            'master' => 'required|string',
+            'flag' => 'required|string',
+            'IMONumber' => 'required|string',
+            'callSign' => 'required|string',
         ]);
 
         Tug::create($validated);
@@ -218,7 +232,10 @@ class AdminOperationalController extends Controller
 
     public function addNewBarge(Request $request){
         $validated = $request -> validate([
-            'bargeName' => 'required|string|unique:barges'
+            'bargeName' => 'required|string|unique:barges',
+            'gt' => 'required|string',
+            'nt' => 'required|string',
+            'flag' => 'required|string',
         ]);
 
         Barge::create($validated);

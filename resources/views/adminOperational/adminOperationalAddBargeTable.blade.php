@@ -2,6 +2,9 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
+            <th scope="col">GT</th>
+            <th scope="col">NT</th>
+            <th scope="col">Flag</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -9,6 +12,9 @@
         @forelse($barges as $key => $b)
             <tr>
                 <td>{{ $b -> bargeName }}</td>
+                <td>{{ $b -> gt }}</td>
+                <td>{{ $b -> nt }}</td>
+                <td>{{ $b -> flag }}</td>
                 <td>
                     <button class="btn btn-sm btn-danger" type="button" data-toggle="modal" id="finalize" data-target="#deleteBarge-{{ $b -> id }}">Delete</button>
                 </td>
@@ -20,7 +26,6 @@
         @endforelse
     </tbody>
 </table>
-{{ $barges -> withQueryString() -> links() }}
 
 @foreach($barges as $b)
     <!-- Modal #1 -->

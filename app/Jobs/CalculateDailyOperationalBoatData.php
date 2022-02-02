@@ -32,9 +32,9 @@ class CalculateDailyOperationalBoatData implements ShouldQueue
     public function handle()
     {   
         // 1) Initialize All The Conditions
-        $conditions = ['DOK', 'Perbaikan', 'Kandas', 'Tunggu DOK', 'Tunggu Tugboat atau Barge', 'Tunggu Dokumen', 'Standby DOK', 'Bocor'];
+        $conditions = ['On Sailing', 'Loading Activity', 'Discharge Activity', 'Standby', 'Repair', 'Docking', 'Standby Docking', 'Grounded Barge', 'Waiting Schedule'];
 
-        $fields_to_be_incremented = ['DOKDays', 'perbaikanDays', 'kandasDays', 'tungguDOKDays', 'tungguTugDays', 'tungguDokumenDays', 'standbyDOKDays', 'bocor'];
+        $fields_to_be_incremented = ['onSailingDays', 'loadingActivityDays', 'dischargeActivityDays', 'standbyDays', 'repairDays', 'dockingDays', 'standbyDockingDays', 'groundedBargeDays', 'waitingScheduleDays'];
 
         // 2) Loop Through All The Conditions & Increment The Days Of The Following Conditions (only ongoing task that is going to be incremented)
         for($i = 0; $i < 8; $i ++){

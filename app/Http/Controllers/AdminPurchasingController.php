@@ -14,45 +14,6 @@ use Storage;
 
 class AdminPurchasingController extends Controller
 {
-    // public function addSupplier(Request $request){
-    //     // Add supplier
-    //     $validated = $request -> validate([
-    //         'supplierName' => 'required',
-    //         'noTelp' => 'required|numeric|digits_between:8,11',
-    //         'supplierEmail' => 'required|email|unique:suppliers',
-    //         'supplierAddress' => 'required',
-    //         'supplierNPWP' => 'required',
-    //         'supplierNoRek' => 'nullable'
-    //     ]);
-        
-    //     Supplier::create($validated);
-
-    //     return redirect('/dashboard')->with('status', 'Added Successfully');
-    // }
-
-    // public function editSupplier(Request $request, Supplier $suppliers){
-    //     // Edit supplier
-    //     $validated = $request -> validate([
-    //         'supplierName' => 'required',
-    //         'noTelp' => 'required|numeric|digits_between:8,11',
-    //         'supplierEmail' => 'required|email',
-    //         'supplierAddress' => 'required',
-    //         'supplierNPWP' => 'required'
-    //     ]);
-
-    //     // Find the supplier's ID then update the value
-    //     Supplier::find($suppliers->id)->update($validated);
-
-    //     return redirect('/dashboard')->with('status', 'Edited Successfully');
-    // }
-
-    // public function deleteSupplier(Request $request, Supplier $suppliers){
-    //     // Find the supplier by the id in the request params
-    //     Supplier::destroy($suppliers->id);
-
-    //     return redirect('/dashboard')->with('status', 'Deleted Successfully');
-    // }
-
     public function formApPage(){
         // Show the form AP page
         $apList = ApList::with('orderHead')->where('cabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);

@@ -39,6 +39,7 @@
                 <div class="w-75" id="table_data">
                     @include('adminOperational.adminOperationalAddBargeTable')
                 </div>
+                {{ $barges -> withQueryString() -> links() }}
             </div>
         </main>
 
@@ -60,6 +61,36 @@
                                 <label for="bargeName">Nama Barge</label>
                                 <input type="text" class="form-control" id="bargeName" name="bargeName"
                                     placeholder="Input Nama Barge" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gt">GT</label>
+                                <input type="text" class="form-control" id="gt" name="gt"
+                                    placeholder="Input GT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nt">NT</label>
+                                <input type="text" class="form-control" id="nt" name="nt"
+                                    placeholder="Input NT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Master">Master</label>
+                                <input type="text" class="form-control" id="Master" name="Master"
+                                    placeholder="Input Master" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="flag">Flag</label>
+                                <input type="text" class="form-control" id="flag" name="flag"
+                                    placeholder="Input Flag" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="IMONumber">IMO Number</label>
+                                <input type="text" class="form-control" id="IMONumber" name="IMONumber"
+                                    placeholder="Input IMO Number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="callSign">Call Sign</label>
+                                <input type="text" class="form-control" id="callSign" name="callSign"
+                                    placeholder="Input Call Sign" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

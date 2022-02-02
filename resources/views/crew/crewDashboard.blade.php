@@ -74,110 +74,29 @@
                 </div>
 
                 <div class="p-2 mt-auto">
+                    <button class="mr-3" type="button" onclick="refresh()">
+                        <span data-feather="refresh-ccw"></span>
+                    </button>
                     <a href="{{ Route('crew.completed-order') }}" class="btn btn-success mr-3">Completed ({{  $completed }})</a>
                     <a href="{{ Route('crew.in-progress-order') }}" class="btn btn-danger mr-3">In Progress ({{ $in_progress }})</a>
                 </div>
-
-                <div class="p-2 mt-auto">
-                    {{ $orderHeads->links() }}
-                </div>
             </div>
 
+            <div class="spinner-border spinner-border-lg text-danger" role="status" id="wait">
+                <span class="sr-only">Loading...</span>
+            </div>
+            
             <div id="content" style="overflow-x:auto;">
-                <table class="table">
-                    <thead class="thead bg-danger">
-                        <tr>
-                            <th scope="col">Order ID</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Keterangan</th>
-                            <th scope="col" class="text-center">Action/Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($orderHeads as $o)
-                        <tr>
-                            <td><strong>{{ $o -> order_id}}</strong></td>
-                            @if(strpos($o -> status, 'Rejected') !== false)
-                                <td style="color: red; font-weight: bold">{{ $o -> status}}</td>
-                            @elseif(strpos($o -> status, 'Completed') !== false)
-                                <td style="color: green; font-weight: bold">{{ $o -> status}}</td>
-                            @elseif($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
-                                <td style="color: blue; font-weight: bold">{{ $o -> status}}</td>
-                            @else
-                                <td>{{ $o -> status}}</td>
-                            @endif
-                            
-                            @if(strpos($o -> status, 'Rejected') !== false)
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> reason}}</td>
-                            @else
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $o -> descriptions}}</td>
-                            @endif
-
-                            @if($o -> status == 'On Delivery' || $o -> status == 'Items Ready')
-                                <td >
-                                    <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
-                                        Detail
-                                    </button>
-                                    <a href="/crew/order/{{ $o->id }}/accept" class="btn btn-primary ml-3">Accept</a>
-                                </td>
-                            @else
-                            <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editItem-{{ $o -> id }}">
-                                    Detail
-                                </button>
-                            </td>
-                            @endif
-                        </tr>
-                        @endforeach
-                    </tbody>
-
-                </table>
+                @include('crew.crewDashboardComponent')
+            </div>
+            
+            <div class="p-2 page">
+                {{ $orderHeads->links() }}
             </div>
             
         </main>
-        
-        @foreach($orderHeads as $o)
-            <div class="modal fade" id="editItem-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
-                aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-danger">
-                            <div class="d-flex-column">
-                                <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Nama Kapal</strong></h5>
-                                <h5 class="modal-title" id="detailTitle" style="color: white">{{ $o->boatName }}</h5>
-                            </div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Item Barang</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Department</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($orderDetails as $od)
-                                        @if($od -> orders_id == $o -> id)
-                                            <tr>
-                                                <td>{{ $od -> item -> itemName }}</td>
-                                                <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                <td>{{ $od -> department }}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
     </div>
-
+    
     <style>
         th{
             color: white;
@@ -198,14 +117,42 @@
     </style>
 
     <script type="text/javascript">
-        function refreshDiv(){
-            $('#content').load(location.href + ' #content')
-        }
-        setInterval(refreshDiv, 60000);
-
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000); 
+    </script>
+
+    <script type="text/javascript">
+        let spinner = document.getElementById("wait");
+        spinner.style.visibility = 'hidden';
+
+        function refresh(){
+            event.preventDefault();
+
+            let url = '';
+
+            if(window.location.pathname == '/dashboard'){
+                url = "{{ route('crew.crewRefreshDashboard') }}";
+            }else if(window.location.pathname == '/crew/completed-order'){
+                url = "{{ route('crew.crewRefreshDashboardCompleted') }}"
+            }else{
+                url = "{{ route('crew.crewRefreshDashboardInProgress') }}"
+            }
+
+            $.ajax({
+                url: url,
+                method: "GET",
+                beforeSend: function(){
+                    $('#content').hide();
+                    spinner.style.visibility = 'visible';
+                },
+                success: function(data){
+                    $('#content').html(data);
+                    $('#content').show();
+                    spinner.style.visibility = 'hidden';
+                }
+            })
+        }
     </script>
 
     @endsection

@@ -443,19 +443,16 @@
                                             <label class="text-danger font-weight-bold" for="condition">Condition : </label>
                                             {{-- <input type="text" class="form-control" name="condition" id="" placeholder="Input Condition ..."> --}}
                                             <select class="form-select" name="condition" id="condition" required>
-                                                <option value="None" {{ $ot -> condition == 'None' ? 'selected' : '' }}>None</option>
-                                                <option value="Perbaikan" {{ $ot -> condition == 'Perbaikan' ? 'selected' : '' }}>Perbaikan</option>
-                                                <option value="DOK" {{ $ot -> condition == 'DOK' ? 'selected' : '' }}>DOK</option>
-                                                <option value="Tunggu Tugboat atau Barge" {{ $ot -> condition == 'Tunggu Tugboat atau Barge' ? 'selected' : '' }}>Tunggu Tugboat atau Barge</option>
-                                                <option value="Cuaca" {{ $ot -> condition == 'Cuaca' ? 'selected' : '' }}>Cuaca</option>
-                                                <option value="Tunggu Dokumen" {{ $ot -> condition == 'Tunggu Dokumen' ? 'selected' : '' }}>Tunggu Dokumen</option>
-                                                <option value="Antri Muat" {{ $ot -> condition == 'Antri Muat' ? 'selected' : '' }}>Antri Muat</option>
-                                                <option value="Antri Bongkar" {{ $ot -> condition == 'Antri Bongkar' ? 'selected' : '' }}>Antri Bongkar</option>
-                                                <option value="Tunggu Schedule" {{ $ot -> condition == 'Tunggu Schedule' ? 'selected' : '' }}>Tunggu Schedule</option>
-                                                <option value="Tunggu DOK" {{ $ot -> condition == 'Tunggu DOK' ? 'selected' : '' }}>Tunggu DOK</option>
-                                                <option value="Standby DOK" {{ $ot -> condition == 'Standby DOK' ? 'selected' : '' }}>Standby DOK</option>
-                                                <option value="Kandas" {{ $ot -> condition == 'Kandas' ? 'selected' : '' }}>Kandas</option>
-                                                <option value="Bocor" {{ $ot -> condition == 'Bocor' ? 'selected' : '' }}>Bocor</option>
+                                                <option disabled>Choose</option>
+                                                <option value="On Sailing" {{ $ot -> condition == 'On Sailing' ? 'selected' : '' }}>On Sailing</option>
+                                                <option value="Loading Activity" {{ $ot -> condition == 'Loading Activity' ? 'selected' : '' }}>Loading Activity</option>
+                                                <option value="Discharge Activity" {{ $ot -> condition == 'Discharge Activity' ? 'selected' : '' }}>Discharge Activity</option>
+                                                <option value="Standby" {{ $ot -> condition == 'Standby' ? 'selected' : '' }}>Standby</option>
+                                                <option value="Repair" {{ $ot -> condition == 'Repair' ? 'selected' : '' }}>Repair</option>
+                                                <option value="Docking" {{ $ot -> condition == 'Docking' ? 'selected' : '' }}>Docking</option>
+                                                <option value="Standby Docking" {{ $ot -> condition == 'Standby Docking' ? 'selected' : '' }}>Standby Docking</option>
+                                                <option value="Grounded Barge" {{ $ot -> condition == 'Grounded Barge' ? 'selected' : '' }}>Grounded Barge</option>
+                                                <option value="Waiting Schedule" {{ $ot -> condition == 'Waiting Schedule' ? 'selected' : '' }}>Waiting Schedule</option>
                                             </select>
                                         </div>
                                     </div>

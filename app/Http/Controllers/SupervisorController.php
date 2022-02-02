@@ -49,7 +49,7 @@ class SupervisorController extends Controller
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereYear('created_at', date('Y'))->latest()->paginate(8);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
             // Count the completed & in progress order
             $completed = OrderHead::where(function($query){
@@ -66,7 +66,7 @@ class SupervisorController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(8);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
     
             $completed = $orderHeads->count();
             
@@ -95,7 +95,7 @@ class SupervisorController extends Controller
             $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereYear('created_at', date('Y'))->latest()->paginate(8);
+            })->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
             $in_progress = OrderHead::where(function($query){
                 $query->where('status', 'like', '%' . 'In Progress By Supervisor' . '%')
@@ -117,7 +117,7 @@ class SupervisorController extends Controller
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%');
-            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
     
             $in_progress = $orderHeads->count();
             
@@ -391,7 +391,7 @@ class SupervisorController extends Controller
         $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where(function($query){
             $query->where('fromCabang', Auth::user()->cabang)
             ->orWhere('toCabang', Auth::user()->cabang);
-        })->whereYear('created_at', date('Y'))->latest()->get();
+        })->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
         $items_below_stock = $this -> checkStock();
 

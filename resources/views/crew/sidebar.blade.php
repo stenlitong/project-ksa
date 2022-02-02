@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'dashboard'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false || strpos($_SERVER['REQUEST_URI'], 'completed-order') !== false || strpos($_SERVER['REQUEST_URI'], 'in-progress-order') !== false){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="/dashboard">
@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'order'){
+                    if(strpos($_SERVER['REQUEST_URI'], '/crew/order') !== false){
                         echo('active');
                     }
                 @endphp" href="{{ Route('crew.order') }}">
@@ -26,7 +26,7 @@
             <li class="nav-item">
                 <a class="nav-link
                     @php
-                        if(basename($_SERVER['REQUEST_URI']) == 'create-task'){
+                        if(strpos($_SERVER['REQUEST_URI'], 'create-task') !== false){
                         echo('active');
                     }
                     @endphp
@@ -39,7 +39,7 @@
             <li class="nav-item">
                 <a class="nav-link
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'ongoing-task'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'ongoing-task') !== false){
                     echo('active');
                 }
                 @endphp

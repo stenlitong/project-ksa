@@ -40,6 +40,7 @@
                     @csrf
                     @include('adminOperational.adminOperationalAddTugboatTable')
                 </div>
+                {{ $tugs -> withQueryString() -> links() }}
             </div>
         </main>
 

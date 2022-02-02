@@ -122,7 +122,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }else{
             $orderHeads = OrderHead::with('user')->where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
@@ -230,7 +232,7 @@ class LogisticController extends Controller
 
     public function requestDoPage(){
         // Get all the DO from the last 6 month
-        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->get();
+        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
         $items_below_stock = $this -> checkStock();
 

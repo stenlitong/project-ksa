@@ -26,7 +26,8 @@ class CreateOperationalBoatDataTable extends Migration
             $table->string('bargeName');
             // $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->string('jetty', 50);
+            $table->string('portOfLoading', 50);
+            $table->string('portOfDischarge', 50);
             $table->string('taskType', 30);
             $table->double('cargoAmountStart');
             $table->string('customer')->nullable();
@@ -94,14 +95,15 @@ class CreateOperationalBoatDataTable extends Migration
             // => departureTime
 
             // Days Calculation
-            $table->bigInteger('DOKDays')->default(0);
-            $table->bigInteger('perbaikanDays')->default(0);
-            $table->bigInteger('kandasDays')->default(0);
-            $table->bigInteger('tungguDOKDays')->default(0);
-            $table->bigInteger('tungguTugDays')->default(0);
-            $table->bigInteger('tungguDokumenDays')->default(0);
-            $table->bigInteger('standbyDOKDays')->default(0);
-            $table->bigInteger('bocor')->default(0);
+            $table->bigInteger('onSailingDays')->default(0);
+            $table->bigInteger('loadingActivityDays')->default(0);
+            $table->bigInteger('dischargeActivityDays')->default(0);
+            $table->bigInteger('standbyDays')->default(0);
+            $table->bigInteger('repairDays')->default(0);
+            $table->bigInteger('dockingDays')->default(0);
+            $table->bigInteger('standbyDockingDays')->default(0);
+            $table->bigInteger('groundedBargeDays')->default(0);
+            $table->bigInteger('waitingScheduleDays')->default(0);
 
             // Calculation Data
             $table->double('sailingToMV')->nullable();

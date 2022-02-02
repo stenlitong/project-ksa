@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false){
+                    if(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false || strpos($_SERVER['REQUEST_URI'], 'completed') !== false || strpos($_SERVER['REQUEST_URI'], 'in-progress') !== false){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="/dashboard">

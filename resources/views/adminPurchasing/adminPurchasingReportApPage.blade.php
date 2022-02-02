@@ -77,49 +77,18 @@
                     @endif
                 </div>
 
-                <div id="content">
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead overflow-auto">
-                        <table id="myTable" class="table table-bordered">
-                            <thead class="thead bg-danger">
-                                <tr>
-                                    <th scope="col">Nama Pembuat</th>
-                                    <th scope="col">Nama Supplier</th>
-                                    <th scope="col">No. Invoice</th>
-                                    <th scope="col">No. Faktur Pajak</th>
-                                    <th scope="col">No. DO</th>
-                                    <th scope="col">No. PO</th>
-                                    <th scope="col">No. PR</th>
-                                    <th scope="col">Nominal Invoice</th>
-                                    <th scope="col">Due Date</th>
-                                    <th scope="col">Keterangan</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($apList as $ap)
-                                    <tr>
-                                        <td>{{ $ap -> userWhoSubmitted }}</td>
-                                        <td>{{ $ap -> supplierName }}</td>
-                                        <td>{{ $ap -> noInvoice }}</td>
-                                        <td>{{ $ap -> noFaktur }}</td>
-                                        <td>{{ $ap -> noDo }}</td>
-                                        <td>{{ $ap -> orderHead -> noPo }}</td>
-                                        <td>{{ $ap -> orderHead -> noPr }}</td>
-                                        <td>Rp. {{ number_format($ap -> nominalInvoice, 2, ",", ".") }}</td>
-                                        <td>{{ date('d/m/Y', strtotime($ap -> dueDate)) }}</td>
-                                        <td>{{ $ap -> additionalInformation}}</td>
-                                        <td>
-                                            <form action="/admin-purchasing/report-ap/{{ $ap -> helper_cursor }}/delete" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-warning text-white">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="d-flex justify-content-between my-3">
+                    <div class="spinner-border spinner-border-lg text-danger ml-3" role="status" id="wait">
+                        <span class="sr-only">Loading...</span>
                     </div>
+
+                    <button class="mr-3" type="button" onclick="refresh()">
+                        <span data-feather="refresh-ccw"></span>
+                    </button>
+                </div>
+
+                <div id="content">
+                    @include('adminPurchasing.adminPurchasingReportApPageComponent')
                 </div>
             </div>
         </main>
@@ -148,17 +117,14 @@
             text-align: center;
         }
     </style>
-    
-    <script type="text/javascript">
-        function refreshDiv(){
-            $('#content').load(location.href + ' #content')
-        }
-        setInterval(refreshDiv, 60000);
 
+    <script type="text/javascript">
         setTimeout(function() {
             $('.alert').fadeOut('fast');
-        }, 3000);
+        }, 3000);    
+    </script>
 
+    <script type="text/javascript">
         function filterTable(event) {
             var filter = event.target.value.toUpperCase();
             var rows = document.querySelector("#myTable tbody").rows;
@@ -176,6 +142,38 @@
 
         document.querySelector('#myInput').addEventListener('keyup', filterTable, false);
     </script>
+
+    <script type="text/javascript">
+        let spinner = document.getElementById("wait");
+        spinner.style.visibility = 'hidden';
+
+        function refresh(){
+            event.preventDefault();
+
+            let url = "{{ route('adminPurchasing.adminPurchasingRefreshReportAp') }}";
+            let _token = $('input[name=_token]').val();
+            let default_branch = '{{ $default_branch }}';
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: {
+                    _token,
+                    default_branch
+                },
+                beforeSend: function(){
+                    $('#content').hide();
+                    spinner.style.visibility = 'visible';
+                },
+                success: function(data){
+                    $('#content').html(data);
+                    $('#content').show();
+                    spinner.style.visibility = 'hidden';
+                }
+            })
+        }  
+    </script>
+
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
     @endsection

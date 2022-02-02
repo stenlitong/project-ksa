@@ -24,12 +24,16 @@
                 @forelse($operationalData as $key => $od)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $od -> tug -> tugName }}</td>
-                        <td>{{ $od -> barge -> bargeName }}</td>
+                        <td>{{ $od -> tugName }}</td>
+                        <td>{{ $od -> bargeName }}</td>
                         <td>{{ $od -> created_at -> format('M/Y') }}</td>
                         <td>{{ $od -> from . ' - ' . $od -> to }}</td>
                         <td>{{ $od -> taskType }}</td>
-                        <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                        @if($od -> taskType == 'Return Cargo')
+                            <td>{{ $od -> cargoAmountEndCargo }} Ton</td>
+                        @else
+                            <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                        @endif
                         @if($taskType == 'Operational Shipment')
                             <td>{{ $od -> customer }}</td>
                             <td>{{ $od -> totalTime }}</td>

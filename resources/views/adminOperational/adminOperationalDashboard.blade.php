@@ -13,68 +13,84 @@
             <h1 class="mt-3 mb-3" style="text-align: center">Dashboard</h1>
 
             <div class="d-flex justify-content-center smaller-size" id="content">
-                <div class="d-flex flex-wrap" style="width: 60%; overflow-y: auto; max-height: 600px">
+                <div class="d-flex flex-wrap" style="width: 50%; overflow-y: auto; max-height: 600px">
                     <div class="flip-card">
                         <div class="flip-card-inner">
-                          <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $dok_ship_count }}</h5>
-                            <h5 class="text-white mt-3">DOK</h5>
+                          <div class="flip-card-front color-green">
+                            <h5 class="text-white mt-3 display-2">{{ $total_fleets }}</h5>
+                            <h5 class="text-white mt-3">Total Fleets</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $perbaikan_ship_count }}</h5>
-                            <h5 class="text-white mt-3">Perbaikan</h5>
+                            <h5 class="text-white mt-3 display-2">{{ $on_sailing_count }}</h5>
+                            <h5 class="text-white mt-3">On Sailing</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $kandas_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Kandas</h5>
+                            <h5 class="text-white mt-3 display-2">{{ $loading_activity_count }}</h5>
+                            <h5 class="text-white mt-3">Loading Activity</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguDOK_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Tunggu DOK</h5>
+                            <h1 class="text-white mt-3 display-2">{{ $discharge_activity_count }}</h1>
+                            <h5 class="text-white mt-3">Discharge Activity</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguTugboat_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Tunggu Tug Boat</h5>
+                            <h1 class="text-white mt-3 display-2">{{ $standby_count }}</h1>
+                            <h5 class="text-white mt-3">Standby</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $tungguDokumen_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Tunggu Dokumen</h5>
+                            <h1 class="text-white mt-3 display-2">{{ $repair_count }}</h1>
+                            <h5 class="text-white mt-3">Repair</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $standbyDOK_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Standby DOK</h5>
+                            <h1 class="text-white mt-3 display-2">{{ $docking_count }}</h1>
+                            <h5 class="text-white mt-3">Docking</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $bocor_ship_count }}</h1>
-                            <h5 class="text-white mt-3">Bocor</h5>
+                            <h1 class="text-white mt-3 display-2">{{ $standby_docking_count }}</h1>
+                            <h5 class="text-white mt-3">Standby Docking</h5>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <h1 class="text-white mt-3 display-2">{{ $grounded_barge_count }}</h1>
+                            <h5 class="text-white mt-3">Grounded Barge</h5>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <h1 class="text-white mt-3 display-2">{{ $waiting_schedule_count }}</h1>
+                            <h5 class="text-white mt-3">Waiting Schedule</h5>
                           </div>
                         </div>
                     </div>
@@ -125,44 +141,45 @@
         .jumbotron{
             background-color: #A4363A;
             color: white;
-            border: 1px solid black;
+            border: 8px solid black;
             border-radius: 10px;
             height: 100%;
         }
         /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
         .flip-card {
-            border-radius: 10px;
             margin: 20px;
             background-color: transparent;
-            width: 300px;
-            height: 200px;
-            perspective: 1000px; /* Remove this if you don't want the 3D effect */
+            width: 250px;
+            height: 250px;
+            perspective: 1000px;
         }
 
         /* This container is needed to position the front and back side */
         .flip-card-inner {
-            border-radius: 10px;
-            border: 1px solid black;
+            border-radius: 50%;
+            border: 8px solid black;
             position: relative;
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
         }
 
         /* Position the front and back side */
         .flip-card-front{
           position: absolute;
+          border-radius: 50%;
           width: 100%;
           height: 100%;
-          -webkit-backface-visibility: hidden; /* Safari */
+          -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
         }
 
-        /* Style the front side (fallback if image is missing) */
         .flip-card-front {
-          background-color: #A01D23;            
+          background-color: #A01D23;      
+        }
+
+        .color-green {
+          background-color: #86c91a;      
         }
 
         .text-white mt-3 display-2{
