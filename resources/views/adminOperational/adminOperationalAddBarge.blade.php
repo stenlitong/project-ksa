@@ -16,11 +16,17 @@
                 </div>
             @endif
 
-            @error('bargeName')
+            {{-- @error('bargeName')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Nama Barge Invalid
                 </div>
-            @enderror
+            @enderror --}}
+
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ $error }}
+                </div>
+            @endforeach
 
             <div class="d-flex justify-content-around mb-3">
                 <div class="input-group w-25">
@@ -73,24 +79,9 @@
                                     placeholder="Input NT" required>
                             </div>
                             <div class="form-group">
-                                <label for="Master">Master</label>
-                                <input type="text" class="form-control" id="Master" name="Master"
-                                    placeholder="Input Master" required>
-                            </div>
-                            <div class="form-group">
                                 <label for="flag">Flag</label>
                                 <input type="text" class="form-control" id="flag" name="flag"
                                     placeholder="Input Flag" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="IMONumber">IMO Number</label>
-                                <input type="text" class="form-control" id="IMONumber" name="IMONumber"
-                                    placeholder="Input IMO Number" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="callSign">Call Sign</label>
-                                <input type="text" class="form-control" id="callSign" name="callSign"
-                                    placeholder="Input Call Sign" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
