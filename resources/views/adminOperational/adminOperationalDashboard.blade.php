@@ -153,8 +153,8 @@
         .flip-card {
             margin: 20px;
             background-color: transparent;
-            width: 250px;
-            height: 250px;
+            width: 220px;
+            height: 220px;
             perspective: 1000px;
         }
 
