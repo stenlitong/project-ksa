@@ -815,17 +815,18 @@ class LogisticController extends Controller
         return view('logistic.logisticReport_JR', compact('jobs', 'str_month', 'items_below_stock'));
     }
 
-    public function Download_JR_report(JobHead $JobRequestHeads) {
+    // export excel jr
+    public function Download_JR_report(Excel $excel) {
         // Get all job on the cabang
-        $id = $JobRequestHeads -> id;
-        return Excel::download(new JR_full_Export($id), 'Job_Request_'. $id . '_' . date("d-m-Y") . '.xlsx');
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
     }
 
-    public function Download_JR(JobHead $JobRequestHeads) {
+    public function Download_JR(JobHead $JobRequestHeads , Excel $excel) {
         // Get all job on the cabang
         $id = $JobRequestHeads -> id;
         // dd($id);
-        return Excel::download(new JRExport($id), 'Job_Request_'. $id . '_' . date("d-m-Y") . '.xlsx');
+        return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.xlsx');
     }
 
     public function ApproveJobPage(Request $request) {

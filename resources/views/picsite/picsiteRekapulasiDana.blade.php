@@ -303,7 +303,7 @@
                                             <select class="btn btn-outline-secondary" name="mata_uang_nilai">
                                                 <option selected value="IDR" id="">RP</option>
                                             </select>
-                                            <input type="number" class="form-control" min="0" max="999999999999" name="Nilai" required id="Nilai" >
+                                            <input type="number" class="form-control" min="1000" max="999999999999" name="Nilai" required id="Nilai" >
                                         </div>
                                     </div>
                                 </div>
@@ -320,6 +320,12 @@
                         <strong>{{ $success }}</strong>
                     </div>
                     @endif
+
+                    @error('Nilai')
+                        <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                            <strong> Nilai Di Ajukan Minimal 1000 rupiah dan Maks. 12 digit !</strong>
+                        </div>
+                    @enderror
 
                     <table class="table" style="margin-top: 1%">
                         <thead class="thead-dark">

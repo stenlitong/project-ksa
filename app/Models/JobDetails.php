@@ -15,5 +15,6 @@ class JobDetails extends Model
         return $this->belongsTo(User::class);
     }
     // Protected $fillable = ['user_id', 'jasa_id'];
+    // Protected $hidden =['user_id','created_at','updated_at' , 'jasa_id'];
     Protected $hidden =['user_id','created_at','updated_at','lokasi' , 'jasa_id' , 'cabang' , 'tugName' , 'bargeName'];
 }

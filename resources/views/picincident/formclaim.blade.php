@@ -47,7 +47,7 @@
                                         <x-label for="TugBoat" :value="__('TugBoat : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="TugBoat" class="block mt-1 w-full" type="text" name="TugBoat" placeholder="Enter TugBoat Name" :value="old('TugBoat')"  autofocus />
 
-                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat & Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat : ')" style="margin-top: 2%; margin-left: 1%"  />
                                           <div class="input-group mb-1">
                                               <select class="btn btn-outline-secondary" name="mata_uang_TSI">
                                                   <option selected value="USD" id="">USD</option>

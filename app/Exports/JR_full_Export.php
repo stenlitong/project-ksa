@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\User;
 use App\Models\JobHead;
 use App\Models\JobDetails;
 use Illuminate\Support\Facades\DB;
@@ -20,37 +21,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class JR_full_Export implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
+class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
 {
     use Exportable;
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function headings(): array
-    {
-        return[
-            //title
-            [
-               'FORM Permintaan Perbaikan'
-            ],
-            // table data
-            [
-            'No.',
-            'cabang',
-            '#ID JR',
-            'Tanggal JR',
-            'Nomor JR',
-            'Created By',
-            'Maintenance',
-            'Nama Kapal',
-            'Lokasi',
-            'Quantity',
-            'Keterangan',
-            ]
-        ];
-    }
 
-    public function collection()
+    public function query()
     {
         $month_now = (int)(date('m'));
 
@@ -71,18 +49,91 @@ class JR_full_Export implements FromCollection , ShouldAutoSize , WithHeadings ,
             $end_date = date('Y-12-31');
             $str_month = 'Okt - Des';
         }
+      
+        // $users = User::whereHas('roles', function($query){
+        //     $query->where('name', 'logistic');
+        // })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        
 
-        $users = User::whereHas('roles', function($query){
-            $query->where('name', 'logistic');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
-
-        $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
+        DB::statement(DB::raw('set @row:=0'));
+        $jobs = JobHead::join('job_details', 'job_details.jasa_id', '=', 'job_heads.id')
+        ->where('job_details.cabang', Auth::user()->cabang)
         ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
         ->whereBetween('job_heads.created_at', [$start_date, $end_date])
-        ->where('job_details.cabang', Auth::user()->cabang)
-        ->orderBy('job_heads.updated_at', 'desc')->get();
+        ->selectRaw('*, @row:=@row+1 as id');
 
         
+
         return $jobs;
+    }
+    
+    public function headings(): array
+    {
+        return[
+            //title
+            [
+               'FORM Permintaan Perbaikan'
+            ],
+            // table data
+            [''],
+            [
+            'No.',
+            'JR-ID :',
+            'Tgl Permintaan :',
+            'NOMOR-JR :',
+            'Dibuat Oleh :',
+            'Cabang',
+            'Jasa ID :',
+            'Lokasi Permintaan :',
+            'Nama TugBoat:',
+            'Nama Barge:',
+            'Quantity' ,
+            'Uraian',
+            ]
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event){
+                $event->sheet->mergeCells('A1:M1');
+                $event->sheet->getStyle('A1:M1')->applyFromArray([
+                    'font' => [
+                        'bold' => true ,
+                        // 'color' => ['argb' => 'ffffffff']
+                    ]
+                ]);
+                $event->sheet->getStyle('A3:M3')->applyFromArray([
+                    'font' => [
+                        'bold' => true ,
+                        // 'color' => ['argb' => 'ffffffff']
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'color' => ['argb' => 'FFFF8080']
+                    ],
+                    'borders' => [
+                        'outline' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                            'color' => ['argb' => 'FF000000'],
+                    ]]
+                ]);
+                // Append row as very last
+                // $event->sheet->appendRows(array(
+                //     array(' '),
+                //     array($this->created_at),
+                //     array('Prepared by:' , ' ' , ' Disetujui :' , ' ' ,' ' ,'Diketahui :'),
+                //     array(' '),
+                //     array(' '),
+                //     array(' '),
+                //     array($this->created_by, ' ' , $this->check_by , ' ' ,' ' , 'maintance'),
+                // ), $event);
+                
+                $event->sheet->getDelegate()->getStyle('A:M')
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
+        ];
     }
 }

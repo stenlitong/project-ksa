@@ -56,6 +56,17 @@
                     Report PR/PO
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'JR_report'){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('supervisor.JR_report') }}">
+                    <span data-feather="archive"></span>
+                    Report JR
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

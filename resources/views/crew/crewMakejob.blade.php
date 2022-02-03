@@ -15,47 +15,74 @@
                         <div class="alert alert-success alert-block" id="success">
                             <strong>{{ $success }}</strong>
                         </div>
-                    @endif
+                @endif
+
+                @if($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger alert-block" id="success">
+                            <strong>
+                                {{ $error }}
+                            </strong>
+                        </div>
+                    @endforeach 
+                @endif
 
                 <div class="row">
-                    {{-- <div> --}}
+                {{-- input space --}}
                     <div class="col">
                         <form method="POST" action="/crew/{{ Auth::user()->id }}/add-cart-jasa">
                             @csrf
-                            <div class="form-group p-2">
-                                <label for="tugName" class="mt-3 mb-3">Nama TugBoat</label>
-                                <input list=tugNames type="text" class="col-sm-full custom-select custom-select-sm" name="tugName" id="tugName" style="height:50px;" placeholder="Ketik nama TugBoat" required>
-                                <datalist id="tugNames">
-                                    @foreach($tugs as $t)
-                                        <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                    @endforeach
-                                </datalist>
-                            </div>
-                            <div class="form-group p-2">
-                                <label for="bargeName" class="mt-3 mb-3">Nama Barge (optional)</label>
-                                <input list = "bargeNames" type="text" class="col-sm-full custom-select custom-select-sm" name="bargeName" id="bargeName" style="height:50px;" placeholder="Ketik nama Barge">
-                                <datalist id="bargeNames">
-                                    @foreach($barges as $b)
-                                        <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                    @endforeach
-                                </datalist>
-                            </div>
-                            <div class="form-group p-2">
-                                <label for="lokasi" class="mb-3">Lokasi</label>
-                                <br>
-                                <input list = "lokasi_list" type="text" class="col-sm-full custom-select custom-select-sm" name="lokasi" id="lokasi" style="height:50px;" placeholder="Ketik Lokasi Job">
-                                <datalist id="lokasi_list">
-                                    <option value="None" disabled selected>Pilih lokasi</option>
-                                    <option value="Jakarta" id="Jakarta">Jakarta</option>
-                                    <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
-                                    <option value="Samarinda" id="Samarinda">Samarinda</option>
-                                    <option value="Bunati" id="Bunati">Bunati</option>
-                                    <option value="Babelan" id="Babelan">Babelan</option>
-                                    <option value="Berau" id="Berau">Berau</option>
-                                    <option value="Kendari" id="Kendari">Kendari</option>
-                                    <option value="Morosi" id="Morosi">Morosi</option>
-                                </datalist>
-                            </div>
+                            @if (count($carts) == 0)
+                                <div class="form-group p-2">
+                                    <label for="tugName" class="mt-3 mb-3">Nama TugBoat</label>
+                                    <input list=tugNames type="text" class="col-sm-full custom-select custom-select-sm" name="tugName" id="tugName" style="height:50px;" placeholder="Ketik nama TugBoat" >
+                                    <datalist id="tugNames">
+                                        @foreach($tugs as $t)
+                                            <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                        @endforeach
+                                    </datalist>
+                                </div>
+                                <div class="form-group p-2">
+                                    <label for="bargeName" class="mt-3 mb-3">Nama Barge (optional)</label>
+                                    <input list = "bargeNames" type="text" class="col-sm-full custom-select custom-select-sm" name="bargeName" id="bargeName" style="height:50px;" placeholder="Ketik nama Barge">
+                                    <datalist id="bargeNames">
+                                        @foreach($barges as $b)
+                                            <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                        @endforeach
+                                    </datalist>
+                                </div>
+                                <div class="form-group p-2">
+                                    <label for="lokasi" class="mb-3">Lokasi</label>
+                                    <br>
+                                    <input list = "lokasi_list" type="text" class="col-sm-full custom-select custom-select-sm" name="lokasi" id="lokasi" style="height:50px;" placeholder="Ketik Lokasi Job">
+                                    <datalist id="lokasi_list">
+                                        <option value="None" disabled selected>Pilih lokasi</option>
+                                        <option value="Jakarta" id="Jakarta">Jakarta</option>
+                                        <option value="Banjarmasin" id="Banjarmasin">Banjarmasin</option>
+                                        <option value="Samarinda" id="Samarinda">Samarinda</option>
+                                        <option value="Bunati" id="Bunati">Bunati</option>
+                                        <option value="Babelan" id="Babelan">Babelan</option>
+                                        <option value="Berau" id="Berau">Berau</option>
+                                        <option value="Kendari" id="Kendari">Kendari</option>
+                                        <option value="Morosi" id="Morosi">Morosi</option>
+                                    </datalist>
+                                </div>
+                            @else
+                                    <div class="form-group p-2">
+                                        <label for="tugName" class="mt-3 mb-3">Nama TugBoat</label>
+                                        <input type="text" class="col-sm-full custom-select custom-select-sm" name="tugName"  readonly="readonly" value="{{ old('tugName') }}" id="tugName" style="height:50px;" placeholder="Ketik nama TugBoat" >
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="bargeName" class="mt-3 mb-3">Nama Barge (optional)</label>
+                                        <input type="text" class="col-sm-full custom-select custom-select-sm" name="bargeName" readonly="readonly" value="{{ old('bargeName') }}" id="bargeName" style="height:50px;" placeholder="Ketik nama Barge">
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="lokasi" class="mb-3">Lokasi</label>
+                                        <br>
+                                        <input type="text" class="col-sm-full custom-select custom-select-sm" name="lokasi" readonly="readonly" value="{{ old('lokasi') }}" id="lokasi" style="height:50px;" placeholder="Ketik Lokasi Job">
+                                    </div>
+                            @endif
+
                             <div class="form-group p-2">
                                 <label for="quantity" class="mb-3">Quantity</label>
                                 <input type="range" class="form-control-range" id="rangebar" min="0" max="100" oninput="updateInput(this.value);">
@@ -80,6 +107,7 @@
                             </form>
                         </div>
                     </div>
+                {{-- table data --}}
                     <div class="col mt-5 mr-3 table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
                         <table class="table">
                             <thead class="thead bg-danger">
@@ -116,7 +144,7 @@
             </div>
         </main>
     </div>
-
+ {{-- script and style --}}
     <script>
         setTimeout(function() {
             $('.alert').fadeOut('fast');

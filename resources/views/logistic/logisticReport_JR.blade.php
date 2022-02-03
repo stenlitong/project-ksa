@@ -13,7 +13,10 @@
 
                 @if(count($jobs) > 0)
                     <div class="d-flex justify-content-end mr-3">
-                        <a href="{{ Route('logistic.downloadReportJR') }}" class="btn btn-outline-success mb-3 btn-lg" target="_blank">Export</a>
+                        <form method="POST" action="/logistic/download_Jr" target="_blank">
+                            @csrf
+                            <button class="btn btn-outline-success mb-3 btn-lg" >Export</button>
+                        </form>
                     </div>
                 @endif
 

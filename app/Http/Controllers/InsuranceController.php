@@ -134,7 +134,7 @@ class InsuranceController extends Controller
         $date = Carbon::now();
         $monthName = $date->format('F');
 
-        return Excel::download(new RekapAdminExport, 'RekapDanaInsuranceManager'. '-' . $monthName . '-' .'.pdf' , Excel::DOMPDF);
+        return Excel::download(new RekapAdminExport, 'RekapDanaInsuranceManager'. '-' . $monthName . '-' .'.pdf' , \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     //export Rekap page

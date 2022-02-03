@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+// use Illuminate\Validation\Validator;
+use Validator;
 use Carbon\Carbon;
 use App\Models\Tug;
 use App\Models\Cart;
@@ -15,6 +17,7 @@ use App\Models\JobDetails;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 
 class CrewController extends Controller
@@ -301,12 +304,13 @@ class CrewController extends Controller
 
     public function addjasaToCart(Request $request){
         // Validate Cart Request
-        $request->validate([
-            'tugName' => 'required',
-            'bargeName' => 'nullable',
-            'quantity' => 'required',
-            'note' => 'required'
+        $checkinput = $request->validate([
+            'tugName' => ['nullable','regex:/^[A-Za-z_-][A-Za-z0-9_-]*$/'] ,
+            'bargeName' => ['nullable','regex:/^[A-Za-z_-][A-Za-z0-9_-]*$/'] ,
+            'quantity' => ['required' , 'numeric'],
+            'note' => ['required' , 'string']
         ]);
+
         // dd($request);
         // Check if the cart within the user is already > 12 items, then cart is full & return with message
         $counts = cartJasa::where('user_id', Auth::user()->id)->count();
@@ -325,7 +329,7 @@ class CrewController extends Controller
             ]);
         }
  
-        return redirect('/crew/make-Job')->with('success', 'Add Item Success');
+        return Redirect::back()->withInput()->with('success', 'Add Item Success');
     }
 
     public function deleteJasaFromCart(cartJasa $cart){

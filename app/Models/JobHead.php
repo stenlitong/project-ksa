@@ -15,5 +15,5 @@ class JobHead extends Model
         return $this->belongsTo(User::class);
     }
     // Protected $fillable = ['user_id'];
-    Protected $hidden =['user_id','created_at','updated_at'];
+    Protected $hidden =['user_id','created_at','updated_at' , 'check_by' , 'status' ,'descriptions', 'reason'];
 }
