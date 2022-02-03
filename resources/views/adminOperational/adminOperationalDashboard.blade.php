@@ -46,53 +46,57 @@
                           </div>
                         </div>
                     </div>
-                    <div class="flip-card">
+                    <div class="d-flex">
+                      <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
                             <h1 class="text-white mt-3 display-2">{{ $standby_count }}</h1>
                             <h5 class="text-white mt-3">Standby</h5>
                           </div>
                         </div>
-                    </div>
-                    <div class="flip-card">
-                        <div class="flip-card-inner">
-                          <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $repair_count }}</h1>
-                            <h5 class="text-white mt-3">Repair</h5>
+                      </div>
+                      <div class="flip-card">
+                          <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                              <h1 class="text-white mt-3 display-2">{{ $repair_count }}</h1>
+                              <h5 class="text-white mt-3">Repair</h5>
+                            </div>
                           </div>
-                        </div>
-                    </div>
-                    <div class="flip-card">
-                        <div class="flip-card-inner">
-                          <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $docking_count }}</h1>
-                            <h5 class="text-white mt-3">Docking</h5>
+                      </div>
+                      <div class="flip-card">
+                          <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                              <h1 class="text-white mt-3 display-2">{{ $docking_count }}</h1>
+                              <h5 class="text-white mt-3">Docking</h5>
+                            </div>
                           </div>
-                        </div>
+                      </div>
                     </div>
-                    <div class="flip-card">
+                    <div class="d-flex">
+                      <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
                             <h1 class="text-white mt-3 display-2">{{ $standby_docking_count }}</h1>
                             <h5 class="text-white mt-3">Standby Docking</h5>
                           </div>
                         </div>
-                    </div>
-                    <div class="flip-card">
-                        <div class="flip-card-inner">
-                          <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $grounded_barge_count }}</h1>
-                            <h5 class="text-white mt-3">Grounded Barge</h5>
+                      </div>
+                      <div class="flip-card">
+                          <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                              <h1 class="text-white mt-3 display-2">{{ $grounded_barge_count }}</h1>
+                              <h5 class="text-white mt-3">Grounded Barge</h5>
+                            </div>
                           </div>
-                        </div>
-                    </div>
-                    <div class="flip-card">
-                        <div class="flip-card-inner">
-                          <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $waiting_schedule_count }}</h1>
-                            <h5 class="text-white mt-3">Waiting Schedule</h5>
+                      </div>
+                      <div class="flip-card">
+                          <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                              <h1 class="text-white mt-3 display-2">{{ $waiting_schedule_count }}</h1>
+                              <h5 class="text-white mt-3">Waiting Schedule</h5>
+                            </div>
                           </div>
-                        </div>
+                      </div>
                     </div>
                 </div>
                 <div class="right-section mt-3" style="width: 40%">

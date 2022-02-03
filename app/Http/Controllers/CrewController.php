@@ -374,15 +374,15 @@ class CrewController extends Controller
 
         // Validation Of CargoAmountEnd, Max 2 Updates => Crew can only update twice of cargo amount, Operational Transhipment and Return Cargo does not share the updates
         if($operationalData -> taskType == 'Return Cargo'){
-            if($operationalData -> cargo2ChangeTracker < 2 && $operationalData -> cargoAmountEndCargo != $request -> cargoAmountEndCargo){
+            if($operationalData -> cargo2ChangeTracker < 3 && $operationalData -> cargoAmountEndCargo != $request -> cargoAmountEndCargo){
                 $validated['cargo2ChangeTracker'] = $operationalData -> cargo2ChangeTracker + 1;
-            }elseif($operationalData -> cargo2ChangeTracker == 2 && $operationalData -> cargoAmountEndCargo != $request -> cargoAmountEndCargo){
+            }elseif($operationalData -> cargo2ChangeTracker == 3 && $operationalData -> cargoAmountEndCargo != $request -> cargoAmountEndCargo){
                 return redirect()->back()->with('error', 'Has Reached The Maximum Amount Of Jumlah Kargo Update');
             }
         }else{
-            if($operationalData -> cargoChangeTracker < 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+            if($operationalData -> cargoChangeTracker < 3 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
                 $validated['cargoChangeTracker'] = $operationalData -> cargoChangeTracker + 1;
-            }elseif($operationalData -> cargoChangeTracker == 2 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
+            }elseif($operationalData -> cargoChangeTracker == 3 && $operationalData -> cargoAmountEnd != $request -> cargoAmountEnd){
                 return redirect()->back()->with('error', 'Has Reached The Maximum Amount Of Jumlah Kargo Update');
             }
         }
