@@ -505,17 +505,17 @@
                                                 <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
+                                                <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo : </label>
                                                 @if($ot -> taskType != 'Return Cargo')
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}">
+                                                        <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">Ton</div>
                                                         </div>
                                                     </div>
                                                 @elseif($ot -> taskType == 'Return Cargo')
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}">
+                                                        <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">Ton</div>
                                                         </div>

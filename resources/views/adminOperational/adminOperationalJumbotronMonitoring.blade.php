@@ -44,7 +44,7 @@
                         <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
                         <h3 class="text-center">{{ $operationalData -> condition }}</h3>
                     </div>
-                    <div class="d-flex flex-column mr-5">
+                    <div class="d-flex flex-column mr-4 ml-2">
                         <h1 class="text-secondary display-8 font-weight-bold">Jumlah Kargo Akhir</h1>
                         <h3 class="text-center">{{ $operationalData -> cargoAmountEnd }}</h3>
                     </div>
@@ -226,7 +226,7 @@
                                 </div>
                             </div>
                         @elseif($operationalData -> taskType == 'Operational Transhipment')
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Sailing to Jetty</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center">
@@ -234,87 +234,87 @@
                                     </h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Ldg Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> ldgTime != NULL ? $operationalData -> ldgTime . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Ldg Rate</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> ldgRate != 0 ? number_format($operationalData -> ldgRate, 2, '.', ',') : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Unberthing</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> unberthing != NULL ? $operationalData -> unberthing . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Sailing to MV</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> sailingToMV != NULL ? $operationalData -> sailingToMV . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Maneuver</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> maneuver != NULL ? $operationalData -> maneuver . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischTime != NULL ? $operationalData -> dischTime . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Rate</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischRate != NULL ? $operationalData -> dischRate . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Cycle Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> cycleTime != NULL ? $operationalData -> cycleTime . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                         @elseif($operationalData -> taskType == 'Return Cargo')
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Sailing To MV</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> sailingToMVCargo != NULL ? $operationalData -> sailingToMVCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Maneuver</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> maneuverCargo != NULL ? $operationalData -> maneuverCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischTimeCargo != NULL ? $operationalData -> dischTimeCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Disch Rate</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> dischRateCargo != NULL ? $operationalData -> dischRateCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Cycle Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> cycleTimeCargo != NULL ? $operationalData -> cycleTimeCargo . ' Hours' : 'n/a' }}</h6>
                                 </div>
                             </div>
                         @elseif($operationalData -> taskType == 'Non Operational')
-                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 13vh;">
+                            <div class="card mx-3 my-3 text-white bg-dark card-styling" style="width: 17rem; height: 15vh;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Total Lost Time</h5>
                                     <h6 class="card-subtitle mb-2 mt-2 text-center"><span class="df-clock mr-2" data-feather="clock"></span>{{ $operationalData -> totalLostDays != NULL ? $operationalData -> totalLostDays . ' Hours' : 'n/a' }}</h6>
