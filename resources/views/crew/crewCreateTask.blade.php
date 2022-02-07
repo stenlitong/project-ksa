@@ -38,18 +38,21 @@
                                 <div class="form-group col-md-4">
                                     <label>Tug</label>
                                     <select class="form-control" name="tugName" id="tugName" style=" height:50px;" required>
-                                        @foreach($tugs as $t)
+                                        @forelse($tugs as $t)
                                             <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                        @endforeach
+                                        @empty
+                                            <option value="" disabled>No Tugs Available</option>
+                                        @endforelse
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Barge</label>
                                     <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;" required>
-
-                                        @foreach($barges as $b)
+                                        @forelse($barges as $b)
                                             <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                        @endforeach
+                                        @empty
+                                            <option value="" disabled>No Barges Available</option>
+                                        @endforelse
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">

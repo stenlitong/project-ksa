@@ -22,6 +22,7 @@ class CreateTugsTable extends Migration
             $table->string('flag');
             $table->string('IMONumber');
             $table->string('callSign');
+            $table->boolean('tugAvailability')->default(true);
             $table->timestamps();
         });
     }

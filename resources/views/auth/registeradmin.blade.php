@@ -59,7 +59,7 @@
                     <x-label for="role_id" :value="__('Register as:')" />
                     
                     <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
-                        <option selected  value="">Choose...</option>
+                        <option selected disabled value="">Choose...</option>
                         <option value="picAdmin" id="picAdmin"  @if (old('role_id') == 'picAdmin') selected="selected" @endif>PIC Admin</option>
                         <option value="adminOperational" @if (old('role_id') == 'adminOperational') selected="selected" @endif>Admin Operational</option>
                         <option value="adminPurchasing" @if (old('role_id') == 'adminPurchasing') selected="selected" @endif>Admin Purchasing</option>

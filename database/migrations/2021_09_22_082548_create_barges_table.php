@@ -19,6 +19,7 @@ class CreateBargesTable extends Migration
             $table->string('gt');
             $table->string('nt');
             $table->string('flag');
+            $table->boolean('bargeAvailability')->default(true);
             $table->timestamps();
         });
     }

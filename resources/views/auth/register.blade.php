@@ -71,7 +71,7 @@
                 <select name="role_id" id="role_id"
                     class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     required>
-                    <option selected value="">Choose...</option>
+                    <option selected value="" disabled>Choose...</option>
                     <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
                     <option value="picIncident" id="picIncident" @if (old('role_id') == 'picIncident') selected="selected" @endif>PIC Incident</option>
                     <option value="insurance" id="insurance" @if (old('role_id') == 'insurance') selected="selected" @endif>Asuransi</option>

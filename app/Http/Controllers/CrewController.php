@@ -237,8 +237,8 @@ class CrewController extends Controller
         $ongoingTask = OperationalBoatData::where('user_id', Auth::user()->id)->where('status', 'On Going')->get();
 
         // Get all the tugs and barge
-        $tugs = Tug::all();
-        $barges = Barge::all();
+        $tugs = Tug::where('tugAvailability', true)->get();
+        $barges = Barge::where('bargeAvailability', true)->get();
 
         // Check If There Is No Task Running, Redirect To Create Task Page
         if(count($ongoingTask) == 0){
@@ -271,6 +271,15 @@ class CrewController extends Controller
         
         // Create The Data
         OperationalBoatData::create($validated);
+
+        // Update Tug & Barge Availability
+        Tug::where('tugName', $request -> tugName)->update([
+            'tugAvailability' => false
+        ]);
+
+        Barge::where('bargeName', $request -> bargeName)->update([
+            'bargeAvailability' => false
+        ]);
 
         // Then Redirect
         return redirect('/crew/ongoing-task')->with('status', 'Task Created Successfully');
@@ -559,6 +568,15 @@ class CrewController extends Controller
                 'task_tracker' => 1
             ]);
         }
+
+        // Update Tug & Barge Availability
+        Tug::where('tugName', $data -> tugName)->update([
+            'tugAvailability' => true
+        ]);
+
+        Barge::where('bargeName', $data -> bargeName)->update([
+            'bargeAvailability' => true
+        ]);
 
         // Then Redirect To Create Task Page
         return redirect('/crew/create-task')->with('status', 'Task Finalized Successfully');

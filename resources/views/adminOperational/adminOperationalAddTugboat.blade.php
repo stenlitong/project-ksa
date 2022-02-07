@@ -173,7 +173,6 @@
         $(document).ready(function(){
             $(document).on('click', '.page-link', function(event){
                 event.preventDefault();
-                console.log('clicked');
                 let page = $(this).attr('href').split('page=')[1];
                 
                 let _token = $('input[name=_token]').val();
@@ -227,6 +226,25 @@
                 }
             })
         }
+    </script>
+
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
     </script>
 
     @endsection
