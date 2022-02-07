@@ -612,6 +612,15 @@ class CrewController extends Controller
         // Find The Task, Then Delete It
         OperationalBoatData::where('id', $request -> taskId)->delete();
 
+        // Update Tug & Barge Availability
+        Tug::where('tugName', $data -> tugName)->update([
+            'tugAvailability' => true
+        ]);
+
+        Barge::where('bargeName', $data -> bargeName)->update([
+            'bargeAvailability' => true
+        ]);
+
         // Then Redirect To Create Task Page
         return redirect('/crew/create-task')->with('status', 'Task Deleted Successfully');
     }
