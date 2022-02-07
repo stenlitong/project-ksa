@@ -609,17 +609,17 @@ class CrewController extends Controller
     }
 
     public function cancelOngoingTask(Request $request){
-        // Find The Task, Then Delete It
-        OperationalBoatData::where('id', $request -> taskId)->delete();
-
         // Update Tug & Barge Availability
-        Tug::where('tugName', $data -> tugName)->update([
+        Tug::where('tugName', $request -> tugName)->update([
             'tugAvailability' => true
         ]);
 
-        Barge::where('bargeName', $data -> bargeName)->update([
+        Barge::where('bargeName', $request -> bargeName)->update([
             'bargeAvailability' => true
         ]);
+
+        // Find The Task, Then Delete It
+        OperationalBoatData::where('id', $request -> taskId)->delete();
 
         // Then Redirect To Create Task Page
         return redirect('/crew/create-task')->with('status', 'Task Deleted Successfully');
