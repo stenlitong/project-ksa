@@ -81,6 +81,7 @@ class AdminPurchasingController extends Controller
                 $dynamic_uploadTime = 'uploadTime_partial' . $i;
                 $dynamic_description = 'description_partial' . $i;
                 $dynamic_path_to_file = 'path_to_file' . $i;
+                $s3_url_to_file = 's3_url_to_file' . $i;
 
                 // So in this case we want to store it in the folder according to the current month and year => /2021/12/"filename", so we decided to store the path also to the db
                 $file_path_format = date('Y/m/');
@@ -99,17 +100,18 @@ class AdminPurchasingController extends Controller
                 // $path = $year . '/' . $month . '/' . $request -> $dynamic_file -> getClientOriginalName();
                 $file = $request -> $dynamic_file -> getClientOriginalName();
 
+                // Store the file into storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
+                $url = $request -> file($dynamic_file) -> storeAs($file_path_format, $file, 's3');
+
                 // Save all additional information to the database
                 ApList::find($request -> apListId)->update([
                     $dynamic_file => $file,
                     $dynamic_status => 'On Review',
                     $dynamic_description => NULL,
                     $dynamic_uploadTime => date('d/m/Y'),
-                    $dynamic_path_to_file => $file_path_format
+                    $dynamic_path_to_file => $file_path_format,
+                    $s3_url_to_file => Storage::disk('s3')->url($url)
                 ]);
-
-                // Store the file into storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
-                $request -> file($dynamic_file) -> storeAs($file_path_format, $file);
             }
         };
         

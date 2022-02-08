@@ -36,20 +36,22 @@
                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                             <div class="d-flex justify-content-around">
                                 <div style="width: 60%">
-                                    <div class="d-flex justify-content-around">
-                                        <h5 class="mt-3">Task : <span class="text-danger">{{ $ot -> taskType }}</span></h5>
+                                    <div class="d-flex">
+                                        <h5 class="mt-4">Task : <span class="text-danger">{{ $ot -> taskType }}</span></h5>
 
-                                        <div class="form-group row">
-                                            <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
+                                        <div class="d-flex ml-5">
+                                            <div class="form-group row">
+                                                <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="text-danger font-weight-bold" for="to" class="col-sm-2 col-form-label text-danger font-weight-bold">To</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
+    
+                                            <div class="form-group row">
+                                                <label class="text-danger font-weight-bold" for="to" class="col-sm-2 col-form-label text-danger font-weight-bold">To</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -470,12 +472,12 @@
                                         @endif
                                     </div>
 
-                                    <div class="d-flex justify-content-center mt-5 mb-5">
+                                    {{-- <div class="d-flex justify-content-center mt-5 mb-5">
                                         <button class="btn btn-info" type="submit">Update</button>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
-                                <div class="mt-5" style="width: 30%">
+                                <div style="width: 30%; margin-top: 7vh">
                                     <div class="d-flex justify-content-center">
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="condition">Condition : </label>
@@ -543,17 +545,20 @@
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="description">Deskripsi : </label>
                                             <br>
-                                            <textarea name="description" id="" style="width: 100%" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
+                                            <textarea name="description" style="width: 100%" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-around mt-5 mb-5">
-                                        <div class="d-flex flex-column w-25">
-                                            <button class="btn btn-danger" type="button" data-toggle="modal" id="cancel" data-target="#cancel-{{ $ot -> id }}">Cancel Task</button>
-                                            @if($ot -> taskType == 'Operational Transhipment')
-                                                <button class="btn btn-info mt-3" type="button" data-toggle="modal" id="return cargo" data-target="#return-cargo-{{ $ot -> id }}">Continue Return Cargo</button>
-                                            @endif
-                                        </div>
-                                        <button class="btn btn-primary w-50" type="button" data-toggle="modal" id="finalize" data-target="#finalize-{{ $ot -> id }}">Finalize</button>
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-info" type="submit" style="width: 90%">Update</button>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button class="btn btn-primary" type="button" data-toggle="modal" id="finalize" data-target="#finalize-{{ $ot -> id }}" style="width: 90%">Finalize</button>
+                                    </div>
+                                    <div class="d-flex justify-content-around mt-3">
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" id="cancel" data-target="#cancel-{{ $ot -> id }}" style="width: 40%">Cancel Task</button>
+                                        @if($ot -> taskType == 'Operational Transhipment')
+                                            <button class="btn btn-warning text-white" type="button" data-toggle="modal" id="return cargo" data-target="#return-cargo-{{ $ot -> id }}" style="width: 40%">Continue Return Cargo</button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

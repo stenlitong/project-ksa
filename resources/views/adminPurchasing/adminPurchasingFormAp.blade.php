@@ -108,7 +108,7 @@
             </main>
         </div>
 
-        <style type="text/javascript">
+        <style>
             th{
                 color: white;
             }

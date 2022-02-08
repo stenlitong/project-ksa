@@ -459,7 +459,8 @@ class PurchasingManagerController extends Controller
         $path = ApList::where('id', $request -> apListId)->pluck($request -> pathToFile)[0];
 
         // Then, find the file to download it
-        return Storage::download($path . $filename);
+        // return Storage::download($path . $filename);
+        return Storage::disk('s3')->response($path . $filename);
     }
 
     public function approveDocument(Request $request){

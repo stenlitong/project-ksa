@@ -17,8 +17,8 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front color-green">
-                            <h5 class="text-white mt-3 display-2">{{ $total_fleets }}</h5>
-                            <h5 class="text-white mt-3">Total Fleets</h5>
+                            <h5 class="text-warning mt-3 display-2">{{ $total_fleets }}</h5>
+                            <h5 class="text-warning mt-3">Total Fleets</h5>
                           </div>
                         </div>
                     </div>
@@ -180,10 +180,6 @@
 
         .flip-card-front {
           background-color: #A01D23;      
-        }
-
-        .color-green {
-          background-color: #86c91a;      
         }
 
         .text-white mt-3 display-2{
