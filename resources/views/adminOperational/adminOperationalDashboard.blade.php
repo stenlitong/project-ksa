@@ -16,8 +16,8 @@
                 <div class="d-flex flex-wrap" style="width: 50%; overflow-y: auto; max-height: 600px">
                     <div class="flip-card">
                         <div class="flip-card-inner">
-                          <div class="flip-card-front color-green">
-                            <h5 class="text-warning mt-3 display-2">{{ $total_fleets }}</h5>
+                          <div class="flip-card-front">
+                            <h5 class="text-warning mt-3 display-5">{{ $total_fleets }}</h5>
                             <h5 class="text-warning mt-3">Total Fleets</h5>
                           </div>
                         </div>
@@ -25,7 +25,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $on_sailing_count }}</h5>
+                            <h5 class="text-white mt-3 display-5">{{ $on_sailing_count }}</h5>
                             <h5 class="text-white mt-3">On Sailing</h5>
                           </div>
                         </div>
@@ -33,7 +33,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h5 class="text-white mt-3 display-2">{{ $loading_activity_count }}</h5>
+                            <h5 class="text-white mt-3 display-5">{{ $loading_activity_count }}</h5>
                             <h5 class="text-white mt-3">Loading Activity</h5>
                           </div>
                         </div>
@@ -41,7 +41,7 @@
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $discharge_activity_count }}</h1>
+                            <h1 class="text-white mt-3 display-5">{{ $discharge_activity_count }}</h1>
                             <h5 class="text-white mt-3">Discharge Activity</h5>
                           </div>
                         </div>
@@ -50,7 +50,7 @@
                       <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $standby_count }}</h1>
+                            <h1 class="text-white mt-3 display-5">{{ $standby_count }}</h1>
                             <h5 class="text-white mt-3">Standby</h5>
                           </div>
                         </div>
@@ -58,7 +58,7 @@
                       <div class="flip-card">
                           <div class="flip-card-inner">
                             <div class="flip-card-front">
-                              <h1 class="text-white mt-3 display-2">{{ $repair_count }}</h1>
+                              <h1 class="text-white mt-3 display-5">{{ $repair_count }}</h1>
                               <h5 class="text-white mt-3">Repair</h5>
                             </div>
                           </div>
@@ -66,7 +66,7 @@
                       <div class="flip-card">
                           <div class="flip-card-inner">
                             <div class="flip-card-front">
-                              <h1 class="text-white mt-3 display-2">{{ $docking_count }}</h1>
+                              <h1 class="text-white mt-3 display-5">{{ $docking_count }}</h1>
                               <h5 class="text-white mt-3">Docking</h5>
                             </div>
                           </div>
@@ -76,7 +76,7 @@
                       <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <h1 class="text-white mt-3 display-2">{{ $standby_docking_count }}</h1>
+                            <h1 class="text-white mt-3 display-5">{{ $standby_docking_count }}</h1>
                             <h5 class="text-white mt-3">Standby Docking</h5>
                           </div>
                         </div>
@@ -84,7 +84,7 @@
                       <div class="flip-card">
                           <div class="flip-card-inner">
                             <div class="flip-card-front">
-                              <h1 class="text-white mt-3 display-2">{{ $grounded_barge_count }}</h1>
+                              <h1 class="text-white mt-3 display-5">{{ $grounded_barge_count }}</h1>
                               <h5 class="text-white mt-3">Grounded Barge</h5>
                             </div>
                           </div>
@@ -92,7 +92,7 @@
                       <div class="flip-card">
                           <div class="flip-card-inner">
                             <div class="flip-card-front">
-                              <h1 class="text-white mt-3 display-2">{{ $waiting_schedule_count }}</h1>
+                              <h1 class="text-white mt-3 display-5">{{ $waiting_schedule_count }}</h1>
                               <h5 class="text-white mt-3">Waiting Schedule</h5>
                             </div>
                           </div>
@@ -121,6 +121,9 @@
     </div>
 
     <style>
+      h5{
+        font-size: 17px;
+      }
         th{
             color: white;
         }
@@ -153,15 +156,16 @@
         .flip-card {
             margin: 20px;
             background-color: transparent;
-            width: 220px;
-            height: 220px;
-            perspective: 1000px;
+            width: 180px;
+            height: 180px;
+            /* perspective: 1000px; */
         }
 
         /* This container is needed to position the front and back side */
         .flip-card-inner {
             border-radius: 50%;
-            border: 8px solid black;
+            /* border: 8px solid black; */
+            border: 8px solid #A01D23;
             position: relative;
             width: 100%;
             height: 100%;

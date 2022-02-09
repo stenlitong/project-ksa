@@ -39,21 +39,21 @@
                                     <div class="d-flex">
                                         <h5 class="mt-4">Task : <span class="text-danger">{{ $ot -> taskType }}</span></h5>
 
-                                        <div class="d-flex ml-5">
-                                            <div class="form-group row">
-                                                <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
-                                                </div>
-                                            </div>
-    
-                                            <div class="form-group row">
-                                                <label class="text-danger font-weight-bold" for="to" class="col-sm-2 col-form-label text-danger font-weight-bold">To</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
-                                                </div>
+                                        <div class="form-group row ml-3">
+                                            <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="text-danger font-weight-bold" for="to" class="col-sm-2 col-form-label text-danger font-weight-bold">To</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
+                                            </div>
+                                        </div>
+
+                                        <h5 class="mt-4">Nama Kapal : <span class="text-danger">{{ $ot -> tugName }}/{{ $ot -> bargeName }}</span></h5>
                                     </div>
 
                                     <div class="d-flex flex-wrap mt-4" style="overflow-y: auto; max-height: 800px">
@@ -586,6 +586,9 @@
                                             @csrf
                                             @method('delete')
                                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
+                                            <input type="hidden" name="tugName" value="{{ $ot -> tugName }}">
+                                            <input type="hidden" name="bargeName" value="{{ $ot -> bargeName }}">
+
                                             <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                             <button type="submit" class="btn btn-primary" href="">Yes</button>
                                         </form>
@@ -618,8 +621,6 @@
                                                 @method('patch')
                                                 <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                                                 <input type="hidden" name="taskType" value="{{ $ot -> taskType }}">
-                                                <input type="hidden" name="tugName" value="{{ $ot -> tugName }}">
-                                                <input type="hidden" name="bargeName" value="{{ $ot -> bargeName }}">
 
                                                 <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                                 <button type="submit" class="btn btn-primary" href="">Yes</button>
@@ -651,6 +652,9 @@
                                         <form action="/crew/ongoing-task" method="POST">
                                             @csrf
                                             @method('patch')
+                                            <input type="hidden" name="tugName" value="{{ $ot -> tugName }}">
+                                            <input type="hidden" name="bargeName" value="{{ $ot -> bargeName }}">
+
                                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                                             <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                             <button type="submit" class="btn btn-primary" href="">Yes</button>
