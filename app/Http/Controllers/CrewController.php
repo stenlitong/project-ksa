@@ -178,7 +178,7 @@ class CrewController extends Controller
         // Update the order id and SBK
         OrderHead::find($o_id->id)->update([
             'order_id' => 'COID#' . $o_id->id,
-            'noSbk' => 'SBK/' . $o_id->id . '/' . $cabang_arr[Auth::user()->cabang]
+            'noSbk' => $o_id->id . '/' . $cabang_arr[Auth::user()->cabang]
         ]);
 
         // Then fill the Order Detail with the cart items of the following Order Head
@@ -262,6 +262,18 @@ class CrewController extends Controller
             // 'customer' => 'required|alpha',
             'taskType' => 'required|in:Operational Shipment,Operational Transhipment,Non Operational'
         ]);
+
+        // Check if Tug|Barge Already Taken or Not
+        $checkTugIsAvailable = Tug::where('tugName', $request -> tugName)->first();
+        $checkBargeIsAvailable = Barge::where('bargeName', $request -> bargeName)->first();
+
+        if($checkTugIsAvailable -> tugAvailability == false){
+            return redirect()->back()->with('failed', 'Tug Already Used');
+        }
+        
+        if($checkBargeIsAvailable -> bargeAvailability == false){
+            return redirect()->back()->with('failed', 'Barge Already Used');
+        }
 
         $validated['portOfLoading'] = strtoupper($request -> portOfLoading);
         $validated['portOfDischarge'] = strtoupper($request -> portOfDischarge);

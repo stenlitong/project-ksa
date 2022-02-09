@@ -585,7 +585,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = 'Jakarta';
 
-        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.user_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')
@@ -594,7 +594,7 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'Item Delivered By Supplier');
         })->get();
-
+        
         return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
     }
     
@@ -624,7 +624,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = $branch;
 
-        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.user_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')

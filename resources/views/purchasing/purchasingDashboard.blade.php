@@ -538,6 +538,25 @@
         }
     </script>
 
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 

@@ -9,7 +9,8 @@ use App\Models\User;
 use App\Models\ApList;
 use App\Models\ApListDetail;
 use App\Models\Supplier;
-use App\Models\Tug;
+// use App\Models\Tug;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class DashboardAjaxController extends Controller
@@ -268,6 +269,26 @@ class DashboardAjaxController extends Controller
 
                 return view('supervisor.supervisorDashboardComponent', compact('orderHeads', 'orderDetails'))->render();
         }
+        }
+    }
+
+    public function supervisorRefreshItemStockPage(Request $request){
+        if($request -> ajax()){
+            // Check the stocks of all branches
+            if($request -> searchData != '' && $request -> default_branch !== 'All'){
+                $search = $request -> searchData;
+                
+                $items = Item::where(function($query) use ($search) {
+                    $query->where('itemName', 'like', '%' . $search . '%')
+                    ->orWhere('codeMasterItem', 'like', '%' . $search . '%');
+                })->where('cabang', $request -> default_branch)->Paginate(10);
+
+                return view('supervisor.supervisorItemStockComponent', compact('items'))->render();
+            }else{
+                $items = Item::orderBy('cabang')->Paginate(10);
+
+                return view('supervisor.supervisorItemStockComponent', compact('items'))->render();
+            }
         }
     }
 

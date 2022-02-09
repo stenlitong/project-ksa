@@ -91,7 +91,7 @@
                                         <td>{{ $od -> boatName }}</td>
                                         <td>{{ $od -> item -> itemName }}</td>
                                         <td>{{ $od -> serialNo }}</td>
-                                        <td>{{ $od -> acceptedQuantity }}</td>
+                                        <td>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</td>
                                         <td>{{ $od -> note }}</td>
                                     </tr>
                                 @endforeach

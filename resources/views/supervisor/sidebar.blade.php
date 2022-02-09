@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'item-stocks'){
+                    if(strpos($_SERVER['REQUEST_URI'], 'stocks') !== false){
                         echo('active');
                     }
                 @endphp" aria-current="page" href="{{ Route('supervisor.itemStock') }}">

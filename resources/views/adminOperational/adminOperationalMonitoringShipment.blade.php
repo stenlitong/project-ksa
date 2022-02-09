@@ -18,18 +18,22 @@
                             <label class="font-weight-bold" for="">Search Tug</label>
                             <select class="custom-select" id="tugName">
                                 <option disabled>Choose</option>
-                                @foreach($tugs as $t)
+                                @forelse($tugs as $t)
                                     <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
-                                @endforeach
+                                @empty
+                                    <option value="" disabled>No Tugs Available</option>
+                                @endforelse
                             </select>
                         </div>
                         <div class="form-group col-md-2 mx-3">
                             <label class="font-weight-bold" for="">Search Barge</label>
                             <select class="custom-select" id="bargeName">
                                 <option disabled>Choose</option>
-                                @foreach($barges as $b)
+                                @forelse($barges as $b)
                                     <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                @endforeach
+                                @empty
+                                    <option value="" disabled>No Barges Available</option>
+                                @endforelse
                             </select>
                         </div>
                         <div class="form-group col-md-2 mx-3">

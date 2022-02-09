@@ -15,8 +15,9 @@ use App\Exports\DailyReportsExport;
 class AdminOperationalController extends Controller
 {
     public function reportTranshipmentPage(){
-        $tugs = Tug::latest()->get();
-        $barges = Barge::latest()->get();
+        // Only Get The Tug|Barge That Is Inactive
+        $tugs = Tug::where('tugAvailability', true)->get();
+        $barges = Barge::where('bargeAvailability', true)->get();
         $operationalData = NULL;
 
         return view('adminOperational.adminOperationalReportTranshipment', compact('operationalData', 'tugs', 'barges'));
@@ -64,8 +65,11 @@ class AdminOperationalController extends Controller
     }
 
     public function monitoringPage(){
-        $tugs = Tug::latest()->get();
-        $barges = Barge::latest()->get();
+        // Only Get The Tug|Barge That Is Active
+        $tugs = Tug::where('tugAvailability', false)->get();
+        $barges = Barge::where('bargeAvailability', false)->get();
+
+        // Get All The Destination|Origin
         $from = OperationalBoatData::where('status', 'On Going')->groupBy('from')->select('from')->get();
         $to = OperationalBoatData::where('status', 'On Going')->groupBy('to')->select('to')->get();
 

@@ -15,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link 
                     @php
-                        if(basename($_SERVER['REQUEST_URI']) == 'stocks'){
+                        if(strpos($_SERVER['REQUEST_URI'], 'stocks') !== false){
                             echo('active');
                         }
                     @endphp" href="{{ Route("logistic.stocks") }}">

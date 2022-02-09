@@ -149,7 +149,6 @@
                             </tbody>
                         </table>
                     </div>
-                    {{-- </div> --}}
                 </div>
             </div>
         </main>
@@ -263,10 +262,30 @@
             width: 100%;
         }
         @media (max-width: 768px) {
-        #row-wrapper{
-            overflow-x: auto;
+            #row-wrapper{
+                overflow-x: auto;
+            }
         }
     </style>
+
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
+    </script>
     @endsection
 @else
     @include('../layouts/notAuthorized')

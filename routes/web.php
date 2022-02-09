@@ -26,12 +26,12 @@ use App\Http\Controllers\DashboardAjaxController;
 // Apologizes for the bad code or we called it "spaghetti" code, because we are consists of 2 intern programmers who are still learning everything while doing our final semester
 // We need to research for every single thing and crammed everything while building this project under 6 months without the help of senior/project manager/any other it department 
 // (just pure 2 intern programmers) 
-// So we need to find every information on the internet, including creating the logic flow -> making the database -> implementing it using laravel (instead of cool & flashy js 
-// framework, coz we need to build this project asap) -> hosting to AWS/prod (also learn how to use EC2, load balancer, auto scaling, security group, route53, rds)
+// So we need to find every information on the internet, including creating the logic flow -> making the database -> implementing it using laravel (instead of cool & flashy js framework, coz we need to build this project asap) -> hosting to AWS/prod (also learn how to use EC2, load balancer, auto scaling, security group, route53, rds)
 // We knew that our project is far from perfect, there are a lot of inconsistencies, no optimization, many bloated files around, also the ui is not good
 // we hope you guys the best of luck and can make a better version of our own project ! 
 // ===================================================================================================================================================================================
 
+// Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
 Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
 
         // Stocks Page
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
+        Route::get('/stocks/{branch}', [LogisticController::class, 'stocksBranchPage']);
         Route::post('/stocks/{items}/request', [LogisticController::class, 'requestStock']);
 
         // Request DO Page
@@ -164,9 +165,13 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
 
         // Stocks Page
         Route::get('/item-stocks', [SupervisorController::class, 'itemStock'])->name('itemStock');
+        Route::get('/item-stocks/{branch}', [SupervisorController::class, 'itemStockBranch']);
         Route::post('/item-stocks', [SupervisorController::class, 'addItemStock']);
         Route::post('/item-stocks/{item}/edit-item', [SupervisorController::class, 'editItemStock']);
         Route::delete('/item-stocks/{item}/delete-item', [SupervisorController::class, 'deleteItemStock']);
+
+        // Ajax
+        Route::post('/refresh-supervisor-item-stocks', [DashboardAjaxController::class, 'supervisorRefreshItemStockPage'])->name('refreshSupervisorItemStock');
 
         // DO Page
         Route::get('/approval-do', [SupervisorController::class, 'approvalDoPage'])->name('approvalDoPage');
