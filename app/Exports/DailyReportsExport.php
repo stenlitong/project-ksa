@@ -61,7 +61,7 @@ class DailyReportsExport implements FromQuery, WithHeadings, ShouldAutoSize, Wit
             ->where('taskType', 'Operational Shipment')
             ->whereMonth('operational_boat_data.created_at', $this -> month)
             ->whereYear('operational_boat_data.created_at', $this -> year)
-            ->select('tugName', 'bargeName', 'from', 'to', 'customer', DB::raw('CONCAT(MONTHNAME(operational_boat_data.created_at),"/",YEAR(operational_boat_data.created_at)) as Shipment'), 'portOfLoading', 'portOfDischarge', 'arrivalTime', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsidePOD', 'asidePod', 'commenceLoadPOD', 'completedLoadingPOD', 'cOffPOD', 'departurePOD', 'totalTime');
+            ->select('tugName', 'bargeName', 'from', 'to', 'customer', DB::raw('CONCAT(MONTHNAME(operational_boat_data.created_at),"/",YEAR(operational_boat_data.created_at)) as Shipment'), 'portOfLoading', 'portOfDischarge', 'arrivalTime', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsidePOD', 'asidePod', 'commenceLoadPOD', 'completedLoadingPOD', 'cOffPOD', 'departureTime', 'totalTime');
         }
 
         return $operationalData;
@@ -80,7 +80,7 @@ class DailyReportsExport implements FromQuery, WithHeadings, ShouldAutoSize, Wit
             return ['Tug', 'Barge', 'From', 'To', 'Customer', 'Shipment', 'Port Of Loading', 'Port Of Discharge',
             'Time Arrival', 
             'Start Aside (L)', 'Aside (L)', 'Commence Loading (L)', 'Complete Loading (L)', 'Cast Off (L)',
-            'Doc Overhand', 'Doc On Boat', 'Departure Time', 'Arrival POD', 'Start Aside POD', 'Aside POD', 'Commence Loading POD', 'Complete Loading POD', 'Cast Off POD', 'Departure Time POD', 
+            'Doc Overhand', 'Doc On Boat', 'Departure to POD', 'Arrival POD', 'Start Aside POD', 'Aside POD', 'Commence Loading POD', 'Complete Loading POD', 'Cast Off POD', 'Departure Time', 
             'totalTime'];
         }
     }

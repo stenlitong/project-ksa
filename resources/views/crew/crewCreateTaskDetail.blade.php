@@ -536,7 +536,7 @@
                                         <div class="d-flex justify-content-center">
                                             <div class="form-group col-md-12">
                                                 <label class="text-danger font-weight-bold" for="customer">Customer : </label>
-                                                <input type="text" class="form-control" name="customer" id="" placeholder="Input Customer ..." value="{{ $ot -> customer }}" required>
+                                                <input type="text" class="form-control" name="customer" id="" placeholder="Input Customer ..." value="{{ $ot -> customer }}">
                                             </div>
                                         </div>
                                     @endif

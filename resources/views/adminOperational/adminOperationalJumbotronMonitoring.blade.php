@@ -1,27 +1,27 @@
 @if(empty($operationalData))
     <div class="d-flex justify-content-around">
         <div style="width: 60%;">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-column">
-                    <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
+            <div class="d-flex justify-content-around">
+                <div>
+                    <h3 class="text-secondary font-weight-bold">Status</h3>
                     <h5 class="text-center">-</h5>
                 </div>
-                <div class="d-flex flex-column">
-                    <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
+                <div>
+                    <h3 class="text-secondary font-weight-bold">Condition</h3>
                     <h5 class="text-center">-</h5>
                 </div>
-                <div class="d-flex flex-column mr-5">
-                    <h1 class="text-secondary display-8 font-weight-bold">Jumlah Cargo</h1>
-                    <h5 class="text-center">-</h5>
+                <div>
+                    <h3 class="text-secondary font-weight-bold">Jumlah Cargo</h3>
+                    <h3 class="text-center">-</h3>
                 </div>
-                <div class="d-flex flex-column mr-5">
-                    <h1 class="text-secondary display-8 font-weight-bold">Total Time</h1>
+                <div>
+                    <h3 class="text-secondary font-weight-bold">Total Time</h3>
                     <h5 class="text-center">-</h5>
                 </div>
             </div>
             <div class="card text-white bg-secondary mt-5 overflow-auto" style="width: 70vw; height: 52vh; border-radius: 10px;">
                 <div class="card-body">
-                    <h1 class="text-white display-8 font-weight-bold">No Data Found.</h1>
+                    <h3 class="text-white font-weight-bold">No Data Found.</h3>
                 </div>
             </div>
         </div>
@@ -37,33 +37,33 @@
             @if($operationalData -> taskType != 'Non Operational')
                 <div class="d-flex justify-content-between">
                     <div class="d-flex flex-column">
-                        <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
-                        <h3 class="text-center">{{ $operationalData -> taskType }}</h3>
+                        <h3 class="text-secondary font-weight-bold">Status</h3>
+                        <h5 class="text-center">{{ $operationalData -> taskType }}</h5>
                     </div>
                     <div class="d-flex flex-column">
-                        <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
-                        <h3 class="text-center">{{ $operationalData -> condition }}</h3>
+                        <h3 class="text-secondary font-weight-bold">Condition</h3>
+                        <h5 class="text-center">{{ $operationalData -> condition }}</h5>
                     </div>
                     <div class="d-flex flex-column mr-4 ml-2">
-                        <h1 class="text-secondary display-8 font-weight-bold">Jumlah Kargo Akhir</h1>
-                        <h3 class="text-center">{{ $operationalData -> cargoAmountEnd }}</h3>
+                        <h3 class="text-secondary font-weight-bold">Jumlah Kargo Akhir</h3>
+                        <h5 class="text-center">{{ $operationalData -> cargoAmountEnd }}</h5>
                     </div>
                     @if($operationalData -> taskType == 'Operational Shipment')
                         <div class="d-flex flex-column mr-5">
-                            <h1 class="text-secondary display-8 font-weight-bold">Total Time</h1>
-                            <h3 class="text-center">{{ !empty($operationalData -> totalTime) ? $operationalData -> totalTime : 'n/a' }}</h3>
+                            <h3 class="text-secondary font-weight-bold">Total Time</h3>
+                            <h5 class="text-center">{{ !empty($operationalData -> totalTime) ? $operationalData -> totalTime : 'n/a' }}</h5>
                         </div>
                     @endif
                 </div>
             @else
                 <div class="d-flex justify-content-around">
                     <div class="d-flex flex-column">
-                        <h1 class="text-secondary display-8 font-weight-bold">Status</h1>
-                        <h3 class="text-center">{{ $operationalData -> taskType }}</h3>
+                        <h3 class="text-secondary font-weight-bold">Status</h3>
+                        <h5 class="text-center">{{ $operationalData -> taskType }}</h5>
                     </div>
                     <div class="d-flex flex-column">
-                        <h1 class="text-secondary display-8 font-weight-bold">Condition</h1>
-                        <h3 class="text-center">{{ $operationalData -> condition }}</h3>
+                        <h3 class="text-secondary font-weight-bold">Condition</h3>
+                        <h5 class="text-center">{{ $operationalData -> condition }}</h5>
                     </div>
                 </div>
             @endif
@@ -326,7 +326,7 @@
             </div>
         </div>
         <div style="width: 30%;">
-            <h3 class="text-danger font-weight-bold mb-4">Deskripsi</h3>
+            <h5 class="text-danger font-weight-bold mb-4">Deskripsi</h5>
             <textarea name="" id="" class="h-75" style="width: 100%" disabled>{{ $operationalData -> description }}</textarea>
         </div>
     </div>
