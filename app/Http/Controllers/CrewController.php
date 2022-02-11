@@ -512,12 +512,12 @@ class CrewController extends Controller
             $calculation['sailingToJetty'] = number_format((double) $sailingToJetty, 2);
             $calculation['prepareLdg'] = number_format((double) $prepareLdg, 2);
             $calculation['ldgTime'] = number_format((double) $ldgTime, 2);
-            $calculation['ldgRate'] = number_format($ldgRate, 2);
+            $calculation['ldgRate'] = $ldgRate;
             $calculation['berthing'] = number_format((double) $berthing, 2);
             $calculation['unberthing'] = number_format((double) $unberthing, 2);
             $calculation['sailingToMV'] = number_format((double) $sailingToMV, 2);
             $calculation['dischTime'] = number_format((double) $dischTime, 2);
-            $calculation['dischRate'] = number_format($dischRate, 2);
+            $calculation['dischRate'] = $dischRate;
             $calculation['maneuver'] = number_format((double) $maneuver, 2);
             $calculation['cycleTime'] = number_format((double) $cycleTime, 2);
         }elseif($operationalData -> taskType == 'Return Cargo'){
@@ -560,7 +560,7 @@ class CrewController extends Controller
             $calculation['unberthing'] = number_format((double) $unberthing, 2);
             $calculation['sailingToMVCargo'] = number_format((double) $sailingToMVCargo, 2);
             $calculation['dischTimeCargo'] = number_format((double) $dischTimeCargo, 2);
-            $calculation['dischRateCargo'] = number_format($dischRateCargo, 2);
+            $calculation['dischRateCargo'] = $dischRateCargo;
             $calculation['maneuverCargo'] = number_format((double) $maneuverCargo, 2);
             $calculation['cycleTimeCargo'] = number_format((double) $cycleTimeCargo, 2);
 
