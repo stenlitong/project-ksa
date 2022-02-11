@@ -83,7 +83,15 @@ class CreateOperationalBoatDataTable extends Migration
             $table->dateTime('compMVTranshipment')->nullable();
             $table->dateTime('cOffMVTranshipment')->nullable();
 
+            $table->dateTime('departureTimeTranshipment')->nullable();
+
+            // Samarinda Only (optional)
+            $table->dateTime('arrivalPangkalan')->nullable();
             $table->dateTime('departureJetty')->nullable();
+            $table->dateTime('pengolonganNaik')->nullable();
+            $table->dateTime('pengolonganTurun')->nullable();
+            $table->dateTime('mooringArea')->nullable();
+            $table->dateTime('departureTimePangkalan')->nullable();
 
             // Non Operational
             // $table->dateTime('arrivalTime')->nullable();

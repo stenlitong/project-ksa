@@ -102,7 +102,7 @@
                 <div class="right-section mt-3" style="width: 40%">
                     <div class="jumbotron jumbotron-fluid mx-2">
                         <div class="container">
-                          <h1 class="display-4 text-wrap font-weight-bold text-center">Percentage Ship's Activity : </h1>
+                          <h1 class="display-5 text-wrap font-weight-bold text-center">Percentage Ship's Activity : </h1>
                           <div class="progress mb-3 mt-3" style="height: 5vh; max-width: 85%; margin-left: 8%">
                               <div class="progress-bar progress-bar-animated progress-bar-striped bg-success font-weight-bold" role="progressbar" style="width: {{ $percentage_ship_activity }}%;" aria-valuenow="{{ $percentage_ship_activity }}" aria-valuemin="0" aria-valuemax="100">
                                 <h3 class="font-weight-bold">
