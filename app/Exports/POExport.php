@@ -38,14 +38,22 @@ class POExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
     }
 
     public function headings(): array{
-        return ['Nama Barang', 'Quantity', 'Satuan', 'Nama Supplier', 'Harga Per Satuan Barang', 'Total Harga Barang', 'Note'];
+        return [
+            // Heading
+            ['PO Export'], 
+
+            [' '],
+
+            // Table
+            ['Nama Barang', 'Quantity', 'Satuan', 'Nama Supplier', 'Harga Per Satuan Barang', 'Total Harga Barang', 'Note']
+        ];
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->getStyle('A3:G3')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

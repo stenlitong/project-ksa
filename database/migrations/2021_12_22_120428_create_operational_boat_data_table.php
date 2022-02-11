@@ -23,7 +23,7 @@ class CreateOperationalBoatDataTable extends Migration
             $table->string('tugName');
             // $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->string('bargeName');
+            $table->string('bargeName')->nullable();
             // $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
             $table->string('portOfLoading', 50);
@@ -86,12 +86,10 @@ class CreateOperationalBoatDataTable extends Migration
             $table->dateTime('departureTimeTranshipment')->nullable();
 
             // Samarinda Only (optional)
-            $table->dateTime('arrivalPangkalan')->nullable();
             $table->dateTime('departureJetty')->nullable();
             $table->dateTime('pengolonganNaik')->nullable();
             $table->dateTime('pengolonganTurun')->nullable();
             $table->dateTime('mooringArea')->nullable();
-            $table->dateTime('departureTimePangkalan')->nullable();
 
             // Non Operational
             // $table->dateTime('arrivalTime')->nullable();

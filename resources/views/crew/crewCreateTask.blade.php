@@ -47,12 +47,11 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Barge</label>
-                                    <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;" required>
-                                        @forelse($barges as $b)
+                                    <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;">
+                                            <option value="">None</option>
+                                        @foreach($barges as $b)
                                             <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
-                                        @empty
-                                            <option value="" disabled>No Barges Available</option>
-                                        @endforelse
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">

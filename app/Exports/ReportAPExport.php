@@ -49,14 +49,22 @@ class ReportAPExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEve
     }
 
     public function headings(): array{
-        return ['Nama Supplier', 'No. Invoice', 'No. Faktur Pajak', 'No. DO', 'No. PO', 'No. PR', 'Nominal Invoice', 'Keterangan'];
+        return [
+            // Heading
+            ['Report AP Export'],
+
+            [' '],
+
+            // Table
+            ['Nama Supplier', 'No. Invoice', 'No. Faktur Pajak', 'No. DO', 'No. PO', 'No. PR', 'Nominal Invoice', 'Keterangan']
+        ];
     }
     
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A3:H3')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

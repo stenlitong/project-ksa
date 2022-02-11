@@ -27,14 +27,22 @@ class PRExport implements FromQuery, WithHeadings, WithEvents
     }
 
     public function headings(): array{
-        return ['Nomor PR', 'Tanggal PR', 'Nama Kapal', 'Nama Barang', 'Quantity', 'Satuan','Department/Bagian', 'Code Master Item', 'Note'];
+        return [
+            // Heading
+            ['PR Export'],
+
+            [' '],
+
+            // Table
+            ['Nomor PR', 'Tanggal PR', 'Nama Kapal', 'Nama Barang', 'Quantity', 'Satuan','Department/Bagian', 'Code Master Item', 'Note']
+        ];
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:I1')->applyFromArray([
+                $event->sheet->getStyle('A3:I3')->applyFromArray([
                     // 'font' => [
                     //     'color' => ['argb' => 'FFFFFF']
                     // ],

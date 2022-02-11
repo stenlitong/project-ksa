@@ -6,10 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Barge;
 use App\Models\OperationalBoatData;
 use App\Models\Tug;
-use App\Models\User;
-use Carbon\Carbon;
-use DateTime;
-use Illuminate\Support\Facades\DB;
 use App\Exports\DailyReportsExport;
 
 class AdminOperationalController extends Controller

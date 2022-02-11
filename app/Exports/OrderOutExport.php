@@ -22,14 +22,22 @@ class OrderOutExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEve
     }
 
     public function headings(): array{
-        return ['Tanggal Keluar', 'Item Barang Keluar', 'Serial Number', 'Qty', 'Satuan', 'No. Resi', 'Note'];
+        return [
+            // Heading
+            ['History Out'],
+
+            [' '], 
+
+            // Table
+            ['Tanggal Keluar', 'Item Barang Keluar', 'Serial Number', 'Qty', 'Satuan', 'No. Resi', 'Note']
+        ];
     }
     
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->getStyle('A3:G3')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

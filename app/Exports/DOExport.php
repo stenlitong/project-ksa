@@ -27,14 +27,22 @@ class DOExport implements FromQuery, WithHeadings, ShouldAutoSize, WithEvents
     }
 
     public function headings(): array{
-        return ['Nama Requester', 'Item Barang', 'Asal Cabang', 'Cabang Tujuan', 'Quantity', 'Satuan', 'description'];
+        return [
+            // Heading
+            ['DO Export'],
+
+            [' '],
+
+            // Table
+            ['Nama Requester', 'Item Barang', 'Asal Cabang', 'Cabang Tujuan', 'Quantity', 'Satuan', 'description']
+        ];
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->getStyle('A3:G3')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],

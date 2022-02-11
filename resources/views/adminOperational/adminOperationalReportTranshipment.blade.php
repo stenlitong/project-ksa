@@ -10,7 +10,7 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1 class="mt-5 mb-3 text-center">Daily Report</h1>
 
-            <div style="margin-top: 15vh">
+            <div style="margin-top: 10vh">
                 <form action="" method="POST">
                     @csrf
                     <div class="form-row">
@@ -27,6 +27,7 @@
                             <label class="text-danger font-weight-bold" for="">Search Barge</label>
                             <select class="custom-select" id="bargeName">
                                 <option disabled>Choose</option>
+                                <option value="">None</option>
                                 @foreach($barges as $b)
                                     <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                 @endforeach

@@ -252,27 +252,63 @@ class CrewController extends Controller
     }
 
     public function createTaskPost(Request $request){
-        // Validate Request
-        $validated = $request -> validate([
-            'tugName' => 'required|exists:tugs,tugName',
-            'bargeName' => 'required|exists:barges,bargeName',
-            'portOfLoading' => 'required|string',
-            'portOfDischarge' => 'required|string',
-            'cargoAmountStart' => 'required|numeric|min:1',
-            // 'customer' => 'required|alpha',
-            'taskType' => 'required|in:Operational Shipment,Operational Transhipment,Non Operational'
-        ]);
+        if($request -> taskType == 'Non Operational'){
+            // Validate Request For Non Operational Task (barge can be null)
+            $validated = $request -> validate([
+                'tugName' => 'required|exists:tugs,tugName',
+                'bargeName' => 'nullable',
+                'portOfLoading' => 'required|string',
+                'portOfDischarge' => 'required|string',
+                'cargoAmountStart' => 'required|numeric|min:1',
+                'taskType' => 'required|in:Operational Shipment,Operational Transhipment,Non Operational'
+            ]);
 
-        // Check if Tug|Barge Already Taken or Not
-        $checkTugIsAvailable = Tug::where('tugName', $request -> tugName)->first();
-        $checkBargeIsAvailable = Barge::where('bargeName', $request -> bargeName)->first();
+            // Checking If The bargeName Null
+            $checkTugIsAvailable = null;
+            $checkBargeIsAvailable = null;
 
-        if($checkTugIsAvailable -> tugAvailability == false){
-            return redirect()->back()->with('failed', 'Tug Already Used');
-        }
-        
-        if($checkBargeIsAvailable -> bargeAvailability == false){
-            return redirect()->back()->with('failed', 'Barge Already Used');
+            // If The bargeName is Null Then We Only Need To Check tugAvailability
+            if($request -> bargeName == ''){
+                $checkTugIsAvailable = Tug::where('tugName', $request -> tugName)->first();
+
+                if($checkTugIsAvailable -> tugAvailability == false){
+                    return redirect()->back()->with('failed', 'Tug Already Used');
+                }
+            // Else We Check The Availability For Both Tugs & Barges
+            }else{
+                $checkTugIsAvailable = Tug::where('tugName', $request -> tugName)->first();
+                $checkBargeIsAvailable = Barge::where('bargeName', $request -> bargeName)->first();
+
+                if($checkTugIsAvailable -> tugAvailability == false){
+                    return redirect()->back()->with('failed', 'Tug Already Used');
+                }
+                
+                if($checkBargeIsAvailable -> bargeAvailability == false){
+                    return redirect()->back()->with('failed', 'Barge Already Used');
+                }
+            }
+        }else{
+            // Validate Request For Other Task (barge cannot be null)
+            $validated = $request -> validate([
+                'tugName' => 'required|exists:tugs,tugName',
+                'bargeName' => 'required|exists:barges,bargeName',
+                'portOfLoading' => 'required|string',
+                'portOfDischarge' => 'required|string',
+                'cargoAmountStart' => 'required|numeric|min:1',
+                'taskType' => 'required|in:Operational Shipment,Operational Transhipment,Non Operational'
+            ]);
+
+            // Check if Tug|Barge Already Taken or Not
+            $checkTugIsAvailable = Tug::where('tugName', $request -> tugName)->first();
+            $checkBargeIsAvailable = Barge::where('bargeName', $request -> bargeName)->first();
+
+            if($checkTugIsAvailable -> tugAvailability == false){
+                return redirect()->back()->with('failed', 'Tug Already Used');
+            }
+            
+            if($checkBargeIsAvailable -> bargeAvailability == false){
+                return redirect()->back()->with('failed', 'Barge Already Used');
+            }
         }
 
         $validated['portOfLoading'] = strtoupper($request -> portOfLoading);
@@ -289,9 +325,11 @@ class CrewController extends Controller
             'tugAvailability' => false
         ]);
 
-        Barge::where('bargeName', $request -> bargeName)->update([
-            'bargeAvailability' => false
-        ]);
+        if($request -> bargeName !== ''){
+            Barge::where('bargeName', $request -> bargeName)->update([
+                'bargeAvailability' => false
+            ]);
+        }
 
         // Then Redirect
         return redirect('/crew/ongoing-task')->with('status', 'Task Created Successfully');
@@ -299,7 +337,7 @@ class CrewController extends Controller
 
     public function ongoingTaskPage(){
         // Find There Is An Ongoing Task Running
-        $ongoingTask = OperationalBoatData::where('user_id', Auth::user()->id)->where('status', 'On Going')->get();
+        $ongoingTask = OperationalBoatData::with(['user'])->where('user_id', Auth::user()->id)->where('status', 'On Going')->get();
 
         // Check If There Is No Task Running, Redirect To Create Task Page
         if(count($ongoingTask) == 0){
@@ -374,7 +412,14 @@ class CrewController extends Controller
                 'commMVTranshipment' => 'nullable|date',
                 'compMVTranshipment' => 'nullable|date',
                 'cOffMVTranshipment' => 'nullable|date',
+                'departureTimeTranshipment' => 'nullable|date',
+
+                // Samarinda Only
                 'departureJetty' => 'nullable|date',
+                'pengolonganNaik' => 'nullable|date',
+                'pengolonganTurun' => 'nullable|date',
+                'mooringArea' => 'nullable|date',
+
             ]);
         }else{
              // Validate All The Non Operational Fields
@@ -464,17 +509,17 @@ class CrewController extends Controller
             (double) $dischTime + (double) $maneuver + (double) $sailingToMV + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
             (double) 0;
 
-            $calculation['sailingToJetty'] = (double) $sailingToJetty;
-            $calculation['prepareLdg'] = (double) $prepareLdg;
-            $calculation['ldgTime'] = (double) $ldgTime;
-            $calculation['ldgRate'] = $ldgRate;
-            $calculation['berthing'] = (double) $berthing;
-            $calculation['unberthing'] = (double) $unberthing;
-            $calculation['sailingToMV'] = (double) $sailingToMV;
-            $calculation['dischTime'] = (double) $dischTime;
-            $calculation['dischRate'] = $dischRate;
-            $calculation['maneuver'] = (double) $maneuver;
-            $calculation['cycleTime'] = (double) $cycleTime;
+            $calculation['sailingToJetty'] = number_format((double) $sailingToJetty, 2);
+            $calculation['prepareLdg'] = number_format((double) $prepareLdg, 2);
+            $calculation['ldgTime'] = number_format((double) $ldgTime, 2);
+            $calculation['ldgRate'] = number_format($ldgRate, 2);
+            $calculation['berthing'] = number_format((double) $berthing, 2);
+            $calculation['unberthing'] = number_format((double) $unberthing, 2);
+            $calculation['sailingToMV'] = number_format((double) $sailingToMV, 2);
+            $calculation['dischTime'] = number_format((double) $dischTime, 2);
+            $calculation['dischRate'] = number_format($dischRate, 2);
+            $calculation['maneuver'] = number_format((double) $maneuver, 2);
+            $calculation['cycleTime'] = number_format((double) $cycleTime, 2);
         }elseif($operationalData -> taskType == 'Return Cargo'){
             // Sailing to MV = (Arrival POD - Departure POD)
             $sailingToMVCargo = !empty($operationalData -> arrivalPODCargo) && !empty($operationalData -> departurePOD) ? date_diff(new DateTime($operationalData -> arrivalPODCargo), new DateTime($operationalData -> departurePOD))->format('%h.%i') : (double) 0;
@@ -508,21 +553,21 @@ class CrewController extends Controller
             (double) $dischTimeCargo + (double) $maneuverCargo + (double) $sailingToMVCargo + (double) $unberthing + (double) $ldgTime + (double) $prepareLdg + (double) $berthing + (double) $sailingToJetty : 
             (double) 0;
 
-            $calculation['sailingToJetty'] = (double) $sailingToJetty;
-            $calculation['prepareLdg'] = (double) $prepareLdg;
-            $calculation['ldgTime'] = (double) $ldgTime;
-            $calculation['berthing'] = (double) $berthing;
-            $calculation['unberthing'] = (double) $unberthing;
-            $calculation['sailingToMVCargo'] = (double) $sailingToMVCargo;
-            $calculation['dischTimeCargo'] = (double) $dischTimeCargo;
-            $calculation['dischRateCargo'] = $dischRateCargo;
-            $calculation['maneuverCargo'] = (double) $maneuverCargo;
-            $calculation['cycleTimeCargo'] = (double) $cycleTimeCargo;
+            $calculation['sailingToJetty'] = number_format((double) $sailingToJetty, 2);
+            $calculation['prepareLdg'] = number_format((double) $prepareLdg, 2);
+            $calculation['ldgTime'] = number_format((double) $ldgTime, 2);
+            $calculation['berthing'] = number_format((double) $berthing, 2);
+            $calculation['unberthing'] = number_format((double) $unberthing, 2);
+            $calculation['sailingToMVCargo'] = number_format((double) $sailingToMVCargo, 2);
+            $calculation['dischTimeCargo'] = number_format((double) $dischTimeCargo, 2);
+            $calculation['dischRateCargo'] = number_format($dischRateCargo, 2);
+            $calculation['maneuverCargo'] = number_format((double) $maneuverCargo, 2);
+            $calculation['cycleTimeCargo'] = number_format((double) $cycleTimeCargo, 2);
 
         }elseif($operationalData -> taskType == 'Non Operational'){
             $totalLostDays = !empty($operationalData -> arrivalTime) && !empty($operationalData -> departurePOL) ? date_diff(new DateTime($operationalData -> arrivalTime), new DateTime($operationalData -> departurePOL))->format('%h.%i') : 0;
 
-            $calculation['totalLostDays'] = (double) $totalLostDays;
+            $calculation['totalLostDays'] = number_format((double) $totalLostDays, 2);
         }
 
         // Update The Following Task Id
@@ -535,16 +580,25 @@ class CrewController extends Controller
     public function finalizeOngoingTask(Request $request){
         // Find The Task Using Task ID
         $data = OperationalBoatData::where('id', $request -> taskId)->first();
-
+        
         // Helper Var
-        $operationShipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'customer', 'arrivalTime', 'departureTime', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsidePOD', 'asidePOD', 'commenceLoadPOD', 'completedLoadingPOD', 'cOffPOD', 'DOBPOD'];
+        if($data -> user -> cabang == 'Samarinda'){
+            $operationShipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'customer', 'arrivalTime', 'departureTime', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'departureJetty', 'pengolonganNaik', 'pengolonganTurun', 'mooringArea', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsidePOD', 'asidePOD', 'commenceLoadPOD', 'completedLoadingPOD', 'cOffPOD', 'DOBPOD'];
 
-        $operationTranshipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'faVessel', 'arrivalPOL', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsideMVTranshipment', 'asideMVTranshipment', 'commMVTranshipment', 'compMVTranshipment', 'cOffMVTranshipment', 'departureJetty'];
+            $operationTranshipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'faVessel', 'departureJetty', 'pengolonganNaik', 'arrivalPOL', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'pengolonganTurun', 'mooringArea', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsideMVTranshipment', 'asideMVTranshipment', 'commMVTranshipment', 'compMVTranshipment', 'cOffMVTranshipment', 'departureTimeTranshipment'];
+        }else{
+            $operationShipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'customer', 'arrivalTime', 'departureTime', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsidePOD', 'asidePOD', 'commenceLoadPOD', 'completedLoadingPOD', 'cOffPOD', 'DOBPOD'];
+
+            $operationTranshipment_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'faVessel', 'arrivalPOL', 'startAsideL', 'asideL', 'commenceLoadL', 'completedLoadingL', 'cOffL', 'DOH', 'DOB', 'departurePOD', 'arrivalPODGeneral', 'startAsideMVTranshipment', 'asideMVTranshipment', 'commMVTranshipment', 'compMVTranshipment', 'cOffMVTranshipment', 'departureTimeTranshipment'];
+        }
+
 
         $returnCargo_loops = ['from', 'to', 'condition', 'estimatedTime', 'cargoAmountEnd', 'cargoAmountEndCargo', 'arrivalPODCargo', 'startAsideMVCargo', 'asideMVCargo', 'commMVCargo', 'compMVCargo', 'cOffMVCargo', 'departureTime'];
 
         $nonOperational_loops = ['from', 'to', 'condition', 'estimatedTime', 'arrivalTime', 'startDocking', 'finishDocking', 'departurePOL'];
 
+
+        // Looping Through Each Column To Check If There Is An Empty Data
         if($data -> taskType == 'Operational Shipment'){
             foreach($operationShipment_loops as $os){
                 if($data -> $os == NULL){
@@ -586,9 +640,11 @@ class CrewController extends Controller
             'tugAvailability' => true
         ]);
 
-        Barge::where('bargeName', $data -> bargeName)->update([
-            'bargeAvailability' => true
-        ]);
+        if($data -> bargeName !== ''){
+            Barge::where('bargeName', $data -> bargeName)->update([
+                'bargeAvailability' => true
+            ]);
+        }
 
         // Then Redirect To Create Task Page
         return redirect('/crew/create-task')->with('status', 'Task Finalized Successfully');
@@ -626,9 +682,11 @@ class CrewController extends Controller
             'tugAvailability' => true
         ]);
 
-        Barge::where('bargeName', $request -> bargeName)->update([
-            'bargeAvailability' => true
-        ]);
+        if($request -> bargeName !== ''){
+            Barge::where('bargeName', $request -> bargeName)->update([
+                'bargeAvailability' => true
+            ]);
+        }
 
         // Find The Task, Then Delete It
         OperationalBoatData::where('id', $request -> taskId)->delete();

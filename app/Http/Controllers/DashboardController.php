@@ -247,10 +247,15 @@ class DashboardController extends Controller
             $discharge_activity_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Discharge Activity')->count();
             $standby_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby')->count();
             $repair_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Repair')->count();
-            $docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Docking')->count();
-            $standby_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby Docking')->count();
             $grounded_barge_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Grounded Barge')->count();
             $waiting_schedule_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Waiting Schedule')->count();
+
+            // Get Each Amount Of Tug & Barges (Non Operational Only)
+            $tug_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Docking')->count();
+            $barge_docking_count = OperationalBoatData::where('status', 'On Going')->whereNotNull('bargeName')->where('condition', 'Docking')->count();
+
+            $tug_standby_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby Docking')->count();
+            $barge_standby_docking_count = OperationalBoatData::where('status', 'On Going')->whereNotNull('bargeName')->where('condition', 'Standby Docking')->count();
 
             // formula => Total lost time : docking + standby docking + standby + grounded barge + repair + waiting schedule
             $total_lost_time = $docking_days + $standby_docking_days + $standby_days + $grounded_barge_days + $repair_days + $waiting_schedule_days;
@@ -272,7 +277,7 @@ class DashboardController extends Controller
 
             $total_fleets = $total_tugs + $total_barges;
 
-            return view('adminOperational.adminOperationalDashboard', compact('total_fleets', 'on_sailing_count', 'loading_activity_count', 'discharge_activity_count', 'standby_count', 'repair_count', 'docking_count', 'standby_docking_count', 'grounded_barge_count', 'waiting_schedule_count', 'percentage_ship_activity', 'total_lost_time'));
+            return view('adminOperational.adminOperationalDashboard', compact('total_barges', 'total_tugs', 'on_sailing_count', 'loading_activity_count', 'discharge_activity_count', 'standby_count', 'repair_count', 'tug_docking_count', 'barge_docking_count', 'tug_standby_docking_count', 'barge_standby_docking_count', 'grounded_barge_count', 'waiting_schedule_count', 'percentage_ship_activity', 'total_lost_time'));
         }elseif(Auth::user()->hasRole('picSite')){
             return view('picsite.picDashboard');
         }elseif(Auth::user()->hasRole('picAdmin')){

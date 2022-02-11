@@ -76,14 +76,22 @@ class PurchasingReportExport implements FromQuery, WithHeadings, ShouldAutoSize,
     }
 
     public function headings(): array{
-        return ['Tanggal PR', 'Nomor PR', 'Supplier', 'Nomor PO', 'Nama Kapal', 'Keterangan'];
+        return [
+            // Heading
+            ['Report Export'], 
+
+            [' '], 
+
+            // Table
+            ['Tanggal PR', 'Nomor PR', 'Supplier', 'Nomor PO', 'Nama Kapal', 'Keterangan']
+        ];
     }
     
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:F1')->applyFromArray([
+                $event->sheet->getStyle('A3:F3')->applyFromArray([
                     'font' => [
                         'color' => ['argb' => 'FFFFFF']
                     ],
