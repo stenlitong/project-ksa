@@ -717,6 +717,7 @@
                                                 @method('patch')
                                                 <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                                                 <input type="hidden" name="taskType" value="{{ $ot -> taskType }}">
+                                                <input type="hidden" name="cabang" value="{{ $ot -> user -> cabang }}">
 
                                                 <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                                 <button type="submit" class="btn btn-primary" href="">Yes</button>
