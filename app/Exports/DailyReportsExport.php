@@ -121,7 +121,7 @@ class DailyReportsExport implements FromQuery, WithHeadings, ShouldAutoSize, Wit
         if($this -> taskType == 'Operational Transhipment'){
             return [
                 AfterSheet::class => function (AfterSheet $event) {
-                    $event->sheet->getStyle('A5:AX5')->applyFromArray([
+                    $event->sheet->getStyle('A5:BB5')->applyFromArray([
                         'font' => [
                             'color' => ['argb' => 'FFFFFF']
                         ],
@@ -136,7 +136,7 @@ class DailyReportsExport implements FromQuery, WithHeadings, ShouldAutoSize, Wit
         }elseif($this -> taskType == 'Operational Shipment'){
             return [
                 AfterSheet::class => function (AfterSheet $event) {
-                    $event->sheet->getStyle('A5:Y5')->applyFromArray([
+                    $event->sheet->getStyle('A5:AC5')->applyFromArray([
                         'font' => [
                             'color' => ['argb' => 'FFFFFF']
                         ],
