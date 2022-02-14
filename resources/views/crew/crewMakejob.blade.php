@@ -17,6 +17,12 @@
                         </div>
                 @endif
 
+                @if ($errorCart = Session::get('errorCart'))
+                        <div class="alert alert-success alert-block" id="errorCart">
+                            <strong>{{ $errorCart }}</strong>
+                        </div>
+                @endif
+
                 @if($errors->any())
                     @foreach ($errors->all() as $error)
                         <div class="alert alert-danger alert-block" id="success">
@@ -89,7 +95,7 @@
                                 <input class="col-md-full form-control" type="number" name="quantity" id="quantity" value ="" placeholder="Masukan Quantity">
                             </div>
                             <div class="form-group p-2">
-                                <label for="note">Description</label>
+                                <label for="note">Job Description</label>
                                 <br>
                                 <textarea class="form-control" name="note" Note="3"
                                     placeholder="Ketik Deskripsi Job" style="height: 100px" required autofocus></textarea>
@@ -115,7 +121,7 @@
                                     <th scope="col">No.</th>
                                     <th scope="col">Nama Tugboat / barge</th>
                                     <th scope="col">Lokasi Perbaikan</th>
-                                    <th scope="col">description</th>
+                                    <th scope="col">Job Description</th>
                                     <th scope="col">quantity</th>
                                     <th scope="col">Action</th>
                                 </tr>

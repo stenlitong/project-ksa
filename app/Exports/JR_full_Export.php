@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Models\JobHead;
 use App\Models\JobDetails;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -60,9 +63,34 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
         ->where('job_details.cabang', Auth::user()->cabang)
         ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
         ->whereBetween('job_heads.created_at', [$start_date, $end_date])
-        ->selectRaw('*, @row:=@row+1 as id');
+        ->selectRaw('*, @row:=@row+1 as job_heads.id')
+        ->select('job_heads.*',
+        'job_details.lokasi',
+        'job_details.tugName',
+        'job_details.bargeName',
+        'job_details.note',
+        'job_details.quantity');
+        // ->get();
+        // ->makeHidden(['job_details.jasa_id' , 'job_details.id',
+        // 'job_heads.user_id',
+        // 'job_heads.created_at',
+        // 'job_heads.updated_at' ,
+        // 'job_heads.company',
+        // 'job_heads.Headjasa_tracker_id',
+        // 'job_heads.check_by' ,
+        // 'job_heads.status' ,
+        // 'job_heads.descriptions',
+        // 'job_heads.reason',
+        // 'job_heads.JO_id',
+        // 'job_heads.ppn',
+        // 'job_heads.discount',
+        // 'job_heads.totalPriceBeforeCalculation',
+        // 'job_heads.totalPrice',
+        // 'job_heads.boatName',
+        // 'job_heads.invoiceAddress',
+        // 'job_heads.Approved_by']);
 
-        
+        // dd($jobs);
 
         return $jobs;
     }
@@ -83,12 +111,11 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
             'NOMOR-JR :',
             'Dibuat Oleh :',
             'Cabang',
-            'Jasa ID :',
             'Lokasi Permintaan :',
             'Nama TugBoat:',
             'Nama Barge:',
-            'Quantity' ,
             'Uraian',
+            'Quantity' ,
             ]
         ];
     }
@@ -97,14 +124,14 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
     {
         return [
             AfterSheet::class => function (AfterSheet $event){
-                $event->sheet->mergeCells('A1:M1');
-                $event->sheet->getStyle('A1:M1')->applyFromArray([
+                $event->sheet->mergeCells('A1:K1');
+                $event->sheet->getStyle('A1:K1')->applyFromArray([
                     'font' => [
                         'bold' => true ,
                         // 'color' => ['argb' => 'ffffffff']
                     ]
                 ]);
-                $event->sheet->getStyle('A3:M3')->applyFromArray([
+                $event->sheet->getStyle('A3:K3')->applyFromArray([
                     'font' => [
                         'bold' => true ,
                         // 'color' => ['argb' => 'ffffffff']
@@ -130,7 +157,7 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
                 //     array($this->created_by, ' ' , $this->check_by , ' ' ,' ' , 'maintance'),
                 // ), $event);
                 
-                $event->sheet->getDelegate()->getStyle('A:M')
+                $event->sheet->getDelegate()->getStyle('A:K')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }

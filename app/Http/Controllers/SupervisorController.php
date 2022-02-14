@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use App\Exports\OrderInExport;
 use App\Models\ItemBelowStock;
+use App\Exports\JR_full_Export;
 use App\Exports\OrderOutExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -207,6 +208,13 @@ class SupervisorController extends Controller
         $items_below_stock = $this -> checkStock();
 
         return view('supervisor.supervisorReportJR', compact('jobs', 'str_month', 'items_below_stock'));
+    }
+
+    // export excel jr
+    public function Download_JR_report(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
     }
 
     public function approveOrder(OrderHead $orderHeads){

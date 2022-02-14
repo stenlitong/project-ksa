@@ -13,7 +13,7 @@
 
                 @if(count($jobs) > 0)
                 <div class="d-flex justify-content-end mr-3">
-                    <form method="POST" action="/logistic/download_Jr" target="_blank">
+                    <form method="POST" action="/supervisor/Jr_report/download" target="_blank">
                         @csrf
                         <button class="btn btn-outline-success mb-3 btn-lg" >Export</button>
                     </form>

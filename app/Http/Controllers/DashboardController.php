@@ -52,22 +52,7 @@ class DashboardController extends Controller
                 ->orWhere('status', 'like', 'On Delivery');
             })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
 
-            // Get all the job request within the logged in user within 6 month
-            $JobRequestHeads = JobHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->paginate(7); 
-            $job_id = $JobRequestHeads->pluck('id');
-            $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
-
-            // Count the completed & in progress job Requests
-            $job_completed = JobHead::where(function($query){
-                $query->where('status', 'like', 'Job Request Approved By Logistics')
-                ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
-            })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
-            
-            $job_in_progress = JobHead::where(function($query){
-                $query->where('status', 'like', 'Job Request In Progress By Logistics');
-            })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
-
-            return view('crew.crewDashboard', compact('orderHeads','JobRequestHeads','orderDetails','jobDetails', 'completed', 'in_progress','job_completed','job_in_progress' ));
+            return view('crew.crewDashboard', compact('orderHeads','orderDetails', 'completed', 'in_progress'));
 
         }elseif(Auth::user()->hasRole('logistic')){
             // Search functonality
@@ -75,15 +60,9 @@ class DashboardController extends Controller
                 $orderHeads = OrderHead::with('user')->where(function($query){
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere( 'order_id', 'like', '%'. request('search') .'%');
-                })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
-                //->whereBetween('created_at', [$start_date, $end_date])
-                $JobRequestHeads = JobHead::with('user')->where(function($query){
-                    $query->where('status', 'like', '%'. request('search') .'%')
-                    ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
-                })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
+                })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString(); 
             }else{
                 $orderHeads = OrderHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
-                $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
             }
 
             // Get all the order detail
@@ -108,22 +87,8 @@ class DashboardController extends Controller
 
             $items_below_stock = $this -> checkStock();
 
-            // Get all the job request within the logged in user within 6 month
-            // Get the orderDetail from orders_id within the orderHead table 
-            $job_id = $JobRequestHeads->pluck('id');
-            $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
 
-            // Count the completed & in progress job Requests
-            $job_completed = JobHead::where(function($query){
-                $query->where('status', 'like', 'Job Request Approved By Logistics')
-                ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
-            })->whereYear('created_at', date('Y'))->count();
-            
-            $job_in_progress = JobHead::where(function($query){
-                $query->where('status', 'like', 'Job Request In Progress By Logistics');
-            })->whereYear('created_at', date('Y'))->count();
-
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock','job_completed','job_in_progress' , 'JobRequestHeads' , 'jobDetails'));
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
             
         }elseif(Auth::user()->hasRole('supervisorLogistic') or Auth::user()->hasRole('supervisorLogisticMaster')){
             // Find order from logistic role, then they can approve and send it to the purchasing role
@@ -757,13 +722,13 @@ class DashboardController extends Controller
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
-            $uploadspgr = spgrfile::where('cabang', 'Jakarta')->whereMonth('created_at', date('m'))->latest()->get();
+            $uploadspgr = spgrfile::where('cabang', 'Jakarta')->whereYear('created_at', date('Y'))->latest()->get();
             
             //Search bar
             //check if search-bar is filled or not
             if ($request->filled('search_no_formclaim')) {
                 $uploadspgr = spgrfile::where('no_formclaim', 'Like', '%' . $request->search_no_formclaim . '%')
-                ->orderBy('id', 'DESC')
+                ->whereYear('created_at', '=', $year)
                 ->latest()->get();
             }
 
@@ -793,14 +758,12 @@ class DashboardController extends Controller
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
-            $uploadspgr = spgrfile::whereYear('created_at', date('Y'))->latest()->get();
+            $uploadspgr = spgrfile::where('cabang', 'Jakarta')->latest()->paginate(7);
             
             //Search bar
             //check if search-bar is filled or not
                 if ($request->filled('search_no_formclaim')) {
                     $uploadspgr = spgrfile::where('no_formclaim', 'Like', '%' . $request->search_no_formclaim . '%')
-                    ->whereYear('created_at', '<=', $year)
-                    ->orderBy('id', 'DESC')
                     ->latest()->get();
                 }
 
@@ -823,7 +786,7 @@ class DashboardController extends Controller
                     // dd($viewer);
                     return Storage::disk('s3')->response('spgr/' . $year . "/". $month . "/" . $viewer);
                 }
-            return view('insurance.Dashboardinsurance', compact('uploadspgr'));
+            return view('insurance.Dashboardinsurance', ['uploadspgr' => $uploadspgr]);
         }
     }
     public function checkStock(){

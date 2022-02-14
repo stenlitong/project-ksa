@@ -109,7 +109,7 @@
                             @if(strpos($jr -> status, 'Rejected') !== false)
                                 <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $jr -> reason}}</td>
                             @else
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is Awaiting for Review</td>
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is On progress</td>
                             @endif
 
                             @if($jr -> status == 'Job Request In Progress By Logistics')

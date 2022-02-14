@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use PHPExcel_Worksheet_PageSetup;
 
 class RekapAdminExport implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
 {
@@ -77,7 +78,7 @@ class RekapAdminExport implements FromCollection , ShouldAutoSize , WithHeadings
                             'color' => ['argb' => 'FF000000'],
                     ]]
                 ]);
-                
+                $event->sheet->getDelegate()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
                 $event->sheet->getDelegate()->getStyle('A:G')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);

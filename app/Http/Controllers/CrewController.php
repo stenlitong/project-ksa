@@ -302,6 +302,26 @@ class CrewController extends Controller
         return view('crew.crewMakejob', compact('carts', 'tugs', 'barges'));
     }
 
+    public function ViewJobPage() {
+        // Get all the job request within the logged in user within 6 month
+        $JobRequestHeads = JobHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->paginate(7); 
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+
+        // Count the completed & in progress job Requests
+        $job_completed = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request Approved By Logistics')
+            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
+        
+        $job_in_progress = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By Logistics');
+        })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
+
+
+        return view('crew.crewListJobOrder', compact('job_completed','job_in_progress','jobDetails','JobRequestHeads'));
+    }
+
     public function addjasaToCart(Request $request){
         // Validate Cart Request
         $checkinput = $request->validate([
@@ -311,12 +331,20 @@ class CrewController extends Controller
             'note' => ['required' , 'string']
         ]);
 
-        // dd($request);
         // Check if the cart within the user is already > 12 items, then cart is full & return with message
         $counts = cartJasa::where('user_id', Auth::user()->id)->count();
         if($counts ==  12){
             return redirect('/crew/make-Job')->with('error', 'Cart is Full');
+        }
+
+        
+
+        // Find if the same configuration of item is already exist in cart or no
+        $itemExistInCart = cartJasa::where('user_id', Auth::user()->id)->whereRaw('LOWER(`note`) LIKE ? ',strtolower($request->note))->where('lokasi', $request->lokasi)->first();
+        if($itemExistInCart){
+            cartJasa::find($itemExistInCart->id)->increment('quantity', $request->quantity);
         }else{
+        // Else add item to the cart
             cartJasa::create([
                 'tugName' => $request->tugName ,
                 'bargeName' => $request->bargeName ,
@@ -324,8 +352,8 @@ class CrewController extends Controller
                 'quantity' => $request->quantity ,
                 'note' => $request->note,
                 // Add cabang & user id to the cart
-               'cabang' => Auth::user()->cabang,
-               'user_id'=> Auth::user()->id
+                'cabang' => Auth::user()->cabang,
+                'user_id'=> Auth::user()->id
             ]);
         }
  
@@ -369,7 +397,8 @@ class CrewController extends Controller
                 'created_by' => Auth::user()->name,
                 'cabang' => Auth::user()->cabang,
                 'status' => 'Job Request In Progress By Logistics',
-                'jrDate' => date("Y/m/d")
+                'jrDate' => date("Y/m/d"),
+                'Headjasa_tracker_id' => 1 ,
             ]);
 
             $Jr_id = $JobHead -> id;

@@ -15,12 +15,35 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'Job_Request_List'){
+                        echo('active');
+                    }
+                @endphp" aria-current="page" href="crew/Job_Request_List">
+                    <span data-feather="align-justify"></span>
+                    Job Request List
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
                     if(basename($_SERVER['REQUEST_URI']) == 'order'){
                         echo('active');
                     }
                 @endphp" href="{{ Route('crew.order') }}">
                     <span data-feather="file"></span>
                     Make Order
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" 
+                @php
+                    if(basename($_SERVER['REQUEST_URI']) == 'makeJobRequest'){
+                        echo('active');
+                    }
+                @endphp
+                href="{{ Route('crew.makeJobRequest') }}">
+                    <span data-feather="layout"></span>
+                    Create Job Request
                 </a>
             </li>
             <li class="nav-item">
@@ -34,18 +57,6 @@
                 href="{{ Route('crew.createTask') }}">
                     <span data-feather="plus-square"></span>
                     Create Task
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" 
-                @php
-                    if(basename($_SERVER['REQUEST_URI']) == 'makeJobRequest'){
-                        echo('active');
-                    }
-                @endphp
-                href="{{ Route('crew.makeJobRequest') }}">
-                    <span data-feather="layout"></span>
-                    Create Job Request
                 </a>
             </li>
             <li class="nav-item">

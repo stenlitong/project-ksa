@@ -80,8 +80,22 @@
                                         <input type="date" class="form-control" name="Datebox2" required id="Datebox2" >
                                         <br>
                                         
-                                        <label for="NamaTug_Barge">Nama TugBoat/Barge</label>
-                                        <input type="text" class="form-control" name="NamaTug_Barge" required id="NamaTug_Barge" >
+                                        <label for="NamaTug_Barge">Nama TugBoat</label>
+                                        <input list="nama_tug_barges" class="col-lg-full custom-select custom-select-md" name="Nama_Tug" required id="Nama_Tug" >
+                                        <datalist id="nama_tug_barges">
+                                            @foreach ($tug as $t)
+                                                <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                            @endforeach
+                                        </datalist>
+                                        <br>
+
+                                        <label for="NamaTug_Barge">Nama Barge</label>
+                                        <input list="nama_tug_barges" class="col-lg-full custom-select custom-select-md" name="Nama_Barge" required id="Nama_Barge" >
+                                        <datalist id="nama_tug_barges">
+                                            @foreach ($barge as $b)
+                                                <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
+                                            @endforeach
+                                        </datalist>
                                         <br>
 
                                         <label for="Nama_File">Nama File</label>

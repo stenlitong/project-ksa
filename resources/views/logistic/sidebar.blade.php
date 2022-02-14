@@ -15,6 +15,17 @@
             <li class="nav-item">
                 <a class="nav-link 
                     @php
+                        if(basename($_SERVER['REQUEST_URI']) == 'Job_Request_List'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.Job_Request_List") }}">
+                    <span data-feather="align-justify"></span>
+                    Job Request Order List
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                    @php
                         if(basename($_SERVER['REQUEST_URI']) == 'stocks'){
                             echo('active');
                         }

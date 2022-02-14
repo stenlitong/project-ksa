@@ -74,12 +74,11 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col">
-                                                    <form method="POST" action="/logistic/Review-Job-Approved">
-                                                        @csrf
-                                                        <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
-                                                        <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
-                                                        <button class="btn btn-success btn-sm">Approve Request</button>
-                                                    </form>
+                                                    {{-- <button class="btn btn-success btn-sm">Approve Request</button> --}}
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approvecompany-{{$jr-> id}}">
+                                                        Approve Request
+                                                    </button>
                                                 </div>
                                                 <div class="col">
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectjob-{{ $jr -> id }}">Reject Request</button>
@@ -164,6 +163,41 @@
                                 </div>
                             </div>
                         @endforeach
+                    <!-- Modal approve -->
+                        @foreach($JobRequestHeads as $jr )
+                            <div class="modal fade" id="approvecompany-{{$jr-> id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Approve Request</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <form method="POST" action="/logistic/Review-Job-Approved">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
+                                            <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
+                                            {{-- send input to identify --}}
+                                            <label for="company" class="mb-3">Perusahaan</label>
+                                            <select class="form-control" name="company" id="company" required>
+                                                <option value="KSA">KSA</option>
+                                                <option value="ISA">ISA</option>
+                                                <option value="KSAO">KSA OFFSHORE</option>
+                                                <option value="KSAM">KSA MARITIME</option>
+                                                <option value="SKB">SKB</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-outline-success">Approve Request</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                        @endforeach
                     {{-- </div> --}}
                 </div>
             </div>
@@ -222,6 +256,7 @@
         @media (max-width: 768px) {
         #row-wrapper{
             overflow-x: auto;
+        }
         }
     </style>
     @endsection

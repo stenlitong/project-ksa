@@ -1,4 +1,4 @@
-@if(Auth::user()->hasRole('purchasing'))
+{{-- @if(Auth::user()->hasRole('purchasing')) --}}
     @extends('../layouts.base')
 
     @section('title', 'Purchasing Dashboard')
@@ -203,59 +203,172 @@
                                 <th scope="col">Detail</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            {{-- order Details --}}
-                                @foreach($orderHeads as $oh)
-                                <tr>
-                                    <td><strong>{{ $oh -> order_id }}</strong></td>
-                                    @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false)
-                                        <td style="color: red; font-weight: bold">{{ $oh -> status}}</td>
-                                    @elseif(strpos($oh -> status, 'Completed') !== false)
-                                        <td style="color: green; font-weight: bold">{{ $oh -> status}}</td>
-                                    @elseif(strpos($oh -> status, 'Item Delivered') !== false)
-                                        <td style="color: blue; font-weight: bold">{{ $oh -> status}}</td>
-                                    @else
-                                        <td>{{ $oh -> status }}</td>
-                                    @endif
-                                    <td>
-                                        @if(strpos($oh -> status, 'Rejected') !== false || strpos($oh -> status, 'Rechecked') !== false || strpos($oh -> status, 'Revised') !== false)
-                                            {{ $oh -> reason }}
+                            <tbody>                      
+                            {{-- job dashboard Details --}}
+                                @foreach ($JobRequestHeads as $jr )
+                                    <tr>
+                                        <td><strong>{{ $jr -> Headjasa_id}}</strong></td>
+                                        @if(strpos($jr -> status, 'Job Request Approved By') !== false)
+                                            <td style="color: green; font-weight: bold">{{ $jr -> status}}</td>
+                                        @endif
+                                        
+                                        @if(strpos($jr -> status, 'Rejected') !== false)
+                                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $jr -> reason}}</td>
                                         @else
-                                            {{ $oh -> descriptions }}
+                                            <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is Awaiting for Review</td>
                                         @endif
-                                    </td>
-                                    <td>
-                                        {{-- Modal button for order details --}}
-                                        <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#detail-{{ $oh -> id }}">Detail</button>
-                                        @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false || strpos($oh -> status, 'Revised') !== false || strpos($oh -> status, 'Finalized') !== false)
-                                        {{-- @if(strpos($oh -> status, 'Delivered') !== false || strpos($oh -> status, 'Completed') !== false) --}}
-                                            <a href="/purchasing/{{ $oh -> id }}/download-po" class="btn btn-warning mb-2" target="_blank">Download PO</a>
+
+                                        @if($jr -> status == 'Job Request In Progress By Logistics')
+                                            <td>
+                                                <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editJob-{{ $jr -> id }}">
+                                                    Detail
+                                                </button>
+                                            </td>
+                                        @elseif ($jr -> status == 'Job Request Approved By Purchasing')
+                                            <td>
+                                                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#detailjob-{{ $jr -> id }}">Detail</button>
+                                            </td>
+                                        @else
+                                            <td>
+                                            <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCenter-{{ $jr -> id }}">
+                                                    Details
+                                                </button>
+                                            
+                                            <!-- Modal -->
+                                                <div class="modal fade " id="ModalCenter-{{ $jr -> id }}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Job Request Details</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <table class="center">
+                                                                <thead class="thead-dark">
+                                                                    <tr>
+                                                                        <th scope="col">Nama Tugboat / barge</th>
+                                                                        <th scope="col">Lokasi Perbaikan</th>
+                                                                        <th scope="col">description</th>
+                                                                        <th scope="col">quantity</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($jobDetails as $c)
+                                                                        @if($c -> jasa_id == $jr -> id)
+                                                                            <tr>
+                                                                                <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
+                                                                                <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
+                                                                                <td class="bg-white">{{ $c ->note }}</td>
+                                                                                <td class="bg-white">{{ $c ->quantity }}</td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @empty
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                            <div class="modal-footer">
+                                                                <a class="btn btn-outline-success" href="/purchasing/Review-Job/{{$jr -> id }}">Approve Request</a>
+                                                                <button class="btn btn-outline-warning" data-toggle="modal" data-target="#revisejob-{{ $jr -> id }}">Revise Request</button>
+                                                                
+                                                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectjob-{{ $jr -> id }}">Reject Request</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         @endif
-                                    </td>
-                                </tr>
-                                @endforeach
+                                    </tr>
+                                @endforeach 
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    {{ $orderHeads->links() }}
+                    {{ $JobRequestHeads->links() }}
                 </div>
 
             </div>
 
-            @foreach($orderHeads as $oh)
-                <div class="modal fade" id="detail-{{ $oh->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
+            {{-- modal job reject details --}}
+            @foreach($JobRequestHeads as $jr )
+                <div class="modal fade" id="rejectjob-{{ $jr -> id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <div class="d-flex-column">
+                                    <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Reject Job Request?</strong></h5>
+                                </div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="POST" action="/purchasing/Review-Job-Rejected">
+                                @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
+                                <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
+                                    <div class="form-group">
+                                        <label for="reason">Reason</label>
+                                        <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                    </div>
+                            </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="submitreject2" class="btn btn-danger">Reject Request</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+            {{-- modal job revise details --}}
+            @foreach($JobRequestHeads as $jr )
+                <div class="modal fade" id="revisejob-{{ $jr -> id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark">
+                                <div class="d-flex-column">
+                                    <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Ask To Revise Job Request?</strong></h5>
+                                </div>
+                                <button type="button" style="color: white" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="POST" action="/purchasing/Review-Job-Revised">
+                                @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
+                                <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
+                                    <div class="form-group">
+                                        <label for="reason">Reason</label>
+                                        <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                    </div>
+                            </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="submitreject2" class="btn btn-danger">Revise Request</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            
+            {{--modal for Job order  --}}
+            @foreach($JobRequestHeads as $jr)
+                <div class="modal fade" id="detailjob-{{ $jr->id }}" tabindex="-1" role="dialog" aria-labelledby="detailTitle"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <div class="d-flex justify-content-around">
-                                    <h5><span style="color: white">Order : {{ $oh -> order_id }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $oh -> approvedBy }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Tipe Order : {{ $oh -> orderType }}</span></h5>
-                                    <h5 class="ml-5"><span style="color: white">Tipe Pesanan : {{ $oh -> itemType }}</span></h5>
+                                    <h5><span style="color: white">Order : {{ $jr -> JobRequestHeads }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Processed By : {{ $jr -> check_by }}</span></h5>
+                                    <h5 class="ml-5"><span style="color: white">Tipe Order : JOB Request</span></h5>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -263,34 +376,28 @@
                             </div>
                             <div class="modal-body">
                                 <div class="d-flex justify-content-around mb-3">
-                                    <h5>Nomor PR : {{ $oh -> noPr }}</h5>
-                                    <h5>Nomor PO : {{ $oh -> noPo }}</h5>
+                                    <h5>Nomor JR : {{ $jr -> noJr }}</h5>
+                                    <h5>Nomor JO : {{ $jr -> noPo }}</h5>
                                 </div>
                                 <table class="table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">Item Barang</th>
                                             <th scope="col">Quantity</th>
-                                            <th scope="col">Accepted Quantity</th>
-                                            <th scope="col">Department</th>
                                             <th scope="col">Note</th>
-                                            <th scope="col">Status Barang</th>
+                                            <th scope="col">Status Order</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($orderDetails as $od)
-                                            @if($od -> orders_id == $oh -> id)
+                                        @foreach($jobDetails as $od)
+                                            @if($od -> jasa_id == $jr -> id)
                                                 <tr>
-                                                    <td><strong>{{ $od -> item -> itemName }}</strong></td>
-                                                    <td>{{ $od -> quantity }} {{ $od -> item -> unit }}</td>
-                                                    <td><strong>{{ $od -> acceptedQuantity }} {{ $od -> item -> unit }}</strong></td>
-                                                    <td>{{ $od -> department }}</td>
                                                     <td>{{ $od -> note }}</td>
+                                                    <td>{{ $od -> quantity }}</td>
                                                     <td>
-                                                        @if($od -> orderItemState == 'Accepted')
-                                                            <span style="color: green; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                        @if(strpos($jr -> Status , 'Approved') !== false)
+                                                            <span style="color: green; font-weight: bold;">{{ $jr -> status }}</span>
                                                         @else
-                                                            <span style="color: red; font-weight: bold;">{{ $od -> orderItemState }}</span>
+                                                            <span style="color: red; font-weight: bold;">{{ $jr -> status }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -301,29 +408,29 @@
                             </div> 
                             <div class="modal-footer">
                                 {{-- Check if the order is already progressed to the next stage/rejected, then do not show the approve & reject button --}}
-                                @if($oh -> status == 'Order In Progress By Purchasing')
-                                    {{-- Button to trigger modal 2 --}}
+                                {{-- @if($oh -> status == 'Order In Progress By Purchasing')
+                                    Button to trigger modal 2
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-order-{{ $oh -> id }}">Reject</button>
                                     <a href="/purchasing/order/{{ $oh -> id }}/approve" class="btn btn-primary mr-3">Approve</a>
                                 @elseif(strpos($oh -> status, 'Rechecked') !== false)
                                     <a href="/purchasing/order/{{ $oh -> id }}/approve" class="btn btn-primary mr-3">Review Order</a>
                                 @elseif(strpos($oh -> status, 'Revised') !== false)
                                     <a href="/purchasing/order/{{ $oh -> id }}/revise" class="btn btn-primary mr-3">Revise Order</a>
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="reject-order-{{ $oh -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
+                {{-- <div class="modal fade" id="reject-order-{{ $jr -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $oh -> order_id }}</h5>
+                            <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Order {{ $jr -> order_id }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" action="/purchasing/order/{{ $oh -> id }}/reject">
+                        <form method="POST" action="/purchasing/order/{{ $jr -> id }}/reject">
                             @csrf
                             <div class="modal-body"> 
                                 <label for="reason">Alasan</label>
@@ -335,7 +442,7 @@
                         </form>
                     </div>
                     </div>
-                </div>
+                </div> --}}
             @endforeach
 
             {{-- Modal for edit supplier ratings --}}
@@ -622,6 +729,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 
     @endsection
-@else
+{{-- @else
     @include('../layouts/notAuthorized')
-@endif
+@endif --}}

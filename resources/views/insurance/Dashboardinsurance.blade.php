@@ -51,7 +51,7 @@
             <table class="table" style="margin-top: 1%">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">No.</th>
+                        <th scope="col">Tanggal</th>
                         <th scope="col">Nama File</th>
                         <th scope="col">Upload Time</th>
                         <th scope="col">Status</th>
@@ -76,7 +76,7 @@
                     @endphp
                     @if(empty($upspgr->$stats))
                         <tr>
-                            <td> </td> {{-- agar tidak keluar hasil kosong --}}
+                             {{-- agar tidak keluar hasil kosong --}}
                         </tr>
                     {{-- @elseif ($upspgr->$stats == 'on review')
                         <tr>
@@ -143,12 +143,16 @@
                         </tr>
                     @endif
                     @endfor
+                    <tr>
+                        <td> </td>
+                    </tr>
                     @empty
                     <tr>
                         <td>Data Not Found or Not Uploaded This Month</td>
                     </tr>
                     @endforelse
                 </tbody>
+                {{ $uploadspgr->links() }}
             </table>
         </div>
     </main>

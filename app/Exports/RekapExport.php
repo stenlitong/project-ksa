@@ -18,6 +18,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use PHPExcel_Worksheet_PageSetup;
 
 class RekapExport implements FromCollection , ShouldAutoSize , WithHeadings , WithEvents
 {
@@ -60,6 +61,7 @@ class RekapExport implements FromCollection , ShouldAutoSize , WithHeadings , Wi
     {
         return [
             AfterSheet::class => function (AfterSheet $event){
+               
                 $event->sheet->mergeCells('A1:G1');
                 $event->sheet->getStyle('A1:G1')->applyFromArray([
                     'font' => [
@@ -83,7 +85,7 @@ class RekapExport implements FromCollection , ShouldAutoSize , WithHeadings , Wi
                     ]]
                 ]);
                 // $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-                
+                $event->sheet->getDelegate()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
                 $event->sheet->getDelegate()->getStyle('A:G')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);

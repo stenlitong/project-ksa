@@ -46,6 +46,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/completed-job', [CrewController::class, 'completedJobRequest'])->name('completed-JobRequest');
         Route::get('/in-progress-job', [CrewController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
 
+        Route::get('/Job_Request_List', [CrewController::class, 'ViewJobPage'])->name('Job_Request_List');
+
         // Task Page
         Route::get('/create-task', [CrewController::class, 'taskPage'])->name('createTask');
         Route::get('/create-task/detail', [CrewController::class, 'createTaskDetailPage'])->name('taskDetail');
@@ -103,6 +105,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/download-report', [LogisticController::class, 'downloadReport'])->name('downloadReport');
         
+        // job request page
+        Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
+
         //review job page
         Route::get('/Review-Job', [LogisticController::class, 'ReviewJobPage'])->name('ReviewJobPage');
         Route::post('/Review-Job-Approved', [LogisticController::class, 'ApproveJobPage']);
@@ -128,10 +133,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         // JR Report Page
         Route::get('/Jr_report', [SupervisorController::class, 'Jr_Reports_Page'])->name('JR_report');
-        Route::get('/Jr_report/download', [SupervisorController::class, 'download_JR_Report'])->name('download_JR_Report');
-
-        //job Request
-        Route::get('/download_Jr-JR', [SupervisorController::class, 'downloadReport'])->name('Download_JR');
+        Route::post('/Jr_report/download', [SupervisorController::class, 'Download_JR_report'])->name('download_JR_Report');
+        // Route::get('/download_JR', [SupervisorController::class, 'Download_JR'])->name('Download_JR');
 
         // Goods In/Out Page
         Route::get('/goods-out', [SupervisorController::class, 'historyOut'])->name('historyOut');
@@ -161,6 +164,15 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/dashboard/{branch}', [PurchasingController::class, 'branchDashboard']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
+
+        // Approve&Reject/Revise Job page
+        Route::get('/Review-Job/{JobHeads}', [PurchasingController::class, 'ApproveJobPage']);
+        Route::post('/Review-Job-Approved', [PurchasingController::class, 'ApproveJobOrder']);
+        Route::post('/Review-Job-Rejected', [PurchasingController::class, 'RejectJobOrder']);
+        Route::post('/Review-Job-Revised', [PurchasingController::class, 'reviseJobOrder']);
+
+        // job request page
+        Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
 
         // Approve Order page
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);

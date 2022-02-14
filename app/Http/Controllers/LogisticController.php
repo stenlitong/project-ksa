@@ -773,6 +773,38 @@ class LogisticController extends Controller
         return view('logistic.logisticJobRequestReview', compact('datadetails', 'tugs', 'barges' , 'items_below_stock', 'JobRequestHeads'));
     }
 
+    public function JobRequestListPage() {
+         // Get all job on the cabang
+         // Search functonality
+         if(request('search')){
+            $JobRequestHeads = JobHead::where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
+        }else{
+            $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
+        }
+
+        // Get all the job request within the logged in user within 6 month
+        // Get the orderDetail from orders_id within the orderHead table 
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+
+        // Count the completed & in progress job Requests
+        $job_completed = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request Approved By Logistics')
+            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+        })->whereYear('created_at', date('Y'))->count();
+        
+        $job_in_progress = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By Logistics');
+        })->whereYear('created_at', date('Y'))->count();
+
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticJobListPage', compact('job_completed','job_in_progress' , 'JobRequestHeads' , 'jobDetails', 'items_below_stock'));
+    }
+
     public function report_JR_Page(){
         // Basically the report is created per 3 months, so we divide it into 4 reports
         // Base on current month, then we classified what period is the report
@@ -829,25 +861,40 @@ class LogisticController extends Controller
         return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.xlsx');
     }
 
-    public function ApproveJobPage(Request $request) {
+    public function ApproveJobPage(Request $request , JobHead $checkJobStatus) {
         $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
         $job_id = $JobRequestHeads->pluck('id');
         $jobhead_id = $request->jobhead_id;
         $jobhead_name = $request ->jobhead_name;
 
+        // dd($checkJobStatus);
+
+        $request -> validate([
+            'company' => 'required',
+        ]);
+
+        //JoB order status
+        if($checkJobStatus->Headjasa_tracker_id == 2){
+            return redirect('/logistic/Review-Job')->with('failed', 'Order Already Been Processed');
+        }
+        
         JobHead::where('cabang', 'like', Auth::user()->cabang)
         ->where('Headjasa_id', '=' ,$jobhead_id)
+        ->where('Headjasa_tracker_id', '1')
         ->whereYear('created_at', date('Y'))
         ->update([
             'check_by' => Auth::user()->name ,
+            'company' => $request->company ,
+            'Headjasa_tracker_id' => 2 ,
             'status' => 'Job Request Approved By Logistics',
         ]);
-        // dd($request);
-        // dd($jon);
+        
         return redirect('/logistic/Review-Job')->with('success', 'Job Request Approved.');
+        
+        // dd($jon);
     }
 
-    public function RejectJobPage(Request $request) {
+    public function RejectJobPage(Request $request , JobHead $checkJobStatus) {
         $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
         $job_id = $JobRequestHeads->pluck('id');
         $jobhead_id = $request->jobhead_id;
@@ -857,17 +904,20 @@ class LogisticController extends Controller
             'reasonbox' => 'required',
         ]);
 
+        if($checkJobStatus -> Headjasa_tracker_id == 2){
+            return redirect('/logistic/Review-Job')->with('failed', 'Order Already Been Processed');
+        }
+       
         JobHead::where('cabang', 'like', Auth::user()->cabang)
         ->where('Headjasa_id', '=' ,$jobhead_id)
         ->whereYear('created_at', date('Y'))
         ->update([
             'status' => 'Job Request Rejected By Logistics',
+            'Headjasa_tracker_id' => 2 ,
             'reason' => $request-> reasonbox
         ]);
-        // dd($request);
-        // dd($jon);
         
-        return redirect('/logistic/Review-Job')->with('failed', 'Job Request Rejected.');
+        return redirect('/logistic/Review-Job')->with('failed', 'Job Request Rejected.');  
     }
 
     public function uploadItem(Request $request){

@@ -7,18 +7,20 @@ use Response;
 use validator;
 use Carbon\Carbon;
 use App\Mail\Gmail;
+use App\Models\Tug;
 use App\Models\User;
+use App\Models\Barge;
 use App\Models\documents;
 use App\Models\Rekapdana;
+use App\Exports\RekapExport;
+use Illuminate\Http\Request;
+
 use App\Models\documentberau;
+
 use App\Models\documentJakarta;
 use App\Models\documentsamarinda;
-use App\Models\documentbanjarmasin;
-
-use App\Exports\RekapExport;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\documentbanjarmasin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -57,37 +59,41 @@ class PicsiteController extends Controller
         public function uploadrekap(Request $request){
             // dd($request);
             $request->validate([
-                'NamaTug_Barge'=> 'required',
+                'Nama_Tug' => 'required|string',
+                'Nama_Barge' => 'required|string',
                 'Nama_File'=> 'required',
                 'Nilai'=> 'required|numeric',
             ]);
 
             $mergeNilai= $request->mata_uang_nilai . ' - ' . $request->Nilai;
+            $mergekapal= $request->Nama_Tug . ' - ' . $request->Nama_Barge;
 
             Rekapdana::create([
                 'user_id'=> Auth::user()->id,
                 'DateNote1' => $request->Datebox1 ,
                 'DateNote2' => $request->Datebox2 ,
                 'Cabang' => Auth::user()->cabang ,
-                'NamaTug_Barge' => $request->NamaTug_Barge ,
+                'NamaTug_Barge' => $mergekapal ,
                 'Nama_File' => $request->Nama_File ,
                 'Nilai' => $mergeNilai ,
             ]);
             return redirect('/picsite/RekapulasiDana')->with('success', 'Note telah ditambahkan.');
         }
     //RekapulasiDana page
-        public function RekapulasiDana()
-            {
-                $datetime = date('Y-m-d');
-                $rekapdana= Rekapdana::where('Cabang', Auth::user()->cabang)
-                ->whereDate('DateNote2', '>=', $datetime)
-                ->latest()
-                ->get();
+        public function RekapulasiDana(){
+            $datetime = date('Y-m-d');
+            $rekapdana= Rekapdana::where('Cabang', Auth::user()->cabang)
+            ->whereDate('DateNote2', '>=', $datetime)
+            ->latest()
+            ->get();
 
-                // dd($rekapdana);
-                // dd($datetime);
-                return view('picsite.picsiteRekapulasiDana', compact('rekapdana'));
-            }
+            $tug=Tug::latest()->get();
+            $barge=Barge::latest()->get();
+            
+            // dd($rekapdana);
+            // dd($datetime);
+            return view('picsite.picsiteRekapulasiDana', compact('rekapdana' , 'tug' , 'barge'));
+        }
     private $excel;
     public function __construct(Excel $excel){
         $this->excel = $excel;
