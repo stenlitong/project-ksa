@@ -1,80 +1,108 @@
-@extends('../layouts.base')
+@if(Auth::user()->hasRole('logistic'))
+    @extends('../layouts.base')
 
-@section('title', 'Logistic Report')
+    @section('title', 'Logistic Reports')
 
-@section('container')
+    @section('container')
     <div class="row">
         @include('logistic.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
-                <h1 style="margin-left: 40%">Goods Report</h1>
-                <br>
-                @if (session('status'))
-                    <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                        {{session('status')}}
+            
+            <div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3 wrapper">
+                <h1 class="d-flex justify-content-center mb-4">Reports PR/PO ({{ $str_month }})</h1>
+
+                @if(count($orders) > 0)
+                    <div class="d-flex justify-content-end mr-3">
+                        <a href="{{ Route('logistic.downloadReport') }}" class="btn btn-outline-danger mb-3" target="_blank">Export</a>
                     </div>
                 @endif
-                {{-- change route --}}
-                <form method="POST" action="{{ Route("logistic.report") }}">
-                    @csrf
-                    {{-- row 1 --}}
-                    <div class="d-flex justify-content-around ml-3 mr-3">
-                            <div class="form-group p-2">
-                                <label for="itemName" class="mt-3 mb-3">Item Name</label>
-                                <input name="itemName" type="text" class="form-control" id="itemName" placeholder="Enter Nama Barang"
-                                    style="width: 400px">
-                            </div>
-    
-                            <div class="form-group p-2">
-                                <label for="sender" class="mt-3 mb-3">Sender</label>
-                                <input name="sender" type="text" class="form-control" id="sender" placeholder="Enter Nama Yang Menyerahkan"
-                                    style="width: 400px">
-                            </div>
-                    </div>
-    
-                    {{-- row 2 --}}
-                    <div class="d-flex justify-content-around ml-3 mr-3">
-                        <div class="form-group p-2">
-                            <label for="quantity" class="mt-3 mb-3">Quantity</label>
-                            <input name="quantity" type="text" class="form-control" id="quantity" placeholder="Enter quantity"
-                                style="width: 400px">
-                        </div>
-    
-                        <div class="form-group p-2">
-                            <label for="receiver" class="mt-3 mb-3">Receiver</label>
-                            <input name="receiver" type="text" class="form-control" id="receiver" placeholder="Enter Nama Yang Menerima"
-                                style="width: 400px">
-                        </div> 
-                    </div>
-    
-                    {{-- row 3 --}}
-                    <div class="d-flex justify-content-around ml-3 mr-3">
-                        <div class="form-group p-2">
-                            <label for="serialNo" class="mt-3 mb-3">Serial No / Part No.</label>
-                            <input name="serialNo" type="text" class="form-control" id="serialNo" placeholder="Enter Serial No / Part No."
-                                style="width: 400px">
-                        </div>
-    
-                        <div class="form-group p-2">
-                            <label for="date" class="mt-3 mb-3">Tanggal Menerima</label>
-                            <br>
-                                <input name="date" type="date" class="form-control" id="date" name="date" style="width: 400px">
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-around ml-3 mr-3">
-                        <div class="form-group p-2">
-                            <label for="location" class="mt-3 mb-3">Location</label>
-                            <input name="location" type="text" class="form-control" id="location" placeholder="Enter location"
-                                style="width: 400px">
-                        </div>
-                    </div>
-                
-    
-                    <br>
-    
-                    <button type="submit" class="btn btn-primary" style="margin-left: 44%">Submit report</button>
-                </form>
-            </div>
+
+                <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
+                    <table class="table table-bordered sortable">
+                        <thead class="thead bg-danger">
+                        <tr>
+                            <th scope="col">Nomor</th>
+                            <th scope="col">Tanggal PR</th>
+                            <th scope="col">Nomor PR</th>
+                            <th scope="col">Supplier</th>
+                            <th scope="col">Tanggal PO</th>
+                            <th scope="col">Nomor PO</th>
+                            <th scope="col">Golongan</th>
+                            <th scope="col">Nama Kapal</th>
+                            <th scope="col">Serial Number</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Harga</th>
+                            <th scope="col">Keterangan</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($orders as $key=>$o)
+                                <tr>
+                                    <td>{{ $key + 1  }}</td>
+                                    <td>{{ $o -> prDate }}</td>
+                                    <td>{{ $o -> noPr }}</td>
+                                    @if(isset($o -> supplier))
+                                        <td>{{ $o -> supplier }}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                    <td>{{ $o -> poDate}}</td>
+                                    <td>{{ $o -> noPo}}</td>
+                                    <td>{{ $o -> item['golongan']}}</td>
+                                    <td>{{ $o -> boatName}}</td>
+                                    <td>{{ $o -> item -> serialNo}}</td>
+                                    <td>{{ $o -> acceptedQuantity}} {{ $o -> item -> unit }}</td>
+                                    <td>Rp. {{ number_format($o -> totalItemPrice, 2, ",", ".") }}</td>
+                                    <td>{{ $o -> descriptions}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
         </main>
     </div>
-@endsection
+
+    <style>
+        body{
+            /* background-image: url('/images/logistic-background.png'); */
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .wrapper{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: antiquewhite;
+            height: 1000px;
+            /* height: 100%; */
+        }
+        .tableFixHead          { overflow: auto; height: 250px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+        .my-custom-scrollbar {
+            position: relative;
+            height: 800px;
+            overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+        th{
+            color: white;
+        }
+        td, th{
+            word-wrap: break-word;
+            min-width: 160px;
+            max-width: 160px;
+            text-align: center;
+            background-color: white;
+        }
+        .modal-backdrop {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    @endsection
+@else
+    @include('../layouts/notAuthorized')
+@endif

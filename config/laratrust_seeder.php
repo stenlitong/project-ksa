@@ -25,10 +25,50 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+        'supervisorLogisticMaster' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'supervisorLogistic' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
         'purchasing' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
+        'adminPurchasing' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'purchasingManager' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'adminOperational' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'picAdmin' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'AsuransiIncident' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'picSite' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'InsuranceManager' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'adminOperational' => [
+            'users' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ]
     ],
 
     'permissions_map' => [

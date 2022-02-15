@@ -1,159 +1,235 @@
-@extends('../layouts.base')
+@if(Auth::user()->hasRole('logistic'))
+    @extends('../layouts.base')
 
-@section('title', 'Logistic Stocks')
+    @section('title', 'Logistic Stocks')
 
-@section('container')
-    @include('logistic.sidebar')
+    @section('container')
+        @include('logistic.sidebar')
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-        <h1 class="mb-3" style="margin-left: 40%">Stock Availability</h1>
-
-        <br>
-        @if(session('status'))
-            <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        <!-- Button trigger modal #1 -->
-        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addItem">
-            Add Item +
-        </button>
-
-        <div class="row">
-            <div class="col-md-6">
-                <form action="">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search Item..." name="search" id="search">
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <div class="d-flex justify-content-end">
-            {{ $items->links() }}
-        </div>
-
-        <!-- Modal #1 -->
-        <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="addItem"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addItemTitle">Add New Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="{{ Route("logistic.stocks") }}">
-                            @csrf
-                            <div class="form-group">
-                                <label for="itemName">Item Name</label>
-                                <input type="text" class="form-control" id="itemName" name="itemName"
-                                    placeholder="Input Item's Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="itemAge">Item Age</label>
-                                <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                    placeholder="Input Item's Age in Number">
-                            </div>
-                            <div class="form-group">
-                                <label for="itemStock">Item Stock</label>
-                                <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                    placeholder="Input Item's Stock in Number">
-                            </div>
-                            <div class="form-group">
-                                <label for="satuan">Satuan</label>
-                                <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                    onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                    <option value="MTR">MTR</option>
-                                    <option value="LTR">LTR</option>
-                                    <option value="PCS">PCS</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description" rows="3"
-                                    placeholder="Input Item's Description"></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Add Item</button>
-                            </div>
-                        </form>
-                    </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+            <div class="wrapper">
+            <h1 class="mb-3" style="text-align: center">Stock Availability</h1>
+                
+            <br>
+            
+            @if(session('itemInvalid'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('itemInvalid') }}
                 </div>
-            </div>
-        </div>
+            @endif
 
-        @foreach($items as $i)
-            <div class="card mt-3 mb-5">
-                <h5 class="card-header">{{ $i -> itemName }}</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Stock : {{ $i -> itemStock }}</h5>
-                    <p class="card-text d-inline">Description : {{ $i -> description }}</p>
-                    <!-- Button trigger modal #2 -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" id="detail" style="margin-left: 90%" data-target="#editItem-{{ $i->id }}">
-                        Edit Item
-                    </button>
-                    {{-- <a href="/logistic/stocks/{{ $i->id }}/edit"class="btn btn-primary" style="margin-left: 90%">Edit Item</a> --}}
+            @if(session('error'))
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ session('error') }}
                 </div>
+            @endif
+
+            @error('itemName')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Nama Barang Invalid
             </div>
-        @endforeach
-        <!-- Modal #2 -->
-        @foreach($items as $i)
-            <div class="modal fade" id="editItem-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="editItemTitle"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editItemTitle">Edit New Item</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            @enderror
+
+            @error('cabang')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Cabang Invalid
+            </div>
+            @enderror
+
+            @error('cabang')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Cabang Invalid
+            </div>
+            @enderror
+
+            @error('quantity')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Quantity Invalid
+            </div>
+            @enderror
+
+            @error('unit')
+            <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                Satuan Invalid
+            </div>
+            @enderror
+
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Search Item by Nama, Cabang, Kode Barang..." name="search" id="search">
+                            <button class="btn btn-primary" type="submit">Search</button>
                         </div>
-                        <div class="modal-body">
-                            <form method="POST" action="/logistic/stocks/{{ $i->id }}/edit">
-                                @csrf
-                                @method('put')
-                                <div class="form-group">
-                                    <label for="itemName">Item Name</label>
-                                    <input type="text" class="form-control" id="itemName" name="itemName"
-                                        placeholder="Input Item's Name" value="{{ $i->itemName }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="itemAge">Item Age</label>
-                                    <input type="text" class="form-control" id="itemAge" name="itemAge"
-                                        placeholder="Input Item's Age in Number" value="{{ $i->itemAge }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="itemStock">Item Stock</label>
-                                    <input type="text" class="form-control" id="itemStock" name="itemStock"
-                                        placeholder="Input Item's Stock in Number">
-                                </div>
-                                <div class="form-group">
-                                    <label for="satuan">Satuan</label>
-                                    <select class="form-control" id="satuan" name="satuan" onfocus='this.size=5;'
-                                        onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                        <option value="MTR">MTR</option>
-                                        <option value="LTR">LTR</option>
-                                        <option value="PCS">PCS</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">Description</label>
-                                    <textarea class="form-control" name="description" id="description" rows="3"
-                                        placeholder="Input Item's Description"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Save Item</button>
-                                </div>
-                            </form>
+                    </form>
+                </div>
+                <div class="col">
+                    <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
+                        <option selected disabled>Pilih Cabang</option>
+                        <option value="/logistic/stocks?search=All">Semua Cabang</option>
+                        <option value="/logistic/stocks?search=Jakarta">Jakarta</option>
+                        <option value="/logistic/stocks?search=Banjarmasin">Banjarmasin</option>
+                        <option value="/logistic/stocks?search=Samarinda">Samarinda</option>
+                        <option value="/logistic/stocks?search=Bunati">Bunati</option>
+                        <option value="/logistic/stocks?search=Babelan">Babelan</option>
+                        <option value="/logistic/stocks?search=Berau">Berau</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                {{ $items->links() }}
+            </div>
+
+            <div id="content" style="overflow-x: auto">
+                <table class="table mb-5">
+                    <thead class="thead bg-danger">
+                    <tr>
+                        <th scope="col" style="color: white">Item Barang</th>
+                        <th scope="col" style="color: white">Umur Barang</th>
+                        <th scope="col" style="color: white">Quantity</th>
+                        <th scope="col" style="color: white">Minimum Stok</th>
+                        <th scope="col" style="color: white">Serial Number</th>
+                        <th scope="col" style="color: white">Code Master Item</th>
+                        <th scope="col" style="color: white">Cabang</th>
+                        <th scope="col" style="color: white">Deskripsi</th>
+                        <th scope="col" style="color: white">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($items as $i)
+                            <tr>
+                                @php
+                                    $str = 'itemNam' . 'e'   
+                                @endphp
+                                <td class="bg-white">{{ $i -> $str }}</td>
+                                <td class="bg-white">{{ $i -> itemAge }}</td>
+                                <td class="bg-white">{{ $i -> itemStock }} {{ $i -> unit }}</td>
+                                @if($i -> minStock > $i -> itemStock)
+                                    <td class="bg-white" style="color: red"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                                @else
+                                    <td class="bg-white" style="color: green"><strong>{{ $i -> minStock }} {{ $i -> unit }}</strong></td>
+                                @endif
+                                <td class="bg-white">{{ $i -> serialNo }}</td>
+                                <td class="bg-white">{{ $i -> codeMasterItem }}</td>
+                                <td class="bg-white">{{ $i -> cabang }}</td>
+                                <td class="bg-white">{{ $i -> description }}</td>
+                                @if($i -> cabang != Auth::user()->cabang)
+                                    <td class="bg-white"><button class="btn btn-warning" data-toggle="modal" data-target="#request-stock-{{ $i -> id }}" style="color: white">Request Delivery</button></td>
+                                @else
+                                    <td class="bg-white"></td>
+                                @endif
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            </div>
+
+            <!-- Modal #1 -->
+            @foreach($items as $i)
+                <div class="modal fade" id="request-stock-{{ $i->id }}" tabindex="-1" role="dialog" aria-labelledby="requestStockTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="editItemTitle" style="color: white">Request Stock</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/logistic/stocks/{{ $i -> id }}/request">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="itemName">Nama Barang <strong>(Periksa Kembali Nama Barang)</strong></label>
+                                                <input type="text" class="form-control" id="itemName" name="itemName"
+                                                    placeholder="Input Nama Barang" value="{{ $i -> itemName }}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="cabang">Cabang</label>
+                                                <input type="text" class="form-control" id="cabang" name="cabang" value="{{ $i -> cabang}}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="quantity">Quantity <strong>(Periksa Kembali Stok Barang)</strong></label>
+                                                <input type="number" min="1" class="form-control" id="quantity" name="quantity"
+                                                    placeholder="Input Quantity Dalam Angka">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="unit">Satuan</label>
+                                                <input type="text" class="form-control" id="unit" name="unit" value="{{ $i -> unit }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Deskripsi (optional)</label>
+                                        <textarea class="form-control" name="description" id="description" rows="3"
+                                            placeholder="Input Deskripsi Tambahan"></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </main>
-@endsection
+            @endforeach
+        </main>
+
+        <style>
+            body{
+                /* background-image: url('/images/logistic-background.png'); */
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .wrapper{
+                padding: 15px;
+                margin: 15px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                height: 900px;
+                /* height: 100%; */
+            }
+            
+            th, td{
+                word-wrap: break-word;
+                min-width: 140px;
+                max-width: 140px;
+                text-align: center;
+            }
+            .alert{
+                text-align: center;
+            }
+            .modal-backdrop {
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function refreshDiv(){
+                $('#content').load(location.href + ' #content')
+            }
+            setInterval(refreshDiv, 60000);
+            
+            setTimeout(function() {
+            $('.alert').fadeOut('fast');
+        }, 3000); 
+        </script>
+
+    @endsection
+@else
+    @include('../layouts/notAuthorized')
+@endif

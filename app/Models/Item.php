@@ -12,7 +12,19 @@ class Item extends Model
         'id'
     ];
 
-    public function order(){
-        return $this->hasMany(Order::class);
+    public function cart(){
+        return $this->hasMany(Cart::class);
     }
+
+    public function orderDetail(){
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    public function itemBelowStocks(){
+        return $this->hasOne(ItemBelowStock::class, 'item_id');
+    }
+
+    // public function orderDo(){
+    //     return $this->hasMany(OrderDo::class);
+    // }
 }
