@@ -73,6 +73,7 @@
                                     <select class="form-control" name="company" id="company">
                                         <option value="KSA">KSA</option>
                                         <option value="ISA">ISA</option>
+                                        <option value="SKB">SKB</option>
                                         <option value="KSAO">KSA OFFSHORE</option>
                                         <option value="KSAM">KSA MARITIME</option>
                                     </select>
@@ -210,11 +211,6 @@
     </style>
 
     <script type="text/javascript">
-        function refreshDiv(){
-            $('#content').load(location.href + ' #content')
-        }
-        setInterval(refreshDiv, 60000);
-
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000); 

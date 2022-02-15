@@ -31,8 +31,8 @@ use App\Http\Controllers\DashboardAjaxController;
 // we hope you guys the best of luck and can make a better version of our own project ! 
 // ===================================================================================================================================================================================
 
-Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
-// Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
+// Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
+Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
