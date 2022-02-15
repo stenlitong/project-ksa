@@ -174,7 +174,7 @@
                         </div>
                     @endif
 
-                    @error('reason')
+                    @error('reasonbox')
                         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                             Alasan Wajib Diisi
                         </div>
@@ -314,7 +314,7 @@
                                 <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
                                     <div class="form-group">
                                         <label for="reason">Reason</label>
-                                        <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                        <textarea class="form-control" name="reasonbox" required id="reason" rows="3" required></textarea>
                                     </div>
                             </div>
                                 <div class="modal-footer">
