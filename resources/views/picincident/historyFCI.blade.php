@@ -41,8 +41,10 @@
                                 <td class="table-info">
                                     <div class="form-row">
                                         <div class="col-md-auto">
-                                            <form method="get" action="/picincident/formclaimDownload">
+                                            <form method="POST" action="/picincident/formclaimDownload">
                                                 @csrf
+                                                    <input type="hidden" name ="file_id" value="{{$claims->id}}"/>
+                                                    <input type="hidden" name ="file_name" value="{{$claims->nama_file}}"/>
                                                     <button class="btn btn-outline-success" id="downloadexcel"><span class="text-center" data-feather="download" style="color: black"></span></button>
                                             </form>
                                         </div>
@@ -50,7 +52,7 @@
                                             <form method="POST" action="/picincident/history/destroy/{{$claims->id}}">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px" id="deleteexcel">Delete</button>
+                                                <button class="btn btn-outline-danger" type="submit" onClick="return confirm('Are you sure?')" style="font-size: 16px" id="deleteexcel">Delete</button>
                                             </form>
                                         </div>
                                     </div>

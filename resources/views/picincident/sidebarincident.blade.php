@@ -8,7 +8,7 @@
                 </a>
                 <a class="nav-link" aria-current="page" href="/picincident/formclaim">
                     <span data-feather="upload"></span>
-                    Upload Claim Form
+                    Create Form Claim
                 </a>
                 <a class="nav-link" aria-current="page" href="/picincident/history">
                     <span data-feather="clock"></span>

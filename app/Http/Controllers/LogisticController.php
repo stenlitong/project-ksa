@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
-use App\Models\OrderHead;
-use App\Models\OrderDetail;
-use App\Models\Cart;
-use App\Models\User;
-use App\Models\Tug;
-use App\Models\Barge;
-use App\Models\OrderDo;
-use App\Models\ItemBelowStock;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Str;
-use App\Exports\OrderOutExport;
-use App\Exports\OrderInExport;
-use App\Jobs\SendItemBelowStockReportJob;
-use App\Exports\PRExport;
-use App\Exports\DOExport;
-use App\Exports\PurchasingReportExport;
-use Maatwebsite\Excel\Excel;
-// Use \Carbon\Carbon;
 use Storage;
+use App\Models\Tug;
+use App\Models\Cart;
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Barge;
+use App\Models\JobHead;
+use App\Models\OrderDo;
+use App\Exports\DOExport;
+use App\Exports\JRExport;
+use App\Exports\PRExport;
+// use Illuminate\Support\Str;
+use App\Models\OrderHead;
+use App\Models\JobDetails;
+use App\Models\OrderDetail;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\OrderInExport;
+use App\Models\ItemBelowStock;
+// Use \Carbon\Carbon;
+use App\Exports\JR_full_Export;
+use App\Exports\OrderOutExport;
+use Illuminate\Support\Facades\Auth;
+use App\Exports\PurchasingReportExport;
+use App\Jobs\SendItemBelowStockReportJob;
 
 class LogisticController extends Controller
 {
@@ -748,6 +752,186 @@ class LogisticController extends Controller
     }
 
     // ============================ Testing Playgrounds ===================================
+    
+    // public function ReviewJobPage() {
+    //      // Get all job on the cabang
+    //     $JobRequestHeads = JobHead::where('status','Job Request In Progress By Logistics')
+    //     ->where('cabang', 'like', Auth::user()->cabang)
+    //     ->whereYear('created_at', date('Y'))
+    //     ->get();
+
+    //     $barges = Barge::all();
+    //     $tugs = Tug::all();
+    //     $job_id = $JobRequestHeads->pluck('id');
+
+    //     $datadetails = JobDetails::where('cabang', 'like', Auth::user()->cabang)
+    //     ->whereYear('created_at', date('Y'))
+    //     ->whereIn('jasa_id', $job_id)
+    //     ->get();
+
+    //     $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+    //     return view('logistic.logisticJobRequestReview', compact('datadetails', 'tugs', 'barges' , 'items_below_stock', 'JobRequestHeads'));
+    // }
+
+    public function JobRequestListPage(Request $request , JobHead $checkJobStatus) {
+         // Get all job on the cabang
+         // Search functonality
+         if(request('search')){
+            $JobRequestHeads = JobHead::where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
+        }else{
+            $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
+        }
+
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+
+        // Count the completed & in progress job Requests
+        $job_completed = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request Rejected By' . '%')
+            ->orWhere('status', 'like', 'Job Request Completed');
+        })->whereYear('created_at', date('Y'))->count();
+        
+        $job_in_progress = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')
+            ->orWhere('status', 'like', 'Job Request Approved By' . '%');
+        })->whereYear('created_at', date('Y'))->count();
+
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticJobListPage', compact('job_completed','job_in_progress' , 'JobRequestHeads' , 'jobDetails', 'items_below_stock'));
+    }
+
+    public function report_JR_Page(){
+        // Basically the report is created per 3 months, so we divide it into 4 reports
+        // Base on current month, then we classified what period is the report
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Find order from user/goods in => order created from logistic
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        
+        // Find all the items that has been approved from the logistic | last 6 month
+        // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+
+        $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
+        ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
+        ->whereBetween('job_heads.created_at', [$start_date, $end_date])
+        ->where('job_details.cabang', Auth::user()->cabang)->orderBy('job_heads.updated_at', 'desc')->get();
+
+        $items_below_stock = $this -> checkStock();
+
+        return view('logistic.logisticReport_JR', compact('jobs', 'str_month', 'items_below_stock'));
+    }
+
+    // export excel jr
+    public function Download_JR_report(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
+    }
+    public function Download_PDF_JR_report(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.pdf',  \Maatwebsite\Excel\Excel::DOMPDF);
+    }
+
+    public function Download_JR(JobHead $JobRequestHeads , Excel $excel) {
+        // Get all job on the cabang
+        $id = $JobRequestHeads -> id;
+        // dd($id);
+        return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.xlsx');
+    }
+
+    public function Download_JR_pdf(JobHead $JobRequestHeads , Excel $excel) {
+        // Get all job on the cabang
+        $id = $JobRequestHeads -> id;
+        // dd($id);
+        return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.pdf',  \Maatwebsite\Excel\Excel::DOMPDF);
+    }
+
+    public function ApproveJobPage(Request $request , JobHead $checkJobStatus) {
+        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobhead_id = $request->jobhead_id;
+        $jobhead_name = $request ->jobhead_name;
+
+        // dd($checkJobStatus);
+
+        $request -> validate([
+            'company' => 'required',
+        ]);
+
+        //JoB order status
+        if($checkJobStatus->Headjasa_tracker_id == 2){
+            return redirect('/logistic/Review-Job')->with('failed', 'Order Already Been Processed');
+        }
+        
+        JobHead::where('cabang', 'like', Auth::user()->cabang)
+        ->where('Headjasa_id', '=' ,$jobhead_id)
+        ->where('Headjasa_tracker_id', '1')
+        ->whereYear('created_at', date('Y'))
+        ->update([
+            'check_by' => Auth::user()->name ,
+            'company' => $request->company ,
+            'Headjasa_tracker_id' => 2 ,
+            'status' => 'Job Request Approved By Logistics',
+        ]);
+        
+        return redirect('/logistic/Job_Request_List')->with('success', 'Job Request Approved.');
+        
+        // dd($jon);
+    }
+
+    public function RejectJobPage(Request $request , JobHead $checkJobStatus) {
+        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobhead_id = $request->jobhead_id;
+        $jobhead_name = $request ->jobhead_name;
+
+        $request->validate([
+            'reasonbox' => 'required',
+        ]);
+
+        if($checkJobStatus -> Headjasa_tracker_id == 2){
+            return redirect('/logistic/Review-Job')->with('failed', 'Order Already Been Processed');
+        }
+       
+        JobHead::where('cabang', 'like', Auth::user()->cabang)
+        ->where('Headjasa_id', '=' ,$jobhead_id)
+        ->whereYear('created_at', date('Y'))
+        ->update([
+            'status' => 'Job Request Rejected By Logistics',
+            'Headjasa_tracker_id' => 2 ,
+            'reason' => $request-> reasonbox
+        ]);
+        
+        return redirect('/logistic/Job_Request_List')->with('failed', 'Job Request Rejected.');  
+    }
 
     public function uploadItem(Request $request){
         // Testing upload to S3 function

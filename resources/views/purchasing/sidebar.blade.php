@@ -15,6 +15,17 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
+                    if(strpos($_SERVER['REQUEST_URI'], 'Job_Request_List') !== false){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('purchasing.Job_Request_List') }}">
+                    <span data-feather="archive"></span>
+                    Review Job Request List
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
                     if(strpos($_SERVER['REQUEST_URI'], 'report') !== false){
                         echo('active');
                     }
@@ -42,7 +53,7 @@
                     }
                 @endphp" href="/purchasing/supplier">
                     <span data-feather="user-plus"></span>
-                    Add More Contact
+                    Add Supplier Contact
                 </a>
             </li>
         </ul>

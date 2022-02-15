@@ -1,6 +1,6 @@
 @extends('../layouts.base')
 
-@section('title', 'PicIncident-Upload-Form')
+@section('title', 'Create-Form')
 
 @section('container')
 <x-guest-layout>
@@ -19,66 +19,90 @@
                             <form method="POST" action="/picincident/formclaim/submitform">
                                 @csrf
                                 <div class="form-row">
-
-                                    <div class="col-lg-3">
-                                        <x-label for="name" :value="__('Name : ')" style="margin-top: 4%; margin-left: 1%" />
-                                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" placeholder="Enter Name" :value="old('name')" required autofocus />
-
-                                        <x-label for="dateincident" :value="__('Tgl Incident : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="dateincident" class="block mt-1 w-full" type="date" name="dateincident"  required autofocus />
-
-                                        <x-label for="dateclaim" :value="__('Tgl.Form Claim : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="dateclaim" class="block mt-1 w-full" type="date" name="dateclaim"  required autofocus />
-
-                                        <x-label for="jenisincident" :value="__('Jenis Incident : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <select name="jenisincident" id="jenisincident" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required autofocus>
-                                            <option selected disabled value="">Please Choose...</option>
-                                            <option value="TP" id="picAdmin">TP</option>
-                                            <option value="HM" id="picIncident">HM</option>
-                                        </select>
-
-                                        <x-label for="Item_name" :value="__('Item : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Item_name" class="block mt-1 w-full" type="text" name="Item_name" placeholder="Enter Item Name" :value="old('Item_name')" required autofocus />
-                                
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <x-label for="FormClaim" :value="__('No. FormClaim : ')" style="margin-top: 4%; margin-left: 1%"  />
+                                    <div class="col-lg-3" style="margin-right:2%">
+                                        <x-label for="name" :value="__('Name : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" placeholder="Enter Name" :value="old('name')"  autofocus />
+                                        
+                                        <x-label for="FormClaim" :value="__('No. FormClaim : ')" style="margin-top: 2%; margin-left: 1%"  />
                                         <x-input id="FormClaim" class="block mt-1 w-full" type="text" name="FormClaim" placeholder="Enter No. FormClaim" :value="old('FormClaim')" required autofocus />
-
-                                        <x-label for="barge" :value="__('barge : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="barge" class="block mt-1 w-full" type="number" name="barge" placeholder="Enter barge" :value="old('barge')" required autofocus />
-                                        
-                                        <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  />
-                                        <x-input id="TSI_barge" class="block mt-1 w-full" type="number" name="TSI_barge" placeholder="Enter TSI barge" :value="old('TSI_barge')" required autofocus />
-
-                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat : ')" style="margin-top: 2%; margin-left: 1%"  />
-                                        <x-input id="TSI_TugBoat" class="block mt-1 w-full" type="number" name="TSI_TugBoat" placeholder="Enter TSI TugBoat" :value="old('TSI_TugBoat')" required autofocus />
-                                        
-                                        <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" required autofocus />
-
-                                        <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus />
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <x-label for="Surveyor" :value="__('Surveyor : ')" style="margin-top: 4%; margin-left: 1%" />
-                                        <x-input id="Surveyor" class="block mt-1 w-full" type="text" name="Surveyor" placeholder="Enter Surveyor's Name" :value="old('Surveyor')" required autofocus />
-
-                                        <x-label for="TugBoat" :value="__('TugBoat : ')" style="margin-top: 2%; margin-left: 1%" />
-                                        <x-input id="TugBoat" class="block mt-1 w-full" type="text" name="TugBoat" placeholder="Enter TugBoat Name" :value="old('TugBoat')" required autofocus />
 
                                         <x-label for="Incident" :value="__('Incident : ')" style="margin-top: 2%; margin-left: 1%" />
                                         <x-input id="Incident" class="block mt-1 w-full" type="text" name="Incident" placeholder="Enter Incident" :value="old('Incident')" required autofocus />
+                                    </div>
+                                    <div class="col-lg-3" style="margin-right:2%">
+                                        <x-label for="dateclaim" :value="__('Tgl.Form Claim : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="dateclaim" class="block mt-1 w-full" type="date" name="dateclaim"  autofocus />
                                         
+                                        <x-label for="dateincident" :value="__('Tgl Incident : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="dateincident" class="block mt-1 w-full" type="date" name="dateincident"  autofocus />
+                                        
+                                        <x-label for="Surveyor" :value="__('Surveyor : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="Surveyor" class="block mt-1 w-full" type="text" name="Surveyor" placeholder="Enter Surveyor's Name" :value="old('Surveyor')"  autofocus />
+                                        
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <x-label for="barge" :value="__('barge : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="barge" class="block mt-1 w-full" type="text" name="barge" placeholder="Enter barge" :value="old('barge')"  autofocus />
+    
+                                        <x-label for="TugBoat" :value="__('TugBoat : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="TugBoat" class="block mt-1 w-full" type="text" name="TugBoat" placeholder="Enter TugBoat Name" :value="old('TugBoat')"  autofocus />
+
+                                        <x-label for="TSI_TugBoat" :value="__('TSI TugBoat : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                          <div class="input-group mb-1">
+                                              <select class="btn btn-outline-secondary" name="mata_uang_TSI">
+                                                  <option selected value="USD" id="">USD</option>
+                                                  <option value="IDR" id="">IDR</option>
+                                              </select>
+                                              <input id="TSI_TugBoat" type="number" class="form-control" name="TSI_TugBoat" placeholder="Enter TSI TugBoat" value="{{ old('TSI_TugBoat') }}"   autofocus>
+                                            </div>
+                                        <x-label for="TSI_barge" :value="__('TSI Barge : ')" style="margin-top: 2%; margin-left: 1%"  />
+                                          <div class="input-group mb-1">
+                                              <select class="btn btn-outline-secondary" name="mata_uang_TSI_barge">
+                                                  <option selected value="USD" id="">USD</option>
+                                                  <option value="IDR" id="">IDR</option>
+                                              </select>
+                                              <input id="TSI_barge" type="number" class="form-control" name="TSI_barge" placeholder="Enter TSI barge" value="{{ old('TSI_barge') }}"   autofocus/>
+                                            </div>
+                                            {{-- <x-label for="TSI_barge" :value="__('TSI barge : ')" style="margin-top: 2%; margin-left: 1%"  /> --}}
                                     </div>
                                 </div>
 
-                                <div>
-                                    <x-label for="Description" :value="__('Description : ')" style="margin-top: 2%; margin-left: 1%;"  />
-                                    <textarea class="form-control" name="reasonbox" id="Description"  autofocus rows="3"></textarea>
+                                <br>
+                                <br>
+                                
+                                <div class="form-row">
+                                    <div class="col-lg-3">
+                                        <x-label for="jenisincident" :value="__('Jenis Incident : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <select name="jenisincident" id="jenisincident" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required autofocus>
+                                            <option selected value="TP" >TP</option>
+                                            <option value="HM" >HM</option>
+                                        </select>
+                                        
+                                        <x-label for="Item_name" :value="__('Item : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="Item_name" class="block mt-1 w-full" type="text" name="Item_name" placeholder="Enter Item Name" :value="old('Item_name')" required autofocus />
+                                    </div>
+                                    
+                                    <div class="col-lg-3" style="margin-right:2%">
+                                        <x-label for="Deductible" :value="__('Deductible : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        <x-input id="Deductible" class="block mt-1 w-full" type="number" name="Deductible" placeholder="Enter Deductible" :value="old('Deductible')" onfocus="this.value=''" autofocus />
+    
+                                        <x-label for="Amount" :value="__('Amount : ')" style="margin-top: 2%; margin-left: 1%" />
+                                        {{-- <x-input id="Amount" class="block mt-1 w-full" type="number" name="Amount" placeholder="Enter Amount" :value="old('Amount')" required autofocus /> --}}
+                                        <div class="input-group mb-1">
+                                            <select class="btn btn-outline-secondary" name="mata_uang_amount">
+                                                <option selected value="USD" id="">USD</option>
+                                                <option value="IDR" id="">IDR</option>
+                                                <option value="SGD" id="">SGD</option>
+                                                <option value="EURO" id="">EURO</option>
+                                            </select>
+                                            <input id="Amount" type="number" class="form-control" name="Amount" placeholder="Enter Amount" value="{{ old('Amount') }}"  required autofocus>
+                                        </div>
+                                    </div>
                                 </div>
+                                
+                                <x-label for="Description" :value="__('Description : ')" style="margin-top: 2%; margin-left: 1%;" required autofocus/>
+                                <textarea class="form-control" name="reasonbox" id="Description"  autofocus rows="3"></textarea>
+
                                 <div class="text-md-right">
                                     <button class="btn btn-dark" type="submit" id="addcart" style= "margin-top: 1%; margin-bottom: 1%;width: 20%;">Add To List</button>
                                 </div>
@@ -86,13 +110,14 @@
 
                             <form method="POST" action="/picincident/create-history">
                                 @csrf
-                                @php
+                                {{-- @php
                                     $date = date('Y-m-d');
-                                    $name = 'file FCI-' . $date;
+                                    $spc = rand(1,100);
+                                    $name = 'file FCI-'. $spc . ' - ' . $date;
                                 @endphp
-                                    <input type="hidden" name ="nama_file" value ="{{$name}}" />
-                                <div class="text-md-right">
-                                    <button class="btn btn-outline-danger" type="submit" id="createform" name="createform"  style="margin-left: 80%;  width: 20%;">Create Form</button>
+                                    <input type="hidden" name ="nama_file" value ="{{$name}}" /> --}}
+                                    <div class="text-md-right">
+                                    <button class="btn btn-outline-danger" type="submit" id="createform" name="createform"  style="margin-left: 80%; width: 20%;">Create Form</button>
                                 </div>
                             </form>
                             
@@ -100,6 +125,14 @@
                                 <div class="center">
                                     <div class="alert alert-success alert-block" id="message">
                                         <strong>{{ $success }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if ($ERR = Session::get('ERR'))
+                                <div class="center">
+                                    <div class="alert alert-danger alert-block" id="message">
+                                        <strong>{{ $ERR }}</strong>
                                     </div>
                                 </div>
                             @endif
@@ -122,9 +155,9 @@
                                         <td class="table-info">{{$loop->index+1}}</td>
                                         <td class="table-info">{{$temp->jenis_incident}}</td>
                                         <td class="table-info">{{$temp->item}}</td>
-                                        <td class="table-info">{{$temp->deductible}}</td>
-                                        <td class="table-info">{{$temp->description}}</td>
-                                        <td class="table-info">{{$temp->amount}}</td>
+                                        <td class="table-info">{{$temp->mata_uang_TSI}}.{{$temp->deductible}}</td>
+                                        <td class="table-info">{{Str::limit($temp->description , 20)}}</td>
+                                        <td class="table-info">{{$temp->mata_uang_amount}}.{{$temp->amount}}</td>
                                         <td class="table-info">
                                             <form action="/picincident/formclaim/destroy/{{$temp->id}}" method="POST">
                                                 @csrf

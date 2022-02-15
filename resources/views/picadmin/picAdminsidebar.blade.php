@@ -14,6 +14,9 @@
                     <span data-feather="file-plus" style="color: black"></span>
                     Review RPK Documents
                 </a>
+                <a class="nav-link" aria-current="page" href="/picadmin/RekapulasiDana">
+                    Rekapitulasi Dana
+                </a>
             </li>
         </ul>
     </div>

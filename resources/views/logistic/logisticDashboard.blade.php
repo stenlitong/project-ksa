@@ -105,7 +105,6 @@
                                     <a href="/logistic/stock-order/{{ $oh -> id }}/accept-order" class="btn btn-primary">Accept</a>
                                 @endif
                             </td>
-
                         </tr>
                         @endforeach
                     </tbody>

@@ -197,13 +197,14 @@
                         <table class="table">
                             <thead class="thead bg-danger">
                             <tr>
-                                <th scope="col">Order ID</th>
+                                <th scope="col">Order/Job ID</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Detail</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {{-- order Details --}}
                                 @foreach($orderHeads as $oh)
                                 <tr>
                                     <td><strong>{{ $oh -> order_id }}</strong></td>
@@ -241,6 +242,7 @@
                 <div class="d-flex justify-content-end">
                     {{ $orderHeads->links() }}
                 </div>
+
             </div>
 
             @foreach($orderHeads as $oh)
@@ -522,6 +524,10 @@
             max-width: 160px;
             text-align: center;
         }
+        .center {
+            margin-left: auto;
+            margin-right: auto;
+        }
         .fa-star{
             font-size: 20px;
         }
@@ -587,11 +593,6 @@
     </style>
 
     <script type="text/javascript">
-        function refreshDiv(){
-            $('#content').load(location.href + ' #content')
-        }
-        setInterval(refreshDiv, 60000);
-
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000);

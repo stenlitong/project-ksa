@@ -29,7 +29,10 @@
             'Samarinda' => 'SMD',
             'Bunati' => 'BNT',
             'Babelan' => 'BBL',
-            'Berau' => 'BER'
+            'Berau' => 'BER' ,
+            'Bunati' => 'BUN' ,
+            'Kendari' => 'KDR' ,
+            'Morosi' => 'MRS' ,
         ];
     @endphp
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -62,7 +65,7 @@
 
     <div class="container-fluid" id="testing">
         <script>
-            document.body.style.zoom = "65%";
+            document.body.style.zoom = "100%";
             // document.body.style.zoom = screen.logicalXDPI;
         </script>
         @yield('container')

@@ -33,12 +33,21 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/search', [DashboardController::class, 'index']);
+    Route::get('/dashboard/searchspgr', [DashboardController::class, 'index']);
+    Route::post('/dashboard/dana/view', [DashboardController::class, 'index']);
+    Route::post('/dashboard/rpk/view', [DashboardController::class, 'index']);
+    Route::post('/dashboard/spgr/view', [DashboardController::class, 'index']);
 
     Route::prefix('crew')->name('crew.')->group(function(){
         // Dashboard Page
         Route::post('/change-branch', [CrewController::class, 'changeBranch'])->name('changeBranch');
         Route::get('/completed-order', [CrewController::class, 'completedOrder'])->name('completed-order');
         Route::get('/in-progress-order', [CrewController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-job', [CrewController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [CrewController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
+
+        Route::get('/Job_Request_List', [CrewController::class, 'ViewJobPage'])->name('Job_Request_List');
 
         // Task Page
         Route::post('/create-task', [CrewController::class, 'createTaskPost']);
@@ -58,6 +67,13 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/{user}/add-cart', [CrewController::class, 'addItemToCart']);
         Route::delete('/{cart}/delete', [CrewController::class, 'deleteItemFromCart']);
         Route::post('/{user}/submit-order', [CrewController::class, 'submitOrder']);
+
+        //Make jobs
+        Route::get('/make-Job', [CrewController::class, 'makeJobPage'])->name('makeJobRequest');
+        Route::post('/{user}/add-cart-jasa', [CrewController::class, 'addjasaToCart']);
+        Route::delete('/{cart}/deletejasa', [CrewController::class, 'deleteJasaFromCart']);
+        Route::post('/{user}/submit-jasa', [CrewController::class, 'submitJasa']);
+
     });
 
     Route::prefix('admin-operational')->name('adminOperational.')->group(function(){
@@ -90,6 +106,8 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         // Dashboard Page
         Route::get('/in-progress-order', [LogisticController::class, 'inProgressOrder'])->name('in-progress-order');
         Route::get('/completed-order', [LogisticController::class, 'completedOrder'])->name('completed-order');
+        Route::get('/completed-job', [LogisticController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [LogisticController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
         Route::get('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrderPage']);
         Route::patch('/order/{orderHeads}/edit/{orderDetails}', [LogisticController::class, 'editAcceptedQuantity']);
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
@@ -117,18 +135,31 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/{user}/submit-order', [LogisticController::class, 'submitOrder']);
         Route::get('/{orderHeads}/download-pr', [LogisticController::class, 'downloadPr']);
         Route::get('/stock-order/{orderHeads}/accept-order', [LogisticController::class, 'acceptStockOrder']);
-
+        
         // Report Page
         Route::get('/report', [LogisticController::class, 'reportPage'])->name('report');
         Route::get('/download-report', [LogisticController::class, 'downloadReport'])->name('downloadReport');
+        
+        // job request page
+        Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
 
-        // Route::post('/upload', [LogisticController::class, 'uploadItem']);
+        //review job page
+        Route::get('/Review-Job', [LogisticController::class, 'ReviewJobPage'])->name('ReviewJobPage');
+        Route::post('/Review-Job-Approved', [LogisticController::class, 'ApproveJobPage']);
+        Route::post('/Review-Job-Rejected', [LogisticController::class, 'RejectJobPage']);
+        Route::get('/download_Jr', [LogisticController::class, 'Download_JR_report'])->name('downloadReportJR');
+        Route::get('/download_Jr_PDF', [LogisticController::class, 'Download_PDF_JR_report']);
+        Route::get('/{JobRequestHeads}/download-JR', [LogisticController::class, 'Download_JR'])->name('downloadJR');
+        Route::get('/{JobRequestHeads}/download-JR_pdf', [LogisticController::class, 'Download_JR_pdf']);
+        Route::get('/report_JR', [LogisticController::class, 'report_JR_Page'])->name('report_JR_Page');
     });
 
     Route::prefix('supervisor')->name('supervisor.')->group(function(){
         // Dashboard Page
         Route::get('/completed-order', [SupervisorController::class, 'completedOrder'])->name('completed-order');
         Route::get('/in-progress-order', [SupervisorController::class, 'inProgressOrder'])->name('in-progress-order');
+        Route::get('/completed-job', [SupervisorController::class, 'completedJobRequest'])->name('completed-JobRequest');
+        Route::get('/in-progress-job', [SupervisorController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
         Route::get('/{orderHeads}/approve-order', [SupervisorController::class, 'approveOrder']);
         Route::put('/{orderHeads}/reject-order', [SupervisorController::class, 'rejectOrder']);
         Route::get('/{orderHeads}/download-pr', [SupervisorController::class, 'downloadPr']);
@@ -136,6 +167,12 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         // Report Page
         Route::get('/report', [SupervisorController::class, 'reportsPage'])->name('report');
         Route::get('/report/download', [SupervisorController::class, 'downloadReport'])->name('downloadReport');
+
+        // JR Report Page
+        Route::get('/Jr_report', [SupervisorController::class, 'Jr_Reports_Page'])->name('JR_report');
+        Route::get('/Job_Request_List', [SupervisorController::class, 'JR_list_page'])->name('Job_Request_List');
+        Route::get('/Jr_report/download', [SupervisorController::class, 'Download_JR_report'])->name('download_JR_Report');
+        Route::get('/Jr_report/download_pdf', [SupervisorController::class, 'Download_JR_report_PDF']);
 
         // Goods In/Out Page
         Route::get('/goods-out', [SupervisorController::class, 'historyOut'])->name('historyOut');
@@ -165,6 +202,15 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/dashboard/{branch}', [PurchasingController::class, 'branchDashboard']);
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
+
+        // Approve&Reject/Revise Job page
+        Route::get('/Review-Job/{JobHeads}', [PurchasingController::class, 'ApproveJobPage']);
+        Route::post('/Review-Job-Approved', [PurchasingController::class, 'ApproveJobOrder']);
+        Route::post('/Review-Job-Rejected', [PurchasingController::class, 'RejectJobOrder']);
+        Route::post('/Review-Job-Revised', [PurchasingController::class, 'reviseJobOrder']);
+
+        // job request page
+        Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
 
         // Approve Order page
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
@@ -248,61 +294,98 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     });
 
     Route::prefix('picsite')->name('picsite.')->group(function(){
+        //RPK page
         Route::get('/rpk', [PicRpkController::class , 'rpk']);
         Route::post('/uploadrpk', [PicRpkController::class , 'uploadrpk'])->name('upload.uploadrpk');
-        Route::get('/downloadrpk' , [PicRpkController::class, 'downloadrpk'])->name('downloadrpk');
 
-        // Route::get('/view', [PicsiteController::class , 'view']);
-
+        //Fund Request page
         Route::get('/upload', [PicsiteController::class , 'uploadform']);
         Route::post('/upload',[PicsiteController::class, 'uploadfile'])->name('upload.uploadFile');
+
+        //rekapdana page
+        Route::get('/RekapulasiDana',[PicsiteController::class, 'RekapulasiDana']);
+        Route::get('/editRekapulasiDana/{rekap}',[PicsiteController::class, 'editrekap']);
+        Route::put('/RekapulasiDana/update/{rekap}',[PicsiteController::class, 'updaterekap']);
+        Route::delete('/RekapulasiDana/destroy/{rekap}',[PicsiteController::class, 'destroyrekap']);
+        Route::post('/uploadrekap',[PicsiteController::class, 'uploadrekap']);
+        Route::post('/exportExcel', [PicsiteController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [PicsiteController::class, 'exportPDF']);
     });
 
     Route::prefix('picadmin')->name('picadmin.')->group(function(){
+        // admin review funds page
         Route::get('/dana', 'picAdminController@checkform');
+        Route::get('/dana/search', 'picAdminController@checkform');
         Route::post('/dana/rejectdana',[picAdminController::class, 'reject']);
         Route::post('/dana/approvedana',[picAdminController::class, 'approve']);
-        
+ 
+        //view route for RPK and Funds page
         Route::post('/dana/view',[picAdminController::class, 'view']);
         Route::post('/rpk/view',[picAdminController::class, 'viewrpk']);
-
+        
+        //Admin RPK page
         Route::get('/rpk', [picAdminController::class , 'checkrpk']);
+        Route::get('/RPK/search', [picAdminController::class , 'checkrpk']);
         Route::post('/rpk/update-status',[picAdminController::class, 'approverpk']);
         Route::post('/rpk/rejectrpk',[picAdminController::class, 'rejectrpk']);
-        Route::get('/download' , [picAdminController::class , 'download'])->name('download');
+
+        //rekapdana page
+        Route::get('/RekapulasiDana',[picAdminController::class, 'RekapulasiDana']);
+        Route::post('/exportExcel', [picAdminController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [picAdminController::class, 'exportPDF']);
     });
 
     Route::prefix('picincident')->name('picincident.')->group(function(){
+        //form claim page
         Route::get('/formclaim', 'picincidentController@formclaim');
         Route::post('/formclaim/submitform', [picincidentController::class, 'submitformclaim']);
         Route::delete('/formclaim/destroy/{temp}', [picincidentController::class , 'destroy']);
         
-        
+        //FCI History page
         Route::post('/create-history', 'picincidentController@createformclaim');
-        Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
         Route::get('/history', 'picincidentController@formclaimhistory');
-        Route::get('/formclaimDownload', 'picincidentController@export');
+        Route::delete('/history/destroy/{claims}', [picincidentController::class , 'DestroyExcel']);
+        Route::post('/formclaimDownload', 'picincidentController@export');
         
+        // SPGR Upload page
         Route::get('/spgr', 'picincidentController@spgr');
         Route::post('/uploadSPGR', [picincidentController::class,'spgrupload']);
 
+        //SPGR Note page
         Route::get('/NoteSpgr', 'picincidentController@notespgr');
         Route::post('/addNoteSpgr', 'picincidentController@uploadnotespgr');
-        Route::delete('/NoteSpgr/destroy/{UpNotes}', [picincidentController::class , 'destroynote']);
+        Route::get('/EditNoteSpgr/{UpNotes}', 'picincidentController@editnotespgr');
         Route::put('/NoteSpgr/update/{UpNotes}', [picincidentController::class, 'updatenote']);
+        Route::delete('/NoteSpgr/destroy/{UpNotes}', [picincidentController::class , 'destroynote']);
+        Route::delete('/NoteSpgr/destroyall', [picincidentController::class , 'destroyallnote']);
+        Route::post('/exportExcel', [picincidentController::class, 'exportNotes']);
 
     });
 
     Route::prefix('insurance')->name('insurance.')->group(function(){
+        // Review uploaded Spgr file page 
         Route::get('/CheckSpgr', 'InsuranceController@checkspgr');
+        Route::get('/CheckSpgr/searchspgr', [InsuranceController::class, 'checkspgr']);
         Route::post('/approvespgr',[InsuranceController::class, 'approvespgr']);
         Route::post('/rejectspgr',[InsuranceController::class, 'rejectspgr']);
         Route::post('/viewspgr',[InsuranceController::class, 'viewspgr']);
 
+        //SPGR history notes page
         Route::get('/HistoryNoteSpgr', 'InsuranceController@historynotespgr');
-       
+
+        //Review history formclaim page
+        Route::get('/historyFormclaim', 'InsuranceController@historyFormclaim');
+        Route::post('/historyFormclaimdownload', 'InsuranceController@historyFormclaimDownload');
+        Route::delete('/historyFormclaim/destroy/{claims}', 'InsuranceController@historyFormclaimDelete');
+
+        //Rekapulasi Dana history page
+        Route::get('/HistoryRekapulasiDana', 'InsuranceController@historyRekapulasiDana');
+        Route::post('/exportExcel', [InsuranceController::class, 'exportEXCEL']);
+        Route::post('/exportPDF', [InsuranceController::class, 'exportPDF']);
     });
 });
+
+// Route::get('/registeradmin' , [RegisteredUserController::class , 'createAdmin']);
 
 Route::get('/', function () {
     return view('welcome');

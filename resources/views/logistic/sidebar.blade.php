@@ -15,6 +15,17 @@
             <li class="nav-item">
                 <a class="nav-link 
                     @php
+                        if(basename($_SERVER['REQUEST_URI']) == 'Job_Request_List'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.Job_Request_List") }}">
+                    <span data-feather="align-justify"></span>
+                    Job Request Order List
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                    @php
                         if(basename($_SERVER['REQUEST_URI']) == 'stocks'){
                             echo('active');
                         }
@@ -31,7 +42,7 @@
                         }
                     @endphp" href="{{ Route("logistic.makeOrder") }}">
                     <span data-feather="plus-circle"></span>
-                    Make Order
+                    Make Order Goods
                 </a>
             </li>
             <li class="nav-item">
@@ -65,6 +76,17 @@
                     @endphp" href="{{ Route("logistic.report") }}">
                     <span data-feather="archive"></span>
                     Report PR/PO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                    @php
+                        if(basename($_SERVER['REQUEST_URI']) == 'report_JR_Page'){
+                            echo('active');
+                        }
+                    @endphp" href="{{ Route("logistic.report_JR_Page") }}">
+                    <span data-feather="archive"></span>
+                    Report JR
                 </a>
             </li>
         </ul>
