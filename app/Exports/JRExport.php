@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use PHPExcel_Worksheet_PageSetup;
 
 class JRExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
 {
@@ -117,7 +118,7 @@ class JRExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
                     array(' '),
                     array($this->created_by, ' ' , $this->check_by , ' ' ,' ' , 'maintance'),
                 ), $event);
-                
+                $event->sheet->getDelegate()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
                 $event->sheet->getDelegate()->getStyle('A:F')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);

@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use PHPExcel_Worksheet_PageSetup;
 
 class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
 {
@@ -125,6 +126,7 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
         return [
             AfterSheet::class => function (AfterSheet $event){
                 $event->sheet->mergeCells('A1:K1');
+                $event->sheet->mergeCells('A2:K2');
                 $event->sheet->getStyle('A1:K1')->applyFromArray([
                     'font' => [
                         'bold' => true ,
@@ -156,7 +158,8 @@ class JR_full_Export implements FromQuery , ShouldAutoSize , WithHeadings , With
                 //     array(' '),
                 //     array($this->created_by, ' ' , $this->check_by , ' ' ,' ' , 'maintance'),
                 // ), $event);
-                
+                $event->sheet->getDelegate()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
+                // $event->sheet->getDelegate()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
                 $event->sheet->getDelegate()->getStyle('A:K')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);

@@ -170,53 +170,6 @@ class SupervisorController extends Controller
         return view('supervisor.supervisorDashboard', compact('JR_in_progress' ,'jobDetails' ,'JobRequestHeads','job_completed'));
     }
 
-    public function Jr_Reports_Page(){
-        $month_now = (int)(date('m'));
-
-        if($month_now <= 3){
-            $start_date = date('Y-01-01');
-            $end_date = date('Y-03-31');
-            $str_month = 'Jan - Mar';
-        }elseif($month_now > 3 && $month_now <= 6){
-            $start_date = date('Y-04-01');
-            $end_date = date('Y-06-30');
-            $str_month = 'Apr - Jun';
-        }elseif($month_now > 6 && $month_now <= 9){
-            $start_date = date('Y-07-01');
-            $end_date = date('Y-09-30');
-            $str_month = 'Jul - Sep';
-        }else{
-            $start_date = date('Y-10-01');
-            $end_date = date('Y-12-31');
-            $str_month = 'Okt - Des';
-        }
-
-        // Find order from user/goods in => order created from logistic
-        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
-        $users = User::whereHas('roles', function($query){
-            $query->where('name', 'logistic');
-        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
-        
-        // Find all the items that has been approved from the logistic | last 6 month
-        // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
-
-        $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
-        ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
-        ->whereBetween('job_heads.created_at', [$start_date, $end_date])
-        ->where('job_details.cabang', Auth::user()->cabang)->orderBy('job_heads.updated_at', 'desc')->get();
-
-        $items_below_stock = $this -> checkStock();
-
-        return view('supervisor.supervisorReportJR', compact('jobs', 'str_month', 'items_below_stock'));
-    }
-
-    // export excel jr
-    public function Download_JR_report(Excel $excel) {
-        // Get all job on the cabang
-        // dd("hello");
-        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
-    }
-
     public function approveOrder(OrderHead $orderHeads){
         // Check if already been processed or not
         if($orderHeads -> order_tracker == 3){
@@ -590,5 +543,92 @@ class SupervisorController extends Controller
     public function downloadDo(OrderDo $orderDos){
         // Find the specific DO, then download it
         return (new DOExport($orderDos -> id))->download('DO-' . $orderDos -> id . '_' .  date("d-m-Y") . '.xlsx');
+    }
+
+    public function JR_list_page() {
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+
+        if(request('search')){
+            $JobRequestHeads = JobHead::with('user')->where(function($query){
+                $query->where('status', 'like', '%'. request('search') .'%')
+                ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
+            })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
+        }else{
+            $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
+        }
+
+        $items_below_stock = $this -> checkStock();
+
+        // show job request
+        $job_id = $JobRequestHeads->pluck('id');
+        $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
+
+         // Count the completed & in progress job Requests
+        $job_completed = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request Rejected By' . '%')
+            ->orWhere('status', 'like', 'Job Request Completed');
+        })->whereYear('created_at', date('Y'))->count();
+        
+        $job_in_progress = JobHead::where(function($query){
+            $query->where('status', 'like', 'Job Request In Progress By' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')
+            ->orWhere('status', 'like', 'Job Request Approved By' . '%');
+        })->whereYear('created_at', date('Y'))->count();
+
+        return view('supervisor.supervisorJobRequestList', compact('items_below_stock','job_in_progress' , 'job_completed' ,'JobRequestHeads','jobDetails'));
+    }
+    public function Jr_Reports_Page(){
+        $month_now = (int)(date('m'));
+
+        if($month_now <= 3){
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-03-31');
+            $str_month = 'Jan - Mar';
+        }elseif($month_now > 3 && $month_now <= 6){
+            $start_date = date('Y-04-01');
+            $end_date = date('Y-06-30');
+            $str_month = 'Apr - Jun';
+        }elseif($month_now > 6 && $month_now <= 9){
+            $start_date = date('Y-07-01');
+            $end_date = date('Y-09-30');
+            $str_month = 'Jul - Sep';
+        }else{
+            $start_date = date('Y-10-01');
+            $end_date = date('Y-12-31');
+            $str_month = 'Okt - Des';
+        }
+
+        // Find order from user/goods in => order created from logistic
+        // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', Auth::user()->cabang)->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        
+        // Find all the items that has been approved from the logistic | last 6 month
+        // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
+
+        $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
+        ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
+        ->whereBetween('job_heads.created_at', [$start_date, $end_date])
+        ->where('job_details.cabang', Auth::user()->cabang)->orderBy('job_heads.updated_at', 'desc')->get();
+
+        $items_below_stock = $this -> checkStock();
+
+        return view('supervisor.supervisorReportJR', compact('jobs', 'str_month', 'items_below_stock'));
+    }
+    // export excel jr
+    public function Download_JR_report(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
+    }
+    public function Download_JR_report_PDF(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        
     }
 }

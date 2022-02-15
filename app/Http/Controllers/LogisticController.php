@@ -753,27 +753,27 @@ class LogisticController extends Controller
 
     // ============================ Testing Playgrounds ===================================
     
-    public function ReviewJobPage() {
-         // Get all job on the cabang
-        $JobRequestHeads = JobHead::where('status','Job Request In Progress By Logistics')
-        ->where('cabang', 'like', Auth::user()->cabang)
-        ->whereYear('created_at', date('Y'))
-        ->get();
+    // public function ReviewJobPage() {
+    //      // Get all job on the cabang
+    //     $JobRequestHeads = JobHead::where('status','Job Request In Progress By Logistics')
+    //     ->where('cabang', 'like', Auth::user()->cabang)
+    //     ->whereYear('created_at', date('Y'))
+    //     ->get();
 
-        $barges = Barge::all();
-        $tugs = Tug::all();
-        $job_id = $JobRequestHeads->pluck('id');
+    //     $barges = Barge::all();
+    //     $tugs = Tug::all();
+    //     $job_id = $JobRequestHeads->pluck('id');
 
-        $datadetails = JobDetails::where('cabang', 'like', Auth::user()->cabang)
-        ->whereYear('created_at', date('Y'))
-        ->whereIn('jasa_id', $job_id)
-        ->get();
+    //     $datadetails = JobDetails::where('cabang', 'like', Auth::user()->cabang)
+    //     ->whereYear('created_at', date('Y'))
+    //     ->whereIn('jasa_id', $job_id)
+    //     ->get();
 
-        $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
-        return view('logistic.logisticJobRequestReview', compact('datadetails', 'tugs', 'barges' , 'items_below_stock', 'JobRequestHeads'));
-    }
+    //     $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
+    //     return view('logistic.logisticJobRequestReview', compact('datadetails', 'tugs', 'barges' , 'items_below_stock', 'JobRequestHeads'));
+    // }
 
-    public function JobRequestListPage() {
+    public function JobRequestListPage(Request $request , JobHead $checkJobStatus) {
          // Get all job on the cabang
          // Search functonality
          if(request('search')){
@@ -785,19 +785,20 @@ class LogisticController extends Controller
             $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
         }
 
-        // Get all the job request within the logged in user within 6 month
-        // Get the orderDetail from orders_id within the orderHead table 
         $job_id = $JobRequestHeads->pluck('id');
         $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
 
         // Count the completed & in progress job Requests
         $job_completed = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request Approved By Logistics')
-            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+            $query->where('status', 'like', 'Job Request Rejected By' . '%')
+            ->orWhere('status', 'like', 'Job Request Completed');
         })->whereYear('created_at', date('Y'))->count();
         
         $job_in_progress = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request In Progress By Logistics');
+            $query->where('status', 'like', 'Job Request In Progress By' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')
+            ->orWhere('status', 'like', 'Job Request Approved By' . '%');
         })->whereYear('created_at', date('Y'))->count();
 
         $items_below_stock = $this -> checkStock();
@@ -853,12 +854,24 @@ class LogisticController extends Controller
         // dd("hello");
         return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.xlsx');
     }
+    public function Download_PDF_JR_report(Excel $excel) {
+        // Get all job on the cabang
+        // dd("hello");
+        return $excel -> download(new JR_full_Export, 'Job_Request_'. date("d-m-Y") . '.pdf',  \Maatwebsite\Excel\Excel::DOMPDF);
+    }
 
     public function Download_JR(JobHead $JobRequestHeads , Excel $excel) {
         // Get all job on the cabang
         $id = $JobRequestHeads -> id;
         // dd($id);
         return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.xlsx');
+    }
+
+    public function Download_JR_pdf(JobHead $JobRequestHeads , Excel $excel) {
+        // Get all job on the cabang
+        $id = $JobRequestHeads -> id;
+        // dd($id);
+        return $excel -> download(new JRExport($id), 'Job_Request_'. $id . '_' . date("Y-m-d") . '.pdf',  \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     public function ApproveJobPage(Request $request , JobHead $checkJobStatus) {
@@ -889,7 +902,7 @@ class LogisticController extends Controller
             'status' => 'Job Request Approved By Logistics',
         ]);
         
-        return redirect('/logistic/Review-Job')->with('success', 'Job Request Approved.');
+        return redirect('/logistic/Job_Request_List')->with('success', 'Job Request Approved.');
         
         // dd($jon);
     }
@@ -917,7 +930,7 @@ class LogisticController extends Controller
             'reason' => $request-> reasonbox
         ]);
         
-        return redirect('/logistic/Review-Job')->with('failed', 'Job Request Rejected.');  
+        return redirect('/logistic/Job_Request_List')->with('failed', 'Job Request Rejected.');  
     }
 
     public function uploadItem(Request $request){

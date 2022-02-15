@@ -1,7 +1,7 @@
 @if(Auth::user()->hasRole('logistic'))
     @extends('../layouts.base')
 
-    @section('title', 'Logistic Dashboard')
+    @section('title', 'Job Request Order List')
 
     @section('container')
     <div class="row">
@@ -10,7 +10,7 @@
             
             @include('../layouts/time')
             <div class="wrapper">
-            <h2 class="mt-3 mb-2" style="text-align: center">Order List Cabang {{ Auth::user()->cabang }}</h2>
+            <h2 class="mt-3 mb-2" style="text-align: center">Job Request List Cabang {{ Auth::user()->cabang }}</h2>
 
             @if(session('error'))
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
@@ -76,7 +76,7 @@
                             @endif
                             
                             @if(strpos($jr -> status, 'Rejected') !== false)
-                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $jr -> reason}}</td>
+                                <td style="word-wrap: break-word;min-width: 250px;max-width: 250px; text-transform: uppercase;"><strong>{{ $jr -> reason}}</td>
                             @elseif(strpos($jr -> status, 'Approved') !== false)
                                 <td style="word-wrap: break-word;min-width: 250px;max-width: 250px;">This Job Request is now on Progress By Purchasing</td>
                             @else
@@ -88,6 +88,20 @@
                                     <button type="button" class="btn btn-info" data-toggle="modal" id="detail" data-target="#editJob-{{ $jr -> id }}">
                                         Detail
                                     </button>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{-- <button class="btn btn-success btn-sm">Approve Request</button> --}}
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approvecompany-{{$jr-> id}}">
+                                                Approve Request
+                                            </button>
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#rejectjob-{{ $jr -> id }}">Reject Request</button>
+                                        </div>
+                                    </div>
                                 </td>
                             @elseif(strpos($jr -> status, 'Rejected') !== false)
                                 <td>
@@ -103,7 +117,10 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a href="/logistic/{{ $jr -> id }}/download-JR" style="color: white" class="btn btn-warning" target="_blank">Download JR</a>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#downloadJR-{{ $jr->id }}">
+                                        Download JR
+                                    </button>
                                 </td>
                             @endif
                         </tr>
@@ -112,49 +129,134 @@
                     </tbody>
                 </table>
             </div>
-
-            {{-- modal job details --}}
-                @foreach ($JobRequestHeads as $jr)
-                    <div class="modal fade" id="editJob-{{ $jr->id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                
+                <!-- Modal download-->
+                    @foreach ($JobRequestHeads as $jr)
+                        <div class="modal fade" id="downloadJR-{{ $jr->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
-                                <div class="modal-header bg-danger">
-                                    <div class="d-flex-column">
-                                        <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Detail Job Request</strong></h5>
-                                    </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Download JR : {{$jr -> Headjasa_id }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                                 </div>
                                 <div class="modal-body">
-                                    <table class="table">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Nama Tugboat / barge</th>
-                                                <th scope="col">Lokasi Perbaikan</th>
-                                                <th scope="col">description</th>
-                                                <th scope="col">quantity</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($jobDetails as $c)
-                                                @if($c -> jasa_id == $jr -> id)
-                                                    <tr>
-                                                        <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
-                                                        <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
-                                                        <td class="bg-white">{{ $c ->note }}</td>
-                                                        <td class="bg-white">{{ $c ->quantity }}</td>
-                                                    </tr>
-                                                @endif
-                                            @empty
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                    <a href="/logistic/{{ $jr -> id }}/download-JR" style="color: white" class="btn btn-dark" target="_blank">Download JR As Excel</a>
+                                    <a href="/logistic/{{ $jr -> id }}/download-JR_pdf" style="color: white" class="btn btn-dark" target="_blank">Download JR As PDF</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    @endforeach
+                {{-- modal job details --}}
+                    @foreach ($JobRequestHeads as $jr)
+                        <div class="modal fade" id="editJob-{{ $jr->id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger">
+                                        <div class="d-flex-column">
+                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Detail Job Request</strong></h5>
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">Nama Tugboat / barge</th>
+                                                    <th scope="col">Lokasi Perbaikan</th>
+                                                    <th scope="col">description</th>
+                                                    <th scope="col">quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse($jobDetails as $c)
+                                                    @if($c -> jasa_id == $jr -> id)
+                                                        <tr>
+                                                            <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
+                                                            <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
+                                                            <td class="bg-white">{{ $c ->note }}</td>
+                                                            <td class="bg-white">{{ $c ->quantity }}</td>
+                                                        </tr>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                {{-- modal job reject details --}}
+                    @foreach($JobRequestHeads as $jr )
+                        <div class="modal fade" id="rejectjob-{{ $jr -> id }}" tabindex="-1" role="dialog" aria-labelledby="editJobTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger">
+                                        <div class="d-flex-column">
+                                            <h5 class="modal-title" id="detailTitle" style="color: white"><strong>Reject Job Request?</strong></h5>
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="POST" action="/logistic/Review-Job-Rejected">
+                                        @csrf
+                                    <div class="modal-body">
+                                        <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
+                                        <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
+                                            <div class="form-group">
+                                                <label for="reason">Reason</label>
+                                                <textarea class="form-control" name="reasonbox" required id="reason" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="submitreject2" class="btn btn-danger">Reject Request</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                <!-- Modal approve -->
+                    @foreach($JobRequestHeads as $jr )
+                        <div class="modal fade" id="approvecompany-{{$jr-> id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Approve Request</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <form method="POST" action="/logistic/Review-Job-Approved">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
+                                        <input type="hidden" name='jobhead_name' value= {{$jr->created_by}}>
+                                        {{-- send input to identify --}}
+                                        <label for="company" class="mb-3">Perusahaan</label>
+                                        <select class="form-control" name="company" id="company" required>
+                                            <option value="KSA">KSA</option>
+                                            <option value="ISA">ISA</option>
+                                            <option value="KSAO">KSA OFFSHORE</option>
+                                            <option value="KSAM">KSA MARITIME</option>
+                                            <option value="SKB">SKB</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-outline-success">Approve Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    @endforeach
             </div>
         </main>
     </div>

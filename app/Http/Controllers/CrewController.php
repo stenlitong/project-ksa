@@ -304,7 +304,7 @@ class CrewController extends Controller
 
     public function ViewJobPage() {
         // Get all the job request within the logged in user within 6 month
-        $JobRequestHeads = JobHead::with('user')->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->paginate(7); 
+        $JobRequestHeads = JobHead::with('user')->where('cabang' , Auth::user()->cabang)->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->latest()->paginate(7); 
         $job_id = $JobRequestHeads->pluck('id');
         $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
 
@@ -433,6 +433,6 @@ class CrewController extends Controller
     
             // Emptying the cart items
             cartJasa::where('user_id', Auth::user()->id)->delete();
-        return redirect('/dashboard')->with('status', 'Submit Order Success');
+        return redirect('/crew/Job_Request_List')->with('status', 'Submit Order Success');
     }
 }

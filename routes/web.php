@@ -112,8 +112,10 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/Review-Job', [LogisticController::class, 'ReviewJobPage'])->name('ReviewJobPage');
         Route::post('/Review-Job-Approved', [LogisticController::class, 'ApproveJobPage']);
         Route::post('/Review-Job-Rejected', [LogisticController::class, 'RejectJobPage']);
-        Route::post('/download_Jr', [LogisticController::class, 'Download_JR_report'])->name('downloadReportJR');
+        Route::get('/download_Jr', [LogisticController::class, 'Download_JR_report'])->name('downloadReportJR');
+        Route::get('/download_Jr_PDF', [LogisticController::class, 'Download_PDF_JR_report']);
         Route::get('/{JobRequestHeads}/download-JR', [LogisticController::class, 'Download_JR'])->name('downloadJR');
+        Route::get('/{JobRequestHeads}/download-JR_pdf', [LogisticController::class, 'Download_JR_pdf']);
         Route::get('/report_JR', [LogisticController::class, 'report_JR_Page'])->name('report_JR_Page');
     });
 
@@ -133,8 +135,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         // JR Report Page
         Route::get('/Jr_report', [SupervisorController::class, 'Jr_Reports_Page'])->name('JR_report');
-        Route::post('/Jr_report/download', [SupervisorController::class, 'Download_JR_report'])->name('download_JR_Report');
-        // Route::get('/download_JR', [SupervisorController::class, 'Download_JR'])->name('Download_JR');
+        Route::get('/Job_Request_List', [SupervisorController::class, 'JR_list_page'])->name('Job_Request_List');
+        Route::get('/Jr_report/download', [SupervisorController::class, 'Download_JR_report'])->name('download_JR_Report');
+        Route::get('/Jr_report/download_pdf', [SupervisorController::class, 'Download_JR_report_PDF']);
 
         // Goods In/Out Page
         Route::get('/goods-out', [SupervisorController::class, 'historyOut'])->name('historyOut');

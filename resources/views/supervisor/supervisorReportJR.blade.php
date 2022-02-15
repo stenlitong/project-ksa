@@ -12,13 +12,13 @@
                 <h1 class="d-flex justify-content-center mb-4">Reports JR ({{ $str_month }})</h1>
 
                 @if(count($jobs) > 0)
-                <div class="d-flex justify-content-end mr-3">
-                    <form method="POST" action="/supervisor/Jr_report/download" target="_blank">
-                        @csrf
-                        <button class="btn btn-outline-success mb-3 btn-lg" >Export</button>
-                    </form>
-                </div>
-            @endif
+                    <div class="d-flex justify-content-end mr-3">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#exampleModalCenter">
+                            Export
+                        </button>
+                    </div>
+                @endif
 
             <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
                 <table class="table table-bordered sortable">
@@ -55,6 +55,24 @@
                 </table>
             </div>
         </main>
+    </div>
+
+    <!-- Modal Download-->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Download Job Request Request</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <a href="/supervisor/Jr_report/download" style="color: white" class="btn btn-dark" target="_blank">Download JR As Excel</a>
+                <a href="/supervisor/Jr_report/download_pdf" style="color: white" class="btn btn-dark" target="_blank">Download JR As PDF</a>
+            </div>
+        </div>
+        </div>
     </div>
 
     <style>

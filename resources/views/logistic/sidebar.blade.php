@@ -48,17 +48,6 @@
             <li class="nav-item">
                 <a class="nav-link 
                     @php
-                        if(basename($_SERVER['REQUEST_URI']) == 'Review-Job'){
-                            echo('active');
-                        }
-                    @endphp" href="{{ Route("logistic.ReviewJobPage") }}">
-                    <span data-feather="plus-square"></span>
-                    Review Job Request
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link 
-                    @php
                         if(basename($_SERVER['REQUEST_URI']) == 'request-do'){
                             echo('active');
                         }

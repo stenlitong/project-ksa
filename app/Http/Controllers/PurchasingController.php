@@ -714,16 +714,11 @@ class PurchasingController extends Controller
 
     public function JobRequestListPage(){
         if(request('search')){
-            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
-                $query->where('status', 'like', '%'. request('search') .'%')
-                ->orWhere('order_id', 'like', '%'. request('search') .'%');
-            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
-            $JobRequestHeads = JobHead::with('user')->where(function($query){
+            $JobRequestHeads = JobHead::where(function($query){
                 $query->where('status', 'like', '%'. request('search') .'%')
                 ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
             })->whereYear('created_at', date('Y'))->latest()->paginate(6);
         }else{
-            $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
             $JobRequestHeads = JobHead::where('cabang', 'like',  $default_branch)->where('status', 'like', 'Job Request Approved By Logistics')->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
         }
 
@@ -735,11 +730,19 @@ class PurchasingController extends Controller
          // Count the completed & in progress job Requests
          $completed = JobHead::where(function($query){
             $query->where('status', 'like', 'Job Request Approved By Logistics')
-            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+            ->orWhere('status', 'like', 'Job Request Rejected By Logistic')
+            ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+            ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereYear('created_at', date('Y'))->count();
         
         $in_progress = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request In Progress By Logistics');
+            $query->where('status', 'like', 'Job Request In Progress By Logistic')
+            ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
+            ->orWhere('status', 'like', '%' . 'Revised' . '%')
+            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+            ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereYear('created_at', date('Y'))->count();
 
         return view('purchasing.jobRequestList', compact('JobRequestHeads','jobDetails' , 'suppliers', 'completed', 'in_progress', 'default_branch'));;
