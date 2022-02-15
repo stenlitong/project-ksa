@@ -16,11 +16,17 @@
                 </div>
             @endif
 
-            @error('bargeName')
+            {{-- @error('bargeName')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Nama Barge Invalid
                 </div>
-            @enderror
+            @enderror --}}
+
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ $error }}
+                </div>
+            @endforeach
 
             <div class="d-flex justify-content-around mb-3">
                 <div class="input-group w-25">
@@ -39,6 +45,7 @@
                 <div class="w-75" id="table_data">
                     @include('adminOperational.adminOperationalAddBargeTable')
                 </div>
+                {{ $barges -> withQueryString() -> links() }}
             </div>
         </main>
 
@@ -60,6 +67,21 @@
                                 <label for="bargeName">Nama Barge</label>
                                 <input type="text" class="form-control" id="bargeName" name="bargeName"
                                     placeholder="Input Nama Barge" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gt">GT</label>
+                                <input type="text" class="form-control" id="gt" name="gt"
+                                    placeholder="Input GT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nt">NT</label>
+                                <input type="text" class="form-control" id="nt" name="nt"
+                                    placeholder="Input NT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="flag">Flag</label>
+                                <input type="text" class="form-control" id="flag" name="flag"
+                                    placeholder="Input Flag" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -161,6 +183,25 @@
         //     $('#content').load(location.href + ' #content')
         // }
         // setInterval(refreshDiv, 60000);
+    </script>
+
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
     </script>
 
     @endsection

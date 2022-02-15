@@ -3,24 +3,14 @@
 namespace App\Http\Controllers;
 
 use Storage;
-use Response;
-use validator;
 use Carbon\Carbon;
-use App\Mail\Gmail;
-use App\Models\User;
-use App\Models\NoteSpgr;
 use App\Models\spgrfile;
-use App\Models\tempcart;
 use App\Models\Rekapdana;
 use App\Exports\FCIexport;
 use App\Exports\RekapAdminExport;
-use App\Models\formclaims;
 use Illuminate\Http\Request;
 use App\Models\headerformclaim;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class InsuranceController extends Controller

@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 use App\Mail\Gmail;
 
 class SendEmailJob implements ShouldQueue
@@ -33,11 +32,22 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        $details = [
-            'title' => 'Thank you for subscribing to my newsletter',
-            'body' => 'You will receive a newsletter every Fourth Friday of the month'
+        // Define all branches
+        $branch = ['Jakarta', 'Banjarmasin', 'Samarinda', 'Bunati', 'Babelan', 'Berau', 'Kendari' , 'Morosi'];
 
-        ];
-        Mail::to(Auth::user()->mail)->send(new Gmail($details));
+        // Then send the message to all users of respectives branches
+        foreach($branch as $b){
+            $user = User::where('cabang', $b)->whereHas('roles', function($query){
+                $query->where('name', 'picAdmin')
+                    ->orWhere('name', 'picSite');
+            })->pluck('email');
+
+            $details = [
+                'title' => 'Reminder for UPLOADING DOCUMENTS RPK/FUND REQ',
+                'body' => 'You will receive This Email Every 15th of the month , confirm that all file is in order 
+                and notify the Admin Jakarta if There is Any conflict'
+            ];
+            Mail::to($user)->send(new Gmail($details));
+        }
     }
 }

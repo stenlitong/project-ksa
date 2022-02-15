@@ -126,7 +126,9 @@ class LogisticController extends Controller
                 ->orWhere('status', 'like', '%' . 'Delivered' . '%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->count();
 
-            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress'));
+            $items_below_stock = $this -> checkStock();
+
+            return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
         }else{
             $orderHeads = OrderHead::with('user')->where(function($query){
                 $query->where('status', 'like', '%' . 'Completed' . '%')
@@ -158,34 +160,35 @@ class LogisticController extends Controller
 
     public function stocksPage(){
         // Logistic can see the stocks of all branches
-        if(request('search')){
-            if(request('search') == 'All'){
-                $items = Item::orderBy('cabang')->Paginate(7)->withQueryString();
-            }else{
-                $items = Item::where(function($query){
-                    $query->where('itemName', 'like', '%' . request('search') . '%')
-                    ->orWhere('cabang', 'like', '%' . request('search') . '%')
-                    ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
-                })->Paginate(7)->withQueryString();
-            }
-            $items_below_stock = $this -> checkStock();
+        $default_branch = 'All';
+        $items_below_stock = $this -> checkStock();
 
-            return view('logistic.stocksPage', compact('items', 'items_below_stock'));
+        if(request('search') !== null){
+            $items = Item::where(function($query){
+                $query->where('itemName', 'like', '%' . request('search') . '%')
+                ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
+            })->orderBy('cabang')->Paginate(7)->withQueryString();
         }else{
-            // $branch_items = Item::where('cabang', Auth::user()->cabang)->get();
-
-            // $other_branch_items = Item::where('cabang', 'not like', Auth::user()->cabang)->orderBy('cabang', 'asc')->get();
-
-            // $items = collect();
-
-            // $items = $items->merge($branch_items)->merge($other_branch_items)->paginate(7)->withQueryString();
-
-            $items = Item::where('cabang', Auth::user()->cabang)->latest()->Paginate(7)->withQueryString();
-
-            $items_below_stock = $this -> checkStock();
-
-            return view('logistic.stocksPage', compact('items', 'items_below_stock'));
+            $items = Item::latest()->Paginate(7)->withQueryString();
         }
+
+        return view('logistic.stocksPage', compact('items', 'items_below_stock', 'default_branch'));
+    }
+    
+    public function stocksBranchPage($branch){
+        $default_branch = $branch;
+        $items_below_stock = $this -> checkStock();
+
+        if(request('search') !== null){
+            $items = Item::where(function($query){
+                $query->where('itemName', 'like', '%' . request('search') . '%')
+                ->orWhere('codeMasterItem', 'like', '%' . request('search') . '%');
+            })->where('cabang', $default_branch)->Paginate(7)->withQueryString();
+        }else{
+            $items = Item::where('cabang', $default_branch)->Paginate(7)->withQueryString();
+        }
+
+        return view('logistic.stocksPage', compact('items', 'items_below_stock', 'default_branch'));
     }
 
     // order_tracker is a validation mechanism (somewhat) to validate if the order is already being processed or not,
@@ -234,7 +237,7 @@ class LogisticController extends Controller
 
     public function requestDoPage(){
         // Get all the DO from the last 6 month
-        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->get();
+        $ongoingOrders = OrderDo::with(['item_requested', 'user'])->where('fromCabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
 
         $items_below_stock = $this -> checkStock();
 

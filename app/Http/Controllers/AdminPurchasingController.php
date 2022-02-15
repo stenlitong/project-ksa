@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\ApList;
 use App\Models\ApListDetail;
-use App\Models\OrderHead;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Excel;
 use App\Exports\ReportAPExport;
@@ -14,45 +13,6 @@ use Storage;
 
 class AdminPurchasingController extends Controller
 {
-    // public function addSupplier(Request $request){
-    //     // Add supplier
-    //     $validated = $request -> validate([
-    //         'supplierName' => 'required',
-    //         'noTelp' => 'required|numeric|digits_between:8,11',
-    //         'supplierEmail' => 'required|email|unique:suppliers',
-    //         'supplierAddress' => 'required',
-    //         'supplierNPWP' => 'required',
-    //         'supplierNoRek' => 'nullable'
-    //     ]);
-        
-    //     Supplier::create($validated);
-
-    //     return redirect('/dashboard')->with('status', 'Added Successfully');
-    // }
-
-    // public function editSupplier(Request $request, Supplier $suppliers){
-    //     // Edit supplier
-    //     $validated = $request -> validate([
-    //         'supplierName' => 'required',
-    //         'noTelp' => 'required|numeric|digits_between:8,11',
-    //         'supplierEmail' => 'required|email',
-    //         'supplierAddress' => 'required',
-    //         'supplierNPWP' => 'required'
-    //     ]);
-
-    //     // Find the supplier's ID then update the value
-    //     Supplier::find($suppliers->id)->update($validated);
-
-    //     return redirect('/dashboard')->with('status', 'Edited Successfully');
-    // }
-
-    // public function deleteSupplier(Request $request, Supplier $suppliers){
-    //     // Find the supplier by the id in the request params
-    //     Supplier::destroy($suppliers->id);
-
-    //     return redirect('/dashboard')->with('status', 'Deleted Successfully');
-    // }
-
     public function formApPage(){
         // Show the form AP page
         $apList = ApList::with('orderHead')->where('cabang', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7);
@@ -120,6 +80,7 @@ class AdminPurchasingController extends Controller
                 $dynamic_uploadTime = 'uploadTime_partial' . $i;
                 $dynamic_description = 'description_partial' . $i;
                 $dynamic_path_to_file = 'path_to_file' . $i;
+                $s3_url_to_file = 's3_url_to_file' . $i;
 
                 // So in this case we want to store it in the folder according to the current month and year => /2021/12/"filename", so we decided to store the path also to the db
                 $file_path_format = date('Y/m/');
@@ -138,17 +99,18 @@ class AdminPurchasingController extends Controller
                 // $path = $year . '/' . $month . '/' . $request -> $dynamic_file -> getClientOriginalName();
                 $file = $request -> $dynamic_file -> getClientOriginalName();
 
+                // Store the file into storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
+                $url = $request -> file($dynamic_file) -> storeAs($file_path_format, $file, 's3');
+
                 // Save all additional information to the database
                 ApList::find($request -> apListId)->update([
                     $dynamic_file => $file,
                     $dynamic_status => 'On Review',
                     $dynamic_description => NULL,
                     $dynamic_uploadTime => date('d/m/Y'),
-                    $dynamic_path_to_file => $file_path_format
+                    $dynamic_path_to_file => $file_path_format,
+                    $s3_url_to_file => Storage::disk('s3')->url($url)
                 ]);
-
-                // Store the file into storage folder, so it does not publicly accessible || the alternative way is store the files on public folder, but it is easier to access
-                $request -> file($dynamic_file) -> storeAs($file_path_format, $file);
             }
         };
         

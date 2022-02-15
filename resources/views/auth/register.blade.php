@@ -71,7 +71,7 @@
                 <select name="role_id" id="role_id"
                     class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     required>
-                    <option selected value="">Choose...</option>
+                    <option selected value="" disabled>Choose...</option>
                     <option value="AsuransiIncident" id="picIncident" @if (old('role_id') == 'AsuransiIncident') selected="selected" @endif>Asuransi Incident</option>
                     <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
                     <option value="purchasing"  @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
@@ -102,53 +102,6 @@
                 </select>
             </div>
             
-<<<<<<< HEAD
-            <script>
-                 
-                function myFunction() {
-                    var x = document.getElementById("password");
-                    var y = document.getElementById("password_confirmation");
-                    if (x.type === "password") {
-                        x.type = "text";
-                    } else {
-                        x.type = "password";
-                    }
-                    if (y.type === "password") {
-                        y.type = "text";
-                    } else {
-                        y.type = "password";
-                    }
-                }
-                
-                function selectopt(id)
-                {
-                    var e = document.getElementById("cabang");
-                    e.selectedIndex=e.querySelector('option[value="'+id+'"]').index;
-                }
-                var dropdown = document.getElementById("role_id");
-                dropdown.onchange = function(event){
-                    
-                    // if(dropdown.value=="picAdmin"){
-                    //     selectopt('jakarta');
-                    //     document.getElementById("samarinda").disabled = true;
-                    //     document.getElementById("Banjarmasin").disabled = true;
-                    //     document.getElementById("bunati").disabled = true; 
-                    // }else{
-                    //     document.getElementById("samarinda").disabled = false;
-                    //     document.getElementById("Banjarmasin").disabled = false;
-                    //     document.getElementById("bunati").disabled = false;   
-                    // }
-                    
-                    if (dropdown.value=="picSite") {
-                        document.getElementById("jakarta").disabled = true;
-                        selectopt('samarinda');
-                    } else {
-                        document.getElementById("jakarta").disabled = false;
-                    }
-                }
-            </script>
-=======
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
@@ -203,7 +156,6 @@
                 }
                 var dropdown = document.getElementById("role_id");
                 dropdown.onchange = function (event) {
-<<<<<<< HEAD
                     if(dropdown.value == "purchasing"){
                         selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = true;
@@ -240,41 +192,6 @@
                         document.getElementById("Berau").disabled = false;
                         document.getElementById("Kendari").disabled = false;
                     }
-=======
-                if(dropdown.value == "purchasing"){
-                    selectopt('Jakarta');
-                    document.getElementById("Banjarmasin").disabled = true;
-                    document.getElementById("Samarinda").disabled = true;
-                    document.getElementById("Bunati").disabled = true;
-                    document.getElementById("Babelan").disabled = true;
-                    document.getElementById("Berau").disabled = true;
-                    document.getElementById("Kendari").disabled = true;
-                    document.getElementById("Morosi").disabled = true;
-                }
-                // else if(dropdown.value == "picSite"){
-                //     selectopt('Jakarta');                 
-                //     document.getElementById("Bunati").disabled = true;
-                //     document.getElementById("Kendari").disabled = true;
-                // }
-                else if(dropdown.value == "AsuransiIncident"){
-                    selectopt('Jakarta');
-                    document.getElementById("Banjarmasin").disabled = true;
-                    document.getElementById("Samarinda").disabled = true;
-                    document.getElementById("Bunati").disabled = true;
-                    document.getElementById("Babelan").disabled = true;
-                    document.getElementById("Berau").disabled = true;
-                    document.getElementById("Kendari").disabled = true;
-                    document.getElementById("Morosi").disabled = true;
-                }else{
-                    document.getElementById("Jakarta").disabled = false;
-                    document.getElementById("Samarinda").disabled = false;
-                    document.getElementById("Banjarmasin").disabled = false;
-                    document.getElementById("Bunati").disabled = false;
-                    document.getElementById("Babelan").disabled = false;
-                    document.getElementById("Berau").disabled = false;
-                    document.getElementById("Kendari").disabled = false;
-                    document.getElementById("Morosi").disabled = false;
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
                 }
             }
             </script>

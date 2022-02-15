@@ -10,25 +10,26 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1 class="mt-5 mb-3 text-center">Daily Report</h1>
 
-            <div style="margin-top: 15vh">
+            <div style="margin-top: 10vh">
                 <form action="" method="POST">
                     @csrf
                     <div class="form-row">
                         <div class="form-group col-md-2 mx-3">
                             <label class="text-danger font-weight-bold" for="">Search Tug</label>
-                            <select class="custom-select" id="tug_id">
+                            <select class="custom-select" id="tugName">
                                 <option disabled>Choose</option>
                                 @foreach($tugs as $t)
-                                    <option value="{{ $t -> id }}">{{ $t -> tugName }}</option>
+                                    <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-2 mx-3">
                             <label class="text-danger font-weight-bold" for="">Search Barge</label>
-                            <select class="custom-select" id="barge_id">
+                            <select class="custom-select" id="bargeName">
                                 <option disabled>Choose</option>
+                                <option value="">None</option>
                                 @foreach($barges as $b)
-                                    <option value="{{ $b -> id }}">{{ $b -> bargeName }}</option>
+                                    <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -37,8 +38,8 @@
                             <select class="custom-select" id="taskType">
                                 <option disabled>Choose</option>
                                 <option value="Operational Shipment">Operational Shipment</option>
-                                <option value="Operational Transhipment">Operational Transhipment</option>
-                                <option value="Return Cargo">Return Cargo</option>
+                                <option value="Operational Transhipment">Operational Transhipment / Return Cargo</option>
+                                <option value="Non Operational">Non Operational</option>
                             </select>
                         </div>
                         <div class="form-group col-md-2 mx-3">
@@ -117,8 +118,8 @@
 
         function search(){
             event.preventDefault();
-            let tug_id = document.getElementById('tug_id').value;
-            let barge_id = document.getElementById('barge_id').value;
+            let tugName = document.getElementById('tugName').value;
+            let bargeName = document.getElementById('bargeName').value;
             let taskType = document.getElementById('taskType').value;
             let month = document.getElementById('month').value;
             let year = document.getElementById('year').value;
@@ -130,8 +131,8 @@
                 method: "POST",
                 data: {
                     _token,
-                    tug_id,
-                    barge_id,
+                    tugName,
+                    bargeName,
                     taskType,
                     month,
                     year

@@ -16,11 +16,10 @@ class CreateBargesTable extends Migration
         Schema::create('barges', function (Blueprint $table) {
             $table->id();
             $table->string('bargeName');
-            // $table->integer('size');
-            // $table->string('type');
-            // $table->string('areaOperation');
-            // $table->string('bargeYear');
-            // $table->string('status');
+            $table->string('gt');
+            $table->string('nt');
+            $table->string('flag');
+            $table->boolean('bargeAvailability')->default(true);
             $table->timestamps();
         });
     }

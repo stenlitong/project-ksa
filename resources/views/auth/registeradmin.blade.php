@@ -60,8 +60,9 @@
                     
                     <select name="role_id" id="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                         <option selected disabled value="">Choose...</option>
-                        <option value="picAdmin" id="picAdmin" disabled @if (old('role_id') == 'picAdmin') selected="selected" @endif>PIC Admin</option>
-                        <option value="adminOperational" disabled @if (old('role_id') == 'adminOperational') selected="selected" @endif>Admin Operational</option>
+                        <option value="picAdmin" id="picAdmin"  @if (old('role_id') == 'picAdmin') selected="selected" @endif>PIC Admin</option>
+                        <option value="InsuranceManager" id="insurance" @if (old('role_id') == 'InsuranceManager') selected="selected" @endif>Manager Asuransi</option>
+                        <option value="adminOperational" @if (old('role_id') == 'adminOperational') selected="selected" @endif>Admin Operational</option>
                         <option value="adminPurchasing" @if (old('role_id') == 'adminPurchasing') selected="selected" @endif>Admin Purchasing</option>
                         <option value="purchasingManager" @if (old('role_id') == 'purchasingManager') selected="selected" @endif>Purchasing Manager</option>
                         <option value="supervisorLogisticMaster" @if (old('role_id') == 'supervisorLogisticMaster') selected="selected" @endif>Supervisor Logistic Master</option>
@@ -144,7 +145,7 @@
                     var dropdown = document.getElementById("role_id");
                     dropdown.onchange = function(event){
                         
-                        if(dropdown.value=="picAdmin"){
+                        if(dropdown.value=="picAdmin" || dropdown.value=="InsuranceManager"){
                             selectopt('Jakarta');
                             document.getElementById("Samarinda").disabled = true;
                             document.getElementById("Banjarmasin").disabled = true;
@@ -161,14 +162,7 @@
                             document.getElementById("Kendari").disabled = false;
                         }
                         
-                        if (dropdown.value=="picSite") {
-                            document.getElementById("Jakarta").disabled = true;
-                            selectopt('Samarinda');
-                            
-                        } else {
-                            document.getElementById("Jakarta").disabled = false;
-                        }
-
+                       
                         if(dropdown.value == "adminPurchasing" || dropdown.value == "purchasingManager"){
                             selectopt('Jakarta');
                             document.getElementById("Banjarmasin").disabled = true;

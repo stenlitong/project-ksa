@@ -16,11 +16,17 @@
                 </div>
             @endif
 
-            @error('tugName')
+            {{-- @error('tugName')
                 <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                     Nama Tugboat Invalid
                 </div>
-            @enderror
+            @enderror --}}
+
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
+                    {{ $error }}
+                </div>
+            @endforeach
 
             <div class="d-flex justify-content-around mb-3">
                 <div class="input-group w-25">
@@ -40,6 +46,7 @@
                     @csrf
                     @include('adminOperational.adminOperationalAddTugboatTable')
                 </div>
+                {{ $tugs -> withQueryString() -> links() }}
             </div>
         </main>
 
@@ -61,6 +68,36 @@
                                 <label for="tugName">Nama Tugboat</label>
                                 <input type="text" class="form-control" id="tugName" name="tugName"
                                     placeholder="Input Nama Tugboat" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gt">GT</label>
+                                <input type="text" class="form-control" id="gt" name="gt"
+                                    placeholder="Input GT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nt">NT</label>
+                                <input type="text" class="form-control" id="nt" name="nt"
+                                    placeholder="Input NT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Master">Master</label>
+                                <input type="text" class="form-control" id="master" name="master"
+                                    placeholder="Input Master" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="flag">Flag</label>
+                                <input type="text" class="form-control" id="flag" name="flag"
+                                    placeholder="Input Flag" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="IMONumber">IMO Number</label>
+                                <input type="text" class="form-control" id="IMONumber" name="IMONumber"
+                                    placeholder="Input IMO Number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="callSign">Call Sign</label>
+                                <input type="text" class="form-control" id="callSign" name="callSign"
+                                    placeholder="Input Call Sign" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -136,7 +173,6 @@
         $(document).ready(function(){
             $(document).on('click', '.page-link', function(event){
                 event.preventDefault();
-                console.log('clicked');
                 let page = $(this).attr('href').split('page=')[1];
                 
                 let _token = $('input[name=_token]').val();
@@ -190,6 +226,25 @@
                 }
             })
         }
+    </script>
+
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
     </script>
 
     @endsection

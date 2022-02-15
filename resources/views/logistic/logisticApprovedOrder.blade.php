@@ -73,6 +73,7 @@
                                     <select class="form-control" name="company" id="company">
                                         <option value="KSA">KSA</option>
                                         <option value="ISA">ISA</option>
+                                        <option value="SKB">SKB</option>
                                         <option value="KSAO">KSA OFFSHORE</option>
                                         <option value="KSAM">KSA MARITIME</option>
                                     </select>
@@ -210,14 +211,28 @@
     </style>
 
     <script type="text/javascript">
-        function refreshDiv(){
-            $('#content').load(location.href + ' #content')
-        }
-        setInterval(refreshDiv, 60000);
-
         setTimeout(function() {
             $('.alert').fadeOut('fast');
         }, 3000); 
+    </script>
+
+    <script type="text/javascript">
+        function trim_text(el) {
+            el.value = el.value.
+            replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+            replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+            replace(/\n +/, "\n"); // Removes spaces after newlines
+            return;
+        }
+        $(function(){
+            $("textarea").change(function() {
+                trim_text(this);
+            });
+
+            $("input").change(function() {
+                trim_text(this);
+            });
+        }); 
     </script>
 
     @endsection

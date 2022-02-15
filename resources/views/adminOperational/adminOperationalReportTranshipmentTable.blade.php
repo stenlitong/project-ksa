@@ -11,7 +11,9 @@
                 <th scope="col">Periode</th>
                 <th scope="col">From-To</th>
                 <th scope="col">Jenis Kegiatan</th>
-                <th scope="col">Jumlah Kargo Akhir</th>
+                @if($taskType != 'Non Operational')
+                    <th scope="col">Jumlah Kargo Akhir</th>
+                @endif
                 @if($taskType == 'Operational Shipment')
                     <th scope="col">Customer</th>
                     <th scope="col">Total Days</th>
@@ -24,12 +26,18 @@
                 @forelse($operationalData as $key => $od)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $od -> tug -> tugName }}</td>
-                        <td>{{ $od -> barge -> bargeName }}</td>
+                        <td>{{ $od -> tugName }}</td>
+                        <td>{{ $od -> bargeName }}</td>
                         <td>{{ $od -> created_at -> format('M/Y') }}</td>
                         <td>{{ $od -> from . ' - ' . $od -> to }}</td>
                         <td>{{ $od -> taskType }}</td>
-                        <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                        @if($od -> taskType != 'Non Operational')
+                            @if($od -> taskType == 'Return Cargo')
+                                <td>{{ $od -> cargoAmountEndCargo }} Ton</td>
+                            @else
+                                <td>{{ $od -> cargoAmountEnd }} Ton</td>
+                            @endif
+                        @endif
                         @if($taskType == 'Operational Shipment')
                             <td>{{ $od -> customer }}</td>
                             <td>{{ $od -> totalTime }}</td>
@@ -48,8 +56,8 @@
             <form action="/admin-operational/daily-reports/download" method="POST">
                 @csrf
 
-                <input type="hidden" name="tugId" value="{{ $tug_id }}">
-                <input type="hidden" name="bargeId" value="{{ $barge_id }}">
+                <input type="hidden" name="tugName" value="{{ $tugName }}">
+                <input type="hidden" name="bargeName" value="{{ $bargeName }}">
                 <input type="hidden" name="taskType" value="{{ $taskType }}">
                 <input type="hidden" name="month" value="{{ $month }}">
                 <input type="hidden" name="year" value="{{ $year }}">

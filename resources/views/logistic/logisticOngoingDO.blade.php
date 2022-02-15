@@ -23,49 +23,24 @@
                         </div>
                     @endif
                     
-                    <div id="content">
-                        <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
-                            <table class="table table-bordered sortable">
-                                <thead class="thead bg-danger">
-                                <tr>
-                                    <th scope="col" style="width: 100px">Nomor</th>
-                                    <th scope="col">Item Barang</th>
-                                    <th scope="col">Cabang Tujuan</th>
-                                    <th scope="col">Request Qty</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Download</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($ongoingOrders as $key => $o)
-                                        <tr>
-                                            <td class="bg-white">{{ $key + 1 }}</td>
-                                            <td class="bg-white"><strong>{{ $o -> item_requested -> itemName }}</strong></td>
-                                            <td class="bg-white">{{ $o -> toCabang}}</td>
-                                            <td class="bg-white"><strong>{{ $o -> quantity}} {{ $o -> item_requested -> unit}}</strong></td>
-                                            @if(strpos($o -> status, 'Rejected') !== false)
-                                                <td class="bg-white"><strong style="color: red">{{ $o -> status }}</strong></td>
-                                            @elseif(strpos($o -> status, 'On Delivery') !== false)
-                                                <td class="bg-white"><strong style="color: blue">{{ $o -> status }}</strong></td>
-                                            @elseif(strpos($o -> status, 'Accepted') !== false)
-                                                <td class="bg-white"><strong style="color: green">{{ $o -> status }}</strong></td>
-                                            @else
-                                                <td class="bg-white">{{ $o -> status }}</td>
-                                            @endif
-                                            <td class="bg-white">
-                                                <a href="/logistic/request-do/{{ $o -> id }}/download" target="_blank"><span data-feather="download" class="icon mr-2"></span></a>
-                                            </td>
-                                            <td class="bg-white">
-                                                @if(strpos($o -> status, 'On Delivery') !== false)
-                                                    <a href="/logistic/request-do/{{ $o -> id }}/accept-do" class="btn btn-info">Accept Delivery</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    <div class="d-flex mb-3">
+                        <div class="ml-auto">
+                            <button class="mr-3" type="button" onclick="refresh()">
+                                <span data-feather="refresh-ccw"></span>
+                            </button>
                         </div>
+                    </div>
+
+                    <div class="spinner-border spinner-border-lg text-danger" role="status" id="wait">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+
+                    <div id="content">
+                        @include('logistic.logisticOngoingDOComponent')
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        {{ $ongoingOrders->links() }}
                     </div>
 
                 </div>
@@ -84,17 +59,6 @@
                 background-color: antiquewhite;
                 height: 1000px;
                 /* height: 100%; */
-            }
-            .tableFixHead          { overflow: auto; height: 250px; }
-            .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
-
-            .my-custom-scrollbar {
-                position: relative;
-                height: 800px;
-                overflow: auto;
-            }
-            .table-wrapper-scroll-y {
-                display: block;
             }
             th{
                 color: white;
@@ -121,17 +85,36 @@
         </style>
 
         <script type="text/javascript">
-            function refreshDiv(){
-                $('#content').load(location.href + ' #content')
-            }
-            setInterval(refreshDiv, 60000);
-
             setTimeout(function() {
                 $('.alert').fadeOut('fast');
             }, 3000); 
         </script>
 
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+        <script type="text/javascript">
+            let spinner = document.getElementById("wait");
+            spinner.style.visibility = 'hidden';
+
+            function refresh(){
+                event.preventDefault();
+
+                let url = "{{ route('logistic.logisticRefreshOngoingDOPage') }}";
+
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    beforeSend: function(){
+                        $('#content').hide();
+                        spinner.style.visibility = 'visible';
+                    },
+                    success: function(data){
+                        $('#content').html(data);
+                        $('#content').show();
+                        spinner.style.visibility = 'hidden';
+                    }
+                })
+            }
+        </script>
+
     @endsection
 @else
     @include('../layouts/notAuthorized')

@@ -8,7 +8,7 @@
         <div class="row">
             @include('crew.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="page-bg flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 mt-3">
+                <div class="page-bg flex-wrap flex-md-nowrap align-items-center pt-4 pb-5 mb-3 mt-3">
                     
                     @if(count($errors) > 0)
                         @foreach($errors->all() as $message)
@@ -36,10 +36,10 @@
                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                             <div class="d-flex justify-content-around">
                                 <div style="width: 60%">
-                                    <div class="d-flex justify-content-around">
-                                        <h5 class="mt-3">Task : <span class="text-danger">{{ $ot -> taskType }}</span></h5>
+                                    <div class="d-flex">
+                                        <h5 class="mt-4">Task : <span class="text-danger">{{ $ot -> taskType }}</span></h5>
 
-                                        <div class="form-group row">
+                                        <div class="form-group row ml-3">
                                             <label class="text-danger font-weight-bold" for="from" class="col-sm-2 col-form-label text-danger font-weight-bold">From</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="from" name="from" placeholder="Input Source" value="{{ $ot -> from }}" required>
@@ -52,9 +52,11 @@
                                                 <input type="text" class="form-control" id="to" name="to" placeholder="Input Destination" value="{{ $ot -> to }}" required>
                                             </div>
                                         </div>
+
+                                        <h5 class="mt-4">Nama Kapal : <span class="text-danger">{{ $ot -> tugName }}/{{ $ot -> bargeName }}</span></h5>
                                     </div>
 
-                                    <div class="d-flex flex-wrap" style="overflow-y: auto; max-height: 800px">
+                                    <div class="d-flex flex-wrap mt-4" style="overflow-y: auto; max-height: 800px">
                                         @if($ot -> taskType == 'Operational Shipment')
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
@@ -110,9 +112,49 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            @if($ot -> user -> cabang == 'Samarinda')
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure To Jetty</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="departureJetty" id="departureJetty" value="{{ $ot -> departureJetty != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departureJetty)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Pengolongan Naik</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="pengolonganNaik" id="pengolonganNaik" value="{{ $ot -> pengolonganNaik != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> pengolonganNaik)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Pengolongan Turun</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="pengolonganTurun" id="pengolonganTurun" value="{{ $ot -> pengolonganTurun != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> pengolonganTurun)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Mooring Area</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="mooringArea" id="mooringArea" value="{{ $ot -> mooringArea != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> mooringArea)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
-                                                    <h5 class="card-title text-center text-danger font-weight-bold">Doc Overhand</h5>
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Doc Overhand {{ $ot -> user -> cabang == 'Samarinda' ? '(Optional)' : '' }}</h5>
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
                                                         <input class="form-control" type="datetime-local" name="DOH" id="DOH" value="{{ $ot -> DOH != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> DOH)) : '' }}">
@@ -142,7 +184,7 @@
                                                     <h5 class="card-title text-center text-danger font-weight-bold">Arrival (POD)</h5>
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
-                                                        <input class="form-control" type="datetime-local" name="arrivalPOD" id="arrivalPOD" value="{{ $ot -> arrivalPOD != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPOD)) : '' }}">
+                                                        <input class="form-control" type="datetime-local" name="arrivalPODGeneral" id="arrivalPODGeneral" value="{{ $ot -> arrivalPODGeneral != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalPODGeneral)) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,7 +244,11 @@
                                             </div>
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
-                                                    <h5 class="card-title text-center text-danger font-weight-bold">Departure Time</h5>
+                                                    @if($ot -> user -> cabang == 'Samarinda')
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure Pangkalan</h5>
+                                                    @else
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure To</h5>
+                                                    @endif
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
                                                         <input class="form-control" type="datetime-local" name="departureTime" id="departureTime" value="{{ $ot -> departureTime != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departureTime)) : '' }}">
@@ -213,13 +259,39 @@
                                         @if($ot -> taskType == 'Operational Transhipment')
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
-                                                    <h5 class="card-title text-center text-danger font-weight-bold">From Arrival Vessel</h5>
+                                                    @if($ot -> user -> cabang == 'Samarinda')
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Arrival Pangkalan</h5>
+                                                    @else
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">From Arrival Vessel</h5>
+                                                    @endif
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
                                                         <input class="form-control" type="datetime-local" name="faVessel" id="faVessel" value="{{ $ot -> faVessel != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> faVessel)) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            @if($ot -> user -> cabang == 'Samarinda')
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure To Jetty</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="departureJetty" id="departureJetty" value="{{ $ot -> departureJetty != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departureJetty)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Pengolongan Naik</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="pengolonganNaik" id="pengolonganNaik" value="{{ $ot -> pengolonganNaik != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> pengolonganNaik)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
                                                     <h5 class="card-title text-center text-danger font-weight-bold">Arrival POL</h5>
@@ -274,9 +346,31 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            @if($ot -> user -> cabang == 'Samarinda')
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Pengolongan Turun</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="pengolonganTurun" id="pengolonganTurun" value="{{ $ot -> pengolonganTurun != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> pengolonganTurun)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Mooring Area</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                        <div class="form-group mt-3">
+                                                            <input class="form-control" type="datetime-local" name="mooringArea" id="mooringArea" value="{{ $ot -> mooringArea != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> mooringArea)) : '' }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
-                                                    <h5 class="card-title text-center text-danger font-weight-bold">Doc Overhand</h5>
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Doc Overhand {{ $ot -> user -> cabang == 'Samarinda' ? '(Optional)' : '' }}</h5>
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
                                                         <input class="form-control" type="datetime-local" name="DOH" id="DOH" value="{{ $ot -> DOH != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> DOH)) : '' }}">
@@ -357,10 +451,14 @@
                                             </div>
                                             <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
                                                 <div class="card-body">
-                                                    <h5 class="card-title text-center text-danger font-weight-bold">Departure To Jetty</h5>
+                                                    @if($ot -> user -> cabang == 'Samarinda')
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure Pangkalan</h5>
+                                                    @else
+                                                        <h5 class="card-title text-center text-danger font-weight-bold">Departure To</h5>
+                                                    @endif
                                                     <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
                                                     <div class="form-group mt-3">
-                                                        <input class="form-control" type="datetime-local" name="departureJetty" id="departureJetty" value="{{ $ot -> departureJetty != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departureJetty)) : '' }}">
+                                                        <input class="form-control" type="datetime-local" name="departureTimeTranshipment" id="departureTimeTranshipment" value="{{ $ot -> departureTimeTranshipment != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departureTimeTranshipment)) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -430,72 +528,133 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        @if($ot -> taskType == 'Non Operational')
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Time Arrival</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="arrivalTime" id="arrivalTime" value="{{ $ot -> arrivalTime != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> arrivalTime)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Start Docking</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="startDocking" id="startDocking" value="{{ $ot -> startDocking != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> startDocking)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Finish Docking</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="finishDocking" id="finishDocking" value="{{ $ot -> finishDocking != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> finishDocking)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card border-dark mx-3 mb-3" style="width: 17rem;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center text-danger font-weight-bold">Departure To POL</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center text-center font-weight-bold">Start Date & Time</h6>
+                                                    <div class="form-group mt-3">
+                                                        <input class="form-control" type="datetime-local" name="departurePOL" id="departurePOL" value="{{ $ot -> departurePOL != NULL ? date('Y-m-d\TH:i:s', strtotime($ot -> departurePOL)) : '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
-                                    <div class="d-flex justify-content-center mt-5 mb-5">
+                                    {{-- <div class="d-flex justify-content-center mt-5 mb-5">
                                         <button class="btn btn-info" type="submit">Update</button>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
-                                <div class="mt-5" style="width: 30%">
+                                <div style="width: 30%; margin-top: 7vh">
                                     <div class="d-flex justify-content-center">
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="condition">Condition : </label>
                                             {{-- <input type="text" class="form-control" name="condition" id="" placeholder="Input Condition ..."> --}}
                                             <select class="form-select" name="condition" id="condition" required>
-                                                <option value="Perbaikan" {{ $ot -> condition == 'Perbaikan' ? 'selected' : '' }}>Perbaikan</option>
-                                                <option value="DOK" {{ $ot -> condition == 'DOK' ? 'selected' : '' }}>DOK</option>
-                                                <option value="Tunggu Tugboat atau Barge" {{ $ot -> condition == 'Tunggu Tugboat atau Barge' ? 'selected' : '' }}>Tunggu Tugboat atau Barge</option>
-                                                <option value="Cuaca" {{ $ot -> condition == 'Cuaca' ? 'selected' : '' }}>Cuaca</option>
-                                                <option value="Tunggu Dokumen" {{ $ot -> condition == 'Tunggu Dokumen' ? 'selected' : '' }}>Tunggu Dokumen</option>
-                                                <option value="Antri Muat" {{ $ot -> condition == 'Antri Muat' ? 'selected' : '' }}>Antri Muat</option>
-                                                <option value="Antri Bongkar" {{ $ot -> condition == 'Antri Bongkar' ? 'selected' : '' }}>Antri Bongkar</option>
-                                                <option value="Tunggu Schedule" {{ $ot -> condition == 'Tunggu Schedule' ? 'selected' : '' }}>Tunggu Schedule</option>
-                                                <option value="Tunggu DOK" {{ $ot -> condition == 'Tunggu DOK' ? 'selected' : '' }}>Tunggu DOK</option>
-                                                <option value="Standby DOK" {{ $ot -> condition == 'Standby DOK' ? 'selected' : '' }}>Standby DOK</option>
-                                                <option value="Kandas" {{ $ot -> condition == 'Kandas' ? 'selected' : '' }}>Kandas</option>
-                                                <option value="Bocor" {{ $ot -> condition == 'Bocor' ? 'selected' : '' }}>Bocor</option>
+                                                <option disabled>Choose</option>
+                                                @if($ot -> taskType == 'Non Operational')
+                                                    <option value="Docking" {{ $ot -> condition == 'Docking' ? 'selected' : '' }}>Docking</option>
+                                                    <option value="Standby Docking" {{ $ot -> condition == 'Standby Docking' ? 'selected' : '' }}>Standby Docking</option>
+                                                @else
+                                                    <option value="On Sailing" {{ $ot -> condition == 'On Sailing' ? 'selected' : '' }}>On Sailing</option>
+                                                    <option value="Loading Activity" {{ $ot -> condition == 'Loading Activity' ? 'selected' : '' }}>Loading Activity</option>
+                                                    <option value="Discharge Activity" {{ $ot -> condition == 'Discharge Activity' ? 'selected' : '' }}>Discharge Activity</option>
+                                                    <option value="Standby" {{ $ot -> condition == 'Standby' ? 'selected' : '' }}>Standby</option>
+                                                    <option value="Repair" {{ $ot -> condition == 'Repair' ? 'selected' : '' }}>Repair</option>
+                                                    <option value="Grounded Barge" {{ $ot -> condition == 'Grounded Barge' ? 'selected' : '' }}>Grounded Barge</option>
+                                                    <option value="Waiting Schedule" {{ $ot -> condition == 'Waiting Schedule' ? 'selected' : '' }}>Waiting Schedule</option>
+                                                @endif
                                             </select>
                                         </div>
+
                                     </div>
-                                    <div class="d-flex justify-content-center mt-3">
-                                        <div class="form-group col-md-6">
-                                            <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
-                                            <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}" required>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo Akhir : </label>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Akhir Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}" required>
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Ton</div>
-                                                </div>
+                                    @if($ot -> taskType != 'Non Operational')
+                                        <div class="d-flex justify-content-around mt-3">
+                                            <div class="form-group col-md-6">
+                                                <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
+                                                <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="text-danger font-weight-bold" for="cargoAmountEnd">Jumlah Kargo : </label>
+                                                @if($ot -> taskType != 'Return Cargo')
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="cargoAmountEnd" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Dalam Ton..." value="{{ $ot -> cargoAmountEnd }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Ton</div>
+                                                        </div>
+                                                    </div>
+                                                @elseif($ot -> taskType == 'Return Cargo')
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="cargoAmountEndCargo" min="1" step="0.001" id="" placeholder="Input Jumlah Kargo Dalam Ton..." value="{{ $ot -> cargoAmountEndCargo }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Ton</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <div class="form-group col-md-6">
+                                            <label class="text-danger font-weight-bold" for="estimatedTime">Estimasi (dalam hari) : </label>
+                                            <input type="text" class="form-control" name="estimatedTime" id="" placeholder="Input Estimasi Dalam Hari ..." value="{{ $ot -> estimatedTime }}">
+                                        </div>
+                                    @endif
+
                                     @if($ot -> taskType == 'Operational Shipment')
                                         <div class="d-flex justify-content-center">
                                             <div class="form-group col-md-12">
                                                 <label class="text-danger font-weight-bold" for="customer">Customer : </label>
-                                                <input type="text" class="form-control" name="customer" id="" placeholder="Input Customer ..." value="{{ $ot -> customer }}" required>
+                                                <input type="text" class="form-control" name="customer" id="" placeholder="Input Customer ..." value="{{ $ot -> customer }}">
                                             </div>
                                         </div>
                                     @endif
+                                    
                                     <div class="d-flex justify-content-center mt-3">
                                         <div class="form-group col-md-12">
                                             <label class="text-danger font-weight-bold" for="description">Deskripsi : </label>
                                             <br>
-                                            <textarea name="description" id="" cols="102" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
+                                            <textarea name="description" style="width: 100%" rows="10" placeholder="Input Deskripsi ...">{{ $ot -> description }}</textarea>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-around mt-5">
-                                        <div class="d-flex flex-column w-25">
-                                            <button class="btn btn-danger" type="button" data-toggle="modal" id="cancel" data-target="#cancel-{{ $ot -> id }}">Cancel Task</button>
-                                            @if($ot -> taskType == 'Operational Transhipment')
-                                                <button class="btn btn-info mt-3" type="button" data-toggle="modal" id="return cargo" data-target="#return-cargo-{{ $ot -> id }}">Continue Return Cargo</button>
-                                            @endif
-                                        </div>
-                                        <button class="btn btn-primary w-50" type="button" data-toggle="modal" id="finalize" data-target="#finalize-{{ $ot -> id }}">Finalize</button>
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-info" type="submit" style="width: 90%">Update</button>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button class="btn btn-primary" type="button" data-toggle="modal" id="finalize" data-target="#finalize-{{ $ot -> id }}" style="width: 90%">Finalize</button>
+                                    </div>
+                                    <div class="d-flex justify-content-around mt-3">
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" id="cancel" data-target="#cancel-{{ $ot -> id }}" style="width: 40%">Cancel Task</button>
+                                        @if($ot -> taskType == 'Operational Transhipment')
+                                            <button class="btn btn-warning text-white" type="button" data-toggle="modal" id="return cargo" data-target="#return-cargo-{{ $ot -> id }}" style="width: 40%">Continue Return Cargo</button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -523,6 +682,9 @@
                                             @csrf
                                             @method('delete')
                                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
+                                            <input type="hidden" name="tugName" value="{{ $ot -> tugName }}">
+                                            <input type="hidden" name="bargeName" value="{{ $ot -> bargeName }}">
+
                                             <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                             <button type="submit" class="btn btn-primary" href="">Yes</button>
                                         </form>
@@ -555,6 +717,8 @@
                                                 @method('patch')
                                                 <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                                                 <input type="hidden" name="taskType" value="{{ $ot -> taskType }}">
+                                                <input type="hidden" name="cabang" value="{{ $ot -> user -> cabang }}">
+
                                                 <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                                 <button type="submit" class="btn btn-primary" href="">Yes</button>
                                             </form>
@@ -585,6 +749,9 @@
                                         <form action="/crew/ongoing-task" method="POST">
                                             @csrf
                                             @method('patch')
+                                            <input type="hidden" name="tugName" value="{{ $ot -> tugName }}">
+                                            <input type="hidden" name="bargeName" value="{{ $ot -> bargeName }}">
+
                                             <input type="hidden" name="taskId" value="{{ $ot -> id }}">
                                             <button type="button" class="btn btn-danger mr-3" data-dismiss="modal" aria-label="Close">No</button>
                                             <button type="submit" class="btn btn-primary" href="">Yes</button>
@@ -620,6 +787,25 @@
             setTimeout(function() {
                 $('.alert').fadeOut('fast');
             }, 3000); 
+        </script>
+
+        <script type="text/javascript">
+            function trim_text(el) {
+                el.value = el.value.
+                replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+                replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+                replace(/\n +/, "\n"); // Removes spaces after newlines
+                return;
+            }
+            $(function(){
+                $("textarea").change(function() {
+                    trim_text(this);
+                });
+
+                $("input").change(function() {
+                    trim_text(this);
+                });
+            }); 
         </script>
 
     @endsection

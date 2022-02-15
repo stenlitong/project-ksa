@@ -14,14 +14,16 @@
                     <div class="d-flex justify-content-start mb-3">
                         <a href="{{ Route('logistic.historyOut') }}" class="btn btn-outline-success mr-3">Goods Out</a>
                         <a href="{{ Route('logistic.historyIn') }}" class="btn btn-outline-secondary">Goods In</a>
-        
+                        
+                        <input type="text" class="form-control ml-5 w-25" id="search" onkeyup="myFunction()" placeholder="Search By Tanggal Masuk, Item, Serial Number, Nama Supplier...">
+                        
                         @if(count($orderHeads) > 0)
                             <a href="{{ Route('logistic.downloadIn') }}" class="btn btn-outline-danger ml-auto mr-3" target="_blank">Export</a>
                         @endif
                     </div>
                     
                     <div class="table-wrapper-scroll-y my-custom-scrollbar tableFixHead" style="overflow-x:auto;">
-                        <table class="table table-bordered sortable">
+                        <table class="table table-bordered sortable" id="myTable">
                             <thead class="thead bg-danger">
                             <tr>
                                 <th scope="col">Nomor</th>
@@ -92,6 +94,33 @@
                 width: 100%;
             }
         </style>
+
+        <script>
+            function myFunction() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("search");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("myTable");
+                tr = table.getElementsByTagName("tr");
+                
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[1];
+                    td1 = tr[i].getElementsByTagName("td")[2];
+                    td2 = tr[i].getElementsByTagName("td")[3];
+                    td3 = tr[i].getElementsByTagName("td")[6];
+                    if (td) {
+                        if ( (td.innerHTML.toUpperCase().indexOf(filter) > -1) || (td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1))  {            
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     @endsection
 @else

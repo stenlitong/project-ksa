@@ -37,23 +37,26 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label>Tug</label>
-                                    <select class="form-control" name="tug_id" id="tug_id" style=" height:50px;" required>
-                                        @foreach($tugs as $t)
-                                            <option value="{{ $t -> id }}">{{ $t -> tugName }}</option>
-                                        @endforeach
+                                    <select class="form-control" name="tugName" id="tugName" style=" height:50px;" required>
+                                        @forelse($tugs as $t)
+                                            <option value="{{ $t -> tugName }}">{{ $t -> tugName }}</option>
+                                        @empty
+                                            <option value="" disabled>No Tugs Available</option>
+                                        @endforelse
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>Barge (Optional)</label>
-                                    <select class="form-control" name="barge_id" id="barge_id" style=" height:50px;" required>
+                                    <label>Barge</label>
+                                    <select class="form-control" name="bargeName" id="bargeName" style=" height:50px;">
+                                            <option value="">None</option>
                                         @foreach($barges as $b)
-                                            <option value="{{ $b -> id }}">{{ $b -> bargeName }}</option>
+                                            <option value="{{ $b -> bargeName }}">{{ $b -> bargeName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="jetty">Jetty</label>
-                                    <input name="jetty" type="text" class="form-control" id="jetty" maxlength="50" pattern="[A-Za-z]{2,}" placeholder="Input Jetty (min. 2 alpha)..."
+                                    <label for="portOfLoading">Port Of Loading</label>
+                                    <input name="portOfLoading" type="text" class="form-control" id="portOfLoading" maxlength="50" placeholder="Input Port Of Loading..."
                                         style=" height: 50px" required>
                                 </div>
                                 <div class="form-group col-md-4">
@@ -72,8 +75,13 @@
                                         <option value="" disabled>Choose Task...</option>
                                         <option value="Operational Shipment">Operational Shipment</option>
                                         <option value="Operational Transhipment">Operational Transhipment</option>
-                                        {{-- <option value="Return Cargo">Return Cargo</option> --}}
+                                        <option value="Non Operational">Non Operational</option>
                                     </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="portOfDischarge">Port Of Discharge</label>
+                                    <input name="portOfDischarge" type="text" class="form-control" id="portOfDischarge" maxlength="50" placeholder="Input Port Of Discharge..."
+                                        style=" height: 50px" required>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center">
@@ -91,6 +99,25 @@
             setTimeout(function() {
                 $('.alert').fadeOut('fast');
             }, 3000); 
+        </script>
+
+        <script type="text/javascript">
+            function trim_text(el) {
+                el.value = el.value.
+                replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+                replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space
+                replace(/\n +/, "\n"); // Removes spaces after newlines
+                return;
+            }
+            $(function(){
+                $("textarea").change(function() {
+                    trim_text(this);
+                });
+
+                $("input").change(function() {
+                    trim_text(this);
+                });
+            }); 
         </script>
 
     @endsection

@@ -29,6 +29,6 @@ class DailyItemBelowStockReport extends Mailable
     {
         return $this->subject('Report Barang Kurang Dari Stok Minimum')
             ->view('mailsTemplate.weeklyItemBelowStockTemplate')
-            ->from('raihannauf@gmail.com');
+            ->from('itptksa@gmail.com');
     }
 }

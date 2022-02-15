@@ -117,7 +117,7 @@ class PurchasingManagerController extends Controller
                 $query->where('status', 'like', 'Order Completed (Logistic)')
                 ->orWhere('status', 'like', 'Order Rejected By Supervisor')
                 ->orWhere('status', 'like', 'Order Rejected By Purchasing');
-            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6);
     
             $completed = $orderHeads->count();
             
@@ -139,7 +139,7 @@ class PurchasingManagerController extends Controller
         // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', $default_branch)->pluck('users.id');
         $users = User::whereHas('roles', function($query){
             $query->where('name', 'logistic');
-        })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
         // Count the completed & in progress order
         $completed = OrderHead::where(function($query){
@@ -180,7 +180,7 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'Revised' . '%')
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'like', 'Item Delivered By Supplier');
-            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(10);
+            })->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6);
     
             $in_progress = $orderHeads->count();
             
@@ -459,7 +459,8 @@ class PurchasingManagerController extends Controller
         $path = ApList::where('id', $request -> apListId)->pluck($request -> pathToFile)[0];
 
         // Then, find the file to download it
-        return Storage::download($path . $filename);
+        // return Storage::download($path . $filename);
+        return Storage::disk('s3')->response($path . $filename);
     }
 
     public function approveDocument(Request $request){
@@ -584,7 +585,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = 'Jakarta';
 
-        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::with(['item'])->join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.user_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')
@@ -593,7 +594,7 @@ class PurchasingManagerController extends Controller
                 ->orWhere('status', 'like', '%' . 'Finalized' . '%')
                 ->orWhere('status', 'Item Delivered By Supplier');
         })->get();
-
+        
         return view('purchasingManager.purchasingManagerChecklistPrPage', compact('default_branch', 'str_month', 'orderDetails'));
     }
     
@@ -623,7 +624,7 @@ class PurchasingManagerController extends Controller
         // Helper var
         $default_branch = $branch;
 
-        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
+        $orderDetails = OrderDetail::join('order_heads', 'order_heads.id', '=', 'order_details.orders_id')->join('users', 'users.id', '=', 'order_heads.user_id')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('order_heads.cabang', $default_branch)->where(function($query){
             $query->where('status', 'Order Completed (Logistic)')
                 ->orWhere('status', 'Order In Progress By Purchasing')
                 ->orWhere('status', 'Order In Progress By Purchasing Manager')

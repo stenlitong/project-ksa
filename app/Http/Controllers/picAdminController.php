@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Storage;
-use Response;
-use validator;
 use Carbon\Carbon;
-use App\Mail\Gmail;
 use App\Models\User;
 use App\Models\documents;
 use App\Models\Rekapdana;
@@ -19,8 +16,6 @@ use App\Models\documentsamarinda;
 use Illuminate\Support\Facades\DB;
 use App\Models\documentbanjarmasin;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class picAdminController extends Controller

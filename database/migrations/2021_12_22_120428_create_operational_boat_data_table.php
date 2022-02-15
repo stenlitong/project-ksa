@@ -20,13 +20,14 @@ class CreateOperationalBoatDataTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('tug_id');
-            $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('tugName');
+            // $table->foreign('tug_id')->references('id')->on('tugs')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedBigInteger('barge_id')->nullable();
-            $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('bargeName')->nullable();
+            // $table->foreign('barge_id')->references('id')->on('barges')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->string('jetty', 50);
+            $table->string('portOfLoading', 50);
+            $table->string('portOfDischarge', 50);
             $table->string('taskType', 30);
             $table->double('cargoAmountStart');
             $table->string('customer')->nullable();
@@ -38,6 +39,7 @@ class CreateOperationalBoatDataTable extends Migration
             $table->string('condition', 50)->nullable();
             $table->string('estimatedTime', 30)->nullable();
             $table->double('cargoAmountEnd')->nullable();
+            $table->double('cargoAmountEndCargo')->nullable();
             $table->longText('description')->nullable();
 
             // Calculation Data
@@ -81,7 +83,19 @@ class CreateOperationalBoatDataTable extends Migration
             $table->dateTime('compMVTranshipment')->nullable();
             $table->dateTime('cOffMVTranshipment')->nullable();
 
+            $table->dateTime('departureTimeTranshipment')->nullable();
+
+            // Samarinda Only (optional)
             $table->dateTime('departureJetty')->nullable();
+            $table->dateTime('pengolonganNaik')->nullable();
+            $table->dateTime('pengolonganTurun')->nullable();
+            $table->dateTime('mooringArea')->nullable();
+
+            // Non Operational
+            // $table->dateTime('arrivalTime')->nullable();
+            $table->dateTime('startDocking')->nullable();
+            $table->dateTime('finishDocking')->nullable();
+            $table->dateTime('departurePOL')->nullable();
 
             // Return Cargo
             $table->dateTime('arrivalPODCargo')->nullable();
@@ -93,14 +107,15 @@ class CreateOperationalBoatDataTable extends Migration
             // => departureTime
 
             // Days Calculation
-            $table->bigInteger('DOKDays')->default(0);
-            $table->bigInteger('perbaikanDays')->default(0);
-            $table->bigInteger('kandasDays')->default(0);
-            $table->bigInteger('tungguDOKDays')->default(0);
-            $table->bigInteger('tungguTugDays')->default(0);
-            $table->bigInteger('tungguDokumenDays')->default(0);
-            $table->bigInteger('standbyDOKDays')->default(0);
-            $table->bigInteger('bocor')->default(0);
+            $table->bigInteger('onSailingDays')->default(0);
+            $table->bigInteger('loadingActivityDays')->default(0);
+            $table->bigInteger('dischargeActivityDays')->default(0);
+            $table->bigInteger('standbyDays')->default(0);
+            $table->bigInteger('repairDays')->default(0);
+            $table->bigInteger('dockingDays')->default(0);
+            $table->bigInteger('standbyDockingDays')->default(0);
+            $table->bigInteger('groundedBargeDays')->default(0);
+            $table->bigInteger('waitingScheduleDays')->default(0);
 
             // Calculation Data
             $table->double('sailingToMV')->nullable();
@@ -116,10 +131,19 @@ class CreateOperationalBoatDataTable extends Migration
             $table->double('cycleTime')->nullable();
             $table->double('document')->nullable();
             $table->string('totalTime', 50)->nullable();
+            $table->double('totalLostDays')->nullable();
+
+            // Additional Calculation Data For Return Cargo
+            $table->double('sailingToMVCargo')->nullable();
+            $table->double('maneuverCargo')->nullable();
+            $table->double('dischTimeCargo')->nullable();
+            $table->double('dischRateCargo')->nullable();
+            $table->double('cycleTimeCargo')->nullable();
 
             // Validation Data
             $table->integer('task_tracker')->default(0);
             $table->integer('cargoChangeTracker')->default(0);
+            $table->integer('cargo2ChangeTracker')->default(0);
 
             $table->timestamps();
         });

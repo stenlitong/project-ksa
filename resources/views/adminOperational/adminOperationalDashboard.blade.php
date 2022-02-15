@@ -10,96 +10,111 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             @include('../layouts/time')            
 
-            <h1 class="mt-3 mb-3" style="text-align: center">Dashboard</h1>
+            <h1 class="mt-4 mb-5" style="text-align: center">Dashboard</h1>
 
             <div class="d-flex justify-content-center smaller-size" id="content">
-                <div class="d-flex flex-wrap" style="width: 60%; overflow-y: auto; max-height: 600px">
+                <div class="d-flex flex-wrap" style="width: 50%; overflow-y: auto; max-height: 600px">
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            {{-- <img src="/images/tool.svg" class="mt-3" alt=""> --}}
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">DOK</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $dok_days }}</h1>
+                            <h5 class="text-warning mt-3 display-5">{{ $total_tugs }}</h5>
+                            <h5 class="text-warning mt-3">Total Tugboat</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Perbaikan</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $perbaikan_days }}</h1>
+                            <h5 class="text-warning mt-3 display-5">{{ $total_barges }}</h5>
+                            <h5 class="text-warning mt-3">Total Barges</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Kandas</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $kandas_days }}</h1>
+                            <h5 class="text-white mt-3 display-5">{{ $on_sailing_count }}</h5>
+                            <h5 class="text-white mt-3">On Sailing</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Tunggu DOK</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguDOK_days }}</h1>
+                            <h5 class="text-white mt-3 display-5">{{ $loading_activity_count }}</h5>
+                            <h5 class="text-white mt-3">Loading Activity</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Tunggu Tug Boat</h5>
+                            <h1 class="text-white mt-3 display-5">{{ $discharge_activity_count }}</h1>
+                            <h5 class="text-white mt-3">Discharge Activity</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguTug_days }}</h1>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <h1 class="text-white mt-3 display-5">{{ $standby_count }}</h1>
+                          <h5 class="text-white mt-3">Standby</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <h1 class="text-white mt-3 display-5">{{ $repair_count }}</h1>
+                            <h5 class="text-white mt-3">Repair</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Tunggu Dokumen</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $tungguDokumen_days }}</h1>
+                            <h1 class="text-white mt-3 display-5">{{ $tug_docking_count }}</h1>
+                            <h5 class="text-white mt-3">Tug Docking</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Standby DOK</h5>
+                            <h1 class="text-white mt-3 display-5">{{ $barge_docking_count }}</h1>
+                            <h5 class="text-white mt-3">Barge Docking</h5>
                           </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $standbyDOK_days }}</h1>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <h1 class="text-white mt-3 display-5">{{ $tug_standby_docking_count }}</h1>
+                          <h5 class="text-white mt-3">Tug Standby Docking</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flip-card">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <h1 class="text-white mt-3 display-5">{{ $barge_standby_docking_count }}</h1>
+                          <h5 class="text-white mt-3">Barge Standby Docking</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <h1 class="text-white mt-3 display-5">{{ $grounded_barge_count }}</h1>
+                            <h5 class="text-white mt-3">Grounded Barge</h5>
                           </div>
                         </div>
                     </div>
                     <div class="flip-card">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="/images/tool.svg" class="mt-3" alt="">
-                            <h5 class="text-white mt-3">Bocor</h5>
-                          </div>
-                          <div class="flip-card-back d-flex flex-column align-items-center justify-content-center">
-                            <h1 class="text-card-back">{{ $bocor_days }}</h1>
+                            <h1 class="text-white mt-3 display-5">{{ $waiting_schedule_count }}</h1>
+                            <h5 class="text-white mt-3">Waiting Schedule</h5>
                           </div>
                         </div>
                     </div>
@@ -107,7 +122,7 @@
                 <div class="right-section mt-3" style="width: 40%">
                     <div class="jumbotron jumbotron-fluid mx-2">
                         <div class="container">
-                          <h1 class="display-4 text-wrap font-weight-bold text-center">Percentage Ship's Activity : </h1>
+                          <h1 class="display-5 text-wrap font-weight-bold text-center">Percentage Ship's Activity : </h1>
                           <div class="progress mb-3 mt-3" style="height: 5vh; max-width: 85%; margin-left: 8%">
                               <div class="progress-bar progress-bar-animated progress-bar-striped bg-success font-weight-bold" role="progressbar" style="width: {{ $percentage_ship_activity }}%;" aria-valuenow="{{ $percentage_ship_activity }}" aria-valuemin="0" aria-valuemax="100">
                                 <h3 class="font-weight-bold">
@@ -126,6 +141,9 @@
     </div>
 
     <style>
+      h5{
+        font-size: 17px;
+      }
         th{
             color: white;
         }
@@ -150,60 +168,46 @@
         .jumbotron{
             background-color: #A4363A;
             color: white;
-            border: 1px solid black;
+            border: 8px solid black;
             border-radius: 10px;
             height: 100%;
         }
         /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
         .flip-card {
-            border-radius: 10px;
             margin: 20px;
             background-color: transparent;
-            width: 300px;
-            height: 200px;
-            perspective: 1000px; /* Remove this if you don't want the 3D effect */
+            width: 180px;
+            height: 180px;
+            /* perspective: 1000px; */
         }
 
         /* This container is needed to position the front and back side */
         .flip-card-inner {
-            border-radius: 10px;
-            border: 1px solid black;
+            border-radius: 50%;
+            /* border: 8px solid black; */
+            border: 8px solid #A01D23;
             position: relative;
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-
-        /* Do an horizontal flip when you move the mouse over the flip box container */
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
         }
 
         /* Position the front and back side */
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* Safari */
-            backface-visibility: hidden;
+        .flip-card-front{
+          position: absolute;
+          border-radius: 50%;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
         }
 
-        /* Style the front side (fallback if image is missing) */
         .flip-card-front {
-            background-color: #A01D23;            
+          background-color: #A01D23;      
         }
 
-        /* Style the back side */
-        .flip-card-back {
-            border-radius: 10px;
-            background-color: beige;
-            color: black;
-            transform: rotateY(180deg);
-        }
-        .text-card-back{
-            font-size: 64px;
+        .text-white mt-3 display-2{
+          font-size: 64px;
         }
         @media only screen and (max-width: 960px) {
             .smaller-size {

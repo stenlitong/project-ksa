@@ -81,11 +81,7 @@
     }
     @media (max-width: 768px) {
     body {
-<<<<<<< HEAD
         height:117.7vh;
-=======
-        height:100vh;
->>>>>>> testing_merge
     }
 </style>
 

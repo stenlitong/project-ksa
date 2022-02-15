@@ -6,17 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Barge;
 use App\Models\OperationalBoatData;
 use App\Models\Tug;
-use App\Models\User;
-use Carbon\Carbon;
-use DateTime;
-use Illuminate\Support\Facades\DB;
 use App\Exports\DailyReportsExport;
 
 class AdminOperationalController extends Controller
 {
     public function reportTranshipmentPage(){
-        $tugs = Tug::latest()->get();
-        $barges = Barge::latest()->get();
+        // Only Get The Tug|Barge That Is Inactive
+        $tugs = Tug::where('tugAvailability', true)->get();
+        $barges = Barge::where('bargeAvailability', true)->get();
         $operationalData = NULL;
 
         return view('adminOperational.adminOperationalReportTranshipment', compact('operationalData', 'tugs', 'barges'));
@@ -25,15 +22,24 @@ class AdminOperationalController extends Controller
     public function searchDailyReports(Request $request){
         if($request->ajax()){
             try{
-                $taskType = $request -> taskType;
-                $tug_id = $request -> tug_id;
-                $barge_id = $request -> barge_id;
+                // Helper var
+                $tugName = $request -> tugName;
+                $bargeName = $request -> bargeName;
                 $month = $request -> month;
                 $year = $request -> year;
+                $taskType = $request -> taskType;
 
-                $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tug_id', $tug_id)->where('barge_id', $barge_id)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                if($request -> taskType == 'Operational Transhipment'){
+                    $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where(function($query){
+                        $query -> where('taskType', 'Operational Transhipment')
+                        ->orWhere('taskType', 'Return Cargo');
+                    })->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                }else{
+                    // $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                    $operationalData = OperationalBoatData::where('status', 'Finalized')->where('tugName', $tugName)->where('bargeName', $bargeName)->where('taskType', $taskType)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+                }
 
-                return view('adminOperational.adminOperationalReportTranshipmentTable', compact('operationalData', 'taskType', 'tug_id', 'barge_id', 'month', 'year'))->render();
+                return view('adminOperational.adminOperationalReportTranshipmentTable', compact('operationalData', 'taskType', 'tugName', 'bargeName', 'month', 'year'))->render();
             }catch(\Throwable $e){
                 $operationalData = null;
                 return view('adminOperational.adminOperationalReportTranshipmentTable', compact('operationalData'))->render();
@@ -42,12 +48,24 @@ class AdminOperationalController extends Controller
     }
 
     public function downloadDailyReports(Request $request){
-        return (new DailyReportsExport($request -> taskType, $request -> tugId, $request -> bargeId, $request -> month, $request -> year))->download('Daily-Report-Transhipment' . '_' .  date("d-m-Y") . '.xlsx');
+        $nameFormat = '';
+        if($request -> taskType == 'Operational Shipment'){
+            $nameFormat = 'Daily-Report-Shipment';
+        }elseif($request -> taskType == 'Non Operational'){
+            $nameFormat = 'Daily-Report-Non-Operational';
+        }else{
+            $nameFormat = 'Daily-Report-Transhipment';
+        }
+
+        return (new DailyReportsExport($request -> taskType, $request -> tugName, $request -> bargeName, $request -> month, $request -> year))->download($nameFormat . '_' .  date("d-m-Y") . '.xlsx');
     }
 
     public function monitoringPage(){
-        $tugs = Tug::latest()->get();
-        $barges = Barge::latest()->get();
+        // Only Get The Tug|Barge That Is Active
+        $tugs = Tug::where('tugAvailability', false)->get();
+        $barges = Barge::where('bargeAvailability', false)->get();
+
+        // Get All The Destination|Origin
         $from = OperationalBoatData::where('status', 'On Going')->groupBy('from')->select('from')->get();
         $to = OperationalBoatData::where('status', 'On Going')->groupBy('to')->select('to')->get();
 
@@ -67,7 +85,7 @@ class AdminOperationalController extends Controller
     public function searchMonitoring(Request $request){
         if($request->ajax()){  
             try{
-                $operationalData = OperationalBoatData::where('status', 'On Going')->where('tug_id', $request -> tug_id)->where('barge_id', $request -> barge_id)->where('from', $request -> from)->where('to', $request -> to)->where('taskType', $request -> taskType)->latest()->first();
+                $operationalData = OperationalBoatData::where('status', 'On Going')->where('tugName', $request -> tugName)->where('bargeName', $request -> bargeName)->where('from', $request -> from)->where('to', $request -> to)->where('taskType', $request -> taskType)->latest()->first();
                 
                 return view('adminOperational.adminOperationalJumbotronMonitoring', compact('operationalData'))->render();
 
@@ -169,7 +187,13 @@ class AdminOperationalController extends Controller
 
     public function addNewTugboat(Request $request){
         $validated = $request -> validate([
-            'tugName' => 'required|string'
+            'tugName' => 'required|string|unique:tugs' ,
+            'gt' => 'required|string',
+            'nt' => 'required|string',
+            'master' => 'required|string',
+            'flag' => 'required|string',
+            'IMONumber' => 'required|string',
+            'callSign' => 'required|string',
         ]);
 
         Tug::create($validated);
@@ -211,7 +235,10 @@ class AdminOperationalController extends Controller
 
     public function addNewBarge(Request $request){
         $validated = $request -> validate([
-            'bargeName' => 'required|string'
+            'bargeName' => 'required|string|unique:barges',
+            'gt' => 'required|string',
+            'nt' => 'required|string',
+            'flag' => 'required|string',
         ]);
 
         Barge::create($validated);

@@ -1,50 +1,32 @@
 <?php
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Models\ItemBelowStock;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\OrderHead;
 use App\Models\OrderDetail;
 use App\Models\Supplier;
 use App\Models\ApList;
 use App\Models\OperationalBoatData;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
-=======
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
-use Storage;
-use Response;
-use validator;
-use Carbon\Carbon;
-use App\Mail\Gmail;
-<<<<<<< HEAD
 use App\Models\Barge;
-=======
-use App\Models\User;
-use App\Models\ApList;
+use App\Models\Tug;
+
 use App\Models\JobHead;
-use App\Models\NoteSpgr;
-use App\Models\spgrfile;
-use App\Models\Supplier;
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
-use App\Models\documents;
-use App\Models\OrderHead;
 use App\Models\JobDetails;
+use App\Models\documents;
 use App\Models\documentrpk;
-use App\Models\OrderDetail;
-use Illuminate\Http\Request;
 use App\Models\documentberau;
-use App\Models\ItemBelowStock;
-use App\Models\documentJakarta;
 use App\Models\documentsamarinda;
-use Illuminate\Support\Facades\DB;
 use App\Models\documentbanjarmasin;
+use App\Models\documentJakarta;
+use App\Models\spgrfile;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+
+use Storage;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -105,7 +87,6 @@ class DashboardController extends Controller
 
             $items_below_stock = $this -> checkStock();
 
-
             return view('logistic.logisticDashboard', compact('orderHeads', 'orderDetails', 'completed', 'in_progress', 'items_below_stock'));
             
         }elseif(Auth::user()->hasRole('supervisorLogistic') or Auth::user()->hasRole('supervisorLogisticMaster')){
@@ -119,10 +100,9 @@ class DashboardController extends Controller
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere('order_id', 'like', '%'. request('search') .'%');
-                })->whereYear('created_at', date('Y'))->latest()->paginate(6);
-                
+                })->whereYear('created_at', date('Y'))->latest()->paginate(7);
             }else{
-                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
+                $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
             }
 
             // Then find all the order details from the orderHeads
@@ -220,7 +200,7 @@ class DashboardController extends Controller
             // $users = User::join('role_user', 'role_user.user_id', '=', 'users.id')->where('role_user.role_id' , '=', '3')->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
             $users = User::whereHas('roles', function($query){
                 $query->where('name', 'logistic');
-            })->where('cabang', 'like', Auth::user()->cabang)->pluck('users.id');
+            })->where('cabang', 'like', $default_branch)->pluck('users.id');
 
             if(request('search')){
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where(function($query){
@@ -255,45 +235,54 @@ class DashboardController extends Controller
             $suppliers = Supplier::latest()->get();
 
             return view('purchasingManager.purchasingManagerDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'default_branch', 'completed', 'in_progress'));
-<<<<<<< HEAD
         }elseif(Auth::user()->hasRole('adminOperational')){
 
             // Sum The DAYS Of Each Condition, Not The Count Of The Ship
-            $dok_days = OperationalBoatData::where('status', 'On Going')->sum('DOKDays');
-            $perbaikan_days = OperationalBoatData::where('status', 'On GOing')->sum('perbaikanDays');
-            $kandas_days = OperationalBoatData::where('status', 'On GOing')->sum('kandasDays');
-            $tungguDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDOKDays');
-            $tungguTug_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguTugDays');
-            $tungguDokumen_days = OperationalBoatData::where('status', 'On GOing')->sum('tungguDokumenDays');
-            $standbyDOK_days = OperationalBoatData::where('status', 'On GOing')->sum('standbyDOKDays');
-            $bocor_days = OperationalBoatData::where('status', 'On GOing')->sum('bocor');
+            $docking_days = OperationalBoatData::where('status', 'On Going')->sum('dockingDays');
+            $standby_docking_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDockingDays');
+            $standby_days = OperationalBoatData::where('status', 'On Going')->sum('standbyDays');
+            $grounded_barge_days = OperationalBoatData::where('status', 'On Going')->sum('groundedBargeDays');
+            $repair_days = OperationalBoatData::where('status', 'On Going')->sum('repairDays');
+            $waiting_schedule_days = OperationalBoatData::where('status', 'On Going')->sum('waitingScheduleDays');
 
-            // formula => Total lost time : 
-            // DOK - standby belum DOK
-            $total_lost_time = $dok_days - $standbyDOK_days;
+            // Ship Count
+            $on_sailing_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'On Sailing')->count();
+            $loading_activity_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Loading Activity')->count();
+            $discharge_activity_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Discharge Activity')->count();
+            $standby_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby')->count();
+            $repair_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Repair')->count();
+            $grounded_barge_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Grounded Barge')->count();
+            $waiting_schedule_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Waiting Schedule')->count();
+
+            // Get Each Amount Of Tug & Barges (Non Operational Only)
+            $tug_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Docking')->count();
+            $barge_docking_count = OperationalBoatData::where('status', 'On Going')->whereNotNull('bargeName')->where('condition', 'Docking')->count();
+
+            $tug_standby_docking_count = OperationalBoatData::where('status', 'On Going')->where('condition', 'Standby Docking')->count();
+            $barge_standby_docking_count = OperationalBoatData::where('status', 'On Going')->whereNotNull('bargeName')->where('condition', 'Standby Docking')->count();
+
+            // formula => Total lost time : docking + standby docking + standby + grounded barge + repair + waiting schedule
+            $total_lost_time = $docking_days + $standby_docking_days + $standby_days + $grounded_barge_days + $repair_days + $waiting_schedule_days;
 
             // formula => AKTIF : 
             //  (31*total barge)-Total lost time:
-            $total_barge = Barge::count();
-            $aktif = (31 * $total_barge) - $total_lost_time;
+            $total_barges = Barge::count();
+            $aktif = (31 * $total_barges) - $total_lost_time;
             
             // formula => percentage ship's activity :
             // Aktif / (31*total barge) * 100
-            $percentage_ship_activity = $aktif / (31 * $total_barge) * 100;
+            $percentage_ship_activity = 0;
+            if($total_barges > 0){
+                $percentage_ship_activity = $aktif / (31 * $total_barges) * 100;
+            }
 
-            return view('adminOperational.adminOperationalDashboard', compact('dok_days', 'perbaikan_days', 'kandas_days', 'tungguDOK_days', 'tungguTug_days', 'tungguDokumen_days', 'standbyDOK_days', 'bocor_days', 'total_lost_time', 'percentage_ship_activity'));
+            // Total fleets => all tugs + barges
+            $total_tugs = Tug::count();
+
+            $total_fleets = $total_tugs + $total_barges;
+
+            return view('adminOperational.adminOperationalDashboard', compact('total_barges', 'total_tugs', 'on_sailing_count', 'loading_activity_count', 'discharge_activity_count', 'standby_count', 'repair_count', 'tug_docking_count', 'barge_docking_count', 'tug_standby_docking_count', 'barge_standby_docking_count', 'grounded_barge_count', 'waiting_schedule_count', 'percentage_ship_activity', 'total_lost_time'));
         }elseif(Auth::user()->hasRole('picSite')){
-            return view('picsite.picDashboard');
-        }elseif(Auth::user()->hasRole('picAdmin')){
-            if (request('search1') == 'All') {
-                $document = DB::table('documents')->get();
-                $documentberau = DB::table('beraudb')->get();
-                $documentbanjarmasin = DB::table('banjarmasindb')->get();
-                $documentsamarinda = DB::table('samarindadb')->get();
-                $docrpk = DB::table('rpkdocuments')->get();
-=======
-        }
-        elseif(Auth::user()->hasRole('picSite')){
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
@@ -543,8 +532,7 @@ class DashboardController extends Controller
                         return view('picsite.picDashboard', compact('documentjakarta','docrpk'));
                     }
                 }
-        }
-        elseif(Auth::user()->hasRole('picAdmin')){
+        }elseif(Auth::user()->hasRole('picAdmin')){
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
@@ -613,7 +601,6 @@ class DashboardController extends Controller
                     // dd($request);
                     return Storage::disk('s3')->response('jakarta/' . $year . "/". $month . "/" . $viewer);
                 }
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
             }
              // RPK view ----------------------------------------------------------
              if($request->tipefile == 'RPK'){
@@ -761,18 +748,8 @@ class DashboardController extends Controller
                 $documentjakarta = documentJakarta::whereDate('periode_akhir', '>=', $datetime)->latest()->get();
                 return view('picadmin.picAdminDashboard', compact('docrpk', 'document', 'documentberau' , 'documentbanjarmasin' , 'documentsamarinda' , 'documentjakarta'));
             }
-<<<<<<< HEAD
-            return view('picadmin.picAdminDashboard' , compact('document', 'documentberau' , 'documentbanjarmasin', 'documentsamarinda', 'docrpk'));
-        }elseif(Auth::user()->hasRole('picIncident')){
-            
-            return view('picincident.dashboardincident' );
-        }elseif(Auth::user()->hasRole('insurance')){
-            $spgrfile = spgrfile::where('cabang', 'Jakarta')->get();
-            return view('insurance.Dashboardinsurance', compact('spgrfile'));
-=======
 
-        }
-        elseif(Auth::user()->hasRole('AsuransiIncident')){
+        }elseif(Auth::user()->hasRole('AsuransiIncident')){
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
@@ -807,8 +784,7 @@ class DashboardController extends Controller
             }
             
             return view('picincident.dashboardincident', compact('uploadspgr'));
-        }
-        elseif(Auth::user()->hasRole('InsuranceManager')){
+        }elseif(Auth::user()->hasRole('InsuranceManager')){
             $datetime = date('Y-m-d');
             $year = date('Y');
             $month = date('m');
@@ -841,14 +817,15 @@ class DashboardController extends Controller
                     return Storage::disk('s3')->response('spgr/' . $year . "/". $month . "/" . $viewer);
                 }
             return view('insurance.Dashboardinsurance', ['uploadspgr' => $uploadspgr]);
->>>>>>> 686e81c109ae5794b1faf1090848cabf4f1c01c7
         }
     }
+
     public function checkStock(){
         $items_below_stock = ItemBelowStock::join('items', 'items.id', '=', 'item_below_stocks.item_id')->where('cabang', Auth::user()->cabang)->get();
 
         return $items_below_stock;
     }
+
     public function completedJobRequest(){
         // Get all the job request within the logged in user within 6 month
         $JobRequestHeads = JobHead::with('user')->where(function($query){

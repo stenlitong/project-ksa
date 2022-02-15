@@ -3,35 +3,30 @@
 use App\Http\Controllers\AdminOperationalController;
 use App\Http\Controllers\AdminPurchasingController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CrewController;
 use App\Http\Controllers\LogisticController;
 use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\PurchasingManagerController;
 use App\Http\Controllers\SupervisorController;
-use App\Models\Barge;
-use App\Models\OrderHead;
-use App\Models\Tug;
 use App\Http\Controllers\PicsiteController;
 use App\Http\Controllers\PicRpkController;
-use App\Http\Controllers\adminRegisController;
 use App\Http\Controllers\picAdminController;
 use App\Http\Controllers\picincidentController;
 use App\Http\Controllers\InsuranceController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DashboardAjaxController;
 
 // ========================================================================== Message ===============================================================================================
 // Apologizes for the bad code or we called it "spaghetti" code, because we are consists of 2 intern programmers who are still learning everything while doing our final semester
 // We need to research for every single thing and crammed everything while building this project under 6 months without the help of senior/project manager/any other it department 
 // (just pure 2 intern programmers) 
-// So we need to find every information on the internet, including creating the logic flow -> making the database -> implementing it using laravel (instead of cool & flashy js 
-// framework, coz we need to build this project asap) -> hosting to AWS/prod (also learn how to use EC2, load balancer, auto scaling, security group, route53, rds)
+// So we need to find every information on the internet, including creating the logic flow -> making the database -> implementing it using laravel (instead of cool & flashy js framework, coz we need to build this project asap) -> hosting to AWS/prod (also learn how to use EC2, load balancer, auto scaling, security group, route53, rds)
 // We knew that our project is far from perfect, there are a lot of inconsistencies, no optimization, many bloated files around, also the ui is not good
 // we hope you guys the best of luck and can make a better version of our own project ! 
-// ===================================================================================================================================================================================
+// =================================================================================================================================================================================== 
 
-Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
+// Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
+Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard/search', [DashboardController::class, 'index']);
     Route::get('/dashboard/searchspgr', [DashboardController::class, 'index']);
@@ -48,6 +43,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/in-progress-job', [CrewController::class, 'inProgressJobRequest'])->name('in-progress-JobRequest');
 
         Route::get('/Job_Request_List', [CrewController::class, 'ViewJobPage'])->name('Job_Request_List');
+
+        // Ajax
+        Route::get('/refresh-dashboard', [DashboardAjaxController::class, 'crewRefreshDashboard'])->name('crewRefreshDashboard');
+        Route::get('/refresh-dashboard-completed', [DashboardAjaxController::class, 'crewRefreshDashboardCompleted'])->name('crewRefreshDashboardCompleted');
+        Route::get('/refresh-dashboard-in-progress', [DashboardAjaxController::class, 'crewRefreshDashboardInProgress'])->name('crewRefreshDashboardInProgress');
 
         // Task Page
         Route::post('/create-task', [CrewController::class, 'createTaskPost']);
@@ -77,7 +77,7 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
     });
 
     Route::prefix('admin-operational')->name('adminOperational.')->group(function(){
-        // Report Transhipment Page
+        // Daily Reports Page
         Route::get('/daily-reports', [AdminOperationalController::class, 'reportTranshipmentPage'])->name('reportTranshipment');
         Route::post('/daily-reports', [AdminOperationalController::class, 'searchDailyReports'])->name('searchDailyReports');
         Route::post('/daily-reports/download', [AdminOperationalController::class, 'downloadDailyReports']);
@@ -113,6 +113,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/order/{orderHeads}/approve', [LogisticController::class, 'approveOrder']);
         Route::post('/order/{orderHeads}/reject', [LogisticController::class, 'rejectOrder']);
         
+        // Ajax
+        Route::post('/refresh-logistic-dashboard', [DashboardAjaxController::class, 'logisticRefreshDashboard'])->name('logisticRefreshDashboard');
+        Route::post('/refresh-logistic-dashboard-completed', [DashboardAjaxController::class, 'logisticRefreshDashboardCompleted'])->name('logisticRefreshDashboardCompleted');
+        Route::post('/refresh-logistic-dashboard-in-progress', [DashboardAjaxController::class, 'logisticRefreshDashboardInProgress'])->name('logisticRefreshDashboardInProgress');
+
         // Goods In/Out Page
         Route::get('/history-out', [LogisticController::class, 'historyOutPage'])->name('historyOut');
         Route::get('/download-out', [LogisticController::class, 'downloadOut'])->name('downloadOut');
@@ -121,12 +126,16 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         // Stocks Page
         Route::get('/stocks', [LogisticController::class, 'stocksPage'])->name('stocks');
+        Route::get('/stocks/{branch}', [LogisticController::class, 'stocksBranchPage']);
         Route::post('/stocks/{items}/request', [LogisticController::class, 'requestStock']);
 
         // Request DO Page
         Route::get('/request-do', [LogisticController::class, 'requestDoPage'])->name('requestDo');
         Route::get('/request-do/{orderDos}/accept-do', [LogisticController::class, 'acceptDo']);
         Route::get('/request-do/{orderDos}/download', [LogisticController::class, 'downloadDo']);
+
+        // Ajax 
+        Route::get('/refresh-request-do', [DashboardAjaxController::class, 'logisticRefreshOngoingDOPage'])->name('logisticRefreshOngoingDOPage');
 
         // Order Page
         Route::get('/make-order', [LogisticController::class, 'makeOrderPage'])->name('makeOrder');
@@ -164,6 +173,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::put('/{orderHeads}/reject-order', [SupervisorController::class, 'rejectOrder']);
         Route::get('/{orderHeads}/download-pr', [SupervisorController::class, 'downloadPr']);
 
+        // Ajax
+        Route::post('/refresh-supervisor-dashboard', [DashboardAjaxController::class, 'supervisorRefreshDashboard'])->name('supervisorRefreshDashboard');
+        Route::post('/refresh-supervisor-dashboard-completed', [DashboardAjaxController::class, 'supervisorRefreshDashboardCompleted'])->name('supervisorRefreshDashboardCompleted');
+        Route::post('/refresh-supervisor-dashboard-in-progress', [DashboardAjaxController::class, 'supervisorRefreshDashboardInProgress'])->name('supervisorRefreshDashboardInProgress');
+
         // Report Page
         Route::get('/report', [SupervisorController::class, 'reportsPage'])->name('report');
         Route::get('/report/download', [SupervisorController::class, 'downloadReport'])->name('downloadReport');
@@ -182,9 +196,13 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         // Stocks Page
         Route::get('/item-stocks', [SupervisorController::class, 'itemStock'])->name('itemStock');
+        Route::get('/item-stocks/{branch}', [SupervisorController::class, 'itemStockBranch']);
         Route::post('/item-stocks', [SupervisorController::class, 'addItemStock']);
         Route::post('/item-stocks/{item}/edit-item', [SupervisorController::class, 'editItemStock']);
         Route::delete('/item-stocks/{item}/delete-item', [SupervisorController::class, 'deleteItemStock']);
+
+        // Ajax
+        Route::post('/refresh-supervisor-item-stocks', [DashboardAjaxController::class, 'supervisorRefreshItemStockPage'])->name('refreshSupervisorItemStock');
 
         // DO Page
         Route::get('/approval-do', [SupervisorController::class, 'approvalDoPage'])->name('approvalDoPage');
@@ -193,6 +211,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/approval-do/{orderDos}/approve', [SupervisorController::class, 'approveDo']);
         Route::get('/approval-do/{orderDos}/reject', [SupervisorController::class, 'rejectDo']);
         Route::get('/approval-do/{orderDos}/download', [SupervisorController::class, 'downloadDo']);
+
+        // Ajax
+        Route::get('/refresh-approval-do', [DashboardAjaxController::class, 'supervisorRefreshApprovalDO'])->name('supervisorRefreshApprovalDO');
     });
 
     Route::prefix('purchasing')->name('purchasing.')->group(function(){
@@ -211,6 +232,10 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
         // job request page
         Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
+        // Ajax
+        Route::post('/refresh-purchasing-dashboard', [DashboardAjaxController::class, 'purchasingRefreshDashboard'])->name('purchasingRefreshDashboard');
+        Route::post('/refresh-purchasing-dashboard-completed', [DashboardAjaxController::class, 'purchasingRefreshDashboardCompleted'])->name('purchasingRefreshDashboardCompleted');
+        Route::post('/refresh-purchasing-dashboard-in-progress', [DashboardAjaxController::class, 'purchasingRefreshDashboardInProgress'])->name('purchasingRefreshDashboardInProgress');
 
         // Approve Order page
         Route::get('/order/{orderHeads}/approve', [PurchasingController::class, 'approveOrderPage']);
@@ -247,6 +272,11 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::get('/completed-order/{branch}', [PurchasingManagerController::class, 'completedOrder']);
         Route::get('/in-progress-order/{branch}', [PurchasingManagerController::class, 'inProgressOrder']);
         
+        // Ajax
+        Route::post('/refresh-purchasing-manager-dashboard', [DashboardAjaxController::class, 'purchasingManagerRefreshDashboard'])->name('purchasingManagerRefreshDashboard');
+        Route::post('/refresh-purchasing-manager-dashboard-completed', [DashboardAjaxController::class, 'purchasingManagerRefreshDashboardCompleted'])->name('purchasingManagerRefreshDashboardCompleted');
+        Route::post('/refresh-purchasing-manager-dashboard-in-progress', [DashboardAjaxController::class, 'purchasingManagerRefreshDashboardInProgress'])->name('purchasingManagerRefreshDashboardInProgress');
+
         // Approve Order Page
         // Route::get('/order/{orderHeads}/approve', [PurchasingManagerController::class, 'approveOrderPage']);
         Route::get('/order/{orderHeads}/order-detail', [PurchasingManagerController::class, 'approveOrderPage']);
@@ -261,6 +291,9 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/form-ap/download', [PurchasingManagerController::class, 'downloadFile']);
         Route::patch('/form-ap/approve', [PurchasingManagerController::class, 'approveDocument']);
         Route::patch('/form-ap/reject', [PurchasingManagerController::class, 'rejectDocument']);
+
+        // Ajax
+        Route::post('/refresh-form-ap', [DashboardAjaxController::class, 'purchasingManagerRefreshFormAp'])->name('purchasingManagerRefreshFormAp');
 
         // Report PR Page
         Route::get('/checklist-pr', [PurchasingManagerController::class, 'checklistPrPage'])->name('checklistPrPage');
@@ -284,11 +317,17 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
         Route::post('/form-ap/ap-detail', [AdminPurchasingController::class, 'saveApDetail']);
         Route::patch('/form-ap/close', [AdminPurchasingController::class, 'closeAp']);
 
+        // Ajax
+        Route::post('/refresh-dashboard-admin-purchasing', [DashboardAjaxController::class, 'adminPurchasingRefreshFormAp'])->name('adminPurchasingRefreshFormAp');
+
         // Report AP Page
         Route::get('/report-ap', [AdminPurchasingController::class, 'reportApPage'])->name('reportAp');
         Route::get('/report-ap/{branch}', [AdminPurchasingController::class, 'reportApPageBranch']);
         Route::delete('/report-ap/{helper_cursor}/delete', [AdminPurchasingController::class, 'deleteApDetail']);
         Route::get('/report-ap/download/{branch}', [AdminPurchasingController::class, 'downloadReportAp']);
+
+        // Ajax
+        Route::post('/refresh-admin-purchasing-report-ap', [DashboardAjaxController::class, 'adminPurchasingRefreshReportAp'])->name('adminPurchasingRefreshReportAp');
 
         // Route::get('/form-ap/{apList}/download', [AdminPurchasingController::class, 'downloadFile']);
     });
@@ -389,28 +428,6 @@ Route::group(['middleware' => ['auth', 'PreventBackHistory']], function(){
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-// ================================================= Dev Route =======================================================
-Route::get('/add-boat', function(){
-    Tug::create([
-        'tugName' => 'Tug A',
-        'areaOperations' => 'Jakarta',
-        'classification' => 'Kapal',
-        'yearModel' => '2021',
-        'status' => 'operational'
-    ]);
-
-    Barge::create([
-        'bargeName' => 'Barge A',
-        'size' => 300,
-        'type' => 'Barge',
-        'areaOperation' => 'Jakarta',
-        'bargeYear' => '2021',
-        'status' => 'operational'
-    ]);
-
-    return redirect('/dashboard');
 });
 
 require __DIR__.'/auth.php';

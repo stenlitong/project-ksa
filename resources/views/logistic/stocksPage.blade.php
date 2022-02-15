@@ -58,7 +58,7 @@
                 <div class="col-md-6">
                     <form action="">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Search Item by Nama, Cabang, Kode Barang..." name="search" id="search">
+                            <input type="text" class="form-control" placeholder="Search Item by Nama, Cabang, Kode Barang..." name="search" id="search" value="{{ request('search') }}">
                             <button class="btn btn-primary" type="submit">Search</button>
                         </div>
                     </form>
@@ -66,19 +66,15 @@
                 <div class="col">
                     <select name="cabang" class="form-select w-25" onchange="window.location = this.value;">
                         <option selected disabled>Pilih Cabang</option>
-                        <option value="/logistic/stocks?search=All">Semua Cabang</option>
-                        <option value="/logistic/stocks?search=Jakarta">Jakarta</option>
-                        <option value="/logistic/stocks?search=Banjarmasin">Banjarmasin</option>
-                        <option value="/logistic/stocks?search=Samarinda">Samarinda</option>
-                        <option value="/logistic/stocks?search=Bunati">Bunati</option>
-                        <option value="/logistic/stocks?search=Babelan">Babelan</option>
-                        <option value="/logistic/stocks?search=Berau">Berau</option>
+                        <option value="/logistic/stocks/All" {{ $default_branch == 'All' ? 'selected' : '' }}>Semua Cabang</option>
+                        <option value="/logistic/stocks/Jakarta" {{ $default_branch == 'Jakarta' ? 'selected' : '' }}>Jakarta</option>
+                        <option value="/logistic/stocks/Banjarmasin" {{ $default_branch == 'Banjarmasin' ? 'selected' : '' }}>Banjarmasin</option>
+                        <option value="/logistic/stocks/Samarinda" {{ $default_branch == 'Samarinda' ? 'selected' : '' }}>Samarinda</option>
+                        <option value="/logistic/stocks/Bunati" {{ $default_branch == 'Bunati' ? 'selected' : '' }}>Bunati</option>
+                        <option value="/logistic/stocks/Babelan" {{ $default_branch == 'Babelan' ? 'selected' : '' }}>Babelan</option>
+                        <option value="/logistic/stocks/Berau" {{ $default_branch == 'Berau' ? 'selected' : '' }}>Berau</option>
                     </select>
                 </div>
-            </div>
-            
-            <div class="d-flex justify-content-end">
-                {{ $items->links() }}
             </div>
 
             <div id="content" style="overflow-x: auto">
@@ -123,6 +119,10 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                {{ $items->links() }}
             </div>
 
             </div>

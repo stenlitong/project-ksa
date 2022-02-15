@@ -2,6 +2,12 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
+            <th scope="col">GT</th>
+            <th scope="col">NT</th>
+            <th scope="col">Master</th>
+            <th scope="col">Flag</th>
+            <th scope="col">IMO Number</th>
+            <th scope="col">Call Sign</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -9,6 +15,12 @@
         @forelse($tugs as $key => $t)
             <tr>
                 <td>{{ $t -> tugName }}</td>
+                <td>{{ $t -> gt }}</td>
+                <td>{{ $t -> nt }}</td>
+                <td>{{ $t -> master }}</td>
+                <td>{{ $t -> flag }}</td>
+                <td>{{ $t -> IMONumber }}</td>
+                <td>{{ $t -> callSign }}</td>
                 <td>
                     <button class="btn btn-sm btn-danger" type="button" data-toggle="modal" id="finalize" data-target="#deleteTugboat-{{ $t -> id }}">Delete</button>
                 </td>
@@ -20,7 +32,6 @@
         @endforelse
     </tbody>
 </table>
-{{ $tugs -> withQueryString() -> links() }}
 
 @foreach($tugs as $t)
     <!-- Modal #1 -->
