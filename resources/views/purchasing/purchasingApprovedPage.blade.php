@@ -214,10 +214,10 @@
                             <thead class="thead bg-danger">
                                     <th scope="col">Item Barang</th>
                                     <th scope="col" class="center">Quantity</th>
-                                    <th scope="col">Harga per Barang</th>
-                                    <th scope="col">Harga</th>
-                                    <th scope="col">Supplier</th>
-                                    <th scope="col" class="center">Action</th>
+                                    <th scope="col" class="left-20">Harga per Barang</th>
+                                    <th scope="col" class="center">Harga</th>
+                                    <th scope="col" class="center">Supplier</th>
+                                    <th scope="col" class="center">" class="center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -237,11 +237,11 @@
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input class="input-sm" type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
+                                                    <input class="input" style="width: 100%;" type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
-                                            <td>
+                                            <td class="center">
                                                 <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
                                             </td>
                                             

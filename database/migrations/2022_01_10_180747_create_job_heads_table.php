@@ -28,7 +28,6 @@ class CreateJobHeadsTable extends Migration
             
             $table->string('company')->nullable();
             
-            $table->string('job_State')->nullable();
             $table->string('JO_id')->nullable();
             $table->date('JODate')->nullable();
             $table->string('ppn')->nullable();
@@ -38,7 +37,6 @@ class CreateJobHeadsTable extends Migration
             $table->string('boatName')->nullable();
             $table->string('invoiceAddress')->nullable();
             $table->string('Approved_by')->nullable();
-            $table->string('descriptions')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

@@ -77,7 +77,8 @@ class JRExport implements FromQuery , ShouldAutoSize , WithHeadings , WithEvents
         DB::statement(DB::raw('set @row:=0'));
         $jobs = JobDetails::where('cabang', Auth::user()->cabang)
         ->whereIn('jasa_id', $job_id)
-        ->selectRaw('*, @row:=@row+1 as id');
+        ->select('id','note','quantity');
+        // ->selectRaw('*, @row:=@row+1 as id');
 
         return $jobs;
     }

@@ -785,7 +785,7 @@ class LogisticController extends Controller
                 ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
             })->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
         }else{
-            $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->paginate(7)->withQueryString();
+            $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->latest()->paginate(7)->withQueryString();
         }
 
         $job_id = $JobRequestHeads->pluck('id');
@@ -799,8 +799,6 @@ class LogisticController extends Controller
         
         $job_in_progress = JobHead::where(function($query){
             $query->where('status', 'like', 'Job Request In Progress By' . '%')
-            ->orWhere('status', 'like', '%' . 'Revised' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')
             ->orWhere('status', 'like', 'Job Request Approved By' . '%');
         })->whereYear('created_at', date('Y'))->count();
 
@@ -842,7 +840,8 @@ class LogisticController extends Controller
         // $orderHeads = OrderHead::whereIn('user_id', $users)->where('status', 'like', 'Order Completed (Logistic)')->whereBetween('order_heads.created_at', [$start_date, $end_date])->where('cabang', 'like', Auth::user()->cabang)->orderBy('order_heads.updated_at', 'desc')->get();
 
         $jobs = JobDetails::join('job_heads', 'job_heads.id', '=', 'job_details.jasa_id')
-        ->where('job_heads.status', 'like', 'Job Request Approved By Logistics')
+        ->orwhere('job_heads.status', 'like', 'Job Request Approved By' . '%')
+        ->orwhere('job_heads.status', 'like', 'Job Request Completed')
         ->whereBetween('job_heads.created_at', [$start_date, $end_date])
         ->where('job_details.cabang', Auth::user()->cabang)->orderBy('job_heads.updated_at', 'desc')->get();
 
