@@ -15,6 +15,8 @@ use App\Http\Controllers\picAdminController;
 use App\Http\Controllers\picincidentController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\DashboardAjaxController;
+// use App\Models\Tug;
+// use App\Models\Barge;
 
 // ========================================================================== Message ===============================================================================================
 // Apologizes for the bad code or we called it "spaghetti" code, because we are consists of 2 intern programmers who are still learning everything while doing our final semester
@@ -25,8 +27,8 @@ use App\Http\Controllers\DashboardAjaxController;
 // we hope you guys the best of luck and can make a better version of our own project ! 
 // =================================================================================================================================================================================== 
 
-Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
-// Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
+// Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
+Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard/search', [DashboardController::class, 'index']);
     Route::get('/dashboard/searchspgr', [DashboardController::class, 'index']);
@@ -440,5 +442,26 @@ Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], f
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/add-boat', function(){
+//     Tug::create([
+//         'tugName' => 'Tug A',
+//         'gt' => 'gt',
+//         'nt' => 'nt',
+//         'master' => 'master',
+//         'flag' => 'flag',
+//         'IMONumber' => 'IMONumber',
+//         'callSign' => 'callSign',
+//     ]);
+
+//     Barge::create([
+//         'bargeName' => 'Barge A',
+//         'gt' => 'gt',
+//         'nt' => 'nt',
+//         'flag' => 'flag',
+//     ]);
+
+//     return redirect('/dashboard');
+// });
 
 require __DIR__.'/auth.php';

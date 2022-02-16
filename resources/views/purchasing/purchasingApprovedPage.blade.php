@@ -234,7 +234,7 @@
                                         <form action="/purchasing/order/{{ $orderHeads -> id }}/{{ $od -> id }}/edit" method="POST">
                                             @csrf
                                             @method('patch')
-                                            <td>
+                                            <td class="center">
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
                                                     <input class="input" style="width: 100%;" type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
@@ -245,7 +245,7 @@
                                                 <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
                                             </td>
                                             
-                                            <td>
+                                            <td class="center">
                                                 <div class="form-group">
                                                     <select class="form-control form-control-sm" id="supplier" name="supplier">
                                                         <option class="h-25 w-50" value="" disabled>Choose Supplier...</option>
