@@ -408,6 +408,7 @@ class PurchasingController extends Controller
             'itemType' => $request -> itemType,
             'order_tracker' => 7,
         ]);
+        
         return redirect('/purchasing/dashboard/' . $default_branch)->with('statusB', 'Order Approved By Purchasing');
     }
 
