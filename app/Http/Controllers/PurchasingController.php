@@ -297,7 +297,7 @@ class PurchasingController extends Controller
             'ppn' => 'required|numeric|in:0,10,11',
             'discount' => 'nullable|numeric|min:0|max:100',
             'totalPrice' => 'required',
-            'itemType' => 'required|in:Barang,Jasa'
+            'itemType' => 'required|in:Barang'
         ]);
 
         // calculate discount first, then PPN
@@ -363,7 +363,7 @@ class PurchasingController extends Controller
             'itemAddress' => 'required',
             'ppn' => 'required|numeric|in:0,10',
             'discount' => 'nullable|numeric|min:0|max:100',
-            'itemType' => 'required|in:Barang,Jasa'
+            'itemType' => 'required|in:Barang'
         ]);
 
         // calculate discount first, then PPN

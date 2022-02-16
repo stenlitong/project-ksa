@@ -64,6 +64,22 @@
 
             <br>
 
+            <!-- Select Department as role -->
+            <div>
+                <x-label for="department" :value="__('Department:')" />
+
+                <select name="department" id="department"
+                    class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    required>
+                    <option selected value="" disabled>Choose...</option>
+                    <option value="purchasingLogistik" id="purchasingLogistik" @if (old('department') == 'purchasingLogistik') selected="selected" @endif>Purchasing - Logistik</option>
+                    <option value="dokumenLegal" id="dokumenLegal" @if (old('department') == 'dokumenLegal') selected="selected" @endif>Dokumen Legal - Asuransi</option>
+                    <option value="operasional" id="operasional" @if (old('role_id') == 'operasional') selected="selected" @endif>Operasional</option>
+                </select>
+            </div>
+
+            <br>
+
             <!-- Select Option role -->
             <div>
                 <x-label for="role_id" :value="__('Register as:')" />
@@ -74,14 +90,14 @@
                     <option selected value="" disabled>Choose...</option>
                     <option value="AsuransiIncident" id="picIncident" @if (old('role_id') == 'AsuransiIncident') selected="selected" @endif>Asuransi Incident</option>
                     <option value="picSite" id="picSite" @if (old('role_id') == 'picSite') selected="selected" @endif>PIC Site</option>
-                    <option value="purchasing"  @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
-                    <option value="logistic"  @if (old('role_id') == 'logistic') selected="selected" @endif>Logistic</option>
-                    <option value="supervisorLogistic"  @if (old('role_id') == 'supervisorLogistic') selected="selected" @endif>Supervisor Logistic</option>
-                    <option value="crew"  @if (old('role_id') == 'crew') selected="selected" @endif>Crew</option>
+                    <option value="purchasing" id="purchasing" @if (old('role_id') == 'purchasing') selected="selected" @endif>Purchasing</option>
+                    <option value="logistic" id="logistic" @if (old('role_id') == 'logistic') selected="selected" @endif>Logistic</option>
+                    <option value="supervisorLogistic" id="supervisorLogistic" @if (old('role_id') == 'supervisorLogistic') selected="selected" @endif>Supervisor Logistic</option>
+                    <option value="crew" id="crew" @if (old('role_id') == 'crew') selected="selected" @endif>Crew</option>
                 </select>
             </div>
+
             <br>
-            
             
             <!-- Select Option Cabang -->
             <div>
@@ -134,8 +150,67 @@
                     Register
                 </x-button>
             </div>
+
             {{-- validation script --}}
             <script>
+                function selectdep(id) {
+                    var e = document.getElementById("role_id");
+                    e.selectedIndex = e.querySelector('option[value="' + id + '"]').index;
+                }
+                var logistik = document.getElementById("logistic") 
+                var spvlogistik = document.getElementById("supervisorLogistic")
+                var purchasing = document.getElementById("purchasing")
+                var insiden = document.getElementById("picIncident") 
+                var doc = document.getElementById("picSite")
+                var crew = document.getElementById("crew")
+                var departmentChooseOption = document.getElementById("department")
+
+                insiden.style.display = 'none'
+                doc.style.display = 'none'
+                logistik.style.display = 'none'
+                spvlogistik.style.display = 'none'
+                purchasing.style.display = 'none'
+                crew.style.display = 'none'
+
+                departmentChooseOption.onchange = function (event){
+                    if (departmentChooseOption.value == "purchasingLogistik"){
+                        selectdep ('logistic');
+                        insiden.style.display = 'none'
+                        doc.style.display = 'none'
+                        crew.style.display = 'none'
+
+                        logistik.style.display = ''
+                        spvlogistik.style.display = ''
+                        purchasing.style.display = ''
+                    }else if(departmentChooseOption.value == "dokumenLegal"){
+                        selectdep ('picSite');
+
+                        logistik.style.display = 'none'
+                        spvlogistik.style.display = 'none'
+                        purchasing.style.display = 'none'
+                        crew.style.display = 'none'
+
+                        insiden.style.display = ''
+                        doc.style.display = ''
+                    }else if(departmentChooseOption.value == "operasional"){
+                        selectdep ('crew');
+
+                        insiden.style.display = 'none'
+                        doc.style.display = 'none'
+                        logistik.style.display = 'none'
+                        spvlogistik.style.display = 'none'
+                        purchasing.style.display = 'none'
+                        crew.style.display = ''
+                    }else{
+                        document.getElementById("picIncident").hidden = false;
+                        document.getElementById("picSite").hidden = false;
+                        document.getElementById("purchasing").hidden = false;
+                        document.getElementById("logistic").hidden = false;
+                        document.getElementById("supervisorLogistic").hidden = false;
+                        document.getElementById("crew").hidden = false;
+                    }
+                }
+
                 function myFunction() {
                     var x = document.getElementById("password");
                     var y = document.getElementById("password_confirmation");
@@ -150,6 +225,7 @@
                         y.type = "password";
                     }
                 }
+
                 function selectopt(id) {
                     var e = document.getElementById("cabang");
                     e.selectedIndex = e.querySelector('option[value="' + id + '"]').index;
@@ -164,25 +240,25 @@
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
                         document.getElementById("Kendari").disabled = false;
-                    }else{
-                        document.getElementById("Jakarta").disabled = false;
-                        document.getElementById("Samarinda").disabled = false;
+                        document.getElementById("Morosi").disabled = true;
+                    }else if (dropdown.value == "picSite") {
+                        selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = false;
+                        document.getElementById("Samarinda").disabled = false;
                         document.getElementById("Bunati").disabled = false;
                         document.getElementById("Babelan").disabled = false;
                         document.getElementById("Berau").disabled = false;
                         document.getElementById("Kendari").disabled = false;
-                    }
-
-                    if (dropdown.value === "picSite") {
-                        console.log('clicked')
+                        document.getElementById("Morosi").disabled = false;
+                    }else if(dropdown.value == "AsuransiIncident"){
                         selectopt('Jakarta');
                         document.getElementById("Banjarmasin").disabled = true;
                         document.getElementById("Samarinda").disabled = true;
                         document.getElementById("Bunati").disabled = true;
                         document.getElementById("Babelan").disabled = true;
                         document.getElementById("Berau").disabled = true;
-                        document.getElementById("Kendari").disabled = false;
+                        document.getElementById("Kendari").disabled = true;
+                        document.getElementById("Morosi").disabled = true;
                     }else{
                         document.getElementById("Jakarta").disabled = false;
                         document.getElementById("Samarinda").disabled = false;
@@ -191,6 +267,7 @@
                         document.getElementById("Babelan").disabled = false;
                         document.getElementById("Berau").disabled = false;
                         document.getElementById("Kendari").disabled = false;
+                        document.getElementById("Morosi").disabled = true;
                     }
                 }
             </script>

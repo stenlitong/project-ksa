@@ -935,28 +935,4 @@ class LogisticController extends Controller
         
         return redirect('/logistic/Job_Request_List')->with('failed', 'Job Request Rejected.');  
     }
-
-    public function uploadItem(Request $request){
-        // Testing upload to S3 function
-
-        $path = "storage/files";
-        $filename = "file_pdf.".$request->fileInput->getClientOriginalExtension();
-        $file = $request->file('fileInput');
-
-        $url = Storage::disk('s3')->url($path."/".$filename);
-        //dd($url);
-
-        Storage::disk('s3')->delete($path."/".$filename);
-
-        $file->storeAs(
-            $path,
-            $filename,
-            's3'
-        );
-        
-        // $url = Storage::disk('s3')->temporaryUrl(
-        //     $path
-        // )
-        // return redirect('/dashboard');
-    }
 }
