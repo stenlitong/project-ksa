@@ -25,8 +25,8 @@ use App\Http\Controllers\DashboardAjaxController;
 // we hope you guys the best of luck and can make a better version of our own project ! 
 // =================================================================================================================================================================================== 
 
-// Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
-Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
+Route::group(['middleware' => ['auth',/* 'verified', */'PreventBackHistory']], function(){
+// Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard/search', [DashboardController::class, 'index']);
     Route::get('/dashboard/searchspgr', [DashboardController::class, 'index']);
@@ -230,8 +230,6 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
         Route::post('/Review-Job-Rejected', [PurchasingController::class, 'RejectJobOrder']);
         Route::post('/Review-Job-Revised', [PurchasingController::class, 'reviseJobOrder']);
 
-        // job request page
-        Route::get('/Job_Request_List', [LogisticController::class, 'JobRequestListPage'])->name('Job_Request_List');
         // Ajax
         Route::post('/refresh-purchasing-dashboard', [DashboardAjaxController::class, 'purchasingRefreshDashboard'])->name('purchasingRefreshDashboard');
         Route::post('/refresh-purchasing-dashboard-completed', [DashboardAjaxController::class, 'purchasingRefreshDashboardCompleted'])->name('purchasingRefreshDashboardCompleted');
@@ -262,6 +260,13 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
         Route::post('/supplier', [PurchasingController::class, 'addSupplier']);
         Route::put('/supplier', [PurchasingController::class, 'editSupplierDetail']);
         Route::delete('/supplier', [PurchasingController::class, 'deleteSupplier']);
+
+        // job request page
+        Route::get('/Job_Request_List', [PurchasingController::class, 'JobRequestListPage'])->name('Job_Request_List_page');
+        Route::patch('/Job_Request/{jobDetails}/drop', [PurchasingController::class, 'dropOrderDetail']);
+        Route::post('/Job_Request_Approved', [PurchasingController::class, 'ApproveJobOrder']);
+        Route::post('/Job_Request_Reject', [PurchasingController::class, 'RejectJobOrder']);
+        Route::post('/Job_Request_Revise', [PurchasingController::class, 'reviseJobOrder']);
     });
     
     Route::prefix('purchasing-manager')->name('purchasingManager.')->group(function(){

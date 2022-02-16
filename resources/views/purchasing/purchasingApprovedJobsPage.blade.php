@@ -8,17 +8,17 @@
         @include('purchasing.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h2 class="mt-3" style="text-align: center">Order {{ $JobRequestHeads -> Headjasa_id }}</h2>
+            <h2 class="mt-3" style="text-align: center">Order {{ $Jobfind -> Headjasa_id }}</h2>
             
             @if(session('status'))
                 <div class="alert alert-success" style="width: 40%; margin-left: 30%">
                     {{ session('status') }}
                 </div>
-            @endif --}}
+            @endif 
 
             {{-- @if(session('dropStatus'))
                 <div class="alert alert-success" style="width: 40%; margin-left: 30%">
-                    Dropped Successfully, <a href="/purchasing/order/{{ $JobRequestHeads -> id }}/{{ Session::get('dropStatus') }}/undo">Click Here To Undo !</a>
+                    Dropped Successfully, <a href="/purchasing/order/{{ $Jobfind -> id }}/{{ Session::get('dropStatus') }}/undo">Click Here To Undo !</a>
                 </div>
             @endif --}}
             
@@ -97,14 +97,14 @@
                 <div class="row mt-4">
                     <div class="col">
                         @php
-                            if(strpos($JobRequestHeads -> status, 'Revised') !== false){
+                            if(strpos($Jobfind -> status, 'Revised') !== false){
                                 $route = 'revise';
                             }else{
                                 $route = 'approve';
                             }
-                            $boatname = $JobDetails -> tugName . '/' . $JobDetails -> bargeName ;
+                            
                         @endphp
-                        <form method="POST" action="/purchasing/order/{{ $JobRequestHeads -> id }}/{{ $route }}">
+                        <form method="POST" action="/purchasing/Job_Request_Approved">
                             @csrf
                             <div class="form-group">
                                 <label for="approvedBy">Approved By</label>
@@ -112,15 +112,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="boatName">Nama Kapal</label>
-                                <input type="text" class="form-control" id="boatName" name="boatName" value="{{$boatname}}" readonly>
+                                <input type="text" class="form-control" id="boatName" name="boatName" value="{{$tugboat}}" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="noPr">Nomor Job Request</label>
-                                <input type="text" class="form-control" id="noJr" name="noJr" value="{{ $JobRequestHeads -> JO_id }}" readonly>
+                                <label for="noJr">Nomor Job Request</label>
+                                <input type="text" class="form-control" id="noJr" name="noJr" value="{{ $no_jr }}" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="noPo">Nomor Job Order</label>
-                                <input type="text" class="form-control" id="noJo" name="noJo" value="{{ $poNumber }}" readonly>
+                                <label for="noJo">Nomor Job Order</label>
+                                <input type="text" class="form-control" id="noJo" name="noJo" value="{{ $JoNumber }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="invoiceAddress">Alamat Pengiriman Invoice</label>
@@ -154,17 +154,17 @@
                                 <label for="ppn">Tipe PPN</label>
                                 <select class="form-control" id="ppn" name="ppn" required>
                                     <option value="10" 
-                                        @if($JobRequestHeads -> ppn == 10)
+                                        @if($Jobfind -> ppn == 10)
                                             {{ 'selected' }}
                                         @endif
                                     >PPN 10%</option>
                                     <option value="11" 
-                                        @if($JobRequestHeads -> ppn == 11)
+                                        @if($Jobfind -> ppn == 11)
                                             {{ 'selected' }}
                                         @endif
                                     >PPN 11%</option>
                                     <option value="0"
-                                        @if($JobRequestHeads -> ppn == 0)
+                                        @if($Jobfind -> ppn == 0)
                                             {{ 'selected' }}
                                         @endif
                                     >Non - PPN</option>
@@ -176,7 +176,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">%</div>
                                     </div>
-                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="{{ $JobRequestHeads -> discount }}" required>
+                                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="Input Diskon Dalam Angka" value="{{ $Jobfind -> discount }}" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -185,14 +185,14 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-white">Rp.</div>
                                     </div>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($JobRequestHeads -> totalPrice, 2, ",", ".") }}" readonly> 
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($JobRequestHeads -> totalPriceBeforeCalculation, 2, ",", ".") }}" readonly>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($Jobfind -> totalPrice, 2, ",", ".") }}" readonly> 
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" value="{{ number_format($Jobfind -> totalPriceBeforeCalculation, 2, ",", ".") }}" readonly>
                                 </div>
                             </div>
                             <label for="radioButton">Tipe Order</label>
                             <div class="form-group">
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" name="itemType" id="itemType1" value="Barang" >
+                                    <input class="form-check-input" type="radio" name="itemType" id="itemType1" value="Barang" disabled >
                                     <label class="form-check-label" for="itemType1">
                                         Barang
                                     </label>
@@ -214,10 +214,10 @@
                         <table class="table" id="myTable">
                             <thead class="thead bg-danger">
                                     <th scope="col">Uraian</th>
-                                    <th scope="col" class="center">Quantity</th>
-                                    <th scope="col">Harga per Barang</th>
-                                    <th scope="col">Harga</th>
-                                    <th scope="col">Supplier</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col" class="left-20">Harga per Barang</th>
+                                    <th scope="col" class="center">Harga</th>
+                                    <th scope="col"class="center" >Supplier</th>
                                     <th scope="col" class="center">Action</th>
                                 </tr>
                             </thead>
@@ -225,24 +225,24 @@
                                 @foreach($jobDetails as $od)
                                     <tr>
                                         <td>
-                                            <h5>{{ $od -> item -> note }}</h5>
+                                            <h5>{{ $od -> note }}</h5>
                                         </td>
 
-                                        <td class="center">
+                                        <td>
                                             <h5>{{ $od -> quantity }}</h5>
                                         </td>
 
-                                        <form action="/purchasing/order/{{ $JobRequestHeads -> id }}/{{ $od -> id }}/edit" method="POST"> 
+                                        <form action="/purchasing/order/{{ $Jobfind -> id }}/{{ $od -> id }}/edit" method="POST"> 
                                             @csrf
                                             @method('patch')
                                             <td>
                                                 <div class="form-group d-flex">
                                                     <h5 class="mr-2">Rp. </h5>
-                                                    <input class="input-sm" type="number" class="form-control" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
+                                                    <input class="input" style="width: 100%;" type="number" class="form-control h-25 w-50" id="itemPrice" name="itemPrice" value="{{ $od -> itemPrice }}" min="1" step="0.01">
                                                 </div>
                                             </td>
                                             
-                                            <td>
+                                            <td class="center">
                                                 <h5>Rp. {{ number_format($od -> totalItemPrice, 2, ",", ".")}}</h5>
                                             </td>
                                             
@@ -257,12 +257,12 @@
                                                 </div>
                                             </td>
 
-                                            {{-- <td class="center">
-                                                @if(count($orderDetails) > 1)
+                                            <td class="center">
+                                                @if(count($jobDetails) > 1)
                                                     <button type="button" class="btn btn-sm mr-2" data-toggle="modal" data-target="#drop-{{ $od -> id }}"><span data-feather="trash-2"></span></button>
                                                 @endif
                                                 <button type="submit" class="btn btn-info btn-sm">Save</button>
-                                            </td> --}}
+                                            </td>
                                         </form> 
                                     </tr>
                                 @endforeach
@@ -273,12 +273,12 @@
             </main>
     </div>
 
-    {{-- @foreach($orderDetails as $od)
+    @foreach($jobDetails as $od)
         <div class="modal fade" id="drop-{{ $od -> id }}" tabindex="-1" role="dialog" aria-labelledby="reject-orderTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
-                    <h5 class="modal-title" id="rejectTitle" style="color: white">Reject Item - {{ $od -> item -> itemName }}</h5>
+                    <h5 class="modal-title" id="rejectTitle" style="color: white">Remove Job Request?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -286,7 +286,7 @@
                 <form method="POST" action="/purchasing/order/{{ $od -> id }}/drop">
                     @csrf
                     @method('patch')
-                    <input type="hidden" name="JobRequestHeadsId" value="{{ $JobRequestHeads -> id }}">
+                    <input type="hidden" name="JobfindId" value="{{ $Jobfind -> id }}">
                     <div class="modal-body"> 
                         <div class="d-flex flex-column justify-content-center align-items-center">
                             <span class="text-danger" data-feather="alert-circle" style="height: 15%; width: 15%;"></span>
@@ -300,7 +300,7 @@
             </div>
             </div>
         </div>
-    @endforeach --}}
+    @endforeach
 
     <script type="text/javascript">
         function showfield(name){

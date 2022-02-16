@@ -28,6 +28,7 @@ class CreateJobHeadsTable extends Migration
             
             $table->string('company')->nullable();
             
+            $table->string('job_State')->nullable();
             $table->string('JO_id')->nullable();
             $table->date('JODate')->nullable();
             $table->string('ppn')->nullable();

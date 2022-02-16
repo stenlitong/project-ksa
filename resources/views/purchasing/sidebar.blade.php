@@ -15,11 +15,11 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
-                    if(strpos($_SERVER['REQUEST_URI'], 'Job_Request_List') !== false){
+                    if(strpos($_SERVER['REQUEST_URI'], 'Job_Request_List_page') !== false){
                         echo('active');
                     }
-                @endphp" href="{{ Route('purchasing.Job_Request_List') }}">
-                    <span data-feather="archive"></span>
+                @endphp" href="/purchasing/Job_Request_List">
+                    <span data-feather="align-justify"></span>
                     Review Job Request List
                 </a>
             </li>

@@ -132,7 +132,7 @@
                                         <td class="bg-white">{{ $loop->index+1 }}</td>
                                         <td class="bg-white" style="text-transform: uppercase;"><strong>{{ $c ->tugName }} / {{ $c ->bargeName }}</td>
                                         <td class="bg-white"style="text-transform: uppercase;"><strong>{{ $c ->lokasi }}</td>
-                                        <td class="bg-white">{{ $c ->note }}</td>
+                                        <td class="bg-white" style="word-wrap: break-word;min-width: 250px;max-width: 250px;">{{ $c ->note }}</td>
                                         <td class="bg-white">{{ $c ->quantity }}</td>
                                         {{-- Delete Item --}}
                                         <form method="POST" action="/crew/{{ $c -> id }}/deletejasa">

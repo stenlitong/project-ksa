@@ -49,7 +49,7 @@
                             </div>
                             </div>
                         </div>
-                    <table class="table" style="margin-top: 1%">
+                    <table id="content" class="table" style="margin-top: 1%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col" style="text-align: center">No.</th>
@@ -101,4 +101,10 @@
     </main>
 </div>
 </x-guest-layout>
+<script type="text/javascript">
+    function refreshDiv(){
+        $('#content').load(location.href + ' #content')
+    }
+    setInterval(refreshDiv, 60000);
+</script>
 @endsection

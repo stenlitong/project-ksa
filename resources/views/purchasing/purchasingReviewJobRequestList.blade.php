@@ -174,7 +174,7 @@
                         </div>
                     @endif
 
-                    @error('reason')
+                    @error('reasonbox')
                         <div class="alert alert-danger" style="width: 40%; margin-left: 30%">
                             Alasan Wajib Diisi
                         </div>
@@ -271,6 +271,7 @@
                                                             </table>
                                                             <div class="modal-footer">
                                                                 <a class="btn btn-outline-success" href="/purchasing/Review-Job/{{$jr -> id }}">Approve Request</a>
+
                                                                 <button class="btn btn-outline-warning" data-toggle="modal" data-target="#revisejob-{{ $jr -> id }}">Revise Request</button>
                                                                 
                                                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectjob-{{ $jr -> id }}">Reject Request</button>
@@ -307,7 +308,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form method="POST" action="/purchasing/Review-Job-Rejected">
+                            <form method="POST" action="/purchasing/Job_Request_Reject">
                                 @csrf
                             <div class="modal-body">
                                 <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>
@@ -339,7 +340,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form method="POST" action="/purchasing/Review-Job-Revised">
+                            <form method="POST" action="/purchasing/Job_Request_Revise">
                                 @csrf
                             <div class="modal-body">
                                 <input type="hidden" name='jobhead_id' value= {{$jr->Headjasa_id}}>

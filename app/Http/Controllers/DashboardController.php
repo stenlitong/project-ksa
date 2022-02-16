@@ -142,17 +142,9 @@ class DashboardController extends Controller
                     $query->where('status', 'like', '%'. request('search') .'%')
                     ->orWhere('order_id', 'like', '%'. request('search') .'%');
                 })->whereYear('created_at', date('Y'))->latest()->paginate(6);
-                $JobRequestHeads = JobHead::with('user')->where(function($query){
-                    $query->where('status', 'like', '%'. request('search') .'%')
-                    ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
-                })->whereYear('created_at', date('Y'))->latest()->paginate(6);
             }else{
                 $orderHeads = OrderHead::with('user')->whereIn('user_id', $users)->where('cabang', 'like', $default_branch)->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
-                $JobRequestHeads = JobHead::where('cabang', 'like',  $default_branch)->where('status', 'like', 'Job Request Approved By Logistics')->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
             }
-
-            $job_id = $JobRequestHeads->pluck('id');
-            $jobDetails = JobDetails::whereIn('jasa_id', $job_id)->get();
 
             // Then find all the order details from the orderHeads
             // $order_id = OrderHead::whereIn('user_id', $users)->where('created_at', '>=', Carbon::now()->subDays(30))->pluck('order_id');
@@ -179,7 +171,7 @@ class DashboardController extends Controller
             // Get all the suppliers
             $suppliers = Supplier::latest()->get();
 
-            return view('purchasing.purchasingDashboard', compact('JobRequestHeads','jobDetails','orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
+            return view('purchasing.purchasingDashboard', compact('orderHeads', 'orderDetails', 'suppliers', 'completed', 'in_progress', 'default_branch'));
 
         }elseif(Auth::user()->hasRole('adminPurchasing')){
             // Show the form AP page

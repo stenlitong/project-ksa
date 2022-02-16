@@ -193,7 +193,6 @@
                         document.getElementById("Kendari").disabled = false;
                     }
                 }
-            }
             </script>
         </form>
     </x-auth-card>

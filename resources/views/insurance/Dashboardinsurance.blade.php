@@ -48,7 +48,7 @@
                     </div>
                 </form>
             {{-- table data --}}
-            <table class="table" style="margin-top: 1%">
+            <table id="content" class="table" style="margin-top: 1%">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Tanggal</th>
@@ -157,4 +157,10 @@
         </div>
     </main>
 </div>
+<script type="text/javascript">
+    function refreshDiv(){
+        $('#content').load(location.href + ' #content')
+    }
+    setInterval(refreshDiv, 60000);
+</script>
 @endsection 

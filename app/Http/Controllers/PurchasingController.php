@@ -679,10 +679,11 @@ class PurchasingController extends Controller
     // ============================================ Dev section ===========================================================
     public function ApproveJobPage(Request $request,JobHead $JobHeads){
         $Jobfind = JobHead::find($JobHeads->id);
-        $JobRequestHeads = JobHead::where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
-        // $job_id = $JobRequestHeads->pluck('id');
-        // dd($job_id);
         $jobDetails = JobDetails::whereIn('jasa_id', $Jobfind)->get();
+        $no_jr = JobHead::whereIn('id', $Jobfind)->pluck('noJr')[0];
+        $tug = JobDetails::whereIn('jasa_id', $Jobfind)->pluck('tugName')[0];
+        $Barge = JobDetails::whereIn('jasa_id', $Jobfind)->pluck('bargeName')[0];
+        $tugboat = $tug . '/' .$Barge;
 
          // Formatting the PO code
          $month_arr_in_roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -697,7 +698,7 @@ class PurchasingController extends Controller
              'Berau' => 'BER'
          ];
  
-         $Jo_id = $Jobfind;
+         $Jo_id = $Jobfind-> id;
          $first_char_name = strtoupper(Auth::user()->name[0]);
          $location = $cabang_arr[Auth::user()->cabang];
          $month = date('n');
@@ -705,19 +706,51 @@ class PurchasingController extends Controller
          $year = date('Y');
  
         // Create the JO Number => 1251.P/PO-KSA-JKT/IX/2021
-        $JoNumber = $Jo_id . '.' . $first_char_name . '/' . 'PO-' . $orderHeads->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
+        $JoNumber = $Jo_id . '.' . $first_char_name . '/' . 'JO-' . $Jobfind->company . '-' . $location . '/' . $month_to_roman . '/' . $year;
 
         $suppliers = Supplier::latest()->get();
 
-        return view('purchasing.purchasingApprovedJobsPage', compact('JobRequestHeads' , 'jobDetails' , 'suppliers' , 'JoNumber'));
+        return view('purchasing.purchasingApprovedJobsPage', compact('Jobfind', 'no_jr' , 'tugboat' , 'jobDetails' , 'suppliers' , 'JoNumber'));
+    }
+
+    public function dropjobDetail(Request $request, JobDetails $jobDetail){
+        // Drop the order detail by changing the status
+        JobDetails::where('id', $jobDetail -> id)->update([
+            'job_State' => 'Rejected',
+        ]);
+
+        // Also update the total price on the order head
+        JobHead::where('id', $jobDetail -> jasa_id)->decrement('totalPriceBeforeCalculation', $jobDetail -> totalItemPrice);
+
+        // Redirect
+        return redirect()->back()->with('dropStatus', $jobDetail -> id);
+    }
+
+    public function undoDropjobDetail(JobHead $JobHeads, JobDetails $jobDetail){
+        // Undo the drop item
+        JobDetails::where('id', $jobDetail -> id)->update([
+            'job_State' => 'Accepted',
+        ]);
+
+        // Increment back the total price from the deleted item
+        JobHead::where('id', $JobHeads -> id)->increment('totalPriceBeforeCalculation', $jobDetail -> totalItemPrice);
+
+        // Redirect
+        return redirect()->back()->with('status', 'Updated Succesfully');
     }
 
     public function JobRequestListPage(){
+        $default_branch = 'Jakarta';
+
+        $users = User::whereHas('roles', function($query){
+            $query->where('name', 'logistic');
+        })->where('cabang', 'like', $default_branch)->pluck('users.id');
+
         if(request('search')){
-            $JobRequestHeads = JobHead::where(function($query){
-                $query->where('status', 'like', '%'. request('search') .'%')
-                ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
-            })->whereYear('created_at', date('Y'))->latest()->paginate(6);
+            $JobRequestHeads = JobHead::with('user')->where(function($query){
+                    $query->where('status', 'like', '%'. request('search') .'%')
+                    ->orWhere( 'Headjasa_id', 'like', '%'. request('search') .'%');
+                })->whereYear('created_at', date('Y'))->latest()->paginate(6);
         }else{
             $JobRequestHeads = JobHead::where('cabang', 'like',  $default_branch)->where('status', 'like', 'Job Request Approved By Logistics')->whereYear('created_at', date('Y'))->latest()->paginate(6)->withQueryString();
         }
@@ -729,30 +762,26 @@ class PurchasingController extends Controller
 
          // Count the completed & in progress job Requests
          $completed = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request Approved By Logistics')
+            $query->where('status', 'like', 'Job Request Completed')
             ->orWhere('status', 'like', 'Job Request Rejected By Logistic')
-            ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
-            ->orWhere('status', 'like', '%' . 'Revised' . '%')
-            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
-            ->orWhere('status', 'like', 'Item Delivered By Supplier');
+            ->orWhere('status', 'like', 'Order Rejected By Supervisor')
+            ->orWhere('status', 'like', 'Order Rejected By Purchasing');
         })->whereYear('created_at', date('Y'))->count();
         
         $in_progress = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request In Progress By Logistic')
+            $query->where('status', 'like', 'Job Request In Progress By'. '%')
             ->orWhere('status', 'like', '%' . 'Rechecked' . '%')
             ->orWhere('status', 'like', '%' . 'Revised' . '%')
-            ->orWhere('status', 'like', '%' . 'Finalized' . '%')
+            ->orWhere('status', 'like', 'Job Request Approved By' . '%')
             ->orWhere('status', 'like', 'Item Delivered By Supplier');
         })->whereYear('created_at', date('Y'))->count();
 
-        return view('purchasing.jobRequestList', compact('JobRequestHeads','jobDetails' , 'suppliers', 'completed', 'in_progress', 'default_branch'));;
+        return view('purchasing.purchasingReviewJobRequestList', compact('jobDetails' , 'suppliers', 'completed', 'in_progress', 'default_branch'));;
     }
 
     public function ApproveJobOrder(Request $request , JobHead $checkJobStatus) {
-        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
-        $job_id = $JobRequestHeads->pluck('id');
-        $jobhead_id = $request->jobhead_id;
-        $jobhead_name = $request ->jobhead_name;
+        $checkJobStatus = JobHead::find($JobHeads->id);
+        $job_id = $checkJobStatus->pluck('id');
 
         // dd($checkJobStatus);
 
@@ -763,7 +792,7 @@ class PurchasingController extends Controller
         }
 
         // Set default branch
-        $default_branch = $JobRequestHeads -> cabang;
+        $default_branch = $checkJobStatus -> cabang;
         // Validate the request form
         $request -> validate([
             'boatName' => 'required',
@@ -784,7 +813,7 @@ class PurchasingController extends Controller
        }
 
         // calculate discount first, then PPN
-        $updatedPriceAfterDiscount = $JobRequestHeads -> totalPriceBeforeCalculation - ($JobRequestHeads -> totalPriceBeforeCalculation * $request -> discount / 100);
+        $updatedPriceAfterDiscount = $checkJobStatus -> totalPriceBeforeCalculation - ($checkJobStatus -> totalPriceBeforeCalculation * $request -> discount / 100);
 
         // calculate PPN
         $updatedPriceAfterPPN = $updatedPriceAfterDiscount + ($updatedPriceAfterDiscount * $request -> ppn / 100);
@@ -806,17 +835,15 @@ class PurchasingController extends Controller
             'discount' => $updatedDiscount,
             'totalPrice' => $updatedPriceAfterPPN,
         ]);
+        dd($request);
         
         return redirect('/logistic/Review-Job')->with('success', 'Job Request Approved.');
         
-        // dd($jon);
     }
 
     public function RejectJobOrder(Request $request , JobHead $checkJobStatus) {
-        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
-        $job_id = $JobRequestHeads->pluck('id');
-        $jobhead_id = $request->jobhead_id;
-        $jobhead_name = $request ->jobhead_name;
+        $job_id = $checkJobStatus->pluck('id');
+        
 
         $request->validate([
             'reasonbox' => 'required',
@@ -839,8 +866,8 @@ class PurchasingController extends Controller
     }
 
     public function reviseJobOrder(Request $request , JobHead $checkJobStatus){
-        $JobRequestHeads = JobHead::with('user')->where('cabang', 'like', Auth::user()->cabang)->whereYear('created_at', date('Y'))->get();
-        $job_id = $JobRequestHeads->pluck('id');
+        
+        $job_id = $checkJobStatus->pluck('id');
         $jobhead_id = $request->jobhead_id;
         $jobhead_name = $request ->jobhead_name;
 
@@ -858,7 +885,7 @@ class PurchasingController extends Controller
         ->update([
             'status' => 'Job Request Ask To Be Revised By Purchasing',
             'Headjasa_tracker_id' => 4 ,
-            'reason' => $request-> reasonbox
+            'descriptions' => $request-> reasonbox
         ]);
         
         return redirect('/logistic/Review-Job')->with('failed', 'Job Request Ask to Be Revised.');
