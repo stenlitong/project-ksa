@@ -48,6 +48,17 @@
             <li class="nav-item">
                 <a class="nav-link 
                 @php
+                    if(strpos($_SERVER['REQUEST_URI'], 'report-JO') !== false){
+                        echo('active');
+                    }
+                @endphp" href="{{ Route('purchasing.reportJO') }}">
+                    <span data-feather="bookmark"></span>
+                    Report JO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @php
                     if(basename($_SERVER['REQUEST_URI']) == 'supplier'){
                         echo('active');
                     }

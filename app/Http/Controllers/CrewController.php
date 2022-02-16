@@ -762,12 +762,13 @@ class CrewController extends Controller
 
         // Count the completed & in progress job Requests
         $job_completed = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request Approved By Logistics')
-            ->orWhere('status', 'like', 'Job Request Rejected By Logistic');
+            $query->where('status', 'like', 'Job Request Completed')
+            ->orWhere('status', 'like', 'Job Request Rejected By'. '%');
         })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
         
         $job_in_progress = JobHead::where(function($query){
-            $query->where('status', 'like', 'Job Request In Progress By Logistics');
+            $query->where('status', 'like', 'Job Request In Progress By'. '%')
+            ->orWhere('status', 'like', 'Job Request Approved By' . '%');
         })->where('user_id', 'like', Auth::user()->id)->whereYear('created_at', date('Y'))->count();
 
 

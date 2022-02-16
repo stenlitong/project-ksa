@@ -21,6 +21,10 @@ class CreateJobDetailsTable extends Migration
             $table->string('lokasi' , 35)->nullable();
             $table->string('tugName',30)->nullable();
             $table->string('bargeName' , 30)->nullable();
+            $table->string('supplier' , 30)->nullable();
+            $table->string('job_State' , 30)->default('Accepted');
+            $table->decimal('HargaJob', 13, 2)->default(0);
+            $table->decimal('totalHargaJob', 13, 2)->default(0);
             $table->longText('note')->nullable();
             $table->integer('quantity')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

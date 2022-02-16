@@ -226,12 +226,6 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
         Route::post('/{suppliers}/edit', [PurchasingController::class, 'editSupplier']);
         Route::get('/{orderHeads}/download-po', [PurchasingController::class, 'downloadPo']);
 
-        // Approve&Reject/Revise Job page
-        Route::get('/Review-Job/{JobHeads}', [PurchasingController::class, 'ApproveJobPage']);
-        Route::post('/Review-Job-Approved', [PurchasingController::class, 'ApproveJobOrder']);
-        Route::post('/Review-Job-Rejected', [PurchasingController::class, 'RejectJobOrder']);
-        Route::post('/Review-Job-Revised', [PurchasingController::class, 'reviseJobOrder']);
-
         // Ajax
         Route::post('/refresh-purchasing-dashboard', [DashboardAjaxController::class, 'purchasingRefreshDashboard'])->name('purchasingRefreshDashboard');
         Route::post('/refresh-purchasing-dashboard-completed', [DashboardAjaxController::class, 'purchasingRefreshDashboardCompleted'])->name('purchasingRefreshDashboardCompleted');
@@ -265,10 +259,22 @@ Route::group(['middleware' => ['auth', 'verified', 'PreventBackHistory']], funct
 
         // job request page
         Route::get('/Job_Request_List', [PurchasingController::class, 'JobRequestListPage'])->name('Job_Request_List_page');
-        Route::patch('/Job_Request/{jobDetails}/drop', [PurchasingController::class, 'dropOrderDetail']);
-        Route::post('/Job_Request_Approved', [PurchasingController::class, 'ApproveJobOrder']);
-        Route::post('/Job_Request_Reject', [PurchasingController::class, 'RejectJobOrder']);
-        Route::post('/Job_Request_Revise', [PurchasingController::class, 'reviseJobOrder']);
+        Route::get('/Job_Request_List/{branch}', [PurchasingController::class, 'JobRequestList_branch']);
+        Route::get('/Review-Job/{JobHeads}', [PurchasingController::class, 'ApproveJobPage']);
+        Route::get('/report-JO', [PurchasingController::class, 'reportJOPage'])->name('reportJO');
+        Route::get('/report-JO/{branch}', [PurchasingController::class, 'reportJOPageBranch']);
+        
+        Route::patch('/Job_Request/{JobHeads}/{jobDetail}/edit', [PurchasingController::class, 'editPriceJobDetail']);
+        Route::post('/Job_Request_Approved/{checkJobStatus}', [PurchasingController::class, 'ApproveJobOrder']);
+        Route::post('/Job_Request_Reject/{checkJobStatus}', [PurchasingController::class, 'RejectJobOrder']);
+        Route::post('/Job_Request_final/{checkJobStatus}', [PurchasingController::class, 'FinalizeJobOrder']);
+        
+        Route::patch('/Job_Request/{jobDetail}/drop', [PurchasingController::class, 'dropjobDetail']);
+        Route::get('/Job_Request/{JobHeads}/{jobDetail}/undo', [PurchasingController::class, 'undoDropjobDetail']);
+
+        Route::get('/{JobRequestHeads}/download-Jo', [PurchasingController::class, 'downloadJOEXCEL']);
+        Route::get('/{JobRequestHeads}/download-JO_pdf', [PurchasingController::class, 'downloadJOPDF']);
+        Route::get('/report_JO/download/{branch}', [PurchasingController::class, 'downloadJOreport']);
     });
     
     Route::prefix('purchasing-manager')->name('purchasingManager.')->group(function(){

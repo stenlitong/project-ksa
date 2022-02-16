@@ -597,8 +597,6 @@ class SupervisorController extends Controller
         
         $job_in_progress = JobHead::where(function($query){
             $query->where('status', 'like', 'Job Request In Progress By' . '%')
-            ->orWhere('status', 'like', '%' . 'Revised' . '%')
-            ->orWhere('status', 'like', '%' . 'Delivered By Supplier' . '%')
             ->orWhere('status', 'like', 'Job Request Approved By' . '%');
         })->whereYear('created_at', date('Y'))->count();
 
